@@ -1,0 +1,60 @@
+body {
+    padding: 0;
+    margin: 0;
+}
+
+/** header dan navigasi */
+header .header.title p{
+    font-size: 24px;
+    margin-left: 10px;
+}
+header .header.nav{
+    background-color: #23303d;    
+    box-shadow: 0 4px 8px 0 #00000033, 0 6px 20px 0 #00000030;
+    display: grid;
+    grid-template-columns: auto 150px;
+}
+nav.banner{    
+  overflow: hidden
+}
+header .header.nav .banner .logo a{   
+    float: left;
+    color: #3f6ce7;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 0.9;
+
+}
+header .header.nav .banner  .menu a{    
+    float: left;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+}
+header .header.nav .banner  .menu a:hover{    
+  background-color: #ddd;
+  color: black;
+}
+header .header.nav .banner  .menu a.active{
+    background-color: #4CAF50;
+    color: white;
+}
+header .header.nav .account a{
+    color: #ffffff;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+}
+
+/* mobile */
+@media screen and (max-width: 600px) {
+    header{
+        height: 400px;
+    }
+}

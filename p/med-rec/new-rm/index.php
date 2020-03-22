@@ -9,8 +9,8 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/db/db_crud/DbConfig.php';
 #Aunt cek
 session_start();
 $token = (isset($_SESSION['token']) ) ? $_SESSION['token'] : '';
-$new_auth = new Auth($token, 2);
-if( !$new_auth->TrushClient() ){
+$auth = new Auth($token, 2);
+if( !$auth->TrushClient() ){
     header("Location: /p/auth/login");   
     exit();
 }
@@ -59,9 +59,17 @@ if( !$new_auth->TrushClient() ){
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+<meta content="id" name="language">
+    <meta content="id" name="geo.country">
+    <meta http-equiv="content-language" content="In-Id">
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Buat Rekam Medis Baru</title>
+    <meta name="description" content="sisteminformasi kesehtan puskesmas Lerep">
+    <meta name="keywords" content="simpus lerep, pkm lerep">
+    <meta name="author" content="amp">
+
+    <link rel="stylesheet" href="/lib/css/style-main.css">
     <style>
         div.main{   
             display: block;
@@ -76,6 +84,9 @@ if( !$new_auth->TrushClient() ){
     </style>
 </head>
 <body>
+    <header>
+        <?php include($_SERVER['DOCUMENT_ROOT'] . '/include/html/header.html') ?>
+    </header>
     <div class="main">
         <p>buat data rm  baru:</p>
     <?php if( isset( $msg ) ) :?>

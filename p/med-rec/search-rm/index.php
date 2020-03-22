@@ -9,8 +9,8 @@
     #Aunt cek
     session_start();
     $token = (isset($_SESSION['token']) ) ? $_SESSION['token'] : '';
-    $new_auth = new Auth($token, 2);
-    if( !$new_auth->TrushClient() ){
+    $auth = new Auth($token, 2);
+    if( !$auth->TrushClient() ){
         header("Location: /p/auth/login");   
         exit();
     }
@@ -50,9 +50,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta content="id" name="language">
+    <meta content="id" name="geo.country">
+    <meta http-equiv="content-language" content="In-Id">
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>crai data rm</title>
+    <meta name="description" content="sisteminformasi kesehtan puskesmas Lerep">
+    <meta name="keywords" content="simpus lerep, pkm lerep">
+    <meta name="author" content="amp">
+
+    <link rel="stylesheet" href="/lib/css/style-main.css">
          
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <style>
@@ -83,53 +91,59 @@
     </style>
 </head>
 <body>
-    <p>Cari Data Rekam Medis</p>
-    <form action="" method="get">
-        <input type="search" name="main-search" id="input-main-search" placeholder="cari data rm" autofocus value="<?= $main_search ?>">
-        <button type="submit" name="submit">Cari</button>
-        <button type="reset" id="reset-btn">Batal</button>
-        <input type="date" name="tgl-search" id="input-tgl-search" data-date-format="DD MMMM YYYY" value="<?= (isset($_GET['tgl-search'])) ? $_GET['tgl-search'] : '' ?>">
-        <input type="text" name="alamat-search" id="input-alamat-seacrh" placeholder="cari alamat" value="<?= $alamat_search ?>">
-        <input type="text" name="no-rt-search" id="input-no-rt-search" placeholder="cari almat rt" value="<?= $no_rt_search ?>">
-        <input type="text" name="no-rw-search" id="input-no-rw-search" placeholder="cari alamat rw" value="<?= $no_rw_search ?>">
-        <input type="text" name="nama-kk-search" id="input-nama-kk-search" placeholder="cari nama kk" value="<?= $nama_kk_search ?>">
-        <input type="text" name="no-rm-kk-search" id="input-no-rm-kk" placeholder="cari nomor rm kk" value="<?= $no_rm_kk_search ?>">
-    </form>
-    <div>
-    <?php if ( $get_data ): ?>
-        <p>Result: </p>
-        <table border="1">
-            <tr>
-                <th>No.</th>
-                <th>No RM</th>
-                <th>Nama</th>
-                <th>Tanggal Lahir</th>
-                <th>Alamat</th>
-                <th>RT / RW</th>
-                <th>Nama KK</th>
-                <th>No. Rm KK</th>
-                <th>Action</th>
-            </tr>                         
-        <?php $idnum = (int) 1; ?>
-        <?php foreach( $get_data as $data) :?>            
-            <tr>       
-                <th><?= $idnum ?></th>
-                <th><?= $data['nomor_rm']?></th>
-                <th><?= $data['nama']?></th>
-                <th><?= $data['tanggal_lahir']?></th>
-                <th><?= $data['alamat']?></th>
-                <th><?= $data['nomor_rt'] . ' / ' . $data['nomor_rw']?></th>
-                <th><?= $data['nama_kk']?></th>
-                <th><?= $data['nomor_rm_kk']?></th>
-                <th><a href="/p/med-rec/edit-rm/index.php?document_id=<?= $data['id']?>">edit</a></th>
-            </tr>                       
-            <?php $idnum++; ?>
-        <?php endforeach ; ?>
-        </table>
-    <?php else : ?>
-        <p>gagal memuat data</p>
-    <?php endif; ?>
-    </div>
+    <header>
+        <?php include($_SERVER['DOCUMENT_ROOT'] . '/include/html/header.html') ?>
+    </header>
+    <main>
+        <p>Cari Data Rekam Medis</p>
+        <form action="" method="get">
+            <input type="search" name="main-search" id="input-main-search" placeholder="cari data rm" autofocus value="<?= $main_search ?>">
+            <button type="submit" name="submit">Cari</button>
+            <button type="reset" id="reset-btn">Batal</button>
+            <input type="date" name="tgl-search" id="input-tgl-search" data-date-format="DD MMMM YYYY" value="<?= (isset($_GET['tgl-search'])) ? $_GET['tgl-search'] : '' ?>">
+            <input type="text" name="alamat-search" id="input-alamat-seacrh" placeholder="cari alamat" value="<?= $alamat_search ?>">
+            <input type="text" name="no-rt-search" id="input-no-rt-search" placeholder="cari almat rt" value="<?= $no_rt_search ?>">
+            <input type="text" name="no-rw-search" id="input-no-rw-search" placeholder="cari alamat rw" value="<?= $no_rw_search ?>">
+            <input type="text" name="nama-kk-search" id="input-nama-kk-search" placeholder="cari nama kk" value="<?= $nama_kk_search ?>">
+            <input type="text" name="no-rm-kk-search" id="input-no-rm-kk" placeholder="cari nomor rm kk" value="<?= $no_rm_kk_search ?>">
+        </form>
+        <div>
+        <?php if ( $get_data ): ?>
+            <p>Result: </p>
+            <table border="1">
+                <tr>
+                    <th>No.</th>
+                    <th>No RM</th>
+                    <th>Nama</th>
+                    <th>Tanggal Lahir</th>
+                    <th>Alamat</th>
+                    <th>RT / RW</th>
+                    <th>Nama KK</th>
+                    <th>No. Rm KK</th>
+                    <th>Action</th>
+                </tr>                         
+            <?php $idnum = (int) 1; ?>
+            <?php foreach( $get_data as $data) :?>            
+                <tr>       
+                    <th><?= $idnum ?></th>
+                    <th><?= $data['nomor_rm']?></th>
+                    <th><?= $data['nama']?></th>
+                    <th><?= $data['tanggal_lahir']?></th>
+                    <th><?= $data['alamat']?></th>
+                    <th><?= $data['nomor_rt'] . ' / ' . $data['nomor_rw']?></th>
+                    <th><?= $data['nama_kk']?></th>
+                    <th><?= $data['nomor_rm_kk']?></th>
+                    <th><a href="/p/med-rec/edit-rm/index.php?document_id=<?= $data['id']?>">edit</a></th>
+                </tr>                       
+                <?php $idnum++; ?>
+            <?php endforeach ; ?>
+            </table>
+        <?php else : ?>
+            <p>gagal memuat data</p>
+        <?php endif; ?>
+            </div>
+        
+        </main>
 </body>
 <script type="text/javascript">
     (function($) {
