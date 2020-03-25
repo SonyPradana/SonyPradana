@@ -9,9 +9,9 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/db/db_crud/DbConfig.php';
     session_start();
     $token = (isset($_SESSION['token']) ) ? $_SESSION['token'] : '';
     $auth = new Auth($token, 1);
+    $user = new User($auth->getUserName());
 ?>
 <?php 
-    $user = new User($auth->getUserName());
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -38,9 +38,9 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/db/db_crud/DbConfig.php';
         <div class="header nav">
             <nav class="banner">
                 <div class="logo">
-                <a href="/">Home</a>
+                    <a href="/" onclick="myFunction()">Home</a>
                 </div>
-                <div class="menu" >
+                <div class="menu">
                 <?php if( $auth->TrushClient()): ?>
                     <a href="/p/med-rec/view-rm/">lihat data rm</a>
                     <a href="/p/med-rec/search-rm/">cari data rm</a>
@@ -48,20 +48,37 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/db/db_crud/DbConfig.php';
                 <?php endif; ?>
                 </div>
             </nav>
-            <nav class="account">
+            <div class="account">
                 <?php if( $auth->TrushClient()): ?>
-                    <a href="/p/auth/reset-password/">password baru</a>
-                    <a href="/p/auth/logout/index.php?url=/p/auth/login">logout</a>
+                    <div class="boxs">
+                        <div class="box left">
+                            <div class="pic-box"></div>
+                        </div>
+                        <div class="box right">
+                            <p><?= $user->getDisplayName()?></p>
+                        </div>
+                    </div>
                 <?php else: ?>
                     <a href="/p/auth/login">login</a>
                 <?php endif; ?>
-            </nav>
+            </div>
         </div>  
     </header>  
     <main>
-        <div>
+        <div class="container">
             
         </div>
     </main> 
+    <footer>
+        <div class="line"></div>        
+        <p class="big-footer">SIMPUS LEREP</p>        
+        <p class="note-footer">creat by <a href="https://twitter.com/AnggerMPd">amp</a></p>
+        <div class="box"></div>
+    </footer>
 </body>
+<script>
+    function openNav(){
+        document.getElementById("myNav").style.width = "250px";
+    }
+</script>
 </html>

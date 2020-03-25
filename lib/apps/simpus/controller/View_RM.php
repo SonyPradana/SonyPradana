@@ -22,6 +22,8 @@ class View_RM{
     #konfigurasi    
     private $_startFrom = 0;
     private $_endTo = 10;
+    private $_limit = 10;
+    private $_sort = 'id';
 
     #property
     /** 
@@ -90,6 +92,24 @@ class View_RM{
             $this->_filter_noRm_kk = $val;
         }
     }   
+
+    /**
+     * jumlah data yang ditampilkan per halaman
+     * min 10, maks 100
+     */
+    public function limitView($val){
+        $verify = StringValidation::NumberValidation($val, 1, 3);
+        if( $verify){
+            $val = $val < 10 ? 10 : $val;
+            $val = $val > 100 ? 100 : $val;
+            $this->_limit =  $val;
+        }
+    }
+    private $_sortSupport = ['id', 'nomor_rm', 'nama', 'tanggal_lahir', 'alamat', 'nomor_rw', 'nama_kk', 'nomor_rm_kk'];
+    public function sortUsing($val){
+        $val = strtolower($val);
+        $this->_sort = in_array($val, $this->_sortSupport) ? $val : 'id';
+    }
 
     public function __construct(){
         
@@ -193,7 +213,7 @@ class View_RM{
             // $query = "SELECT * FROM data_rm ORDER BY id ASC";
             return [];
         } else{
-            $query = "SELECT * FROM data_rm WHERE " . $queryFilter . " ORDER BY nama ASC";
+            $query = "SELECT * FROM data_rm WHERE " . $queryFilter . " ORDER BY ". $this->_sort ." ASC LIMIT " . $this->_limit;
         }
         # mengambil dari table
         $result = mysqli_query($link, $query);
@@ -212,9 +232,12 @@ class View_RM{
     }  
 
     public function resultAll(){
+        $limit = $this->_limit; #limited views
+        $sort = $this->_sort;
+
         $conn = new DbConfig();
         $link = $conn->StartConnection();
-        $query = "SELECT * FROM data_rm ORDER BY id ASC";
+        $query = "SELECT * FROM data_rm ORDER BY $sort ASC LIMIT $limit";
         $result = mysqli_query($link, $query);
         $data = [];
         while ( $feedback = mysqli_fetch_assoc( $result ) ){

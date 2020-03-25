@@ -16,6 +16,7 @@ if( !$auth->TrushClient() ){
 }
 ?>
 <?php 
+    $user = new User($auth->getUserName());
     #ambil id dari url jika tidak ada akes ditolak
     if( isset( $_GET['document_id'])){
         #ambil data rm menggunakn  id
@@ -83,43 +84,73 @@ if( !$auth->TrushClient() ){
     <meta name="author" content="amp">
 
     <link rel="stylesheet" href="/lib/css/style-main.css">
+    <link rel="stylesheet" href="/lib/css/ui/v1/control.default.css">
     <style>
-        div.main{   
-            display: block;
-                margin: 50px auto;
-                width: 500px;
+        .boxs{
+            width: 100%;
+            height: 100%;
+            display: grid;
+            grid-template-columns: 1fr 2fr;
         }
-        input{
-            display: block;
-            margin: 7px 0;
-            font-size: 25px;
-        } 
+        .box.right{
+            padding: 10px 100px 20px 20px;
+        }
+        /* mobile */
+        @media screen and (max-width: 600px) {            
+            .boxs{
+                grid-template-columns: 1fr;
+            }
+            .box.right{
+                padding: 5px
+            }
+        }
     </style>
 </head>
 <body>
     <header>
         <?php include($_SERVER['DOCUMENT_ROOT'] . '/include/html/header.html') ?>
     </header>
-    <div class="main">
-    <?php if( isset( $msg ) ) :?>
-        <p style="color: red"><?= $msg ?></p>
-        <a href="/">kembali ke menu utama</a>
-    <?php else:?>
-        <p>buat data rm  baru:</p>
-        <form action="" method="post">
-            <input type="text" name="nomor_rm" id="input-nomor-rm" placeholder="nomor rekam medis" value="<?= isset($load_rm) ? $nomorRM : '' ?>">
-            <input type="text" name="nama" id="input-nama" placeholder="nama" value="<?= isset($load_rm) ? $nama : '' ?>">
-            <input type="date" name="tgl_lahir" id="input-tgl-lahir" value="<?= isset($load_rm) ? $tanggalLahir : '' ?>">
-            <input type="text" name="alamat" id="input-alamat" placeholder="alamat tanpa rt/rw" value="<?= isset($load_rm) ? $alamat : '' ?>">
-            <input type="text" name="nomor_rt" id="input-nomor-rt" placeholder="nomor rt" max="2" value="<?= isset($load_rm) ? $nomorRt : '' ?>">
-            <input type="text" name="nomor_rw" id="input-nomor-rw" placeholder="nomor rw" max="2" value="<?= isset($load_rm) ? $nomorRw : '' ?>">
-            <p>data pelengkpa (opsonal)</p>
-            <input type="text" name="nama_kk" id="input-nama-kk" placeholder="nama kepala keluarga" value="<?= isset($load_rm) ? $namaKK : '' ?>">
-            <input type="text" name="nomor_rm_kk" id="input-nomor-rm-kk" placeholder="nomor rm kepla keluarga" value="<?= isset($load_rm) ? $nomorRM_KK : '' ?>">
-        
-            <button type="submit" name="submit">Buat Rm Baru</button>
-        </form>           
-    <?php endif; ?>
-    </div>
+    <main>
+        <div class="container">
+            <div class="coit breadcrumb">
+                <ul class="crumb">
+                    <li><a href="/">Home</a></li>
+                    <li>Edit Data Rekam Medis</li>
+                </ul>
+            </div>
+            <div class="boxs">
+                <div class="box left"></div>
+                <div class="box right">
+                <?php if( isset( $msg ) ) :?>
+                    <p style="color: red"><?= $msg ?></p>
+                    <a href="/">kembali ke menu utama</a>
+                <?php else:?>
+                    <h1>Edit data Rekam Medis</h1>
+                    <form action="" method="post">
+                        <input type="text" name="nomor_rm" id="input-nomor-rm" placeholder="nomor rekam medis" value="<?= isset($load_rm) ? $nomorRM : '' ?>" maxlength="6" inputmode="numeric" pattern="[0-9]*">
+                        <input type="text" name="nama" id="input-nama" placeholder="nama" value="<?= isset($load_rm) ? $nama : '' ?>" maxlength="50">
+                        <input type="date" name="tgl_lahir" id="input-tgl-lahir" value="<?= isset($load_rm) ? $tanggalLahir : '' ?>">
+                        <input type="text" name="alamat" id="input-alamat" placeholder="alamat tanpa rt/rw" value="<?= isset($load_rm) ? $alamat : '' ?>">
+                        <div class="form-box">
+                            <input type="text" name="nomor_rt" id="input-nomor-rt" placeholder="nomor rt" max="2" value="<?= isset($load_rm) ? $nomorRt : '' ?>" inputmode="numeric" pattern="[0-9]*">
+                            <input type="text" name="nomor_rw" id="input-nomor-rw" placeholder="nomor rw" max="2" value="<?= isset($load_rm) ? $nomorRw : '' ?>" inputmode="numeric" pattern="[0-9]*">
+                        </div>
+                        <p>data pelengkpa (opsonal)</p>
+                        <input type="text" name="nama_kk" id="input-nama-kk" placeholder="nama kepala keluarga" value="<?= isset($load_rm) ? $namaKK : '' ?>">
+                        <input type="text" name="nomor_rm_kk" id="input-nomor-rm-kk" placeholder="nomor rm kepla keluarga" value="<?= isset($load_rm) ? $nomorRM_KK : '' ?>" maxlength="6" inputmode="numeric" pattern="[0-9]*">
+                    
+                        <button type="submit" name="submit">Buat Rm Baru</button>
+                    </form>           
+                <?php endif; ?>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <div class="line"></div>
+        <p class="big-footer">SIMPUS LEREP</p>
+        <p class="note-footer">creat by <a href="https://twitter.com/AnggerMPd">amp</a></p>
+        <div class="box"></div>
+    </footer>
 </body>
 </html>

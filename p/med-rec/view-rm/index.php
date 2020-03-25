@@ -1,6 +1,7 @@
 <?php
     #import modul 
     require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/auth/init.php';
+    require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/library/init.php';
     require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/simpus/init.php';
     require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/db/db_crud/DbConfig.php';
 ?>
@@ -15,8 +16,13 @@
     }
 ?>
 <?php
+    $user = new User($auth->getUserName());
+    #ambil dari url
+    $sort = isset($_GET['sortby']) ? $_GET['sortby'] : 'id';
     # ambil data
     $show_data = new View_RM();
+    $show_data->sortUsing($sort);
+    $show_data->limitView(10);
     $get_data = $show_data->resultAll();
 ?>
 <!DOCTYPE html>
@@ -33,30 +39,14 @@
     <meta name="author" content="amp">
 
     <link rel="stylesheet" href="/lib/css/style-main.css">
+    <link rel="stylesheet" href="/lib/css/ui/v1/table.css">
     <style>
-        input{
-            display: block;
-            margin: 7px 0
+        button{
+            margin: 7px 0;
         }
-        #input-main-search{
-            display: inline
-        }
-        table {
-            margin-top: 5px;
-            padding: 5px;
-            font-family: arial, sans-serif;
-            border-collapse: collapse;
+        .boxs {
             width: 100%;
-        }
-
-        td, th {
-            border: 1px solid #dddddd;
-            text-align: left;
-            padding: 8px;
-        }
-
-        tr:nth-child(even) {
-            background-color: #dddddd;
+            overflow-x: auto;
         }
     </style>
 </head>
@@ -64,40 +54,57 @@
     <header>
         <?php include($_SERVER['DOCUMENT_ROOT'] . '/include/html/header.html') ?>
     </header>
-    <div class="main">
-        <p>liat data rekam medis</p>
-    <?php if ( $get_data ): ?>
-        <table>
-            <tr>
-                <th>No.</th>
-                <th>No RM</th>
-                <th>Nama</th>
-                <th>Tanggal Lahir</th>
-                <th>Almat</th>
-                <th>RT / RW</th>
-                <th>Nama KK</th>
-                <th>No. Rm KK</th>
-                <th>Action</th>
-            </tr>                         
-        <?php $idnum = (int) 1; ?>
-        <?php foreach( $get_data as $data) :?>            
-            <tr>       
-                <th><?= $idnum ?></th>
-                <th><?= $data['nomor_rm']?></th>
-                <th><?= $data['nama']?></th>
-                <th><?= $data['tanggal_lahir']?></th>
-                <th><?= $data['alamat']?></th>
-                <th><?= $data['nomor_rt'] . ' / ' . $data['nomor_rw']?></th>
-                <th><?= $data['nama_kk']?></th>
-                <th><?= $data['nomor_rm_kk']?></th>
-                <th><a href="/p/med-rec/edit-rm/index.php?document_id=<?= $data['id']?>">edit</a></th>
-            </tr>                       
-            <?php $idnum++; ?>
-        <?php endforeach ; ?>
-        </table>
-    <?php else : ?>
-        <p>gagal memuat data</p>
-    <?php endif; ?>
-    </div>
+    <main>
+        <div class="container">
+            <div class="coit breadcrumb">
+                <ul class="crumb">
+                    <li><a href="/">Home</a></li>
+                    <li>Lihat Data</li>
+                </ul>
+            </div>
+            <h1>Lihat Data Rekam Medis</h1>
+            <button>Costume Filter</button>
+        <?php if ( $get_data ): ?>
+            <div class="boxs">
+                <table>
+                    <tr>
+                        <th>No.</th>
+                        <th scope="col"><a class="sort-by" href="/p/med-rec/view-rm/?sortby=nomor_rm">No RM</a></th>
+                        <th scope="col"><a class="sort-by" href="/p/med-rec/view-rm/?sortby=nama">Nama</a></th>
+                        <th scope="col"><a class="sort-by" href="/p/med-rec/view-rm/?sortby=tanggal_lahir">Tanggal Lahir</a></th>
+                        <th scope="col"><a class="sort-by" href="/p/med-rec/view-rm/?sortby=alamat">alamat</a></th>
+                        <th scope="col"><a class="sort-by" href="/p/med-rec/view-rm/?sortby=nomor_rw">RT / RW</a></th>
+                        <th scope="col"><a class="sort-by" href="/p/med-rec/view-rm/?sortby=nama_kk">Nama KK</a></th>
+                        <th scope="col"><a class="sort-by" href="/p/med-rec/view-rm/?sortby=nomor_rm_kk">No. Rm KK</a></th>
+                        <th><a href="#">Action</a></th>
+                    </tr>                         
+                <?php $idnum = (int) 1; ?>
+                <?php foreach( $get_data as $data) :?>            
+                    <tr>       
+                        <th><?= $idnum ?></th>
+                        <th><?= $data['nomor_rm']?></th>
+                        <th><?= $data['nama']?></th>
+                        <th><?= $data['tanggal_lahir']?></th>
+                        <th><?= $data['alamat']?></th>
+                        <th><?= $data['nomor_rt'] . ' / ' . $data['nomor_rw']?></th>
+                        <th><?= $data['nama_kk']?></th>
+                        <th><?= $data['nomor_rm_kk']?></th>
+                        <th><a class="link" href="/p/med-rec/edit-rm/index.php?document_id=<?= $data['id']?>">edit</a></th>
+                    </tr>                       
+                    <?php $idnum++; ?>
+                <?php endforeach ; ?>
+                </table>
+            </div>
+        <?php else : ?>
+            <p>gagal memuat data</p>
+        <?php endif; ?>
+        </div>
+    </main>
+    <footer>
+        <div class="line"></div>
+        <p class="big-footer">SIMPUS LEREP</p>
+        <p class="note-footer">creat by <a href="https://twitter.com/AnggerMPd">amp</a></p>
+        <div class="box"></div>
+    </footer>
 </body>
 </html>

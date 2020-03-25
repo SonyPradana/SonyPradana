@@ -1,0 +1,35 @@
+input,
+.form-box {
+    display: block;
+    font-size: 17px;
+}
+
+input[type=text],
+input[type=date] {
+    width: 100%;
+    min-width: 100px;
+    padding: 6px 10px;
+    margin: 10px 0;
+    box-sizing: border-box;
+    border: 1.5px solid #b50b0b;
+    border-radius: 4px;
+}
+
+.form-box input {
+    display: inline-block;
+    width: 80px;
+
+}
+
+/* mobile */
+@media screen and (max-width: 600px) {
+    input[type=text],
+    input[type=date] {
+        width: 100%;
+    }
+
+    .form-box input {
+        display: inline-block;
+        width: 80px;
+    }
+}

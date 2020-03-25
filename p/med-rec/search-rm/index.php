@@ -16,19 +16,22 @@
     }
 ?>
 <?php
+    $user = new User($auth->getUserName());
     # ambil data
     $show_data = new View_RM();
 
     # defultnya false agar tidak menampilkan table ketika kosong/pertama
     $get_data = false;
 
-    # get data dari link  
+    # ambil data dari url 
     $main_search = isset( $_GET['main-search'] ) ? $_GET['main-search'] : '';
     $alamat_search = isset( $_GET['alamat-search'] ) ? $_GET['alamat-search'] : '';
     $no_rt_search = isset( $_GET['no-rt-search'] ) ? $_GET['no-rt-search'] : '';
     $no_rw_search = isset( $_GET['no-rw-search'] ) ? $_GET['no-rw-search'] : '';
     $nama_kk_search = isset( $_GET['nama-kk-search'] ) ? $_GET['nama-kk-search'] : '';
-    $no_rm_kk_search = isset( $_GET['no-rm-kk-search'] ) ? $_GET['no-rm-kk-search'] : '';
+    $no_rm_kk_search = isset( $_GET['no-rm-kk-search'] ) ? $_GET['no-rm-kk-search'] : '';    
+    # data lainnya
+    $sort = isset($_GET['sortby']) ? $_GET['sortby'] : 'id';
     
     if( isset( $_GET['submit'])  ){
             # cari berdasarkan nama
@@ -43,6 +46,8 @@
             # cari berdasarkan nomor rm kk
             $show_data->filterByNomorRmKK( $no_rm_kk_search );
         
+            $show_data->sortUsing($sort);
+            $show_data->limitView(25);
             #mulai mencari data
             $get_data = $show_data->result( );
     }
@@ -61,32 +66,32 @@
     <meta name="author" content="amp">
 
     <link rel="stylesheet" href="/lib/css/style-main.css">
+    <link rel="stylesheet" href="/lib/css/ui/v1/table.css">    
+    <link rel="stylesheet" href="/lib/css/ui/v1/control.default.css">
          
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <style>
-        input{
-            display: block;
-            margin: 7px 0
-        }
         #input-main-search{
             display: inline
         }
-        table {
-            margin-top: 5px;
-            padding: 5px;
-            font-family: arial, sans-serif;
-            border-collapse: collapse;
+        .boxs{
+            display: grid;
+            grid-template-columns: minmax(250px, 350px) minmax(30%, auto);
+            grid-column-gap: 10px;
+        }
+        .boxs p{margin-top: 0}
+        .boxs .box.right .box-table {
             width: 100%;
+            overflow-x: auto;
         }
-
-        td, th {
-            border: 1px solid #dddddd;
-            text-align: left;
-            padding: 8px;
+        .boxs .box.left .box-form.bottom{
+            padding: 0 50px 0 0;
         }
-
-        tr:nth-child(even) {
-            background-color: #dddddd;
+        /* mobile */
+        @media screen and (max-width: 600px) {                
+            .boxs{
+                display: block
+            }
         }
     </style>
 </head>
@@ -95,55 +100,79 @@
         <?php include($_SERVER['DOCUMENT_ROOT'] . '/include/html/header.html') ?>
     </header>
     <main>
-        <p>Cari Data Rekam Medis</p>
-        <form action="" method="get">
-            <input type="search" name="main-search" id="input-main-search" placeholder="cari data rm" autofocus value="<?= $main_search ?>">
-            <button type="submit" name="submit">Cari</button>
-            <button type="reset" id="reset-btn">Batal</button>
-            <input type="date" name="tgl-search" id="input-tgl-search" data-date-format="DD MMMM YYYY" value="<?= (isset($_GET['tgl-search'])) ? $_GET['tgl-search'] : '' ?>">
-            <input type="text" name="alamat-search" id="input-alamat-seacrh" placeholder="cari alamat" value="<?= $alamat_search ?>">
-            <input type="text" name="no-rt-search" id="input-no-rt-search" placeholder="cari almat rt" value="<?= $no_rt_search ?>">
-            <input type="text" name="no-rw-search" id="input-no-rw-search" placeholder="cari alamat rw" value="<?= $no_rw_search ?>">
-            <input type="text" name="nama-kk-search" id="input-nama-kk-search" placeholder="cari nama kk" value="<?= $nama_kk_search ?>">
-            <input type="text" name="no-rm-kk-search" id="input-no-rm-kk" placeholder="cari nomor rm kk" value="<?= $no_rm_kk_search ?>">
-        </form>
-        <div>
-        <?php if ( $get_data ): ?>
-            <p>Result: </p>
-            <table border="1">
-                <tr>
-                    <th>No.</th>
-                    <th>No RM</th>
-                    <th>Nama</th>
-                    <th>Tanggal Lahir</th>
-                    <th>Alamat</th>
-                    <th>RT / RW</th>
-                    <th>Nama KK</th>
-                    <th>No. Rm KK</th>
-                    <th>Action</th>
-                </tr>                         
-            <?php $idnum = (int) 1; ?>
-            <?php foreach( $get_data as $data) :?>            
-                <tr>       
-                    <th><?= $idnum ?></th>
-                    <th><?= $data['nomor_rm']?></th>
-                    <th><?= $data['nama']?></th>
-                    <th><?= $data['tanggal_lahir']?></th>
-                    <th><?= $data['alamat']?></th>
-                    <th><?= $data['nomor_rt'] . ' / ' . $data['nomor_rw']?></th>
-                    <th><?= $data['nama_kk']?></th>
-                    <th><?= $data['nomor_rm_kk']?></th>
-                    <th><a href="/p/med-rec/edit-rm/index.php?document_id=<?= $data['id']?>">edit</a></th>
-                </tr>                       
-                <?php $idnum++; ?>
-            <?php endforeach ; ?>
-            </table>
-        <?php else : ?>
-            <p>gagal memuat data</p>
-        <?php endif; ?>
+        <div class="container">
+            <div class="coit breadcrumb">
+                <ul class="crumb">
+                    <li><a href="/">Home</a></li>
+                    <li>Cari Data</li>
+                </ul>
             </div>
-        
-        </main>
+            <h1>Cari Data Rekam Medis</h1>
+            <div class="boxs">
+                <div class="box left">
+                    <p>Search :</p>
+                    <form action="" method="get">
+                        <input type="search" name="main-search" id="input-main-search" placeholder="cari data rm" autofocus value="<?= $main_search ?>">
+                        <button type="submit" name="submit">Cari</button>
+                        <button type="reset" id="reset-btn">Batal</button>
+                        <div class="box-form bottom">
+                            <input type="date" name="tgl-search" id="input-tgl-search" data-date-format="DD MMMM YYYY" value="<?= (isset($_GET['tgl-search'])) ? $_GET['tgl-search'] : '' ?>">
+                            <input type="text" name="alamat-search" id="input-alamat-seacrh" placeholder="cari alamat" value="<?= $alamat_search ?>">
+                            <input type="text" name="no-rt-search" id="input-no-rt-search" placeholder="cari almat rt" value="<?= $no_rt_search ?>">
+                            <input type="text" name="no-rw-search" id="input-no-rw-search" placeholder="cari alamat rw" value="<?= $no_rw_search ?>">
+                            <input type="text" name="nama-kk-search" id="input-nama-kk-search" placeholder="cari nama kk" value="<?= $nama_kk_search ?>">
+                            <input type="text" name="no-rm-kk-search" id="input-no-rm-kk" placeholder="cari nomor rm kk" value="<?= $no_rm_kk_search ?>">
+                        </div>
+                    </form>
+                </div>
+                <div class="box right">                        
+                
+                    <p>Result: </p>
+                    <div class="box-table">   
+                        <table>
+                            <tr>
+                                <th>No.</th>
+                                <th scope="col"><a class="sort-by" href="#">No RM</a></th>
+                                <th scope="col"><a class="sort-by" href="#">Nama</a></th>
+                                <th scope="col"><a class="sort-by" href="#">Tanggal Lahir</a></th>
+                                <th scope="col"><a class="sort-by" href="#">Alamat</a></th>
+                                <th scope="col"><a class="sort-by" href="#">RT/RW</a></th>
+                                <th scope="col"><a class="sort-by" href="#">Nama KK</a></th>
+                                <th scope="col"><a class="sort-by" href="#">No. Rm KK</a></th>
+                                <th><a href="#">Action</a></th>                                                       
+                            </tr> 
+                        <?php if ( $get_data ): ?>
+                            <?php $idnum = (int) 1; ?>
+                            <?php foreach( $get_data as $data) :?>            
+                            <tr>       
+                                <th><?= $idnum ?></th>
+                                <th><?= $data['nomor_rm']?></th>
+                                <th><?= $data['nama']?></th>
+                                <th><?= $data['tanggal_lahir']?></th>
+                                <th><?= $data['alamat']?></th>
+                                <th><?= $data['nomor_rt'] . ' / ' . $data['nomor_rw']?></th>
+                                <th><?= $data['nama_kk']?></th>
+                                <th><?= $data['nomor_rm_kk']?></th>
+                                <th><a class="link" href="/p/med-rec/edit-rm/index.php?document_id=<?= $data['id']?>">edit</a></th>
+                            </tr>   
+                            <?php $idnum++; ?>
+                            <?php endforeach ; ?>      
+                            <?= '</table>' ?>                      
+                        <?php else : ?>
+                        </table>    
+                            <p>data tidak ditemukan</p>
+                        <?php endif; ?>
+                    </div> 
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <div class="line"></div>
+        <p class="big-footer">SIMPUS LEREP</p>
+        <p class="note-footer">creat by <a href="https://twitter.com/AnggerMPd">amp</a></p>
+        <div class="box"></div>
+    </footer>
 </body>
 <script type="text/javascript">
     (function($) {
