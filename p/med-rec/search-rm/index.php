@@ -97,6 +97,7 @@
 </head>
 <body>
     <header>
+        <?php $active_menu = 'cari data' ?>
         <?php include($_SERVER['DOCUMENT_ROOT'] . '/include/html/header.html') ?>
     </header>
     <main>

@@ -52,6 +52,7 @@
 </head>
 <body>
     <header>
+        <?php $active_menu = 'lihat data' ?>
         <?php include($_SERVER['DOCUMENT_ROOT'] . '/include/html/header.html') ?>
     </header>
     <main>

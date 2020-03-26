@@ -95,6 +95,7 @@ if( !$auth->TrushClient() ){
 </head>
 <body>
     <header>
+        <?php $active_menu = 'buat data'?>
         <?php include($_SERVER['DOCUMENT_ROOT'] . '/include/html/header.html') ?>
     </header>
     <main>
@@ -113,7 +114,7 @@ if( !$auth->TrushClient() ){
                         <p style="color: red"><?= $msg ?></p>         
                     <?php endif; ?>
                         <form action="" method="post">
-                            <input type="text" name="nomor_rm" id="input-nomor-rm" placeholder="nomor rekam medis" value="<?= $nomor_rm ?>" maxlength="6" inputmode="numeric" pattern="[0-9]*" >
+                            <input type="number" name="nomor_rm" id="input-nomor-rm" placeholder="nomor rekam medis" value="<?= $nomor_rm ?>" maxlength="6" inputmode="numeric" pattern="[0-9]*" >
                             <input type="text" name="nama" id="input-nama" placeholder="nama" value="<?= $nama ?>" maxlength="50">
                             <input type="date" name="tgl_lahir" id="input-tgl-lahir" value="<?= $tgl_lahir ?>">
                             <input type="text" name="alamat" id="input-alamat" placeholder="alamat tanpa rt/rw" value="<?= $alamat ?>">

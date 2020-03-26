@@ -108,6 +108,7 @@ if( !$auth->TrushClient() ){
 </head>
 <body>
     <header>
+        <?php $active_menu = 'home' ?>
         <?php include($_SERVER['DOCUMENT_ROOT'] . '/include/html/header.html') ?>
     </header>
     <main>
