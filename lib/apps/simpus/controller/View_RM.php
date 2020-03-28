@@ -24,8 +24,21 @@ class View_RM{
     private $_endTo = 10;
     private $_limit = 10;
     private $_sort = 'id';
+    /** @var string order by ACD | DEC */
+    private $_order = "ASC";    
 
     #property
+    public function filterByNomorRm($val){        
+        $verify = StringValidation::NumberValidation($val, 1,6);
+        if ($verify) {
+            $len = strlen($val);
+            $max = 6 - $len;
+            for ($i=0; $i < $max ; $i++) { 
+                $val = 0 . $val;
+            }
+            $this->_filter_nomor_rm = $val;
+        }
+    }
     /** 
      * @param string $val filter berdasarkan nama 
      * */
@@ -105,10 +118,30 @@ class View_RM{
             $this->_limit =  $val;
         }
     }
+    /**
+     * jumlah data yang ditampilkan per halaman
+     * paksa sesaui angak yg dikehendaki
+     */
+    public function forceLimitView($val){
+        $verify = StringValidation::NumberValidation($val, 1, 3);
+        if( $verify){
+            $this->_limit =  $val;
+        }
+    }
+
     private $_sortSupport = ['id', 'nomor_rm', 'nama', 'tanggal_lahir', 'alamat', 'nomor_rw', 'nama_kk', 'nomor_rm_kk'];
     public function sortUsing($val){
         $val = strtolower($val);
         $this->_sort = in_array($val, $this->_sortSupport) ? $val : 'id';
+    }
+
+    public function orderUsing($val = "ASC"){
+        $val = strtoupper($val);
+        if( $val == "ASC"){
+            $this->_order = "ASC";
+        }else{
+            $this->_order = "DESC";
+        }
     }
 
     public function __construct(){
@@ -129,7 +162,7 @@ class View_RM{
         $q = [];
         $q[] = $this->cekStringExis( 'nomor_rm', $this->_filter_nomor_rm);
         $q[] = $this->cekStringExis( 'nama', $this->_filter_nama);
-        $q[] = $this->cekStringExis( 'tgl', $this->_filter_tanggal_lahir);
+        $q[] = $this->cekStringExis( 'tanggal_lahir', $this->_filter_tanggal_lahir);
         $q[] = $this->cekStringExis( 'alamat', $this->_filter_alamat);
         $q[] = $this->cekStringExis( 'nomor_rt', $this->_filter_rt, false);
         $q[] = $this->cekStringExis( 'nomor_rw', $this->_filter_rw, false);
@@ -213,7 +246,11 @@ class View_RM{
             // $query = "SELECT * FROM data_rm ORDER BY id ASC";
             return [];
         } else{
-            $query = "SELECT * FROM data_rm WHERE " . $queryFilter . " ORDER BY ". $this->_sort ." ASC LIMIT " . $this->_limit;
+            $sort = $this->_sort;
+            $order = $this->_order;
+            $limit = $this->_limit;
+            $sort_order = ', tanggal_lahir';
+            $query = "SELECT * FROM data_rm WHERE $queryFilter ORDER BY $sort $order $sort_order LIMIT $limit";
         }
         # mengambil dari table
         $result = mysqli_query($link, $query);
@@ -234,10 +271,12 @@ class View_RM{
     public function resultAll(){
         $limit = $this->_limit; #limited views
         $sort = $this->_sort;
+        $order = $this->_order;
+        $sort_order = ', tanggal_lahir';
 
         $conn = new DbConfig();
         $link = $conn->StartConnection();
-        $query = "SELECT * FROM data_rm ORDER BY $sort ASC LIMIT $limit";
+        $query = "SELECT * FROM data_rm ORDER BY $sort $order $sort_order LIMIT $limit";
         $result = mysqli_query($link, $query);
         $data = [];
         while ( $feedback = mysqli_fetch_assoc( $result ) ){
