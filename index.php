@@ -11,7 +11,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/db/db_crud/DbConfig.php';
     $auth = new Auth($token, 1);
     $user = new User($auth->getUserName());
 ?>
-<?php 
+<?php
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -148,7 +148,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/db/db_crud/DbConfig.php';
                 </div>
                 <div class="box-info info-two">
                     <div class="box-info-left">
-                        <p>38</p>
+                        <p>83</p>
                     </div>
                     <div class="box-info-right">
                         <p>Data RM  tersimpan</p>
@@ -156,7 +156,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/db/db_crud/DbConfig.php';
                 </div>
                 <div class="box-info info-tree">
                     <div class="box-info-left">
-                        <p>0,002%</p>
+                        <p>0,005%</p>
                     </div>
                     <div class="box-info-right">
                         <p>record</p>

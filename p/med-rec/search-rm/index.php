@@ -50,6 +50,7 @@
             $show_data->limitView(25);
             #mulai mencari data
             $get_data = $show_data->result( );
+            $result_fount = count($get_data);
     }
 ?>
 <!DOCTYPE html>
@@ -128,7 +129,7 @@
                 </div>
                 <div class="box right">                        
                 
-                    <p>Result: </p>
+                    <p>Result: <?= isset($result_fount) ? $result_fount : ''?></p>
                     <div class="box-table">   
                         <table>
                             <tr>

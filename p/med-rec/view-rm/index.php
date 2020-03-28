@@ -17,12 +17,17 @@
 ?>
 <?php
     $user = new User($auth->getUserName());
+
     #ambil dari url
     $sort = isset($_GET['sortby']) ? $_GET['sortby'] : 'id';
+    #ambi dr session
+    $order = isset($_GET['orderby']) ? $_GET['orderby'] : 'ASC';
+
     # ambil data
     $show_data = new View_RM();
     $show_data->sortUsing($sort);
-    $show_data->limitView(10);
+    $show_data->orderUsing($order);
+    $show_data->limitView(25);
     $get_data = $show_data->resultAll();
 ?>
 <!DOCTYPE html>
@@ -67,16 +72,16 @@
             <button>Costume Filter</button>
         <?php if ( $get_data ): ?>
             <div class="boxs">
-                <table>
+                <table>                
                     <tr>
                         <th>No.</th>
-                        <th scope="col"><a class="sort-by" href="/p/med-rec/view-rm/?sortby=nomor_rm">No RM</a></th>
-                        <th scope="col"><a class="sort-by" href="/p/med-rec/view-rm/?sortby=nama">Nama</a></th>
-                        <th scope="col"><a class="sort-by" href="/p/med-rec/view-rm/?sortby=tanggal_lahir">Tanggal Lahir</a></th>
-                        <th scope="col"><a class="sort-by" href="/p/med-rec/view-rm/?sortby=alamat">alamat</a></th>
-                        <th scope="col"><a class="sort-by" href="/p/med-rec/view-rm/?sortby=nomor_rw">RT / RW</a></th>
-                        <th scope="col"><a class="sort-by" href="/p/med-rec/view-rm/?sortby=nama_kk">Nama KK</a></th>
-                        <th scope="col"><a class="sort-by" href="/p/med-rec/view-rm/?sortby=nomor_rm_kk">No. Rm KK</a></th>
+                        <th scope="col"><a class="sort-by" href="/p/med-rec/view-rm/?sortby=nomor_rm<?= $order == "ASC" && $sort == 'nomor_rm' ? "&orderby=DESC" : "&orderby=ASC"?>">No RM</a></th>
+                        <th scope="col"><a class="sort-by" href="/p/med-rec/view-rm/?sortby=nama<?= $order == "ASC" && $sort == 'nama' ? "&orderby=DESC" : "&orderby=ASC"?>">Nama</a></th>
+                        <th scope="col"><a class="sort-by" href="/p/med-rec/view-rm/?sortby=tanggal_lahir<?= $order == "ASC" && $sort == 'tanggal_lahir' ? "&orderby=DESC" : "&orderby=ASC"?>">Tanggal Lahir</a></th>
+                        <th scope="col"><a class="sort-by" href="/p/med-rec/view-rm/?sortby=alamat<?= $order == "ASC" && $sort == 'alamat' ? "&orderby=DESC" : "&orderby=ASC"?>">alamat</a></th>
+                        <th scope="col"><a class="sort-by" href="/p/med-rec/view-rm/?sortby=nomor_rw<?= $order == "ASC" && $sort == 'nomor_rw' ? "&orderby=DESC" : "&orderby=ASC"?>">RT / RW</a></th>
+                        <th scope="col"><a class="sort-by" href="/p/med-rec/view-rm/?sortby=nama_kk<?= $order == "ASC" && $sort == 'nama_kk' ? "&orderby=DESC" : "&orderby=ASC"?>">Nama KK</a></th>
+                        <th scope="col"><a class="sort-by" href="/p/med-rec/view-rm/?sortby=nomor_rm_kk<?= $order == "ASC" && $sort == 'nomor_rm_kk' ? "&orderby=DESC" : "&orderby=ASC"?>">No. Rm KK</a></th>
                         <th><a href="#">Action</a></th>
                     </tr>                         
                 <?php $idnum = (int) 1; ?>
