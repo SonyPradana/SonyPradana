@@ -10,7 +10,7 @@ input[type=number] {
     width: 100%;
     min-width: 100px;
     padding: 6px 10px;
-    margin: 10px 0;
+    margin: 10px 0 0 0;
     box-sizing: border-box;
     border: 1.5px solid #b50b0b;
     border-radius: 4px;
