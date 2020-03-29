@@ -1,8 +1,5 @@
 <?php 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/auth/init.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/library/init.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/simpus/init.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/db/db_crud/DbConfig.php';
+    require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/init.php';
 ?>
 <?php 
     #Aunt cek
