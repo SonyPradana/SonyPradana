@@ -3,32 +3,40 @@
 use function PHPSTORM_META\type;
 
 class Database{
-    private $host = 'DB_HOST';
-    private $user = 'DB_USER';
-    private $pass = 'DB_PASS';
-    private $dbname = 'DB_NAME';
+    // private $host = 'DB_HOST';
+    // private $user = 'DB_USER';
+    // private $pass = 'DB_PASS';
+    // private $dbname = 'DB_NAME';
     private $dbh;
     private $error;
     private $stmt;
 
-    public function __construct()    {
-        $dsn = 'mysql:host' . $this->host . 'dbname=' . $this->dbname;
+    public function __construct($host, $user, $pass, $dbname){
+        // konfigurasi driver
+        $dsn = 'mysql:host' . $host . 'dbname=' . $dbname;
         $option = array(
             PDO::ATTR_PERSISTENT => true,
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
         );
 
+        // menjalankan koneksi daabase
         try{
-            $this->dbh = new PDO($dsn, $this->user, $this->pass, $option);
+            $this->dbh = new PDO($dsn, $user, $pass, $option);
         } catch(PDOException $e){
             $this->error = $e->getMessage();
         }
     }
 
+    /**
+     *  mempersiapkan statement pada query
+     */
     public function query($query){
         $this->stmt = $this->dbh->prepare($query);
     }
 
+    /**
+     * menggantikan paramater input dari user dengan sebuah placeholder
+     */
     public function bind($param, $value, $type = null){
         if( is_null($type)){
             switch (true){
@@ -48,16 +56,50 @@ class Database{
         $this->stmt->bindValue($param, $value, $type);
     }
 
+    /**
+     * menjalankan atau mengeksekusi query 
+     */
     public function execute(){
         return $this->stmt->execute();
     }
 
+    /**
+     * mengembalikan hasil dari query yang dijalankan berupa array
+     */
     public function resultset(){
         $this->execute();
         return $this->stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    /**
+     * mengembalikan hasil dari query, ditampilkan hanya satu baris data saja
+     */
     public function single(){
         $this->execute();
         return $this->stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * menampilkan jumlah data yang berhasil di simpan, di ubah maupun dihapus
+     */
+    public function rowCount(){  
+        return $this->stmt->rowCount();  
+    }  
+
+    /**
+     * id dari data yang terakhir disimpan
+     */
+    public function lastInsertId() {  
+        return $this->dbh->lastInsertId();  
+    } 
+
+    public function beginTransaction(){  
+        return $this->dbh->beginTransaction();  
+    }  
+    public function endTransaction(){  
+        return $this->dbh->commit();  
+    }  
+    public function cancelTransaction(){  
+        return $this->dbh->rollBack();  
     }
 }
