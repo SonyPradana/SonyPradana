@@ -1,8 +1,5 @@
 <?php 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/core/library/init.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/core/simpus/init.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/core/database/init.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/config/DbConfig.php';
+    require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/init.php';
 ?>
 <?php 
     #Aunt cek
