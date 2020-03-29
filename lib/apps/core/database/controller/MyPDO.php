@@ -1,29 +1,27 @@
 <?php
-
-use function PHPSTORM_META\type;
-
-class Database{
-    // private $host = 'DB_HOST';
-    // private $user = 'DB_USER';
-    // private $pass = 'DB_PASS';
-    // private $dbname = 'DB_NAME';
+class MyPDO{    
+    private $host = 'localhost';
+    private $user = 'root';
+    private $pass = '';
+    private $dbname = 'simpusle_simpus_lerep';
+    
     private $dbh;
-    private $error;
     private $stmt;
 
-    public function __construct($host, $user, $pass, $dbname){
+    public function __construct()
+    {        
         // konfigurasi driver
-        $dsn = 'mysql:host' . $host . 'dbname=' . $dbname;
-        $option = array(
+        $dsn = 'mysql:host=' . $this->host . ';dbname=' . $this->dbname;
+        $option = [
             PDO::ATTR_PERSISTENT => true,
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
-        );
+        ];
 
         // menjalankan koneksi daabase
-        try{
-            $this->dbh = new PDO($dsn, $user, $pass, $option);
-        } catch(PDOException $e){
-            $this->error = $e->getMessage();
+        try {
+            $this->dbh = new PDO($dsn, $this->user, $this->pass, $option);
+        } catch(PDOException $e) {
+            die($e->getMessage());
         }
     }
 

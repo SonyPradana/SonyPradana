@@ -7,7 +7,7 @@
  * @author sonypradana@gmail.com 
  */
 spl_autoload_register(function( $class ){
-    if (file_exists( $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/library/controller/' . $class . '.php')){
-        require_once  $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/library/controller/' . $class . '.php';
+    if (file_exists( $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/core/library/controller/' . $class . '.php')){
+        require_once  $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/core/library/controller/' . $class . '.php';
     }
 });

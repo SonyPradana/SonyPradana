@@ -10,7 +10,7 @@
 spl_autoload_register(function( $class ){
     // $class = explode('\\', $class);
     // $class = end($class);
-    if (file_exists( $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/auth/controller/' . $class . '.php')){
-        require_once  $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/auth/controller/' . $class . '.php';
+    if (file_exists( $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/core/database/controller/' . $class . '.php')){
+        require_once  $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/core/database/controller/' . $class . '.php';
     }
 }, false);

@@ -1,8 +1,8 @@
 <?php 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/auth/init.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/library/init.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/simpus/init.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/db/db_crud/DbConfig.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/core/library/init.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/core/simpus/init.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/core/database/init.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/config/DbConfig.php';
 ?>
 <?php 
     #Aunt cek
@@ -12,6 +12,9 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/db/db_crud/DbConfig.php';
     $user = new User($auth->getUserName());
 ?>
 <?php
+    $db = new MyPDO();
+    $db->query("SELECT * FROM data_rm");
+    $result = $db->resultset();
 ?>
 <!DOCTYPE html>
 <html lang="en">

@@ -1,6 +1,6 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/auth/init.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/db/db_crud/DbConfig.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/core/auth/init.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/config/DbConfig.php';
 
 session_start();
 $token = (isset($_SESSION['token']) ) ? $_SESSION['token'] : '';

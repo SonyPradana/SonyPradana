@@ -1,8 +1,8 @@
 <?php
 #import modul 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/auth/init.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/library/init.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/db/db_crud/DbConfig.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/core/auth/init.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/core/library/init.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/config/DbConfig.php';
 use StringValidation as sv;
 ?>
 <?php
