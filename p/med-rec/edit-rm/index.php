@@ -82,6 +82,7 @@ if( !$auth->TrushClient() ){
     <meta name="description" content="sisteminformasi kesehtan puskesmas Lerep">
     <meta name="keywords" content="simpus lerep, pkm lerep">
     <meta name="author" content="amp">
+<?php include($_SERVER['DOCUMENT_ROOT'] . '/include/html/metatag.html') ?>
 
     <link rel="stylesheet" href="/lib/css/style-main.css">
     <link rel="stylesheet" href="/lib/css/ui/v1/control.default.css">

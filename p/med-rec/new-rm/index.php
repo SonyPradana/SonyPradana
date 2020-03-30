@@ -63,6 +63,14 @@ if( !$auth->TrushClient() ){
             $msg =  'gagal menyimpan';
         }
 
+        # merefrresh nomor rm terakhir saad form dikirim
+        # ambil nomor rm terakhir
+        $data = new View_RM();
+        $data->limitView(1);
+        $data->sortUsing('nomor_rm');
+        $data->orderUsing("DESC");
+        $last_nomor_rm = $data->resultAll()[0]['nomor_rm'];
+
     }
 ?>
 <!DOCTYPE html>
@@ -77,6 +85,7 @@ if( !$auth->TrushClient() ){
     <meta name="description" content="sisteminformasi kesehtan puskesmas Lerep">
     <meta name="keywords" content="simpus lerep, pkm lerep">
     <meta name="author" content="amp">
+<?php include($_SERVER['DOCUMENT_ROOT'] . '/include/html/metatag.html') ?>
 
     <link rel="stylesheet" href="/lib/css/style-main.css">
     <link rel="stylesheet" href="/lib/css/ui/v1/control.default.css">

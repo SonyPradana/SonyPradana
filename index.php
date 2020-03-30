@@ -22,6 +22,11 @@
     <meta name="description" content="sisteminformasi kesehtan puskesmas Lerep">
     <meta name="keywords" content="simpus lerep, pkm lerep">
     <meta name="author" content="amp">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" sizes="16x16 24x24 32x32 64x64">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
 
     <link rel="stylesheet" href="lib/css/style-main.css">
     <style>

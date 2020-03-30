@@ -76,6 +76,7 @@ if( isset( $_POST['submit'])){
     <meta name="description" content="sistem informasi kesehatan puskesmas Lerep">
     <meta name="keywords" content="simpus lerep, pkm lerep">
     <meta name="author" content="amp">
+<?php include($_SERVER['DOCUMENT_ROOT'] . '/include/html/metatag.html') ?>
        
     <style>
         body{background-color: #d2d6de;}

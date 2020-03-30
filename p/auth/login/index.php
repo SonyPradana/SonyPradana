@@ -102,6 +102,7 @@ $_SESSION['to'] = $exp_bane;
     <meta name="description" content="sistem informasi kesehatan puskesmas Lerep">
     <meta name="keywords" content="simpus lerep, pkm lerep">
     <meta name="author" content="amp">
+<?php include($_SERVER['DOCUMENT_ROOT'] . '/include/html/metatag.html') ?>
        
     <style>
         body {
