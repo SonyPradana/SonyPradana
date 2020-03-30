@@ -63,6 +63,14 @@ if( !$auth->TrushClient() ){
             $msg =  'gagal menyimpan';
         }
 
+        # merefrresh nomor rm terakhir saad form dikirim
+        # ambil nomor rm terakhir
+        $data = new View_RM();
+        $data->limitView(1);
+        $data->sortUsing('nomor_rm');
+        $data->orderUsing("DESC");
+        $last_nomor_rm = $data->resultAll()[0]['nomor_rm'];
+
     }
 ?>
 <!DOCTYPE html>
