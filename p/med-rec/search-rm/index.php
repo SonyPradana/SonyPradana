@@ -31,7 +31,7 @@
     $nama_kk_search = isset( $_GET['nama-kk-search'] ) ? $_GET['nama-kk-search'] : '';
     $no_rm_kk_search = isset( $_GET['no-rm-kk-search'] ) ? $_GET['no-rm-kk-search'] : '';    
     # data lainnya
-    $sort = isset($_GET['sortby']) ? $_GET['sortby'] : 'id';
+    $sort = isset($_GET['sortby']) ? $_GET['sortby'] : 'nama';
     
     if( isset( $_GET['submit'])  ){
             # cari berdasarkan nama
@@ -61,7 +61,7 @@
     <meta http-equiv="content-language" content="In-Id">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>crai data rm</title>
+    <title>Cari data rm</title>
     <meta name="description" content="sisteminformasi kesehtan puskesmas Lerep">
     <meta name="keywords" content="simpus lerep, pkm lerep">
     <meta name="author" content="amp">
@@ -151,7 +151,7 @@
                                 <th><?= $idnum ?></th>
                                 <th><?= $data['nomor_rm']?></th>
                                 <th><?= $data['nama']?></th>
-                                <th><?= $data['tanggal_lahir']?></th>
+                                <th><?= date("d-m-Y", strtotime( $data['tanggal_lahir']))  ?></th>
                                 <th><?= $data['alamat']?></th>
                                 <th><?= $data['nomor_rt'] . ' / ' . $data['nomor_rw']?></th>
                                 <th><?= $data['nama_kk']?></th>

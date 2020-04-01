@@ -19,7 +19,7 @@
     $user = new User($auth->getUserName());
 
     #ambil dari url
-    $sort = isset($_GET['sortby']) ? $_GET['sortby'] : 'id';
+    $sort = isset($_GET['sortby']) ? $_GET['sortby'] : 'nomor_rm';
     #ambi dr session
     $order = isset($_GET['orderby']) ? $_GET['orderby'] : 'ASC';
 
@@ -79,7 +79,7 @@
                         <th scope="col"><a class="sort-by" href="/p/med-rec/view-rm/?sortby=nomor_rm<?= $order == "ASC" && $sort == 'nomor_rm' ? "&orderby=DESC" : "&orderby=ASC"?>">No RM</a></th>
                         <th scope="col"><a class="sort-by" href="/p/med-rec/view-rm/?sortby=nama<?= $order == "ASC" && $sort == 'nama' ? "&orderby=DESC" : "&orderby=ASC"?>">Nama</a></th>
                         <th scope="col"><a class="sort-by" href="/p/med-rec/view-rm/?sortby=tanggal_lahir<?= $order == "ASC" && $sort == 'tanggal_lahir' ? "&orderby=DESC" : "&orderby=ASC"?>">Tanggal Lahir</a></th>
-                        <th scope="col"><a class="sort-by" href="/p/med-rec/view-rm/?sortby=alamat<?= $order == "ASC" && $sort == 'alamat' ? "&orderby=DESC" : "&orderby=ASC"?>">alamat</a></th>
+                        <th scope="col"><a class="sort-by" href="/p/med-rec/view-rm/?sortby=alamat<?= $order == "ASC" && $sort == 'alamat' ? "&orderby=DESC" : "&orderby=ASC"?>">Alamat</a></th>
                         <th scope="col"><a class="sort-by" href="/p/med-rec/view-rm/?sortby=nomor_rw<?= $order == "ASC" && $sort == 'nomor_rw' ? "&orderby=DESC" : "&orderby=ASC"?>">RT / RW</a></th>
                         <th scope="col"><a class="sort-by" href="/p/med-rec/view-rm/?sortby=nama_kk<?= $order == "ASC" && $sort == 'nama_kk' ? "&orderby=DESC" : "&orderby=ASC"?>">Nama KK</a></th>
                         <th scope="col"><a class="sort-by" href="/p/med-rec/view-rm/?sortby=nomor_rm_kk<?= $order == "ASC" && $sort == 'nomor_rm_kk' ? "&orderby=DESC" : "&orderby=ASC"?>">No. Rm KK</a></th>
@@ -91,7 +91,7 @@
                         <th><?= $idnum ?></th>
                         <th><?= $data['nomor_rm']?></th>
                         <th><?= $data['nama']?></th>
-                        <th><?= $data['tanggal_lahir']?></th>
+                        <th><?= date("d-m-Y", strtotime( $data['tanggal_lahir']))  ?></th>
                         <th><?= $data['alamat']?></th>
                         <th><?= $data['nomor_rt'] . ' / ' . $data['nomor_rw']?></th>
                         <th><?= $data['nama_kk']?></th>
