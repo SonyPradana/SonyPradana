@@ -11,7 +11,6 @@
     $token = (isset($_SESSION['token']) ) ? $_SESSION['token'] : '';
     $auth = new Auth($token, 2);
     if( !$auth->TrushClient() ){
-        header("Location: /p/auth/login");   
         exit();
     }
 ?>
