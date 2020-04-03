@@ -16,6 +16,9 @@ td a:not(.link) {
     display: block;
     width: 100%;
 }
+th .link{
+    margin-right: 4px;
+}
         
 th a.sort-by{ 
     padding-right: 18px;
@@ -42,12 +45,12 @@ a.sort-by:after{
 }
 
 table {
-    margin-top: 5px;
+    /* margin-top: 5px; */
     padding: 5px;
-    font-family: arial, sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     border-collapse: collapse;
     width: 100%;
-    line-height: 2;
+    line-height: 29px;
 }
 td, th {
     border: 1px solid #f0f0f0;
@@ -56,5 +59,11 @@ td, th {
 }
 
 tr:nth-child(even) {
-    background-color: #f0f0f0;
+    background-color: #f6f6f6de;
+}
+tr:hover:not(:first-child ){
+    background-color: #f9ffc4;
+}
+th.mark{
+    color:#00ef0f
 }
