@@ -18,15 +18,20 @@
 <?php
     $user = new User($auth->getUserName());
 
-    #ambil dari url
+    #config
     $sort = 'nomor_rm';
-    #ambi dr session
     $order = 'ASC';
+    $page = isset( $_GET['page'] ) ? $_GET['page'] : 1;
+    $page = is_numeric($page) ? $page : 1;
+
     # ambil data
     $show_data = new View_RM();
     $show_data->sortUsing($sort);
     $show_data->orderUsing($order);
     $show_data->limitView(25);
+    $max_page = $show_data->maxPage();
+    $page = $page > $max_page ? $max_page : $page;
+    $show_data->currentPage($page);
     $get_data = $show_data->resultAll();
 ?>
 <!DOCTYPE html>
@@ -45,6 +50,7 @@
 
     <link rel="stylesheet" href="/lib/css/style-main.css">
     <link rel="stylesheet" href="/lib/css/ui/v1/table.css">
+    <link rel="stylesheet" href="/lib/css/ui/v1/pagination.css">
     <style>
         button{
             margin: 7px 0;
@@ -172,20 +178,20 @@
                     <!-- table -->
                     <table>                
                         <tr>
-                            <th>No.</th>
-                            <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="GDcostumeFilter('nomor_rm', <?= $order == 'ASC' && $sort == 'nomor_rm' ? "'DESC'" : "'ASC'" ?>, [])">No RM</a></th>
-                            <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="GDcostumeFilter('nama', <?= $order == 'ASC' && $sort == 'nama' ? "'DESC'" : "'ASC'" ?>, [])">Nama</a></th>
-                            <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="GDcostumeFilter('tanggal_lahir', <?= $order == 'ASC' && $sort == 'tanggal_lahir' ? "'DESC'" : "'ASC'"?>, [])">Tanggal Lahir</a></th>
-                            <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="GDcostumeFilter('alamat', <?= $order == 'ASC' && $sort == 'alamat' ? "'DESC'" : "'ASC'"?>, [])">Alamat</a></th>
-                            <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="GDcostumeFilter('nomor_rw',<?= $order == 'ASC' && $sort == 'nomor_rt' ? "'DESC'" : "'ASC'"?>, [])">RT / RW</a></th>
-                            <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="GDcostumeFilter('nama_kk',<?= $order == 'ASC' && $sort == 'nama_kk' ? "'DESC'" : "'ASC'"?>, [])">Nama KK</a></th>
-                            <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="GDcostumeFilter('nomor_rm_kk', <?= $order == 'ASC' && $sort == 'nomor_rm_kk' ? "'DESC'" : "'ASC'"?>, [])">No. Rm KK</a></th>
+                            <!-- <th>No.</th> -->
+                            <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="GDcostumeFilter('nomor_rm', <?= $order == 'ASC' && $sort == 'nomor_rm' ? "'DESC'" : "'ASC'" ?>, <?= $page ?>, [])">No RM</a></th>
+                            <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="GDcostumeFilter('nama', <?= $order == 'ASC' && $sort == 'nama' ? "'DESC'" : "'ASC'" ?>, <?= $page ?>, [])">Nama</a></th>
+                            <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="GDcostumeFilter('tanggal_lahir', <?= $order == 'ASC' && $sort == 'tanggal_lahir' ? "'DESC'" : "'ASC'"?>, <?= $page ?>, [])">Tanggal Lahir</a></th>
+                            <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="GDcostumeFilter('alamat', <?= $order == 'ASC' && $sort == 'alamat' ? "'DESC'" : "'ASC'"?>, <?= $page ?>, [])">Alamat</a></th>
+                            <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="GDcostumeFilter('nomor_rw',<?= $order == 'ASC' && $sort == 'nomor_rt' ? "'DESC'" : "'ASC'"?>, <?= $page ?>, [])">RT / RW</a></th>
+                            <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="GDcostumeFilter('nama_kk',<?= $order == 'ASC' && $sort == 'nama_kk' ? "'DESC'" : "'ASC'"?>, <?= $page ?>, [])">Nama KK</a></th>
+                            <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="GDcostumeFilter('nomor_rm_kk', <?= $order == 'ASC' && $sort == 'nomor_rm_kk' ? "'DESC'" : "'ASC'"?>, <?= $page ?>, [])">No. Rm KK</a></th>
                             <th><a href="javascript:void(0)">Action</a></th>
                         </tr>                         
-                    <?php $idnum = (int) 1; ?>
+                    <?php $idnum = (int) ($page * 25) - 24; ?>
                     <?php foreach( $get_data as $data) :?>            
                         <tr>       
-                            <th><?= $idnum ?></th>
+                            <!-- <th><?= $idnum ?></th> -->
                             <th><?= $data['nomor_rm']?></th>
                             <th><?= ucwords( $data['nama'] )?></th>
                             <th><?= date("d-m-Y", strtotime( $data['tanggal_lahir']))  ?></th>
@@ -198,7 +204,19 @@
                         <?php $idnum++; ?>
                     <?php endforeach ; ?>
                     </table>
-
+                    <div class="box-pagination">
+                        <div class="pagination">
+                            <?php if( $page - 1 != 0 ):?>
+                                <a href="javascript:void(0)" onclick="GDcostumeFilter('nomor_rm', <?= $order == 'ASC' && $sort == 'nomor_rm' ? "'DESC'" : "'ASC'" ?>, <?= $page -1 ?>, [])">&laquo;</a>
+                            <?php endif;?>
+                            <?php for ($i=1; $i <= $max_page; $i++) :?>
+                                <a <?= $i == $page ? 'class="active"' : '' ?> href="javascript:void(0)" onclick="GDcostumeFilter('nomor_rm', <?= $order == 'ASC' && $sort == 'nomor_rm' ? "'DESC'" : "'ASC'" ?>, <?= $i ?>, [])"><?= $i ?></a>
+                            <?php endfor;?>
+                            <?php if( $page + 1 != $max_page ):?>
+                                <a href="javascript:void(0)" onclick="GDcostumeFilter('nomor_rm', <?= $order == 'ASC' && $sort == 'nomor_rm' ? "'DESC'" : "'ASC'" ?>, <?= $page +1 ?>, [])">&raquo;</a>
+                            <?php endif;?>
+                        </div>
+                    </div>
                 </div>
             </div>
         <?php else : ?>
@@ -242,8 +260,8 @@
         var cNyatnyono = formData.get('filter-alamat-nyatnyono');
         var cStatusKK = formData.get('filter-kk');
 
-        var filters = [rangeUmur, cbandarjo, cbranjang, cKalisidi, cKeji, cLerep, cNyatnyono, cStatusKK ];
-        GDcostumeFilter('alamat', 'asc', filters);
+        var filters = [rangeUmur, cbandarjo, cbranjang, cKalisidi, cKeji, cLerep, cNyatnyono, cStatusKK];
+        GDcostumeFilter('alamat', 'asc', <?= $page ?>, filters);
     });
 </script>
 </html>

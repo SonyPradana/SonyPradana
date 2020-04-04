@@ -28,8 +28,7 @@ class View_RM{
     private $_filter_status_kk = false;
 
     #konfigurasi    
-    private $_startFrom = 0;
-    private $_endTo = 10;
+    private $_current_pos = 1;  # set oleh user
     private $_limit = 10;
     private $_sort = 'id';
     /** @var string order by ACD | DEC */
@@ -204,6 +203,52 @@ class View_RM{
         }
     }
 
+    /**
+     * me-set posisi halaman, posisi halaman tergantung dengan jumalah data dan data yg ditampilkan setiap halam.
+     * 
+     * bila posisi halman tidak disetting halman akan menunjuk pada halaman awal
+     * @param interger $val posisi halaman
+     */
+    public function currentPage($val){
+        $val = is_numeric( $val ) ? $val : 1;
+        $val = $val < 1 ? 1 : $val;
+        $val = $val > 100 ? 100 : $val;
+        $val= floor($val);
+
+        $this->_current_pos = $val;
+    }
+
+    /**
+     * menampilkan jumlah data yg disajikan setalah filter di atur
+     * 
+     * @return int jumlah data 
+     */
+    public function maxData(){
+        $query_filter = $this->filter();
+        $query_filters = $this->filters();
+
+        $merge_filter = $query_filter . $query_filters;   
+        $merge_filter = $merge_filter != '' ? "WHERE " . $merge_filter : "";
+
+        $query = "SELECT COUNT(id) FROM data_rm $merge_filter";
+
+        $conn = new DbConfig();
+        $link = $conn->StartConnection();        
+        $result = mysqli_query($link, $query);
+        $feedback = mysqli_fetch_assoc( $result );
+
+        return (int) $feedback['COUNT(id)'];    
+    }
+
+    /**
+     * jumlah halaman maksimum yang dapat di tampilkan
+     * 
+     * @return interger jumlah halaman
+     */
+    public function maxPage(){
+        return (int) ceil($this->maxData() / $this->_limit);
+    }
+
     public function __construct(){
         
     }   
@@ -364,9 +409,10 @@ class View_RM{
         } else{
             $sort = $this->_sort;
             $order = $this->_order;
+            $start_data = ($this->_current_pos * $this->_limit) - $this->_limit;
             $limit = $this->_limit;
             $sort_order = ', tanggal_lahir';
-            $query = "SELECT * FROM data_rm WHERE $queryFilter ORDER BY $sort $order $sort_order LIMIT $limit";
+            $query = "SELECT * FROM data_rm WHERE $queryFilter ORDER BY $sort $order $sort_order LIMIT $start_data, $limit";
         }
         # mengambil dari table
         $result = mysqli_query($link, $query);
@@ -395,11 +441,12 @@ class View_RM{
         $limit = $this->_limit; #limited views
         $sort = $this->_sort;
         $order = $this->_order;
+        $start_data = ($this->_current_pos * $this->_limit) - $this->_limit;
         $sort_order = ', tanggal_lahir';
 
         $conn = new DbConfig();
         $link = $conn->StartConnection();
-        $query = "SELECT * FROM data_rm ORDER BY $sort $order $sort_order LIMIT $limit";
+        $query = "SELECT * FROM data_rm ORDER BY $sort $order $sort_order LIMIT $start_data, $limit";
         $result = mysqli_query($link, $query);
         $data = [];
         while ( $feedback = mysqli_fetch_assoc( $result ) ){
@@ -437,9 +484,10 @@ class View_RM{
        } else{
            $sort = $this->_sort;
            $order = $this->_order;
+           $start_data = ($this->_current_pos * $this->_limit) - $this->_limit;
            $limit = $this->_limit;
            $sort_order = ', tanggal_lahir';
-           $query = "SELECT * FROM data_rm WHERE $queryFilter ORDER BY $sort $order $sort_order LIMIT $limit";
+           $query = "SELECT * FROM data_rm WHERE $queryFilter ORDER BY $sort $order $sort_order LIMIT $start_data, $limit";
        }
        # mengambil dari table
        $result = mysqli_query($link, $query);
