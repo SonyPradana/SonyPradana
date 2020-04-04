@@ -207,13 +207,13 @@
                     <div class="box-pagination">
                         <div class="pagination">
                             <?php if( $page - 1 != 0 ):?>
-                                <a href="javascript:void(0)" onclick="GDcostumeFilter('nomor_rm', <?= $order == 'ASC' && $sort == 'nomor_rm' ? "'DESC'" : "'ASC'" ?>, <?= $page -1 ?>, [])">&laquo;</a>
+                                <a href="javascript:void(0)" onclick="GDcostumeFilter('<?= $sort ?>', '<?= $order ?>', <?= $page -1 ?>, [])">&laquo;</a>
                             <?php endif;?>
                             <?php for ($i=1; $i <= $max_page; $i++) :?>
-                                <a <?= $i == $page ? 'class="active"' : '' ?> href="javascript:void(0)" onclick="GDcostumeFilter('nomor_rm', <?= $order == 'ASC' && $sort == 'nomor_rm' ? "'DESC'" : "'ASC'" ?>, <?= $i ?>, [])"><?= $i ?></a>
+                                <a <?= $i == $page ? 'class="active"' : '' ?> href="javascript:void(0)" onclick="GDcostumeFilter('<?= $sort ?>', '<?= $order ?>', <?= $i ?>, [])"><?= $i ?></a>
                             <?php endfor;?>
                             <?php if( $page + 1 != $max_page ):?>
-                                <a href="javascript:void(0)" onclick="GDcostumeFilter('nomor_rm', <?= $order == 'ASC' && $sort == 'nomor_rm' ? "'DESC'" : "'ASC'" ?>, <?= $page +1 ?>, [])">&raquo;</a>
+                                <a href="javascript:void(0)" onclick="GDcostumeFilter('<?= $sort ?>', '<?= $order ?>', <?= $page +1 ?>, [])">&raquo;</a>
                             <?php endif;?>
                         </div>
                     </div>
