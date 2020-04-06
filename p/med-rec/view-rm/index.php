@@ -178,7 +178,7 @@
                     <!-- table -->
                     <table>                
                         <tr>
-                            <!-- <th>No.</th> -->
+                            <th>No.</th>
                             <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="GDcostumeFilter('nomor_rm', <?= $order == 'ASC' && $sort == 'nomor_rm' ? "'DESC'" : "'ASC'" ?>, <?= $page ?>, [])">No RM</a></th>
                             <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="GDcostumeFilter('nama', <?= $order == 'ASC' && $sort == 'nama' ? "'DESC'" : "'ASC'" ?>, <?= $page ?>, [])">Nama</a></th>
                             <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="GDcostumeFilter('tanggal_lahir', <?= $order == 'ASC' && $sort == 'tanggal_lahir' ? "'DESC'" : "'ASC'"?>, <?= $page ?>, [])">Tanggal Lahir</a></th>
@@ -191,7 +191,7 @@
                     <?php $idnum = (int) ($page * 25) - 24; ?>
                     <?php foreach( $get_data as $data) :?>            
                         <tr>       
-                            <!-- <th><?= $idnum ?></th> -->
+                            <th><?= $idnum ?></th>
                             <th><?= $data['nomor_rm']?></th>
                             <th><?= ucwords( $data['nama'] )?></th>
                             <th><?= date("d-m-Y", strtotime( $data['tanggal_lahir']))  ?></th>
