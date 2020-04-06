@@ -128,7 +128,7 @@
         </table>
         <div class="box-pagination">
             <div class="pagination">
-                <?php if( $page > 0 ):?>
+                <?php if( $page > 1 ):?>
                     <a href="javascript:void(0)" onclick="GDcostumeFilter('<?= $sort?>', '<?= $order ?>', <?= $page -1 ?>, <?= $arr?>)">&laquo;</a>
                 <?php endif;?>                
                 <?php if( $max_page > 5 ):?>
