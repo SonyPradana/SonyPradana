@@ -22,7 +22,14 @@
             border-radius: 5px;
         }
 
-        .pagination a:hover:not(.active) {
+        .pagination a:hover:not(.active){
             background-color: #ddd;
             border-radius: 5px;
+        }
+        
+        .pagination a.sperator {
+            padding:   8px 0px;
+        }
+        .pagination a.sperator:hover{
+            background-color:transparent;
         }

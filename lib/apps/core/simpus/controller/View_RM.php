@@ -225,7 +225,7 @@ class View_RM{
      */
     public function maxData(){
         $query_filter = $this->filter();
-        $query_filters = $this->filters();
+        $query_filters = $this->filters(false);
 
         $merge_filter = $query_filter . $query_filters;   
         $merge_filter = $merge_filter != '' ? "WHERE " . $merge_filter : "";

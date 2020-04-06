@@ -57,7 +57,7 @@
             $show_data->filtersAddAlamat("bandarjo");
         }
         if( $d2 == 'on'){
-            $show_data->filtersAddAlamat("barnjang");
+            $show_data->filtersAddAlamat("branjang");
         }
         if( $d3 == 'on'){
             $show_data->filtersAddAlamat("kalisidi");
@@ -128,13 +128,36 @@
         </table>
         <div class="box-pagination">
             <div class="pagination">
-                <?php if( $page - 1 != 0 ):?>
+                <?php if( $page > 0 ):?>
                     <a href="javascript:void(0)" onclick="GDcostumeFilter('<?= $sort?>', '<?= $order ?>', <?= $page -1 ?>, <?= $arr?>)">&laquo;</a>
-                <?php endif;?>
-                <?php for ($i=1; $i <= $max_page; $i++) :?>
-                    <a <?= $i == $page ? 'class="active"' : '' ?> href="javascript:void(0)" onclick="GDcostumeFilter('<?= $sort?>', '<?= $order ?>', <?= $i ?>, <?= $arr?>)"><?= $i ?></a>
-                <?php endfor;?>
-                <?php if( $page + 1 != $max_page ):?>
+                <?php endif;?>                
+                <?php if( $max_page > 5 ):?>
+                    <!-- satu depan -->
+                    <a <?= 1 == $page ? 'class="active"' : '' ?> href="javascript:void(0)" onclick="GDcostumeFilter('<?= $sort ?>', '<?= $order ?>', 1, <?= $arr?>)">1</a>
+                    <!-- tiga tengah -->
+                    <?php if( $page  > 2 && $page < ($max_page - 1)):?>
+                        <a href="javascript:void(0)" class="sperator">...</a>
+                        <a href="javascript:void(0)" onclick="GDcostumeFilter('<?= $sort ?>', '<?= $order ?>', <?= $page - 1 ?>, <?= $arr?>)"><?= $page - 1 ?></a>
+                        <a class="active" href="javascript:void(0)" onclick="GDcostumeFilter('<?= $sort ?>', '<?= $order ?>', <?= $page ?>, <?= $arr?>)"><?= $page ?></a>
+                        <a href="javascript:void(0)" onclick="GDcostumeFilter('<?= $sort ?>', '<?= $order ?>', <?= $page + 1 ?>, <?= $arr?>)"><?= $page + 1 ?></a>
+                        <a href="javascript:void(0)" class="sperator">...</a>
+                    <?php elseif( $page < 4 ):?>    
+                        <a <?= 2 == $page ? 'class="active"' : '' ?> href="javascript:void(0)" onclick="GDcostumeFilter('<?= $sort ?>', '<?= $order ?>', 2, <?= $arr?>)">2</a>
+                        <a <?= 3 == $page ? 'class="active"' : '' ?> href="javascript:void(0)" onclick="GDcostumeFilter('<?= $sort ?>', '<?= $order ?>', 3, <?= $arr?>)">3</a>
+                        <a href="javascript:void(0)" class="sperator">...</a>
+                    <?php elseif( $page > ($max_page - 2) ):?>  
+                        <a href="javascript:void(0)" class="sperator">...</a>  
+                        <a <?= $max_page - 2 == $page ? 'class="active"' : '' ?> href="javascript:void(0)" onclick="GDcostumeFilter('<?= $sort ?>', '<?= $order ?>', <?= $max_page - 2 ?>, <?= $arr?>)"><?= $max_page - 2?></a>
+                        <a <?= $max_page - 1 == $page ? 'class="active"' : '' ?> href="javascript:void(0)" onclick="GDcostumeFilter('<?= $sort ?>', '<?= $order ?>', <?= $max_page - 1 ?>, <?= $arr?>)"><?= $max_page - 1?></a>                        
+                    <?php endif;?> 
+                    <!-- satu belakang -->
+                    <a <?= $max_page == $page ? 'class="active"' : '' ?> href="javascript:void(0)" onclick="GDcostumeFilter('<?= $sort ?>', '<?= $order ?>', <?= $max_page ?>, <?= $arr?>)"><?= $max_page ?></a>                                
+                <?php elseif( $max_page < 6 ):?>
+                    <?php for ($i=1; $i <= $max_page; $i++) :?>
+                        <a <?= $i == $page ? 'class="active"' : '' ?> href="javascript:void(0)" onclick="GDcostumeFilter('<?= $sort?>', '<?= $order ?>', <?= $i ?>, <?= $arr?>)"><?= $i ?></a>
+                    <?php endfor;?>
+                <?php endif;?> 
+                <?php if( $page < $max_page ):?>
                     <a href="javascript:void(0)" onclick="GDcostumeFilter('<?= $sort?>', '<?= $order ?>', <?= $page +1 ?>, <?= $arr?>)">&raquo;</a>
                 <?php endif;?>
             </div>

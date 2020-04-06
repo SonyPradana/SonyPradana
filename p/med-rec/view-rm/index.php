@@ -206,13 +206,36 @@
                     </table>
                     <div class="box-pagination">
                         <div class="pagination">
-                            <?php if( $page - 1 != 0 ):?>
+                            <?php if( $page > 0  ):?>
                                 <a href="javascript:void(0)" onclick="GDcostumeFilter('<?= $sort ?>', '<?= $order ?>', <?= $page -1 ?>, [])">&laquo;</a>
-                            <?php endif;?>
-                            <?php for ($i=1; $i <= $max_page; $i++) :?>
-                                <a <?= $i == $page ? 'class="active"' : '' ?> href="javascript:void(0)" onclick="GDcostumeFilter('<?= $sort ?>', '<?= $order ?>', <?= $i ?>, [])"><?= $i ?></a>
-                            <?php endfor;?>
-                            <?php if( $page + 1 != $max_page ):?>
+                            <?php endif;?>                            
+                            <?php if( $max_page > 5 ):?>
+                                <!-- satu depan -->
+                                <a <?= 1 == $page ? 'class="active"' : '' ?> href="javascript:void(0)" onclick="GDcostumeFilter('<?= $sort ?>', '<?= $order ?>', 1, [])">1</a>
+                                <!-- tiga tengah -->                                
+                                <?php if( $page  > 2 && $page < ($max_page - 1) ):?>
+                                    <a href="javascript:void(0)" class="sperator">...</a>
+                                    <a href="javascript:void(0)" onclick="GDcostumeFilter('<?= $sort ?>', '<?= $order ?>', <?= $page - 1 ?>, [])"><?= $page - 1 ?></a>
+                                    <a class="active" href="javascript:void(0)" onclick="GDcostumeFilter('<?= $sort ?>', '<?= $order ?>', <?= $page ?>, [])"><?= $page ?></a>
+                                    <a href="javascript:void(0)" onclick="GDcostumeFilter('<?= $sort ?>', '<?= $order ?>', <?= $page + 1 ?>, [])"><?= $page + 1 ?></a>
+                                    <a href="javascript:void(0)" class="sperator">...</a>
+                                <?php elseif( $page < 4 ):?> 
+                                    <a <?= 2 == $page ? 'class="active"' : '' ?> href="javascript:void(0)" onclick="GDcostumeFilter('<?= $sort ?>', '<?= $order ?>', 2, [])">2</a>
+                                    <a <?= 3 == $page ? 'class="active"' : '' ?> href="javascript:void(0)" onclick="GDcostumeFilter('<?= $sort ?>', '<?= $order ?>', 3, [])">3</a>
+                                    <a href="javascript:void(0)" class="sperator">...</a>
+                                <?php elseif( $page > ($max_page - 2) ):?>  
+                                    <a href="javascript:void(0)" class="sperator">...</a>
+                                    <a <?= $max_page - 2 == $page ? 'class="active"' : '' ?> href="javascript:void(0)" onclick="GDcostumeFilter('<?= $sort ?>', '<?= $order ?>', <?= $max_page - 2 ?>, [])"><?= $max_page - 2 ?></a>
+                                    <a <?= $max_page - 1 == $page ? 'class="active"' : '' ?> href="javascript:void(0)" onclick="GDcostumeFilter('<?= $sort ?>', '<?= $order ?>', <?= $max_page - 1 ?>, [])"><?= $max_page -1 ?></a>
+                                <?php endif;?>  
+                                <!-- satu belakang -->
+                                <a href="javascript:void(0)" onclick="GDcostumeFilter('<?= $sort ?>', '<?= $order ?>', <?= $max_page ?>, [])"><?= $max_page ?></a>
+                            <?php elseif( $max_page < 6 ):?>
+                                <?php for ($i=1; $i <= $max_page; $i++) :?>
+                                    <a <?= $i == $page ? 'class="active"' : '' ?> href="javascript:void(0)" onclick="GDcostumeFilter('<?= $sort ?>', '<?= $order ?>', <?= $i ?>, [])"><?= $i ?></a>
+                                <?php endfor;?>
+                            <?php endif;?>  
+                            <?php if( $page < $max_page ):?>  
                                 <a href="javascript:void(0)" onclick="GDcostumeFilter('<?= $sort ?>', '<?= $order ?>', <?= $page +1 ?>, [])">&raquo;</a>
                             <?php endif;?>
                         </div>
