@@ -288,7 +288,7 @@ class View_RM{
             #oprasi or (salah satu harus ada)                    
             foreach( $q as $res){
                 if( $res == '' ) continue;
-                $query .= ($res) ?  $res . ' AND ': '' ;
+                $query .= ($res) ?  $res . ' OR ': '' ;
             }           
 
             $strLen = strlen ($query) ;
