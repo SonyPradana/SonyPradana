@@ -17,28 +17,26 @@
 ?>
 <?php
     $user = new User($auth->getUserName());
-    # ambil data
-    $show_data = new View_RM();
-
-    #config
-    $sort = 'nomor_rm';
-    $order = 'ASC';
+    
+    # ambil parameter dari url
+    $sort = isset( $_GET['sort'] ) ? $_GET['sort'] : 'nomor_rm';
+    $order = isset( $_GET['order'] ) ? $_GET['order'] : 'ASC';
     $page = isset( $_GET['page'] ) ? $_GET['page'] : 1;
     $page = is_numeric($page) ? $page : 1;
-
-    # defultnya false agar tidak menampilkan table ketika kosong/pertama
-    $get_data = false;
-
-    # ambil data dari url 
+    $max_page = 1;
+    $limit = 10;
+    # parameter untuk search data
     $main_search = isset( $_GET['main-search'] ) ? $_GET['main-search'] : '';
     $nomor_rm_search = isset( $_GET['nomor-rm-search']) ? $_GET['nomor-rm-search'] : '';
     $alamat_search = isset( $_GET['alamat-search'] ) ? $_GET['alamat-search'] : '';
     $no_rt_search = isset( $_GET['no-rt-search'] ) ? $_GET['no-rt-search'] : '';
     $no_rw_search = isset( $_GET['no-rw-search'] ) ? $_GET['no-rw-search'] : '';
     $nama_kk_search = isset( $_GET['nama-kk-search'] ) ? $_GET['nama-kk-search'] : '';
-    $no_rm_kk_search = isset( $_GET['no-rm-kk-search'] ) ? $_GET['no-rm-kk-search'] : '';    
-    # data lainnya
-    $strict_search = isset( $_GET['strict-search'] ) ? true : false;
+    $no_rm_kk_search = isset( $_GET['no-rm-kk-search'] ) ? $_GET['no-rm-kk-search'] : '';
+    $strict_search = isset( $_GET['strict-search'] ) ? true : false;    
+
+    # defultnya false agar tidak menampilkan table ketika kosong/pertama
+    $get_data = false;
     
     if( isset( $_GET['main-search']) || 
         isset( $_GET['nomor-rm-search']) ||
@@ -47,29 +45,33 @@
         isset( $_GET['no-rw-search']) ||
         isset( $_GET['nama-kk-search']) ||
         isset( $_GET['no-rm-kk-search']) ){
-            # cari berdasarkan nama
-            $show_data->filterByNama( $main_search );
-            # cari berdasarkan nomor rm 
-            $show_data->filterByNomorRm( $nomor_rm_search);
-            # cari berdasarkan alamat
-            $show_data->filterByAlamat($alamat_search );
-            # cari berdasarkan rt dan rw
-            $show_data->filterByRt( $no_rt_search );
-            $show_data->filterByRw( $no_rw_search );
-            # cari bedasarkan nama kk
-            $show_data->filterByNamaKK( $nama_kk_search );
-            # cari berdasarkan nomor rm kk
-            $show_data->filterByNomorRmKK( $no_rm_kk_search );
-        
+            
+            # cari data
+            $show_data = new View_RM();
+
+            # setup data
             $show_data->sortUsing($sort);
             $show_data->orderUsing($order);
-            $show_data->limitView(10);
+            $show_data->limitView($limit);
+
+            # query data
+            $show_data->filterByNama( $main_search );
+            $show_data->filterByNomorRm( $nomor_rm_search);
+            $show_data->filterByAlamat($alamat_search );
+            $show_data->filterByRt( $no_rt_search );
+            $show_data->filterByRw( $no_rw_search );
+            $show_data->filterByNamaKK( $nama_kk_search );
+            $show_data->filterByNomorRmKK( $no_rm_kk_search );
+                    
+            # setup page
             $max_page = $show_data->maxPage();
             $page = $page > $max_page ? $max_page : $page;
             $show_data->currentPage($page);
-            #mulai mencari data
+
+            # excute query
             $get_data = $show_data->result( $strict_search );
     }
+    $parram = "'$main_search', '$nomor_rm_search', '$strict_search', '', '$alamat_search', '$no_rt_search', '$no_rw_search', '$nama_kk_search', '$no_rm_kk_search'";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -91,6 +93,7 @@
     <link rel="stylesheet" href="/lib/css/ui/v1/control.default.css">
          
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="/lib/js/ajax/html/GetData.js"></script>
     <style>
         .boxs{
             display: grid;
@@ -181,44 +184,9 @@
                 </div>
                 <div class="box right">                        
                     <div class="box-right">   
-                        <table>
-                            <tr>
-                                <th>No.</th>
-                                <th scope="col"><a class="sort-by" href="javascript:void(0)" >No RM</a></th>
-                                <th scope="col"><a class="sort-by" href="javascript:void(0)" >Nama</a></th>
-                                <th scope="col"><a class="sort-by" href="javascript:void(0)" >Tanggal Lahir</a></th>
-                                <th scope="col"><a class="sort-by" href="javascript:void(0)" >Alamat</a></th>
-                                <th scope="col"><a class="sort-by" href="javascript:void(0)" >RT / RW</a></th>
-                                <th scope="col"><a class="sort-by" href="javascript:void(0)" >Nama KK</a></th>
-                                <th scope="col"><a class="sort-by" href="javascript:void(0)" >No. Rm KK</a></th>
-                                <th><a href="javascript:void(0)">Action</a></th>                                                     
-                            </tr> 
-                        <?php if ( $get_data ): ?>
-                            <?php $idnum = (int) 1; ?>
-                            <?php foreach( $get_data as $data) :?>            
-                            <tr>       
-                                <th><?= $idnum ?></th>
-                                <th><?= $data['nomor_rm']?></th>
-                                <th><?= StringManipulation::addHtmlTag($data['nama'], $main_search, '<span style="color:blue">', '</span>')?></th>
-                                <th><?= date("d-m-Y", strtotime( $data['tanggal_lahir']))  ?></th>
-                                <th><?= $data['alamat']?></th>
-                                <th><?= $data['nomor_rt'] . ' / ' . $data['nomor_rw']?></th>
-                                <th><?= StringManipulation::addHtmlTag($data['nama_kk'], $nama_kk_search, '<span style="color:blue">', '</span>')?></th>
-                                <th><?= $data['nomor_rm_kk']?></th>
-                                <th><a class="link" href="/p/med-rec/edit-rm/index.php?document_id=<?= $data['id']?>">edit</a></th>
-                            </tr>   
-                            <?php $idnum++; ?>
-                            <?php endforeach ; ?>      
-                            <?= '</table>' ?>     
-                            <div class="box-pagination">
-                                <div class="pagination">
-                                    <!-- paganation -->
-                                </div>
-                            </div>                 
-                        <?php else : ?>
-                        </table>    
-                            <p>data tidak ditemukan</p>
-                        <?php endif; ?>
+                        <script>
+                            getTableSearch( '<?= $sort ?>', '<?= $order ?>', '<?= $page ?>' , <?= $parram ?>)
+                        </script>
                     </div> 
                 </div>
             </div>
@@ -253,6 +221,8 @@
             document.querySelector('#input-nama-kk-search').setAttribute('value', '');
             document.querySelector('#input-no-rm-kk').setAttribute('value', '');
     };
-
+    // var href = new URL('http://localhost/p/med-rec/search-rm/?main-search=agus');
+    // href.searchParams.set('page', 1);
+    // console.log(href.toString());
 </script>
 </html>
