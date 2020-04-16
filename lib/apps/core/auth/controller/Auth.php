@@ -137,5 +137,47 @@ class Auth{
         }
         return false;
     }
+
+    /**
+     * Mengecek privilege user sudah memenuhi syarat privilege Auth. 
+     * Meng-compare privilege user dengan privilage auth page.
+     * 
+     * Warning: case-sensitive, harus lengkap
+     * @param string $target 
+     * target auth privilage (eg: med-rec, admin)
+     * @return boolean 
+     * sudah memnuhi atau belum
+     */
+    public function privilege($target){
+        #login cek
+        if( !$this->_trushClinet) return false;
+        # tampilkan privilege
+        $privilege = new Privilege($this->getUserName());
+        # privilage user
+        $privil = $privilege->ReadAcces($target);
+        #privilage auth
+        $allow_privilege =  $privilege->MasterPrivilage($target);
+
+        $privil_arr = str_split($privil);
+        $privil_arr_allow = str_split($allow_privilege);
+        foreach ($privil_arr_allow as $value) {
+            if( !in_array($value, $privil_arr)){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Sigle line authentication, cek auth dan jika salah akan di redirect ke login
+     * @param string $redirect target lokasi redirect
+     * @return False->redirect ke link
+     */
+    public function authing($redirect = '/p/auth/login/'){
+        if( !$this->_trushClinet){              
+            header("Location: " . $redirect);   
+            exit();
+        }
+    }
 }
 
