@@ -21,15 +21,10 @@
         $nomor_rm = $_GET['nr'];
 
         # ambil data
-        $sData = new View_RM();
-        # cari berdasarkan parameter
-        $sData->filterByNomorRm($nomor_rm);
-        # costume filter
-        $sData->forceLimitView(1);
-        #result
-        if( isset( $sData->result()[0] ) ){
-            echo "1";
-            exit();
-        }
-        echo "0";
+        $cari_rm = new View_RM();
+        $cari_rm->filterByNomorRm($nomor_rm);
+        $cari_rm->forceLimitView(2);
+        echo $cari_rm->maxData();
+        exit;
     }
+echo -1;

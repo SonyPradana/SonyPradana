@@ -82,8 +82,8 @@ if( !$auth->TrushClient() ){
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Buat Rekam Medis Baru</title>
-    <meta name="description" content="sisteminformasi kesehtan puskesmas Lerep">
-    <meta name="keywords" content="simpus lerep, pkm lerep">
+    <meta name="description" content="Sistem Informasi Manajemen Puskesmas SIMPUS Lerep">
+    <meta name="keywords" content="simpus lerep, puskesmas lerep, puskesmas, ungaran, kabupaten semarang">
     <meta name="author" content="amp">
 <?php include($_SERVER['DOCUMENT_ROOT'] . '/include/html/metatag.html') ?>
 
@@ -155,6 +155,7 @@ if( !$auth->TrushClient() ){
                         <form action="" method="post">
                             <input type="number" name="nomor_rm" id="input-nomor-rm" placeholder="nomor rekam medis" value="<?= $nomor_rm ?>" maxlength="6" inputmode="numeric" pattern="[0-9]*">
                             <div class="input-information"><p>nomor rm terahir : <a href="javascript:void(0)" id="tambah-nomor-rm" tabindex="10"><?= $last_nomor_rm ?></a></p></div>
+                            <div class="input-information warning"></div>
                             <input type="text" name="nama" id="input-nama" placeholder="nama" value="<?= $nama ?>" maxlength="50">
                             <input type="date" name="tgl_lahir" id="input-tgl-lahir" value="<?= $tgl_lahir ?>">
                             <input type="text" name="alamat" id="input-alamat" placeholder="alamat tanpa rt/rw" value="<?= $alamat ?>">
@@ -190,6 +191,30 @@ if( !$auth->TrushClient() ){
     var tandai_sbg_kk = document.querySelector('#input-mark-as-kk');
     var cari_no_RmKk = document.querySelector('#input-nama-kk');
     var tambah_no_rm_kk = document.querySelector('#tambah-nomor-rm-kk');
+    var cari_no_Rm = document.querySelector('#input-nomor-rm');
+    
+    // cari nomor rm kk jika ada
+    cari_no_Rm.addEventListener('input', (event) => {
+        if( cari_no_Rm.value == '')  return;
+        // remove element
+        var sendAjax = new XMLHttpRequest();
+        sendAjax.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {            
+                //berhasil dipanggil
+                let res = document.querySelector('.input-information.warning');
+                var para = document.createElement("p");
+                var node = document.createTextNode("nomor rm sudah terdaftar");
+                para.appendChild(node);
+                res.textContent = '';
+                if( this.responseText > 0){
+                    res.appendChild(para);
+                }
+            }
+        }
+        let nr = cari_no_Rm.value;
+        sendAjax.open('GET', "/lib/ajax/inner-text/cek-nomor-rm.php?nr="+ nr, true);
+        sendAjax.send();
+    });
     
     //function
     // insert nomor rm terakhir

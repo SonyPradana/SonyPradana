@@ -9,6 +9,9 @@
     $user = new User($auth->getUserName());
 ?>
 <?php
+    # mengambil data rm
+    $data_rm = new View_RM();    
+    $jumlah_rm = $data_rm->maxData();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -19,8 +22,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SIMPUS Lerep</title>
-    <meta name="description" content="sisteminformasi kesehtan puskesmas Lerep">
-    <meta name="keywords" content="simpus lerep, pkm lerep">
+    <meta name="description" content="Sistem Informasi Manajemen Puskesmas SIMPUS Lerep">
+    <meta name="keywords" content="simpus lerep, puskesmas lerep, puskesmas, ungaran, kabupaten semarang">
     <meta name="author" content="amp">
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" sizes="16x16 24x24 32x32 64x64">
     <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
@@ -150,7 +153,7 @@
                 </div>
                 <div class="box-info info-two">
                     <div class="box-info-left">
-                        <p>83</p>
+                        <p><?= $jumlah_rm ?></p>
                     </div>
                     <div class="box-info-right">
                         <p>Data RM  tersimpan</p>
@@ -158,7 +161,7 @@
                 </div>
                 <div class="box-info info-tree">
                     <div class="box-info-left">
-                        <p>0,005%</p>
+                        <p><?=round( $jumlah_rm / 15000 , 3) ?>%</p>
                     </div>
                     <div class="box-info-right">
                         <p>record</p>

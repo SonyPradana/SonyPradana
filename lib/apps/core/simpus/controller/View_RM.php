@@ -147,7 +147,7 @@ class View_RM{
      * filter berdasarkan satus kepala keluarga
      * @param boolean $val Staus kepala keluarga
      */
-    public function filtereStatusKK($val = true){
+    public function filterStatusKK($val = true){
         if( $val ===true){
             $this->_filter_status_kk = true;
         }else{

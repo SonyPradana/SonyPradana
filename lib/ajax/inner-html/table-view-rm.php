@@ -74,7 +74,7 @@
 
         # setup data
         if( $sk == 'on'){
-            $show_data->filtereStatusKK();
+            $show_data->filterStatusKK();
         }
 
         #setup page

@@ -17,13 +17,15 @@ if( !$auth->TrushClient() ){
 ?>
 <?php 
     $user = new User($auth->getUserName());
-    #ambil id dari url jika tidak ada akes ditolak
+    # ambil id dari url jika tidak ada akes ditolak
     if( isset( $_GET['document_id'])){
-        #ambil data rm menggunakn  id
+        # ambil data rm menggunakn  id
         $id = $_GET['document_id'];
-    
+        # default property
+        $status_kk = false;
+        $status_double = false;    
         # validasi tombol submit di click
-        if( isset( $_POST['submit']) ){
+        if( isset( $_POST['submit']) ){ # untuk menggirim data
             # validasi form jika ada yg kurang atau salah permintaaan ditolak
     
             # kita anggap semua field form sudah benar
@@ -47,7 +49,7 @@ if( !$auth->TrushClient() ){
             } else{
                 $msg =  'gagal menyimpan';
             }    
-        }else{           
+        }else{ # untuk menangkap data        
             // memuat data dari data base
             $load_rm = MedicalRecord::withId($id);
             // persipan data untuk ditampilkan
@@ -59,8 +61,21 @@ if( !$auth->TrushClient() ){
             $nomorRw = $load_rm->getNomorRw();
             $namaKK = $load_rm->getNamaKK();
             $nomorRM_KK = $load_rm->getNomorRM_KK();
+            # cek status kk
+            if( $nama === $namaKK){
+                $status_kk = true;
+            }
+            # cari rm yang sama
+            $cari_rm = new View_RM();
+            $cari_rm->filterByNomorRm($nomorRM);
+            $cari_rm->forceLimitView(2);
+            if( $cari_rm->maxData() > 1){
+                $status_double = true;
+            }
+            # cek data rm terdaftar atau tidak
             if( $load_rm->cekAxis() == false){                        
                 echo 'acces deny!!!';
+                header('HTTP/1.1 403 Forbidden');
                 exit;
             }
 
@@ -78,9 +93,9 @@ if( !$auth->TrushClient() ){
     <meta http-equiv="content-language" content="In-Id">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buat Rekam Medis Baru</title>
-    <meta name="description" content="sisteminformasi kesehtan puskesmas Lerep">
-    <meta name="keywords" content="simpus lerep, pkm lerep">
+    <title>Edit Rekam Medis Baru</title>
+    <meta name="description" content="Sistem Informasi Manajemen Puskesmas SIMPUS Lerep">
+    <meta name="keywords" content="simpus lerep, puskesmas lerep, puskesmas, ungaran, kabupaten semarang">
     <meta name="author" content="amp">
 <?php include($_SERVER['DOCUMENT_ROOT'] . '/include/html/metatag.html') ?>
 
@@ -91,11 +106,30 @@ if( !$auth->TrushClient() ){
             width: 100%;
             height: 100%;
             display: grid;
-            grid-template-columns: 1fr 2fr;
+            grid-template-columns: 1fr 1fr;
         }
         .box.right{
             padding: 10px 100px 20px 20px;
+        }        
+        .input-information p,
+        .input-information p a{
+            margin: 0;
+            color: #7f6cff;
         }
+        button{
+            margin-top: 15px;
+            padding: 10px 6px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        input[type=checkbox]{
+            margin: 0 !important;
+            width: 0 !important;
+        }
+        .form-box.bottom{
+            margin-top: 10px !important;
+        }
+
         /* mobile */
         @media screen and (max-width: 600px) {            
             .boxs{
@@ -129,7 +163,15 @@ if( !$auth->TrushClient() ){
                 <?php else:?>
                     <h1>Edit data Rekam Medis</h1>
                     <form action="" method="post">
-                        <input type="text" name="nomor_rm" id="input-nomor-rm" placeholder="nomor rekam medis" value="<?= isset($load_rm) ? $nomorRM : '' ?>" maxlength="6" inputmode="numeric" pattern="[0-9]*">
+                        <input type="text" name="nomor_rm" id="input-nomor-rm" placeholder="nomor rekam medis" value="<?= isset($load_rm) ? $nomorRM : '' ?>" maxlength="6" inputmode="numeric" pattern="[0-9]*">                        
+                        <div class="input-information">
+                        <?php if( $status_double ) : ?>
+                            <p>Nomor Rekam Medis sama:
+                                <a href="/p/med-rec/search-rm/?nomor-rm-search=<?= $nomorRM ?>"
+                                    target="_blank">lihat</a>
+                            </p>
+                        <?php endif; ?>
+                        </div>
                         <input type="text" name="nama" id="input-nama" placeholder="nama" value="<?= isset($load_rm) ? $nama : '' ?>" maxlength="50">
                         <input type="date" name="tgl_lahir" id="input-tgl-lahir" value="<?= isset($load_rm) ? $tanggalLahir : '' ?>">
                         <input type="text" name="alamat" id="input-alamat" placeholder="alamat tanpa rt/rw" value="<?= isset($load_rm) ? $alamat : '' ?>">
@@ -137,11 +179,15 @@ if( !$auth->TrushClient() ){
                             <input type="text" name="nomor_rt" id="input-nomor-rt" placeholder="nomor rt" max="2" value="<?= isset($load_rm) ? $nomorRt : '' ?>" inputmode="numeric" pattern="[0-9]*">
                             <input type="text" name="nomor_rw" id="input-nomor-rw" placeholder="nomor rw" max="2" value="<?= isset($load_rm) ? $nomorRw : '' ?>" inputmode="numeric" pattern="[0-9]*">
                         </div>
-                        <p>data pelengkpa (opsonal)</p>
+                        <div class="form-box bottom">
+                            <input type="checkbox" name="tandai_sebagai_kk" id="input-mark-as-kk" tabindex="11" <?= $status_kk == true ? "checked" : ""?>>
+                            <label for="input-mark-as-kk">Tandai sebagai kk</label>
+                        </div>  
                         <input type="text" name="nama_kk" id="input-nama-kk" placeholder="nama kepala keluarga" value="<?= isset($load_rm) ? $namaKK : '' ?>">
                         <input type="text" name="nomor_rm_kk" id="input-nomor-rm-kk" placeholder="nomor rm kepla keluarga" value="<?= isset($load_rm) ? $nomorRM_KK : '' ?>" maxlength="6" inputmode="numeric" pattern="[0-9]*">
                     
-                        <button type="submit" name="submit">Buat Rm Baru</button>
+                        <button type="submit" name="submit">Edit Data RM</button>
+                        <button type="button" onclick="window.history.back()">Batal Perubahan</button>
                     </form>           
                 <?php endif; ?>
                 </div>
@@ -149,10 +195,49 @@ if( !$auth->TrushClient() ){
         </div>
     </main>
     <footer>
-        <div class="line"></div>
-        <p class="big-footer">SIMPUS LEREP</p>
-        <p class="note-footer">creat by <a href="https://twitter.com/AnggerMPd">amp</a></p>
-        <div class="box"></div>
+        <?php include($_SERVER['DOCUMENT_ROOT'] . '/include/html/footer.html') ?>
     </footer>
+    <script>
+        //DOM property
+        var cari_no_Rm = document.querySelector('#input-nomor-rm');
+        var tandai_sbg_kk = document.querySelector('#input-mark-as-kk');
+        // cari nomor rm kk jika ada
+        cari_no_Rm.addEventListener('input', (event) => {
+            if( cari_no_Rm.value == '')  return;
+            // remove element
+            var sendAjax = new XMLHttpRequest();
+            sendAjax.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {            
+                    //berhasil dipanggil
+                    let res = document.querySelector('.input-information');
+                    var para = document.createElement("p");
+                    var node = document.createTextNode("nomor rm sudah terdaftar");
+                    para.appendChild(node);
+                    res.textContent = '';
+                    if( this.responseText > 0){
+                        res.appendChild(para);
+                    }
+                }
+            }
+            let nr = cari_no_Rm.value;
+            sendAjax.open('GET', "/lib/ajax/inner-text/cek-nomor-rm.php?nr="+ nr, true);
+            sendAjax.send();
+        });
+        // checkbox kk
+        tandai_sbg_kk.onclick = function(){        
+            let input_noRm = document.querySelector("#input-nomor-rm");
+            let input_nama = document.querySelector("#input-nama");
+            let input_noRm_kk = document.querySelector("#input-nomor-rm-kk");
+            let input_nama_kk = document.querySelector("#input-nama-kk");
+            // If the checkbox is checked, display the output text
+            if (tandai_sbg_kk.checked == true){
+                input_noRm_kk.value = input_noRm.value;
+                input_nama_kk.value = input_nama.value;
+            }else{
+                input_noRm_kk.value = "";
+                input_nama_kk.value = "";
+            }
+        };
+    </script>
 </body>
 </html>
