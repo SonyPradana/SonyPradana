@@ -36,9 +36,9 @@ if( !$auth->TrushClient() ){
     $data->orderUsing("DESC");
     $last_nomor_rm = $data->resultAll()[0]['nomor_rm'];
 
-
     if( isset( $_POST['submit']) ){
         # validasi form jika ada yg kurang atau salah permintaaan ditolak
+        $last_data = isset( $_SESSION['last_data']) ? $_SESSION['last_data'] : [];
 
         # kita anggap semua field form sudah benar
         $new_rm = new MedicalRecord();
@@ -55,8 +55,9 @@ if( !$auth->TrushClient() ){
 
         #simpan data
         $simpan = $new_rm->insertNewOne();
-        if( $simpan ){
+        if( $simpan && $last_data != $_POST){
             $msg = 'berhasil disimpan';
+            $_SESSION['last_data'] = $_POST;
             $_POST = [];$nomor_rm = isset( $_POST['nomor_rm'] ) ? $_POST['nomor_rm'] : '';
             $nama = $tgl_lahir = $alamat = $nomor_rt = $nomor_rw = $nama_kk = $nomor_rm_kk = null;
         } else{
@@ -66,7 +67,7 @@ if( !$auth->TrushClient() ){
         # merefrresh nomor rm terakhir saad form dikirim
         # ambil nomor rm terakhir
         $data = new View_RM();
-        $data->limitView(1);
+        $data->forceLimitView(1);
         $data->sortUsing('nomor_rm');
         $data->orderUsing("DESC");
         $last_nomor_rm = $data->resultAll()[0]['nomor_rm'];
@@ -135,7 +136,7 @@ if( !$auth->TrushClient() ){
 <body>
     <header>
         <?php $active_menu = 'buat data'?>
-        <?php include($_SERVER['DOCUMENT_ROOT'] . '/include/html/header.html') ?>
+        <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/header/header.html') ?>
     </header>
     <main>
         <div class="container">

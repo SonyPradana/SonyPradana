@@ -109,37 +109,35 @@
     <header>
         <?php $active_menu = 'home' ?>
         <div class="header title">
-           <p>Welcome To Simpus Lerep</p>
+            <p>Welcome To Simpus Lerep</p>
         </div>
-        <div class="header nav">
-            <nav class="banner">
-                <div class="logo">
-                    <a href="/" onclick="myFunction()">Simpus</a>
-                </div>
-                <div class="menu">
-                <?php if( $auth->TrushClient()): ?>
-                    <a href="/p/med-rec/view-rm/" <?= $active_menu == 'lihat data'? 'class="active"' : ''?>>lihat data rm</a>
-                    <a href="/p/med-rec/search-rm/" <?= $active_menu == 'cari data'? 'class="active"' : ''?>>cari data rm</a>
-                    <a href="/p/med-rec/new-rm/" <?= $active_menu == 'buat data'? 'class="active"' : ''?>>buat data rm</a>
+        <div class="header menu">
+            <div class="logo">
+                <a href="/">Simpus</a>
+            </div>
+            <div class="nav">                
+                <?php if( $auth->TrushClient()): ?>                
+                <a href="/p/med-rec/view-rm/" <?= $active_menu == 'lihat data'? 'class="active"' : ''?>>Lihat RM</a>
+                <a href="/p/med-rec/search-rm/" <?= $active_menu == 'cari data'? 'class="active"' : ''?>>Cari RM</a>
+                <a href="/p/med-rec/new-rm/" <?= $active_menu == 'buat data'? 'class="active"' : ''?>>Buat RM</a>
                 <?php endif; ?>
-                </div>
-            </nav>
+            </div>
             <div class="account">
                 <?php if( $auth->TrushClient()): ?>
-                    <div class="boxs-account">
-                        <div class="box-account left">
-                            <div class="pic-box"></div>
-                        </div>
-                        <div class="box-account right">
-                            <p><?= $user->getDisplayName()?></p>
-                        </div>
+                <div class="boxs-account">
+                    <div class="box-account left">
+                        <div class="pic-box"></div>
                     </div>
+                    <div class="box-account right">
+                        <p><?= $user->getDisplayName()?></p>
+                    </div>
+                </div>                
                 <?php else: ?>
                     <a href="/p/auth/login">login</a>
                 <?php endif; ?>
             </div>
-        </div>  
-    </header>  
+        </div>
+    </header>
     <main>
         <div class="container">
             <div class="boxs-main top">

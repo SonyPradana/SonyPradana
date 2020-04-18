@@ -27,6 +27,7 @@ if( !$auth->TrushClient() ){
         # validasi tombol submit di click
         if( isset( $_POST['submit']) ){ # untuk menggirim data
             # validasi form jika ada yg kurang atau salah permintaaan ditolak
+            $last_data = isset( $_SESSION['last_data']) ? $_SESSION['last_data'] : [];
     
             # kita anggap semua field form sudah benar
             $new_rm = MedicalRecord::withId($id);
@@ -43,8 +44,9 @@ if( !$auth->TrushClient() ){
     
             #simpan data
             $simpan = $new_rm->save();
-            if( $simpan ){
+            if( $simpan && $last_data != $_POST){
                 $msg = 'berhasil disimpan';
+                $_POST = [];$nomor_rm = isset( $_POST['nomor_rm'] ) ? $_POST['nomor_rm'] : '';
                 $_POST = [];
             } else{
                 $msg =  'gagal menyimpan';
@@ -144,7 +146,7 @@ if( !$auth->TrushClient() ){
 <body>
     <header>
         <?php $active_menu = 'home' ?>
-        <?php include($_SERVER['DOCUMENT_ROOT'] . '/include/html/header.html') ?>
+        <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/header/header.html') ?>
     </header>
     <main>
         <div class="container">

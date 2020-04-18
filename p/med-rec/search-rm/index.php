@@ -143,7 +143,7 @@
 <body>
     <header>
         <?php $active_menu = 'cari data' ?>
-        <?php include($_SERVER['DOCUMENT_ROOT'] . '/include/html/header.html') ?>
+        <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/header/header.html') ?>
     </header>
     <main>
         <div class="container">
