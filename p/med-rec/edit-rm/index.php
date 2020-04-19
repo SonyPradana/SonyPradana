@@ -101,8 +101,9 @@ if( !$auth->TrushClient() ){
     <meta name="author" content="amp">
 <?php include($_SERVER['DOCUMENT_ROOT'] . '/include/html/metatag.html') ?>
 
-    <link rel="stylesheet" href="/lib/css/style-main.css">
+    <link rel="stylesheet" href="/lib/css/main.css">
     <link rel="stylesheet" href="/lib/css/ui/v1/control.default.css">
+    <script src="/lib/js/index.js"></script>
     <style>
         .boxs{
             width: 100%;
@@ -148,6 +149,7 @@ if( !$auth->TrushClient() ){
         <?php $active_menu = 'home' ?>
         <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/header/header.html') ?>
     </header>
+    <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/control/modal.html') ?>
     <main>
         <div class="container">
             <div class="coit breadcrumb">
@@ -196,6 +198,7 @@ if( !$auth->TrushClient() ){
             </div>
         </div>
     </main>
+    <div class="gotop" onclick="gTop()"></div>
     <footer>
         <?php include($_SERVER['DOCUMENT_ROOT'] . '/include/html/footer.html') ?>
     </footer>
@@ -241,5 +244,6 @@ if( !$auth->TrushClient() ){
             }
         };
     </script>
+    <script src="/lib/js/index.end.js"></script>
 </body>
 </html>

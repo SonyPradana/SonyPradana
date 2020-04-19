@@ -87,11 +87,12 @@
     <meta name="author" content="amp">
 <?php include($_SERVER['DOCUMENT_ROOT'] . '/include/html/metatag.html') ?>
 
-    <link rel="stylesheet" href="/lib/css/style-main.css">
+    <link rel="stylesheet" href="/lib/css/main.css">
     <link rel="stylesheet" href="/lib/css/ui/v1/table.css">    
     <link rel="stylesheet" href="/lib/css/ui/v1/pagination.css">
     <link rel="stylesheet" href="/lib/css/ui/v1/control.default.css">
-         
+
+    <script src="/lib/js/index.js"></script>         
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="/lib/js/ajax/html/GetData.js"></script>
     <style>
@@ -145,6 +146,7 @@
         <?php $active_menu = 'cari data' ?>
         <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/header/header.html') ?>
     </header>
+    <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/control/modal.html') ?>
     <main>
         <div class="container">
             <div class="coit breadcrumb">
@@ -192,6 +194,7 @@
             </div>
         </div>
     </main>
+    <div class="gotop" onclick="gTop()"></div>
     <footer>
         <div class="line"></div>
         <p class="big-footer">SIMPUS LEREP</p>
@@ -225,4 +228,5 @@
     // href.searchParams.set('page', 1);
     // console.log(href.toString());
 </script>
+    <script src="/lib/js/index.end.js"></script>
 </html>

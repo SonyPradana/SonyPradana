@@ -13,7 +13,7 @@
         <a href="/p/med-rec/new-rm/" <?= $active_menu == 'buat data'? 'class="active"' : ''?>>Buat RM</a>
         <?php endif; ?>
     </div>
-    <div class="account">
+    <div class="account" onclick="open_modal()">
         <?php if( $auth->TrushClient()): ?>
         <div class="boxs-account">
             <div class="box-account left">

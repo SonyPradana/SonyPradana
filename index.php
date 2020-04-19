@@ -31,8 +31,53 @@
     <meta name="msapplication-TileColor" content="#da532c">
     <meta name="theme-color" content="#ffffff">
 
-    <link rel="stylesheet" href="lib/css/style-main.css">
+    <link rel="stylesheet" href="lib/css/main.css">
+    <script src="lib/js/index.js"></script>
     <style>
+        /* kerangka aside */
+        aside{
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            flex-flow: column;
+            height: 100px;
+        }
+        aside .boxs-info{
+            display: grid;
+            grid-template-columns: repeat(3, 130px);
+            grid-column-gap: 12px;
+            align-items: center;
+            overflow-x: auto;
+        }
+        aside .boxs-info .info{
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 0px 4px;
+        }
+        /* sttyle aside */
+        aside .boxs-header p{
+            margin: 8px 0px;
+        }
+        aside .boxs-info .info{
+            height: 40px;
+            background: linear-gradient(25deg,#d64c7f,#ee4758 50%);
+            border-radius: 12px;
+            cursor: pointer
+        }
+        aside .boxs-info .info .item-info.left{
+            background-color: wheat;
+            width: 20px; height: 20px;
+            border-radius: 50%;     
+            display: flex;
+            align-items: center;       
+        }
+        aside .boxs-info .info .item-info.right{
+            color: #fff;
+            display: flex;
+            align-items: center;
+        }
         .boxs-main.top{   
             border-radius: 8px;         
             padding: 30px;
@@ -124,7 +169,7 @@
             </div>
             <div class="account">
                 <?php if( $auth->TrushClient()): ?>
-                <div class="boxs-account">
+                <div class="boxs-account"  onclick="open_modal()">
                     <div class="box-account left">
                         <div class="pic-box"></div>
                     </div>
@@ -138,6 +183,33 @@
             </div>
         </div>
     </header>
+    <div class="modal account">
+        <div class="modal-box">
+            <span class="close" onclick="close_modal()">&times;</span>
+            <div class="boxs-menu">
+                <a href="#">Edit profile</a>
+                <a href="/p/auth/reset-password/">Ganti Pasword</a>
+                <a href="/p/auth/logout/">Log Out</a>
+            </div>
+        </div>
+    </div>
+    <aside>
+            <div class="boxs-header">
+                <p>Info Covid (jawa tengah) <span><a href="https://kawalcorona.com/">i</a></span></p>
+            </div>
+            <div class="boxs-info">
+                <div class="info one">
+                    <div class="item-info left"></div>
+                    <div class="item-info right">xxx positif</div>
+                </div>
+                <div class="info two">
+                    <div class="item-info left"></div>
+                    <div class="item-info right">xxx sembuh</div></div>
+                <div class="info three">
+                    <div class="item-info left"></div>
+                    <div class="item-info right">xxx meninggal</div></div>
+            </div>
+    </aside>
     <main>
         <div class="container">
             <div class="boxs-main top">
@@ -167,17 +239,36 @@
                 </div>
             </div>
         </div>
-    </main> 
+    </main>
+    <div class="gotop" onclick="gTop()"></div>
     <footer>
         <div class="line"></div>        
         <p class="big-footer">SIMPUS LEREP</p>        
         <p class="note-footer">creat by <a href="https://twitter.com/AnggerMPd">amp</a></p>
         <div class="box"></div>
     </footer>
+    <script>
+        // memuat info Covid, source https://kawalcorona.com/api/
+        window.addEventListener('load', event => {
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function(){
+                if( this.readyState == 4 && this.status == 200){
+                    // berhasil memanggil
+                    var json = JSON.parse( this.responseText);
+                    var info_one = document.querySelector('.info.one .item-info.right');
+                    info_one.innerHTML = json[4]['attributes']['Kasus_Posi'] + ' positif';
+
+                    var info_one = document.querySelector('.info.two .item-info.right');
+                    info_one.innerHTML = json[4]['attributes']['Kasus_Semb'] + ' sembuh';
+
+                    var info_one = document.querySelector('.info.three .item-info.right');
+                    info_one.innerHTML = json[4]['attributes']['Kasus_Meni'] + ' meninggal';
+                }
+            }
+            xhr.open('GET', 'https://api.kawalcorona.com/indonesia/provinsi/', true);
+            xhr.send();
+        })
+    </script>
+    <script src="lib/js/index.end.js"></script>
 </body>
-<script>
-    function openNav(){
-        document.getElementById("myNav").style.width = "250px";
-    }
-</script>
 </html>

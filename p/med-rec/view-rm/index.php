@@ -48,9 +48,10 @@
     <meta name="author" content="amp">
 <?php include($_SERVER['DOCUMENT_ROOT'] . '/include/html/metatag.html') ?>
 
-    <link rel="stylesheet" href="/lib/css/style-main.css">
+    <link rel="stylesheet" href="/lib/css/main.css">
     <link rel="stylesheet" href="/lib/css/ui/v1/table.css">
     <link rel="stylesheet" href="/lib/css/ui/v1/pagination.css">
+    <script src="/lib/js/index.js"></script>
     <style>
         button{
             margin: 7px 0;
@@ -101,6 +102,7 @@
         <?php $active_menu = 'lihat data' ?>
         <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/header/header.html') ?>
     </header>
+    <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/control/modal.html') ?>
     <main>
         <div class="container">
             <div class="coit breadcrumb">
@@ -247,6 +249,7 @@
         <?php endif; ?>
         </div>
     </main>
+    <div class="gotop" onclick="gTop()"></div>
     <footer>
         <div class="line"></div>
         <p class="big-footer">SIMPUS LEREP</p>
@@ -287,4 +290,5 @@
         GDcostumeFilter('alamat', 'asc', <?= $page ?>, filters);
     });
 </script>
+    <script src="/lib/js/index.end.js"></script>
 </html>
