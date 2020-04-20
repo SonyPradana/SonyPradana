@@ -173,7 +173,8 @@ if( !$auth->TrushClient() ){
                             </div>                            
                             <input type="text" name="nama_kk" id="input-nama-kk" placeholder="nama kepala keluarga" value="<?= $nama_kk ?>">
                             <input type="text" name="nomor_rm_kk" id="input-nomor-rm-kk" placeholder="nomor rm kepla keluarga" value="<?= $nomor_rm_kk ?>" maxlength="6" maxlength="6" inputmode="numeric" pattern="[0-9]*" >
-                            <div class="input-information"><p>nomor rm kk : <a href="javascript:void(0)" id="tambah-nomor-rm-kk" tabindex="12"></a></p></div>
+                            <div class="input-information no-rm-kk"><p>nomor rm kk : <a href="javascript:void(0)" id="tambah-nomor-rm-kk" tabindex="12"></a></p></div>
+                            <div class="input-information kk-sama"></div>
 
                             <button type="submit" name="submit">Buat Rm Baru</button>
                         </form>      
@@ -182,19 +183,21 @@ if( !$auth->TrushClient() ){
         </div>
     </main>
     <div class="gotop" onclick="gTop()"></div>
+    <?php if( isset( $msg ) ) :?>
+        <div class="snackbar">
+            <?= $msg ?>
+        </div>
+    <?php endif; ?>
     <footer>
-        <div class="line"></div>
-        <p class="big-footer">SIMPUS LEREP</p>
-        <p class="note-footer">creat by <a href="https://twitter.com/AnggerMPd">amp</a></p>
-        <div class="box"></div>
+        <?php include($_SERVER['DOCUMENT_ROOT'] . '/include/html/footer.html') ?>
     </footer>
 </body>
 <script>
     //DOM property
     var tambah_no_rm = document.querySelector('#tambah-nomor-rm'); 
+    var tambah_no_rm_kk = document.querySelector('#tambah-nomor-rm-kk');
     var tandai_sbg_kk = document.querySelector('#input-mark-as-kk');
     var cari_no_RmKk = document.querySelector('#input-nama-kk');
-    var tambah_no_rm_kk = document.querySelector('#tambah-nomor-rm-kk');
     var cari_no_Rm = document.querySelector('#input-nomor-rm');
     
     // cari nomor rm kk jika ada
@@ -207,9 +210,13 @@ if( !$auth->TrushClient() ){
                 //berhasil dipanggil
                 let res = document.querySelector('.input-information.warning');
                 var para = document.createElement("p");
-                var node = document.createTextNode("nomor rm sudah terdaftar");
-                para.appendChild(node);
+                var alink = document.createElement('a');
                 res.textContent = '';
+                para.innerHTML = 'nomor rekam medis sama : ';
+                alink.href = '/p/med-rec/search-rm/?nomor-rm-search=' + cari_no_Rm.value;
+                alink.innerHTML = 'lihat'
+                alink.target = '_blank';
+                para.appendChild(alink);
                 if( this.responseText > 0){
                     res.appendChild(para);
                 }
@@ -223,22 +230,22 @@ if( !$auth->TrushClient() ){
     //function
     // insert nomor rm terakhir
     tambah_no_rm.onclick = function(){        
-        var input_noRm = document.querySelector("#input-nomor-rm");
-        input_noRm.value = last_nomor_rm + 1;
+        var input_no_Rm = document.querySelector("#input-nomor-rm");
+        input_no_Rm.value = last_nomor_rm + 1;
     };
 
     // checkbox kk
     tandai_sbg_kk.onclick = function(){        
-        let input_noRm = document.querySelector("#input-nomor-rm");
+        let input_no_Rm = document.querySelector("#input-nomor-rm");
         let input_nama = document.querySelector("#input-nama");
-        let input_noRm_kk = document.querySelector("#input-nomor-rm-kk");
+        let input_no_Rm_kk = document.querySelector("#input-nomor-rm-kk");
         let input_nama_kk = document.querySelector("#input-nama-kk");
          // If the checkbox is checked, display the output text
         if (tandai_sbg_kk.checked == true){
-            input_noRm_kk.value = input_noRm.value;
+            input_no_Rm_kk.value = input_noRm.value;
             input_nama_kk.value = input_nama.value;
         }else{
-            input_noRm_kk.value = "";
+            input_no_Rm_kk.value = "";
             input_nama_kk.value = "";
         }
     };
@@ -246,29 +253,45 @@ if( !$auth->TrushClient() ){
     // cari nomor rm kk jika ada
     cari_no_RmKk.addEventListener('input', (event) => {
         var sendAjax = new XMLHttpRequest();
-        sendAjax.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {            
-            //berhasil dipanggil
-            let res = document.querySelector('#tambah-nomor-rm-kk');
-            res.innerHTML = this.responseText;
-            no_rm_kk = this.responseText;
-            // console.log(this.responseText);
-        }
-    }
         let n = document.querySelector("#input-nama-kk").value;
         let a = document.querySelector("#input-alamat").value;
         let r = document.querySelector("#input-nomor-rt").value;
         let w = document.querySelector("#input-nomor-rw").value;
+
+        sendAjax.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {            
+                //berhasil dipanggil
+                tambah_no_rm_kk.innerHTML = this.responseText;
+                no_rm_kk = this.responseText;
+                // nama kk yang sama
+                if( n != ''){
+                    let info_kk = document.querySelector('.input-information.kk-sama');
+                    var para = document.createElement('p');
+                    var alink = document.createElement('a');
+                    info_kk.textContent = '';
+                    para.innerHTML = 'nama kk indentik : '
+                    alink.href = '/p/med-rec/search-rm/?strict-search=on&alamat-search='+ a +'&no-rt-search=' + r + '&no-rw-search=' + w + '&nama-kk-search=' + n;
+                    alink.innerHTML = 'lihat'
+                    alink.target = '_blank';
+                    para.appendChild(alink);
+                    info_kk.appendChild(para);
+                }
+            }
+        }
     sendAjax.open('GET', "/lib/ajax/inner-text/cari-nomor-rm-kk.php?n="+ n + "&a=" + a + "&r=" + r + "&w=" + w, true);
     sendAjax.send();
     });
     
     // insert nomor rm kk
     var no_rm_kk = 6969;
-    tambah_no_rm_kk.onclick = function(){        
-        var input_noRm = document.querySelector("#input-nomor-rm-kk");
-        input_noRm.value = no_rm_kk;
-    };
+    tambah_no_rm_kk.onclick = () => {        
+        var input_no_rm_kk = document.querySelector("#input-nomor-rm-kk");
+        input_no_rm_kk.value = no_rm_kk;
+    };   
+    
+    // sticky header
+    window.onscroll = function(){stickyHeader('82px')};
+    var mycontent = document.querySelector('main');
 </script>
 <script src="/lib/js/index.end.js"></script>
 </html>

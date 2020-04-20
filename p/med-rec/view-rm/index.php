@@ -289,6 +289,10 @@
         var filters = [rangeUmur, cbandarjo, cbranjang, cKalisidi, cKeji, cLerep, cNyatnyono, cStatusKK];
         GDcostumeFilter('alamat', 'asc', <?= $page ?>, filters);
     });
+    
+    // sticky header
+    window.onscroll = function(){stickyHeader('82px')};
+    var mycontent = document.querySelector('main');
 </script>
     <script src="/lib/js/index.end.js"></script>
 </html>

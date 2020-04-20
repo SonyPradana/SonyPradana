@@ -170,7 +170,7 @@ if( !$auth->TrushClient() ){
                         <input type="text" name="nomor_rm" id="input-nomor-rm" placeholder="nomor rekam medis" value="<?= isset($load_rm) ? $nomorRM : '' ?>" maxlength="6" inputmode="numeric" pattern="[0-9]*">                        
                         <div class="input-information">
                         <?php if( $status_double ) : ?>
-                            <p>Nomor Rekam Medis sama:
+                            <p>nomor rekam medis sama :
                                 <a href="/p/med-rec/search-rm/?nomor-rm-search=<?= $nomorRM ?>"
                                     target="_blank">lihat</a>
                             </p>
@@ -189,6 +189,8 @@ if( !$auth->TrushClient() ){
                         </div>  
                         <input type="text" name="nama_kk" id="input-nama-kk" placeholder="nama kepala keluarga" value="<?= isset($load_rm) ? $namaKK : '' ?>">
                         <input type="text" name="nomor_rm_kk" id="input-nomor-rm-kk" placeholder="nomor rm kepla keluarga" value="<?= isset($load_rm) ? $nomorRM_KK : '' ?>" maxlength="6" inputmode="numeric" pattern="[0-9]*">
+                        <div class="input-information no-rm-kk"><p>nomor rm kk : <a href="javascript:void(0)" id="tambah-nomor-rm-kk" tabindex="12"></a></p></div>
+                        <div class="input-information kk-sama"></div>
                     
                         <button type="submit" name="submit">Edit Data RM</button>
                         <button type="button" onclick="window.history.back()">Batal Perubahan</button>
@@ -199,13 +201,22 @@ if( !$auth->TrushClient() ){
         </div>
     </main>
     <div class="gotop" onclick="gTop()"></div>
+    <?php if( isset( $msg ) ) :?>
+        <div class="snackbar">
+            <?= $msg ?>
+        </div>
+    <?php endif; ?>
     <footer>
         <?php include($_SERVER['DOCUMENT_ROOT'] . '/include/html/footer.html') ?>
     </footer>
     <script>
         //DOM property
-        var cari_no_Rm = document.querySelector('#input-nomor-rm');
+        var tambah_no_rm = document.querySelector('#tambah-nomor-rm')
+        var tambah_no_rm_kk = document.querySelector('#tambah-nomor-rm-kk');
         var tandai_sbg_kk = document.querySelector('#input-mark-as-kk');
+        var cari_no_RmKk = document.querySelector('#input-nama-kk');
+        var cari_no_Rm = document.querySelector('#input-nomor-rm');        
+        
         // cari nomor rm kk jika ada
         cari_no_Rm.addEventListener('input', (event) => {
             if( cari_no_Rm.value == '')  return;
@@ -216,9 +227,13 @@ if( !$auth->TrushClient() ){
                     //berhasil dipanggil
                     let res = document.querySelector('.input-information');
                     var para = document.createElement("p");
-                    var node = document.createTextNode("nomor rm sudah terdaftar");
-                    para.appendChild(node);
+                    var alink = document.createElement('a');
                     res.textContent = '';
+                    para.innerHTML = 'nomor rekam medis sama sama : ';
+                    alink.href = '/p/med-rec/search-rm/?nomor-rm-search=' + cari_no_Rm.value;
+                    alink.innerHTML = 'lihat'
+                    alink.target = '_blank';
+                    para.appendChild(alink);
                     if( this.responseText > 0){
                         res.appendChild(para);
                     }
@@ -243,6 +258,47 @@ if( !$auth->TrushClient() ){
                 input_nama_kk.value = "";
             }
         };
+        
+        // cari nomor rm kk jika ada
+        cari_no_RmKk.addEventListener('input', (event) => {
+            var sendAjax = new XMLHttpRequest();
+            let n = document.querySelector("#input-nama-kk").value;
+            let a = document.querySelector("#input-alamat").value;
+            let r = document.querySelector("#input-nomor-rt").value;
+            let w = document.querySelector("#input-nomor-rw").value;
+
+            sendAjax.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {            
+                    //berhasil dipanggil
+                    tambah_no_rm_kk.innerHTML = this.responseText;
+                    no_rm_kk = this.responseText;
+                    // nama kk yang sama
+                    if( n != ''){
+                        let info_kk = document.querySelector('.input-information.kk-sama');
+                        var para = document.createElement('p');
+                        var alink = document.createElement('a');
+                        info_kk.textContent = '';
+                        para.innerHTML = 'nama kk indentik : '
+                        alink.href ='/p/med-rec/search-rm/?strict-search=on&alamat-search='+ a +'&no-rt-search=' + r + '&no-rw-search=' + w + '&nama-kk-search=' + n;
+                        alink.innerHTML = 'lihat'
+                        alink.target = '_blank';
+                        para.appendChild(alink);
+                        info_kk.appendChild(para);
+                    }
+                }
+            }
+        sendAjax.open('GET', "/lib/ajax/inner-text/cari-nomor-rm-kk.php?n="+ n + "&a=" + a + "&r=" + r + "&w=" + w, true);
+        sendAjax.send();
+        });
+        // insert nomor rm kk
+        var no_rm_kk = 6969;
+        tambah_no_rm_kk.onclick = () => {
+            var input_no_rm_kk = document.querySelector("#input-nomor-rm-kk");
+            input_no_rm_kk.value = no_rm_kk;
+        };
+        // sticky header
+        window.onscroll = function(){stickyHeader('82px')};
+        var mycontent = document.querySelector('main');
     </script>
     <script src="/lib/js/index.end.js"></script>
 </body>

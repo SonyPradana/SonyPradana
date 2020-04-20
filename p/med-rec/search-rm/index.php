@@ -227,6 +227,10 @@
     // var href = new URL('http://localhost/p/med-rec/search-rm/?main-search=agus');
     // href.searchParams.set('page', 1);
     // console.log(href.toString());
+    
+    // sticky header
+    window.onscroll = function(){stickyHeader('82px')};
+    var mycontent = document.querySelector('main');
 </script>
     <script src="/lib/js/index.end.js"></script>
 </html>

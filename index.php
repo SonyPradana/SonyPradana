@@ -268,6 +268,9 @@
             xhr.open('GET', 'https://api.kawalcorona.com/indonesia/provinsi/', true);
             xhr.send();
         })
+        // sticky header
+        window.onscroll = function(){stickyHeader()};
+        var mycontent = document.querySelector('aside');
     </script>
     <script src="lib/js/index.end.js"></script>
 </body>
