@@ -255,14 +255,16 @@
                 if( this.readyState == 4 && this.status == 200){
                     // berhasil memanggil
                     var json = JSON.parse( this.responseText);
+                    var jateng = json.find(json => json['attributes']['Provinsi'] == 'Jawa Tengah');
+
                     var info_one = document.querySelector('.info.one .item-info.right');
-                    info_one.innerHTML = json[4]['attributes']['Kasus_Posi'] + ' positif';
+                    info_one.innerHTML = jateng['attributes']['Kasus_Posi'] + ' positif';
 
                     var info_one = document.querySelector('.info.two .item-info.right');
-                    info_one.innerHTML = json[4]['attributes']['Kasus_Semb'] + ' sembuh';
+                    info_one.innerHTML = jateng['attributes']['Kasus_Semb'] + ' sembuh';
 
                     var info_one = document.querySelector('.info.three .item-info.right');
-                    info_one.innerHTML = json[4]['attributes']['Kasus_Meni'] + ' meninggal';
+                    info_one.innerHTML = jateng['attributes']['Kasus_Meni'] + ' meninggal';
                 }
             }
             xhr.open('GET', 'https://api.kawalcorona.com/indonesia/provinsi/', true);
