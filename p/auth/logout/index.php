@@ -11,7 +11,7 @@ if( $test_auth->TrushClient() == true){
     $newLogout = new Logout($token);   
 
     #logout seesion
-    $_SESSION['token'] = '';
+    unset($_SESSION["token"]);
 
     #header
     $url = isset( $_GET['url'] ) ? $_GET['url'] : '/';

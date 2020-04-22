@@ -91,10 +91,12 @@
     <link rel="stylesheet" href="/lib/css/ui/v1/table.css">    
     <link rel="stylesheet" href="/lib/css/ui/v1/pagination.css">
     <link rel="stylesheet" href="/lib/css/ui/v1/control.default.css">
+    <link rel="stylesheet" href="/lib/css/ui/v1/alert.css">
 
     <script src="/lib/js/index.js"></script>         
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="/lib/js/ajax/html/GetData.js"></script>
+    <script src="/lib/js/bundles/keepalive.js"></script>
     <style>
         .boxs{
             display: grid;
@@ -147,6 +149,7 @@
         <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/header/header.html') ?>
     </header>
     <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/control/modal.html') ?>
+    <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/control/alert.html') ?>
     <main>
         <div class="container">
             <div class="coit breadcrumb">
@@ -231,6 +234,14 @@
     // sticky header
     window.onscroll = function(){stickyHeader('82px')};
     var mycontent = document.querySelector('main');
+    
+    // keep alive    
+    var dom_alert = document.querySelector('.modal.alert');
+    
+    keepalive(dom_alert);
+    function redirect_login(){
+        window.location.href = "/";
+    }
 </script>
     <script src="/lib/js/index.end.js"></script>
 </html>

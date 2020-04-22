@@ -103,7 +103,9 @@ if( !$auth->TrushClient() ){
 
     <link rel="stylesheet" href="/lib/css/main.css">
     <link rel="stylesheet" href="/lib/css/ui/v1/control.default.css">
+    <link rel="stylesheet" href="/lib/css/ui/v1/alert.css">
     <script src="/lib/js/index.js"></script>
+    <script src="/lib/js/bundles/keepalive.js"></script>
     <style>
         .boxs{
             width: 100%;
@@ -150,6 +152,7 @@ if( !$auth->TrushClient() ){
         <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/header/header.html') ?>
     </header>
     <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/control/modal.html') ?>
+    <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/control/alert.html') ?>
     <main>
         <div class="container">
             <div class="coit breadcrumb">
@@ -301,6 +304,14 @@ if( !$auth->TrushClient() ){
         // sticky header
         window.onscroll = function(){stickyHeader('82px')};
         var mycontent = document.querySelector('main');
+        
+        // keep alive    
+        var dom_alert = document.querySelector('.modal.alert');
+        
+        keepalive(dom_alert);
+        function redirect_login(){
+            window.location.href = "/";
+        }
     </script>
     <script src="/lib/js/index.end.js"></script>
 </body>
