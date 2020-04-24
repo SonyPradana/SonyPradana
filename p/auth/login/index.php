@@ -9,7 +9,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/config/DbConfig.php';
 session_start();
 $token = (isset($_SESSION['token']) ) ? $_SESSION['token'] : '';
 #$token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1SWQiOjE0LCJ1TmFtZSI6ImFuZ2dlciIsImV4cHQiOjE1ODI3NTA0ODgsImlwIjoiOjoxIiwidUFnZW50IjoiTW96aWxsYVwvNS4wIChXaW5kb3dzIE5UIDEwLjA7IFdpbjY0OyB4NjQ7IHJ2OjczLjApIEdlY2tvXC8yMDEwMDEwMSBGaXJlZm94XC83My4wIn0.nrx0rBqneP1-ErORCIj6kBWzXXyIWKMVrSJRu1D5Sdo';
-$test_auth = new Auth($token, 1);
+$test_auth = new Auth($token, 2);
 if( $test_auth->TrushClient() == true){
     header("Location: /");   
     exit();
