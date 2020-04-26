@@ -92,6 +92,7 @@
     <link rel="stylesheet" href="/lib/css/ui/v1/pagination.css">
     <link rel="stylesheet" href="/lib/css/ui/v1/control.default.css">
     <link rel="stylesheet" href="/lib/css/ui/v1/alert.css">
+    <link rel="stylesheet" href="/lib/css/ui/v1/control.css">
 
     <script src="/lib/js/index.js"></script>         
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -199,10 +200,7 @@
     </main>
     <div class="gotop" onclick="gTop()"></div>
     <footer>
-        <div class="line"></div>
-        <p class="big-footer">SIMPUS LEREP</p>
-        <p class="note-footer">creat by <a href="https://twitter.com/AnggerMPd">amp</a></p>
-        <div class="box"></div>
+        <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/footer/footer.html') ?>
     </footer>
 </body>
 <script type="text/javascript">

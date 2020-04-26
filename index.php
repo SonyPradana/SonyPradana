@@ -242,10 +242,22 @@
     </main>
     <div class="gotop" onclick="gTop()"></div>
     <footer>
-        <div class="line"></div>        
-        <p class="big-footer">SIMPUS LEREP</p>        
-        <p class="note-footer">creat by <a href="https://twitter.com/AnggerMPd">amp</a></p>
-        <div class="box"></div>
+        <div class="line"></div>
+        <p class="big-footer">SIMPUS LEREP</p>
+        <div class="boxs footer">
+            <div class="box about">
+                <a href="#">About</a>
+            </div>
+            <div class="box ourteam">
+                <a href="#">Meet Our Team</a>
+            </div>
+            <div class="box contact">
+                <a href="p/contact/contactus/">Contact Us</a>
+            </div>
+        </div>
+        <div class="footnote">
+            <p class="note-footer">creat by <a href="https://twitter.com/AnggerMPd">amp</a></p>
+        </div>
     </footer>
     <script>
         // memuat info Covid, source https://kawalcorona.com/api/

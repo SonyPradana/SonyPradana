@@ -1,0 +1,74 @@
+/* global ui control */
+.btn.rounded,
+.textbox.rounded{
+    border-radius: 4px;
+}
+.btn.small,
+.textbox.small{
+    padding: 8px 12px;
+    border: 1px solid #000;
+}
+.btn.normal,
+.textbox.normal{
+    padding: 12px 24px;
+    border: 2px solid #000000;
+}
+
+
+/* input ui (outline) */
+.textbox.outline{
+    width: 100%;
+    min-width: 100px;
+    box-sizing: border-box;
+    background-color: #fff !important;
+}
+/* blue color */
+.textbox.blue{
+    border-color: #2196F3;
+}
+
+
+/* button ui (outline style) */
+.btn.outline{
+    border: 2px solid black;
+    background-color: white;
+    color: black;
+    font-size: 16px;
+    cursor: pointer;
+}
+/* blue color */
+.btn.blue{
+    border-color: #2196F3;
+    color: dodgerblue
+}
+.btn.blue:hover{
+    background: #2196F3;
+    color: white;
+}
+/* green color */
+.btn.green{
+    border-color: #4CAF50;
+    color: green
+}
+.btn.green:hover{    
+    background-color: #4CAF50;
+    color: white;
+}
+/* red ccolor */
+.btn.red{
+    border-color: #f44336;
+    color: red
+}
+.btn.red:hover{    
+    background: #f44336;
+    color: white;
+}
+
+/* grub control */
+.grub-control.horizontal{
+    display: flex
+}
+.grub-control.vertical{
+    display: flex;
+    flex-flow: column;
+}

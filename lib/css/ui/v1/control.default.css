@@ -1,12 +1,15 @@
 input,
 .form-box {
-    display: block;
+    display: flexbox;
+    flex-direction: column;
     font-size: 17px;
 }
 
 input[type=text],
 input[type=date],
-input[type=number] {
+input[type=number],
+input[type=email],
+select {
     width: 100%;
     min-width: 100px;
     padding: 6px 10px;
@@ -26,10 +29,18 @@ input[type=number] {
   -moz-appearance: textfield;
 }
 
+textarea{    
+    width: 100%;
+    min-width: 100px;
+    padding: 6px 10px;
+    box-sizing: border-box;
+    border: 1.5px solid #b50b0b;
+    border-radius: 4px;
+}
+
 .form-box input {
     display: inline-block;
     width: 80px;
-
 }
 
 /* mobile */

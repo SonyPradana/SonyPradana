@@ -91,6 +91,7 @@ if( !$auth->TrushClient() ){
     <link rel="stylesheet" href="/lib/css/main.css">
     <link rel="stylesheet" href="/lib/css/ui/v1/control.default.css">
     <link rel="stylesheet" href="/lib/css/ui/v1/alert.css">
+    <link rel="stylesheet" href="/lib/css/ui/v1/control.css">
     <script src="/lib/js/index.js"></script>
     <script src="/lib/js/bundles/keepalive.js"></script>
     <style>
@@ -192,7 +193,7 @@ if( !$auth->TrushClient() ){
         </div>
     <?php endif; ?>
     <footer>
-        <?php include($_SERVER['DOCUMENT_ROOT'] . '/include/html/footer.html') ?>
+        <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/footer/footer.html') ?>
     </footer>
 </body>
 <script>

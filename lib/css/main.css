@@ -242,11 +242,10 @@ ul.crumb li a:hover {
 /* footer */
 footer{
     left:0px;
-    bottom:0px;
-    height: 120px;
+    bottom: 0px;
     margin-top: 40px;
     background:#0d2a46;    
-    padding: 40px 20px 20px 20px;
+    padding: 40px 0px 0px 0px;
     -webkit-box-shadow: 0px -19px 55px -22px #00000078;
     -moz-box-shadow: 0px -19px 55px -22px #00000078;
     box-shadow: 0px -19px 55px -22px #00000078;
@@ -264,16 +263,35 @@ footer p.big-footer{
     font-size: 28px;
     margin: 20px 0 0 0;
 }
-footer p.note-footer{    
-    text-align: center;
-    color: #ffffff;
-    font-size: 14px;
-    margin: 4px 0 0 0;
+/* kerangka footer */
+footer .boxs.footer{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 16px;
 }
-footer p.note-footer a{    
+/* style footer */
+footer .boxs.footer .box a{
+    text-decoration: none;
+    margin: 8px 18px;
+    color: #fff;
+    font-size: 1.3rem;
+}
+/* kerangka footenote */
+footer .footnote{
+    width: 100%;
+    background-color: #092037;
+    margin-top: 18px;
+}
+footer .footnote p{
+    color: #fff;
+    margin: 0;
+}
+footer .footnote p a{
     text-decoration: none;
     color: #fff;
 }
+
 /* interface dan lain-lain */
 /* snackbar */
 .snackbar{
