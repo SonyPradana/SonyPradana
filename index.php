@@ -32,121 +32,21 @@
     <meta name="theme-color" content="#ffffff">
 
     <link rel="stylesheet" href="lib/css/main.css">
+    <link rel="stylesheet" href="lib/css/ui/v1/control.costume.css">
     <script src="lib/js/index.js"></script>
     <style>
-        /* kerangka aside */
-        aside{
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            align-items: center;
-            flex-flow: column;
-            height: 100px;
-        }
-        aside .boxs-info{
+        /* costume main container */
+        .container.width-view{
+            margin-top: 12px !important;
             display: grid;
-            grid-template-columns: repeat(3, 130px);
-            grid-column-gap: 12px;
-            align-items: center;
-            overflow-x: auto;
+            grid-template-columns: 1fr 280px;
+            grid-column-gap: 12px; grid-row-gap: 12px;
         }
-        aside .boxs-info .info{
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            padding: 0px 4px;
-        }
-        /* sttyle aside */
-        aside .boxs-header p{
-            margin: 8px 0px;
-        }
-        aside .boxs-info .info{
-            height: 40px;
-            background: linear-gradient(25deg,#d64c7f,#ee4758 50%);
-            border-radius: 12px;
-            cursor: pointer
-        }
-        aside .boxs-info .info .item-info.left{
-            background-color: wheat;
-            width: 20px; height: 20px;
-            border-radius: 50%;     
-            display: flex;
-            align-items: center;       
-        }
-        aside .boxs-info .info .item-info.right{
-            color: #fff;
-            display: flex;
-            align-items: center;
-        }
-        .boxs-main.top{   
-            border-radius: 8px;         
-            padding: 30px;
-            display: grid;
-            grid-template-columns: repeat(3, minmax(232px, 250px));
-            grid-column-gap: 60px; 
-            grid-row-gap: 60px;
-        } 
-        .boxs-main.top .box-info {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            grid-column-gap: 6px;
-            
-            justify-content: center;	
-
-
-            background: #fa2500;
-            background: -moz-linear-gradient(-45deg, #fa2500 0%, #e6de00 85%, #e6de00 100%);
-            background: -webkit-gradient(left top, right bottom, color-stop(0%, #fa2500), color-stop(85%, #e6de00), color-stop(100%, #e6de00));
-            background: -webkit-linear-gradient(-45deg, #fa2500 0%, #e6de00 85%, #e6de00 100%);
-            background: -o-linear-gradient(-45deg, #fa2500 0%, #e6de00 85%, #e6de00 100%);
-            background: -ms-linear-gradient(-45deg, #fa2500 0%, #e6de00 85%, #e6de00 100%);
-            background: linear-gradient(135deg, #fa2500 0%, #e6de00 85%, #e6de00 100%);
-            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fa2500', endColorstr='#e6de00', GradientType=1);
-
-            height: 150px;
-            border-radius: 15px;
-            box-shadow: -1px 0px 46px 0px rgba(0, 0, 0, 0.28);
-        }
-        .box-info-left p{
-            font-size:47px;
-            text-align: right;  
-            vertical-align: middle;
-            line-height: 150px;
-            margin: 0;
-        }
-        .box-info-right p{
-            color: #333;
-            font-size: 17px;
-            text-align: left;   
-            vertical-align: middle;
-            margin: 66.5px 0;
-        }
-
-        @media screen and (max-width: 1020px) {
-            .boxs-main.top{       
-                grid-template-columns: repeat(2, minmax(232px, 250px));
-            }
-
-        }
-        @media screen and (max-width: 747px) {
-            .boxs-main.top{
-                grid-template-columns: minmax(150px, 250px);
-            }
-        }
-        /* mobile potret*/
-        @media screen and (max-width: 400px) {
-            .boxs-main.top .box-info{
-                grid-template-columns: 1fr;
-                grid-template-rows: 2fr 1fr;
-            }
-            .box-info-left p{
-                text-align: center;
-                line-height: 100px;
-            }
-            .box-info-right p{
-                margin: 0;
-                text-align: center;
-            }
+        main.news{            
+            overflow-x: hidden;
+        }        
+        aside.side{
+            background-color: #fff
         }
     </style>
 </head>
@@ -193,53 +93,56 @@
             </div>
         </div>
     </div>
-    <aside>
-            <div class="boxs-header">
-                <p>Info Covid (jawa tengah) <span><a href="https://kawalcorona.com/">i</a></span></p>
+    <aside class="top">
+        <div class="boxs-header">
+            <p>Info Covid (jawa tengah) <span><a href="https://kawalcorona.com/">i</a></span></p>
+        </div>
+        <div class="boxs-info">
+            <div class="info one">
+                <div class="item-info left"></div>
+                <div class="item-info right">xxx positif</div>
             </div>
-            <div class="boxs-info">
-                <div class="info one">
-                    <div class="item-info left"></div>
-                    <div class="item-info right">xxx positif</div>
-                </div>
-                <div class="info two">
-                    <div class="item-info left"></div>
-                    <div class="item-info right">xxx sembuh</div></div>
-                <div class="info three">
-                    <div class="item-info left"></div>
-                    <div class="item-info right">xxx meninggal</div></div>
-            </div>
+            <div class="info two">
+                <div class="item-info left"></div>
+                <div class="item-info right">xxx sembuh</div></div>
+            <div class="info three">
+                <div class="item-info left"></div>
+            <div class="item-info right">xxx meninggal</div></div>
+        </div>
     </aside>
-    <main>
-        <div class="container">
-            <div class="boxs-main top">
-                <div class="box-info info-one">
-                    <div class="box-info-left">
+    <div class="container width-view">
+        <main class="news">
+            <div class="boxs-card">
+                <div class="cards">
+                    <div class="card title">
                         <p>15000</p>
                     </div>
-                    <div class="box-info-right">
+                    <div class="card content">
                         <p>Data RM</p>
                     </div>
                 </div>
-                <div class="box-info info-two">
-                    <div class="box-info-left">
-                        <p><?= $jumlah_rm ?></p>
+                <div class="cards">
+                    <div class="card title">
+                        <p><?= $jumlah_rm?></p>
                     </div>
-                    <div class="box-info-right">
-                        <p>Data RM  tersimpan</p>
+                    <div class="card content">
+                        <p>Data RM Terdata</p>
                     </div>
                 </div>
-                <div class="box-info info-tree">
-                    <div class="box-info-left">
-                        <p><?=round( $jumlah_rm / 15000 , 3) ?>%</p>
+                <div class="cards">
+                    <div class="card title">
+                        <p><?= round( $jumlah_rm / 15000, 3) ?>% </p>
                     </div>
-                    <div class="box-info-right">
-                        <p>record</p>
+                    <div class="card content">
+                        <p>Prosentase </p>
                     </div>
                 </div>
             </div>
-        </div>
-    </main>
+        </main>
+        <aside class="side">
+
+        </aside>
+    </div>
     <div class="gotop" onclick="gTop()"></div>
     <footer>
         <div class="line"></div>

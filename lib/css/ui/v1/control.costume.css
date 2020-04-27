@@ -1,1 +1,87 @@
 /* digunkan untuk costume control yang lebih dari satu control (dalam grub) */
+
+/* kerangka aside */
+aside.top{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    flex-flow: column;
+    height: 100px;
+}
+aside.top .boxs-info{
+    display: grid;
+    grid-template-columns: repeat(3, 130px);
+    grid-column-gap: 12px;
+    align-items: center;
+    overflow-x: auto;
+}
+aside.top .boxs-info .info{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0px 4px;
+}
+/* sttyle aside */
+aside.top .boxs-header p{
+    margin: 8px 0px;
+}
+aside.top .boxs-info .info{
+    height: 36px;
+    background: linear-gradient(25deg,#d64c7f,#ee4758 50%);
+    border-radius: 8px;
+    cursor: pointer
+}
+aside.top .boxs-info .info .item-info.left{
+    background-color: wheat;
+    width: 20px; height: 20px;
+    border-radius: 50%;     
+    display: flex;
+    align-items: center;       
+}
+aside.top .boxs-info .info .item-info.right{
+    color: #fff;
+    display: flex;
+    align-items: center;
+}
+
+/* card info rm */
+.boxs-card{
+    overflow-x: auto;
+    padding: 12px;
+    display: flex;
+    flex-direction: row
+}
+.boxs-card .cards{
+    min-width: 200px;
+    height: 80px;
+    padding: 8px;
+    margin-right: 12px;
+    cursor: pointer;
+    
+    /* style */
+    border-radius: 12px;
+    background: #fa2500;
+    background: -moz-linear-gradient(-45deg, #fa2500 0%, #e6de00 85%, #e6de00 100%);
+    background: -webkit-gradient(left top, right bottom, color-stop(0%, #fa2500), color-stop(85%, #e6de00), color-stop(100%, #e6de00));
+    background: -webkit-linear-gradient(-45deg, #fa2500 0%, #e6de00 85%, #e6de00 100%);
+    background: -o-linear-gradient(-45deg, #fa2500 0%, #e6de00 85%, #e6de00 100%);
+    background: -ms-linear-gradient(-45deg, #fa2500 0%, #e6de00 85%, #e6de00 100%);
+    background: linear-gradient(135deg, #fa2500 0%, #e6de00 85%, #e6de00 100%);
+    
+}
+.boxs-card .cards p{margin: 0; color: #fff; }
+.cards .card.title p{
+    font-size: 2.7rem;
+}
+.cards .card.content p{
+    font-size: 1.3rem;
+}
+
+@media screen and (max-width: 747px) {
+    /* costume main container */
+    .container.width-view{
+        display: grid;
+        grid-template-columns: 1fr;
+    }
+}
