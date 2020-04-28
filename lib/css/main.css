@@ -241,6 +241,7 @@ ul.crumb li a:hover {
 
 /* footer */
 footer{
+    position: relative; width: 100%;
     left:0px;
     bottom: 0px;
     margin-top: 40px;
@@ -365,7 +366,7 @@ footer .footnote p a{
     }
 }
 /* mobile mode*/
-@media screen and (max-width: 400px) {
+@media screen and (max-width: 479px) {
     /* kerangka */
     header .header.menu .logo{
         grid-column: 1 / 3;
@@ -386,5 +387,15 @@ footer .footnote p a{
         padding: 20px;
         min-height: 300px;
         background-color: white;
+    }
+    /* kerangka footer */
+    footer .boxs.footer{
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+    footer .boxs.footer .box a{
+        font-size: 1.1rem;
     }
 }

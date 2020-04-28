@@ -48,6 +48,14 @@
         aside.side{
             background-color: #fff
         }
+        /* tablet vie view */
+        @media screen  and (max-width: 767px) {
+            /* costume main container */
+            .container.width-view{
+                display: grid;
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>

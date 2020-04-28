@@ -1,6 +1,6 @@
 /* digunkan untuk costume control yang lebih dari satu control (dalam grub) */
 
-/* kerangka aside */
+/* kerangka aside top*/
 aside.top{
     display: flex;
     flex-wrap: wrap;
@@ -8,13 +8,13 @@ aside.top{
     align-items: center;
     flex-flow: column;
     height: 100px;
+    overflow-x: auto;
 }
 aside.top .boxs-info{
     display: grid;
     grid-template-columns: repeat(3, 130px);
     grid-column-gap: 12px;
     align-items: center;
-    overflow-x: auto;
 }
 aside.top .boxs-info .info{
     display: flex;
@@ -22,7 +22,7 @@ aside.top .boxs-info .info{
     align-items: center;
     padding: 0px 4px;
 }
-/* sttyle aside */
+/* sttyle aside top */
 aside.top .boxs-header p{
     margin: 8px 0px;
 }
@@ -33,8 +33,11 @@ aside.top .boxs-info .info{
     cursor: pointer
 }
 aside.top .boxs-info .info .item-info.left{
-    background-color: wheat;
-    width: 20px; height: 20px;
+    /* background-color: #c1b659; */
+    background-image: url(/lib/css/ui/v1/asset/corona-virus.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 24px; height: 24px;
     border-radius: 50%;     
     display: flex;
     align-items: center;       
@@ -58,6 +61,10 @@ aside.top .boxs-info .info .item-info.right{
     padding: 8px;
     margin-right: 12px;
     cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; */
+    justify-content: center;
     
     /* style */
     border-radius: 12px;
@@ -78,10 +85,18 @@ aside.top .boxs-info .info .item-info.right{
     font-size: 1.3rem;
 }
 
-@media screen and (max-width: 747px) {
-    /* costume main container */
-    .container.width-view{
-        display: grid;
-        grid-template-columns: 1fr;
+/* tablet view */
+@media screen  and (max-width: 767px) {
+    .boxs-card .cards{
+        min-width: 110px;
+        height: 56px;
+        padding: 8px;
+    }
+    .boxs-card .cards p{text-align: center; }
+    .cards .card.title p{
+        font-size: 1.4rem;
+    }
+    .cards .card.content p{
+        font-size: .8rem;
     }
 }
