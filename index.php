@@ -39,7 +39,7 @@
         .container.width-view{
             margin-top: 12px !important;
             display: grid;
-            grid-template-columns: 1fr 280px;
+            grid-template-columns: 1fr minmax(250px, 280px);
             grid-column-gap: 12px; grid-row-gap: 12px;
         }
         main.news{            
@@ -139,7 +139,7 @@
                 </div>
                 <div class="cards">
                     <div class="card title">
-                        <p><?= round( $jumlah_rm / 15000, 3) ?>% </p>
+                        <p><?= round( ($jumlah_rm / 15000) * 100, 1) ?>% </p>
                     </div>
                     <div class="card content">
                         <p>Prosentase </p>
@@ -148,7 +148,63 @@
             </div>
         </main>
         <aside class="side">
-
+            <div class="boxs-review">
+                <div class="reviews">
+                    <div class="review title">
+                        <p>Usalan untuk Kami</p>
+                    </div>
+                    <div class="review respones">
+                        <div class="respone low">
+                        </div>
+                        <div class="respone med"></div>
+                        <div class="respone hig"></div>
+                    </div>
+                    <div class="review comment">
+                        <input type="text" id="input-comment" placeholder="Kritik dan saran">
+                    </div>
+                </div>
+            </div>
+            <div class="boxs-timetable">
+                <div class="timetables">
+                    <div class="timetable title">
+                        <p>Jadwal Pelayanan</p>
+                    </div>
+                    <div class="timetable hours">
+                        <div class="box-day">
+                            <div class="day"><p>Senin</p></div>
+                            <div class="hour"><p>08:00 AM-12:00 AM</p></div>
+                        </div>
+                        <div class="box-day">
+                            <div class="day"><p>Selasa</p></div>
+                            <div class="hour"><p>08:00 AM-12:00 AM</p></div>
+                        </div>
+                        <div class="box-day">
+                            <div class="day"><p>Rabu</p></div>
+                            <div class="hour"><p>08:00 AM-12:00 AM</p></div>
+                        </div>
+                        <div class="box-day">
+                            <div class="day"><p>Kamis</p></div>
+                            <div class="hour"><p>08:00 AM-12:00 AM</p></div>
+                        </div>
+                        <div class="box-day">
+                            <div class="day"><p>Jumat</p></div>
+                            <div class="hour"><p>08:00 AM-10:30 AM</p></div>
+                        </div>
+                        <div class="box-day">
+                            <div class="day"><p>Sabtu</p></div>
+                            <div class="hour"><p>08:00 AM-11:00 AM</p></div>
+                        </div>
+                        <div class="box-day">
+                            <div class="day"><p>Minggu</p></div>
+                            <div class="hour"><p>Tutup</p></div>
+                        </div>
+                    </div>
+                    <div class="timtable note">
+                        <p>Note: Tanggal merah dan libur tutup</p>
+                        <p style="color: blue">Selama wabah covid berlaku pembatasan, untuk keamaan bersama</p>
+                    </div>
+                </div>
+            </div>
         </aside>
     </div>
     <div class="gotop" onclick="gTop()"></div>
