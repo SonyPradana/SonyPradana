@@ -59,7 +59,7 @@
         boxs h2{font-family: 18px !important}
 
         .container{                
-            margin: 20px 20px;
+            margin: 32px 56px;
             padding: 20px;
             min-height: 300px;
             background-color: white;
@@ -75,7 +75,7 @@
         }
         form label,
         form button{
-            margin-top: 8px;
+            margin-top: 8px; margin-bottom: 4px;
             min-width: 80px;
             max-width: 150px;
         }
@@ -83,6 +83,7 @@
             margin-top: 8px;
         }
 
+        input, label, select, textarea{font-size: 1rem}
         #input-ampcaptcha{
             width: 100px
         }
@@ -112,7 +113,7 @@
                 </ul>
             </div>
             <div class="boxs">
-                <h1>Contact Us / Hubungi Kami</h1>
+                <h1>Hubungi Kami</h1>
                 <h2>kritik dan saran untuk kami</h2>
                 <form action="" method="post">
                     <label for="input-email">Email</label>
@@ -120,7 +121,7 @@
 
                     <label for="input-regarding">Regarding</label>
                     <select name="regarding" id="input-regarding" class="textbox outline blue rounded small">
-                        <option value="bug">Malah pada website</option>
+                        <option value="bug">Masalah pada website</option>
                         <option value="saran">Saran</option>
                         <option value="sponsor">Tertarik dengan Kami</option>
                         <option value="other">Yang lainnya</option>
@@ -155,7 +156,7 @@
 </body>
 <script>    
     // sticky header
-    window.onscroll = function(){stickyHeader('70px', '20px')};
+    window.onscroll = function(){stickyHeader('82px', '32px')};
     var mycontent = document.querySelector('.container');
 
      // keep alive    

@@ -33,6 +33,7 @@
 
     <link rel="stylesheet" href="lib/css/main.css">
     <link rel="stylesheet" href="lib/css/ui/v1/control.costume.css">
+    <link rel="stylesheet" href="lib/css/ui/v1/control.css">
     <script src="lib/js/index.js"></script>
     <style>
         /* costume main container */
@@ -40,7 +41,7 @@
             margin-top: 12px !important;
             display: grid;
             grid-template-columns: 1fr minmax(250px, 280px);
-            grid-column-gap: 12px; grid-row-gap: 12px;
+            grid-column-gap: 24px; grid-row-gap: 24px;
         }
         main.news{            
             overflow-x: hidden;
@@ -86,7 +87,7 @@
                     </div>
                 </div>                
                 <?php else: ?>
-                    <a href="/p/auth/login">login</a>
+                    <a class="btn outline blue small" href="/p/auth/login">login</a>
                 <?php endif; ?>
             </div>
         </div>
@@ -96,6 +97,7 @@
             <span class="close" onclick="close_modal()">&times;</span>
             <div class="boxs-menu">
                 <a href="#">Edit profile</a>
+                <a href="#">Pesan Masuk</a>
                 <a href="/p/auth/reset-password/">Ganti Pasword</a>
                 <a href="/p/auth/logout/">Log Out</a>
             </div>
@@ -146,12 +148,18 @@
                     </div>
                 </div>
             </div>
+            <div class="sparator blue">
+                <div class="sparator-title">Berita terbaru</div>
+                </div>
+            <div class="boxs-news">
+
+            </div>
         </main>
         <aside class="side">
             <div class="boxs-review">
                 <div class="reviews">
                     <div class="review title">
-                        <p>Usalan untuk Kami</p>
+                        <p>Ulasan untuk Kami</p>
                     </div>
                     <div class="review respones">
                         <div class="respone low">
@@ -170,31 +178,31 @@
                         <p>Jadwal Pelayanan</p>
                     </div>
                     <div class="timetable hours">
-                        <div class="box-day">
+                        <div class="box-day <?= date('D') == 'Mon' ? 'active' : ''?>">
                             <div class="day"><p>Senin</p></div>
                             <div class="hour"><p>08:00 AM-12:00 AM</p></div>
                         </div>
-                        <div class="box-day">
+                        <div class="box-day <?= date('D') == 'Tue' ? 'active' : ''?>">
                             <div class="day"><p>Selasa</p></div>
                             <div class="hour"><p>08:00 AM-12:00 AM</p></div>
                         </div>
-                        <div class="box-day">
+                        <div class="box-day <?= date('D') == 'Wed' ? 'active' : ''?>">
                             <div class="day"><p>Rabu</p></div>
                             <div class="hour"><p>08:00 AM-12:00 AM</p></div>
                         </div>
-                        <div class="box-day">
+                        <div class="box-day <?= date('D') == 'Thu' ? 'active' : ''?>">
                             <div class="day"><p>Kamis</p></div>
                             <div class="hour"><p>08:00 AM-12:00 AM</p></div>
                         </div>
-                        <div class="box-day">
+                        <div class="box-day <?= date('D') == 'Fri' ? 'active' : ''?>">
                             <div class="day"><p>Jumat</p></div>
                             <div class="hour"><p>08:00 AM-10:30 AM</p></div>
                         </div>
-                        <div class="box-day">
+                        <div class="box-day <?= date('D') == 'Sat' ? 'active' : ''?>">
                             <div class="day"><p>Sabtu</p></div>
                             <div class="hour"><p>08:00 AM-11:00 AM</p></div>
                         </div>
-                        <div class="box-day">
+                        <div class="box-day <?= date('D') == 'Sun' ? 'active' : ''?>">
                             <div class="day"><p>Minggu</p></div>
                             <div class="hour"><p>Tutup</p></div>
                         </div>

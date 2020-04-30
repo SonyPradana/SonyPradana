@@ -31,10 +31,11 @@
 /* button ui (outline style) */
 .btn.outline{
     border: 2px solid black;
-    background-color: white;
+    background-color: transparent;
     color: black;
     font-size: 16px;
     cursor: pointer;
+    text-decoration: none;
 }
 /* blue color */
 .btn.blue{
