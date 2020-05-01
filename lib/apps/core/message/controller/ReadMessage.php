@@ -156,7 +156,7 @@ class ReadMessage{
         $conn = new DbConfig();
         $link = $conn->StartConnection();
         $query = $this->query();
-        echo $query;
+        // echo $query;
         if( $query != ''){
             // mengambil data dari database
             $result = mysqli_query($link, $query);

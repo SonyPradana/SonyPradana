@@ -103,7 +103,7 @@ aside.top .boxs-info .info .item-info.right{
     border-radius: 12px;
     box-shadow: 5px 10px 19px -10px rgba(0,0,0,0.75);
 }
-.review.title p{
+.review.title h3{
     margin: 0;
     /* style */
     font-family: Arial, Helvetica, sans-serif;
@@ -118,6 +118,11 @@ aside.top .boxs-info .info .item-info.right{
     grid-template-columns: repeat(3, 1fr);
     grid-column-gap: 8px;
     justify-content: center;
+}
+.review.respones[hidden]{
+    height: 0;
+    transform: scale(0);
+    margin: 0
 }
 .respones .respone{
     background-color: blue;
@@ -180,6 +185,49 @@ aside.top .boxs-info .info .item-info.right{
     padding: 8px 8px;
     border-radius: 12px
 }
+/* result-done */
+.review.results{
+    width: 100%;
+    display: flex;
+    justify-content: center;        
+    align-items: center;
+    margin: 14px 0;
+}
+.review.results[hidden]{
+    height: 0;
+    transform: scale(0);
+    margin: 0
+}
+.result.done{
+    background-color: blue;
+    /* style */
+    border-radius: 16px;
+    background: linear-gradient(145deg, #4da7db, #5bc6ff);
+    box-shadow:  19px 19px 38px #489dcf, 
+                -19px -19px 38px #62d5ff;
+    width: 100px; height: 100px;
+    display: flex;
+    justify-content: center;        
+    align-items:flex-end;
+    cursor: pointer
+}
+.result.done:hover{
+    /* style */
+    border-radius: 16px;
+    background: #55b9f3;
+    box-shadow: inset 19px 19px 38px #489dcf, 
+                inset -19px -19px 38px #62d5ff;
+}
+.result.done::before{
+    content: "";
+    width: 100px; height: 100px;
+    position: absolute;
+    background: url("/lib/css/ui/v1/asset/smile.svg");
+    background-repeat: no-repeat;
+    background-size: 50px 50px;
+    background-position: 50% 30%;
+}
+.result.done p{color: #fff; margin: 12px}
 
 /* timetable */
 .boxs-timetable{
@@ -196,7 +244,7 @@ aside.top .boxs-info .info .item-info.right{
     border-radius: 12px;
     box-shadow: 5px 10px 19px -10px rgba(0,0,0,0.75);
 }
-.timetable.title p{
+.timetable.title h3{
     margin: 0;
     /* style */
     font-family: Arial, Helvetica, sans-serif;
@@ -222,7 +270,7 @@ aside.top .boxs-info .info .item-info.right{
     margin: 0 4px;
     font-size: .97rem;
     padding: 4px 0;
-
+}
 /* tablet view */
 @media screen  and (max-width: 767px) {
     .boxs-card .cards{

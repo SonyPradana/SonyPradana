@@ -35,6 +35,7 @@
     <link rel="stylesheet" href="lib/css/ui/v1/control.costume.css">
     <link rel="stylesheet" href="lib/css/ui/v1/control.css">
     <script src="lib/js/index.js"></script>
+    <script src="lib/js/bundles/message.js"></script>
     <style>
         /* costume main container */
         .container.width-view{
@@ -159,7 +160,12 @@
             <div class="boxs-review">
                 <div class="reviews">
                     <div class="review title">
-                        <p>Ulasan untuk Kami</p>
+                        <h3>Ulasan untuk Kami</h3>
+                    </div>
+                    <div class="review results" hidden>
+                        <div class="result done">
+                            <p>Terimakasih</p>
+                        </div>
                     </div>
                     <div class="review respones">
                         <div class="respone low">
@@ -175,7 +181,7 @@
             <div class="boxs-timetable">
                 <div class="timetables">
                     <div class="timetable title">
-                        <p>Jadwal Pelayanan</p>
+                        <h3>Jadwal Pelayanan</h3>
                     </div>
                     <div class="timetable hours">
                         <div class="box-day <?= date('D') == 'Mon' ? 'active' : ''?>">
@@ -260,6 +266,47 @@
         // sticky header
         window.onscroll = function(){stickyHeader()};
         var mycontent = document.querySelector('aside');
+
+        // write review
+        const r_low = document.querySelector('.respone.low');
+        const r_med = document.querySelector('.respone.med');
+        const r_hig = document.querySelector('.respone.hig');
+        const s_msg = document.querySelector('#input-comment');
+        // hidem elemnt
+        var cls_result = document.querySelector('.review.results');
+        var cls_respones = document.querySelector('.review.respones');
+        var cls_comment = document.querySelector('.review.comment');
+        const cls_res_done = document.querySelector('.result.done');
+
+        const hidden_cls_result = () =>{
+            cls_result.removeAttribute("hidden");
+            cls_respones.setAttribute("hidden", "");
+            cls_comment.setAttribute("hidden", "");            
+        };
+        const show_cls_result = () =>{
+            cls_result.setAttribute("hidden", "");
+            cls_respones.removeAttribute("hidden");
+            cls_comment.removeAttribute("hidden");
+        };
+        
+        r_low.addEventListener('click', function(){
+            Rating(1, 3, 'Rekam Medis');
+            hidden_cls_result();
+        });
+        r_med.addEventListener('click', function(){
+            Rating(2, 3, 'Rekam Medis');
+            hidden_cls_result();
+        });
+        r_hig.addEventListener('click', function(){
+            Rating(3, 3, 'Rekam Medis');
+            hidden_cls_result();
+        });
+        s_msg.addEventListener('click', function(){
+            window.location = '/p/contact/contactus/';
+        });
+        cls_res_done.addEventListener('click', function(){
+            show_cls_result();  
+        });
     </script>
     <script src="lib/js/index.end.js"></script>
 </body>

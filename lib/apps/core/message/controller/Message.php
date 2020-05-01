@@ -63,7 +63,16 @@ abstract class Message{
         // step 3:  jika sama -> cek selisihnya -> selisih waktu < 12 jam => spamer
         // scope kedua (resiver):
         // berlaku hal yang sama       
-        
+        $get_msg = new ReadMessage();
+        $get_msg->filterByPengirim($this->_sender);
+        $get_msg->filterByPenerima($this->_resiver);
+        $get_msg->filterByDate(time() - 120, '>');
+        $get_msg->limitView(5);
+        $msg = $get_msg->bacaPesan();
+        if( count($msg) > 0){
+            return true;
+        }
+
         // detact by isi pesan -> tergantung type pesan
         // metode 1:
         // jika type != kepuasan

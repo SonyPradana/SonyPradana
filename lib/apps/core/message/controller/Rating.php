@@ -15,12 +15,17 @@ class Rating extends Message{
      */
     public function __construct($sender, $rating, $max_rating = 5, $target = 'Rekam Medis')
     {
+        // senitilizer input
+        $max_rating = $max_rating < 0 ? 1 : $max_rating;
+        $rating = $rating > $max_rating ? $max_rating : $rating;
+        $rating= $rating < 1 ? 1 : $rating;
+
         $this->_sender =  $sender;
         $this->_resiver = 'sonypradana@gamil.com';
         $this->_type = 'review';
         $this->_message = '';
         $this->_date = time();
-        $meta = sprintf('{"ver":"1.0", "maks-rating":"%d", "rating":"%d", "unit":"%s"', $max_rating, $rating, $target);
+        $meta = sprintf('{"ver":"1.0", "maks-rating":"%d", "rating":"%d", "unit":"%s"}', $max_rating, $rating, $target);
         $this->_meta = $meta;
     }
 }
