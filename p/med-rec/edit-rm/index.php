@@ -217,19 +217,36 @@ if( !$auth->TrushClient() ){
         //DOM property
         var tambah_no_rm = document.querySelector('#tambah-nomor-rm')
         var tandai_sbg_kk = document.querySelector('#input-mark-as-kk');
-        var cari_no_RmKk = document.querySelector('#input-nama-kk');
-        var cari_no_Rm = document.querySelector('#input-nomor-rm');        
+        var dom_no_rm_kk = document.querySelector('#input-nama-kk');
+        var dom_no_rm = document.querySelector('#input-nomor-rm');        
         
         // cari nomor rm kk jika ada
-        cari_no_Rm.addEventListener('input', (event) => {
-            if( cari_no_Rm.value == '')  return;
+        dom_no_rm.addEventListener('input', (event) => {
+            if( dom_no_rm.value == '')  return;
             xhr_cek_rm_terdaftar();
         });
         
         // cari nomor rm kk jika ada
-        cari_no_RmKk.addEventListener('input', (event) => {
+        dom_no_rm_kk.addEventListener('input', (event) => {
             xhr_cek_rm_kk();
         });
+
+        // checkbox kk
+        tandai_sbg_kk.onclick = () => {        
+            let input_noRm = document.querySelector("#input-nomor-rm");
+            let input_nama = document.querySelector("#input-nama");
+            let input_no_Rm_kk = document.querySelector("#input-nomor-rm-kk");
+            let input_nama_kk = document.querySelector("#input-nama-kk");
+            // If the checkbox is checked, display the output text
+            if (tandai_sbg_kk.checked == true){
+                input_no_Rm_kk.value = input_noRm.value;
+                input_nama_kk.value = input_nama.value;
+            }else{
+                input_no_Rm_kk.value = "";
+                input_nama_kk.value = "";
+            }
+            xhr_cek_rm_kk();
+        };
 
         // function
         function xhr_cek_rm_kk() {
@@ -239,25 +256,29 @@ if( !$auth->TrushClient() ){
             let a = document.querySelector("#input-alamat").value;
             let r = document.querySelector("#input-nomor-rt").value;
             let w = document.querySelector("#input-nomor-rw").value;
+            // property lainnay            
+            let info_rm_kk = document.querySelector('.input-information.no-rm-kk');
 
             sendAjax.onreadystatechange = function () {
-                if (this.readyState == 4 && this.status == 200) {            
+                if (this.readyState == 4 && this.status == 200) {
+                    // parse json
+                    const json = JSON.parse(this.responseText);
+                    const nrk = json['nomor_rm_kk'];
                     //berhasil dipanggil
-                    let info_rm_kk = document.querySelector('.input-information.no-rm-kk');
                     var para2 = document.createElement('p');
                     var alink2 = document.createElement('a');
                     info_rm_kk.textContent = '';
-                    if( this.response != ''){
+                    if( nrk != ''){
                         para2.innerHTML = 'nomor rm kk : ';
                         alink2.href = 'javascript:void(0)';
                         alink2.id = 'tambah-nomor-rm-kk';
                         alink2.tabIndex = 12;
-                        alink2.innerHTML = this.response;
+                        alink2.innerHTML = nrk;
                         para2.appendChild(alink2);
                         info_rm_kk.appendChild(para2);
                         alink2.addEventListener('click', (event) => {
                             var input_no_rm_kk = document.querySelector("#input-nomor-rm-kk");
-                            input_no_rm_kk.value = this.responseText;
+                            input_no_rm_kk.value = nrk;
                         })
                     }
                     // nama kk yang sama
@@ -265,7 +286,7 @@ if( !$auth->TrushClient() ){
                     var para = document.createElement('p');
                     var alink = document.createElement('a');
                     info_kk.textContent = '';
-                    if( this.response != '' && n == nm ){
+                    if( nrk != '' && n == nm ){
                         para.innerHTML = 'nama kk indentik : '
                         alink.href ='/p/med-rec/search-rm/?strict-search=on&alamat-search='+ a +'&no-rt-search=' + r + '&no-rw-search=' + w + '&nama-kk-search=' + n;
                         alink.innerHTML = 'lihat'
@@ -273,13 +294,17 @@ if( !$auth->TrushClient() ){
                         para.appendChild(alink);
                         info_kk.appendChild(para);
                     }
+                }else if(this.readyState == 4 && this.status == 400){ // handle kita respone ditolak
+                    info_rm_kk.textContent = '';
                 }
             }
-            sendAjax.open('GET', "/lib/ajax/inner-text/cari-nomor-rm-kk.php?n="+ n + "&a=" + a + "&r=" + r + "&w=" + w, true);
+            sendAjax.open('GET', "/lib/ajax/json/private/med-rec/cari-nomor-rm-kk/?n="+ n + "&a=" + a + "&r=" + r + "&w=" + w, true);
             sendAjax.send();
         }
 
         function xhr_cek_rm_terdaftar(params) {
+            if( dom_no_rm.value == '')  return;
+            // remove element
             var sendAjax = new XMLHttpRequest();
             sendAjax.onreadystatechange = function () {
                 if (this.readyState == 4 && this.status == 200) {            
@@ -289,17 +314,20 @@ if( !$auth->TrushClient() ){
                     var alink = document.createElement('a');
                     res.textContent = '';
                     para.innerHTML = 'nomor rekam medis sama : ';
-                    alink.href = '/p/med-rec/search-rm/?nomor-rm-search=' + cari_no_Rm.value;
+                    alink.href = '/p/med-rec/search-rm/?nomor-rm-search=' + dom_no_rm.value;
                     alink.innerHTML = 'lihat'
                     alink.target = '_blank';
                     para.appendChild(alink);
-                    if( this.responseText > 0){
+                    // parse json
+                    const json = JSON.parse(this.responseText);
+                    const nrm = json['found'];
+                    if( nrm > 0){
                         res.appendChild(para);
                     }
                 }
             }
-            let nr = cari_no_Rm.value;
-            sendAjax.open('GET', "/lib/ajax/inner-text/cek-nomor-rm.php?nr="+ nr, true);
+            let nr = dom_no_rm.value;
+            sendAjax.open('GET', "/lib/ajax/json/private/med-rec/cek-nomor-rm/?nr="+ nr, true);
             sendAjax.send();
         }
         // sticky header
