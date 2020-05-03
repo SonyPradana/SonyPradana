@@ -288,18 +288,22 @@
             cls_respones.removeAttribute("hidden");
             cls_comment.removeAttribute("hidden");
         };
-        
+
+        var messageStatus = (val) =>{
+            console.log(val);
+            if( val == 'ok'){
+                hidden_cls_result();
+            }
+        };
+                
         r_low.addEventListener('click', function(){
-            Rating(1, 3, 'Rekam Medis');
-            hidden_cls_result();
+            Rating(1, 3, 'Rekam Medis', messageStatus);
         });
         r_med.addEventListener('click', function(){
-            Rating(2, 3, 'Rekam Medis');
-            hidden_cls_result();
+            Rating(2, 3, 'Rekam Medis', messageStatus);
         });
         r_hig.addEventListener('click', function(){
-            Rating(3, 3, 'Rekam Medis');
-            hidden_cls_result();
+            Rating(3, 3, 'Rekam Medis', messageStatus);
         });
         s_msg.addEventListener('click', function(){
             window.location = '/p/contact/contactus/';
@@ -307,6 +311,7 @@
         cls_res_done.addEventListener('click', function(){
             show_cls_result();  
         });
+
     </script>
     <script src="lib/js/index.end.js"></script>
 </body>
