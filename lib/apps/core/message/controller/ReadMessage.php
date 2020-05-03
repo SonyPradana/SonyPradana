@@ -20,6 +20,19 @@ class ReadMessage{
     /** @var string lebih besar atau lebih kecil */
     private $_sign = ">";
 
+    /** @var string opsi tampilkan data - sender */
+    private $_view_sender = true;
+    /** @var string opsi tampilkan data - resiver */
+    private $_view_resiver = true;
+    /** @var string opsi tampilkan data - type */
+    private $_view_type = true;
+    /** @var string opsi tampilkan data - date */
+    private $_view_date = true;
+    /** @var string opsi tampilkan data - message */
+    private $_view_message = true;
+    /** @var string opsi tampilkan data - meta */
+    private $_view_meta = true;
+
     /** filter pencarian berdasarkan pengrim pesan
      * 
      * @param string $val pengirim pesan
@@ -89,6 +102,13 @@ class ReadMessage{
         }
     }
 
+    /** membatasi data yang akan ditampilkan, resiver.
+     * @param boolean $val true(default) data ditapilkan, false data disembunyokan
+     */
+    public function viewResiver($val){
+        $this->_view_resiver = is_bool($val) ? $val : $this->_view_resiver;
+    }
+
     /**
      * membuat sebuah query string dari filter dan configurasi lainya, menjadi query yang dibaca mesin.
      * 
@@ -106,7 +126,21 @@ class ReadMessage{
         // replace frist ' AND '
         $all = preg_replace('/^( AND )/', '', $all);
         $all = $all != '' ? " WHERE ($all)" : $all;
-        return "SELECT * FROM public_message$all LIMIT $limit";
+
+        // menampilkan data yang hanya diinginkan
+        $v_sender = $this->colmBulider('sender', $this->_view_sender);
+        $v_resiver = $this->colmBulider('resiver', $this->_view_resiver);
+        $v_type= $this->colmBulider('type', $this->_view_type);
+        $v_date = $this->colmBulider('date', $this->_view_date);
+        $v_message = $this->colmBulider('message', $this->_view_message);
+        $v_meta = $this->colmBulider('meta', $this->_view_meta);
+
+        $select = $v_sender . $v_resiver . $v_type . $v_date . $v_message . $v_message . $v_meta;
+        // replace end (, )
+        $select = preg_replace('/(, )$/', '', $select);
+        $select = $select == '' ? '*' : $select;
+        
+        return "SELECT $select FROM public_message$all LIMIT $limit";
     }
 
     /**
@@ -146,12 +180,28 @@ class ReadMessage{
     }
 
     /**
+     * helper untuk mebuatt sebuah parameter pada query,
+     * menampilkan data berdasarkan coloumn database yang dipilih
+     * 
+     * @param string $key nama column data base
+     * @param boolean $val opsi untuk nenampilkan column pada result
+     */
+    private function colmBulider($key, $val){
+        if( $val ){
+            $bulider = $key . ', ';
+            return $bulider;
+        }
+        return '';
+    }
+
+    /**
      * menampilkan hasil pencarian setalah di filter terlebih dahulu, 
      * apabila blm di tentukan filter sebelumnya makan tidak ada hasil yang ditampilkan
      * 
+     * @param boolean convert data dalam bentuk json
      * @return array hasil dari table data base
      */
-    public function bacaPesan(){
+    public function bacaPesan($convrt_to_json = false){
         // koneksi dan membuat query
         $conn = new DbConfig();
         $link = $conn->StartConnection();
@@ -165,10 +215,10 @@ class ReadMessage{
                 $data[] = $feedback;
             }
             // mengembalikan data dengan format array
-            return $data;
+            return $convrt_to_json ? json_encode( $data ) : $data;
         }
         // tidak bs memuat data karena tidak query yang akan dicari
-        return [];
+        return $convrt_to_json ? json_encode( [] ) : [];
     }
     /**
      * menampilkan semua hasil yang ada di data base

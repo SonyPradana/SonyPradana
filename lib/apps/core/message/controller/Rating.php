@@ -21,7 +21,7 @@ class Rating extends Message{
         $rating= $rating < 1 ? 1 : $rating;
 
         $this->_sender =  $sender;
-        $this->_resiver = 'sonypradana@gamil.com';
+        $this->_resiver = 'sonypradana@gmail.com';
         $this->_type = 'review';
         $this->_message = '';
         $this->_date = time();
