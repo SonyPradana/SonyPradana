@@ -1,8 +1,6 @@
 <?php
 #import modul 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/core/auth/init.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/core/library/init.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/config/DbConfig.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/init.php';
 ?>
 <?php
 #Aunt cek

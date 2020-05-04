@@ -6,11 +6,8 @@
  * */ 
 class DbConfig{
     private $_conn;
-    // 45.118.132.253
-    // 203.114.74.128
     public function __construct($database_name = "simpusle_simpus_lerep"){              
-        // $conn = mysqli_connect("localhost", "root", "", $database_name);
-        $conn = mysqli_connect("45.118.132.253", "simpusle_admin", "ulfamylove", $database_name);
+        $conn = mysqli_connect(DB_HOST, DB_USER, DB_PASS, $database_name);
         $this->_conn = $conn;        
     }
     public function StartConnection(){
