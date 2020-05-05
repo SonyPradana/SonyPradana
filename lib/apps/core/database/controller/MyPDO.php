@@ -1,8 +1,8 @@
 <?php
 class MyPDO{    
-    private $host = 'localhost';
-    private $user = 'root';
-    private $pass = '';
+    private $host = DB_HOST;
+    private $user = DB_USER;
+    private $pass = DB_PASS;
     private $dbname = 'simpusle_simpus_lerep';
     
     private $dbh;
