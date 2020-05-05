@@ -1,9 +1,14 @@
 <?php
     #import modul 
-    require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/core/auth/init.php';
-    require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/core/library/init.php';
-    require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/core/simpus/init.php';
-    require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/config/DbConfig.php';
+    require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/init.php';
+    // header 
+    header_remove("Expires");
+    header_remove("Pragma");
+    header_remove("X-Powered-By");
+    header_remove("Connection");
+    header_remove("Server");
+    header("Cache-Control:	private");
+    header("Content-Type: text/html; charset=UTF-8");
 ?>
 <?php
     #Aunt cek
@@ -11,8 +16,10 @@
     $token = (isset($_SESSION['token']) ) ? $_SESSION['token'] : '';
     $auth = new Auth($token, 2);
     if( !$auth->TrushClient() ){ 
+        header("HTTP/1.1 401 Unauthorized");
         exit();
     }
+    header("HTTP/1.1 200 Ok");
 ?>
 <?php
     # ambil dari url
