@@ -86,8 +86,7 @@ class Registartion{
      */
     public function AddToArchive(){
         # koneksi data base
-        $conn = new DbConfig();
-        $link = $conn->StartConnection();
+        $link = mysqli_connect(DB_HOST, DB_USER, DB_PASS, "simpusle_simpus_lerep");
         # query data base
         $user = $this->_userName;
         $email = $this->_email;

@@ -232,8 +232,7 @@ class View_RM{
 
         $query = "SELECT COUNT(id) FROM data_rm $merge_filter";
 
-        $conn = new DbConfig();
-        $link = $conn->StartConnection();        
+        $link = mysqli_connect(DB_HOST, DB_USER, DB_PASS, "simpusle_simpus_lerep");      
         $result = mysqli_query($link, $query);
         $feedback = mysqli_fetch_assoc( $result );
 
@@ -398,8 +397,7 @@ class View_RM{
      */
     public function result($strict = true, $convert_To_Json = false){
         # koneksi data base
-        $conn = new DbConfig();
-        $link = $conn->StartConnection();
+        $link = mysqli_connect(DB_HOST, DB_USER, DB_PASS, "simpusle_simpus_lerep");
         # query data 
         $queryFilter = $this->filter($strict);
         if( $queryFilter == ''){
@@ -444,8 +442,7 @@ class View_RM{
         $start_data = ($this->_current_pos * $this->_limit) - $this->_limit;
         $sort_order = ', tanggal_lahir';
 
-        $conn = new DbConfig();
-        $link = $conn->StartConnection();
+        $link = mysqli_connect(DB_HOST, DB_USER, DB_PASS, "simpusle_simpus_lerep");
         $query = "SELECT * FROM data_rm ORDER BY $sort $order $sort_order LIMIT $start_data, $limit";
         $result = mysqli_query($link, $query);
         $data = [];
@@ -473,8 +470,7 @@ class View_RM{
      */
     public function results($strict = false, $convert_To_Json = false){
        # koneksi data base
-       $conn = new DbConfig();
-       $link = $conn->StartConnection();
+       $link = mysqli_connect(DB_HOST, DB_USER, DB_PASS, "simpusle_simpus_lerep");
        # query data 
        $queryFilter = $this->filters($strict);
        if( $queryFilter == ''){

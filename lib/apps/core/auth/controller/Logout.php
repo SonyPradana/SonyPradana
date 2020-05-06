@@ -21,8 +21,7 @@ class Logout{
             #decode token
             $tokenId = $verify->getId();
             # koneksi data base
-            $conn = new DbConfig();
-            $link = $conn->StartConnection();
+            $link = mysqli_connect(DB_HOST, DB_USER, DB_PASS, "simpusle_simpus_lerep");
             # query data base
             $query = "UPDATE auths SET `stat` = 0 WHERE `id` = '$tokenId'"; 
             mysqli_query($link, $query); 

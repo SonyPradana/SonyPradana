@@ -38,8 +38,7 @@ class ResetPassword{
      */
     public function newPassword($new_Passsword){
         if( $this->password_veryfy){
-            $conn = new DbConfig();
-            $link = $conn->StartConnection();
+            $link = mysqli_connect(DB_HOST, DB_USER, DB_PASS, "simpusle_simpus_lerep");
             #query data base
             $user_name = $this->userName;
             $time = time() - 1;

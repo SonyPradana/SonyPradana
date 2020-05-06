@@ -203,8 +203,7 @@ class ReadMessage{
      */
     public function bacaPesan($convrt_to_json = false){
         // koneksi dan membuat query
-        $conn = new DbConfig();
-        $link = $conn->StartConnection();
+        $link = mysqli_connect(DB_HOST, DB_USER, DB_PASS, "simpusle_simpus_lerep");
         $query = $this->query();
         // echo $query;
         if( $query != ''){
@@ -227,8 +226,7 @@ class ReadMessage{
      */
     public function bacaSemua(){
         // koneksi data base
-        $conn = new DbConfig();
-        $link = $conn->StartConnection();
+        $link = mysqli_connect(DB_HOST, DB_USER, DB_PASS, "simpusle_simpus_lerep");
         $limit = $this->_limit;
         $query = "SELECT * FROM public_message LIMIT $limit";
         // mengambil data dari data base (mengambil semua tanpa di filter)

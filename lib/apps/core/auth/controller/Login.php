@@ -72,8 +72,7 @@ class Login{
         $this->_userName = strtolower( $user_name );
         $this->_password = $password;
         #koneksi databse
-        $this->conn = new DbConfig();
-        $this->conn = $this->conn->StartConnection();
+        $this->conn = mysqli_connect(DB_HOST, DB_USER, DB_PASS, "simpusle_simpus_lerep");
         #query data base
         $query = mysqli_query($this->conn, "SELECT pwd, stat FROM users WHERE user = '$user_name'");
         if( mysqli_num_rows( $query ) === 1 )  {
@@ -153,8 +152,8 @@ class Login{
      */
     public static function BaneFase($user_name){       
         #koneksi data base
-        $_conn = new DbConfig();
-        $query = mysqli_query($_conn->StartConnection(), "SELECT user, stat, bane FROM users WHERE user ='$user_name'");
+        $link = mysqli_connect(DB_HOST, DB_USER, DB_PASS, "simpusle_simpus_lerep");
+        $query = mysqli_query($link, "SELECT user, stat, bane FROM users WHERE user ='$user_name'");
         if( mysqli_num_rows( $query ) === 1 )  {           
             $row = mysqli_fetch_assoc( $query );
             if( $row['stat'] > 0 AND $row['bane'] < time()) {
@@ -175,14 +174,14 @@ class Login{
      */
     public static function RefreshBaneFase($user_name){
         #koneksi data base
-        $_conn = new DbConfig();
-        $query = mysqli_query($_conn->StartConnection(), "SELECT user, stat, bane FROM users WHERE user ='$user_name'");
+        $link = mysqli_connect(DB_HOST, DB_USER, DB_PASS, "simpusle_simpus_lerep");
+        $query = mysqli_query($link, "SELECT user, stat, bane FROM users WHERE user ='$user_name'");
         if( mysqli_num_rows( $query ) === 1 )  {           
             $row = mysqli_fetch_assoc( $query );
             if( $row['stat'] == 0 AND $row['bane'] < time()) {
                 #set user ke defult / hapus bane
                 $query = "UPDATE users SET `stat` = 25, `bane` = time() WHERE `user` = '$user_name'";
-                mysqli_query($_conn->StartConnection(), $query);
+                mysqli_query($link, $query);
             }
         }
     }
@@ -196,8 +195,7 @@ class Login{
      * @return boolean user dan password banar atau tidak
      */
     public static function PasswordVerify($user_name, $password){
-        $conn = new DbConfig();
-        $link = $conn->StartConnection();
+        $link = mysqli_connect(DB_HOST, DB_USER, DB_PASS, "simpusle_simpus_lerep");
         #query data base
         $query = mysqli_query($link, "SELECT pwd, stat FROM users WHERE user ='$user_name'");
         if( mysqli_num_rows( $query ) === 1 )  {

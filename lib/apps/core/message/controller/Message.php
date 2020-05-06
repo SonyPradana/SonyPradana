@@ -31,8 +31,7 @@ abstract class Message{
     */
     public function kirimPesan(){
         // koneksi data base
-        $conn = new DbConfig();
-        $link = $conn->StartConnection();
+        $link = mysqli_connect(DB_HOST, DB_USER, DB_PASS, "simpusle_simpus_lerep");
 
         $sender = $this->_sender; $resiver = $this->_resiver;
         $type = $this->_type; $date = $this->_date;

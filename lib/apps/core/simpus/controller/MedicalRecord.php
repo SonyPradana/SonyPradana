@@ -290,8 +290,7 @@ class MedicalRecord{
         # memuat ulang data dari data base menggunakn id
         $id = $this->_id;
 
-        $conn = new DbConfig();
-        $link  = $conn->StartConnection();
+        $link  = mysqli_connect(DB_HOST, DB_USER, DB_PASS, "simpusle_simpus_lerep");
         $query = mysqli_query($link, "SELECT * FROM data_rm WHERE id = '$id' ");
         if( mysqli_num_rows( $query ) == 1 ){
             $row = mysqli_fetch_assoc( $query );
@@ -323,8 +322,7 @@ class MedicalRecord{
         # jika nama dan no rm kosong tidak disimpan
         if( $nomor_rm == '' && $nama == '') return false;  
 
-        $conn = new DbConfig();
-        $link  = $conn->StartConnection();
+        $link  = mysqli_connect(DB_HOST, DB_USER, DB_PASS, "simpusle_simpus_lerep");
         $query = "UPDATE data_rm SET 
                                     nomor_rm = '$nomor_rm',
                                     data_dibuat = '$data_dibuat',
@@ -355,8 +353,7 @@ class MedicalRecord{
         # memuat ulang data dari data base menggunakn id
         $id = $this->_id;
 
-        $conn = new DbConfig();
-        $link  = $conn->StartConnection();
+        $link  = mysqli_connect(DB_HOST, DB_USER, DB_PASS, "simpusle_simpus_lerep");
         $query = "DELETE FROM data_rm WHERE id  = $id";
 
         #esekusi query /delet
@@ -409,8 +406,7 @@ class MedicalRecord{
         # jika nama dan no rm kosong tidak disimpan
         if( $nomor_rm == '' && $nama == '') return false;        
         
-        $conn = new DbConfig();
-        $link  = $conn->StartConnection();
+        $link  = mysqli_connect(DB_HOST, DB_USER, DB_PASS, "simpusle_simpus_lerep");
         $query = "INSERT INTO data_rm VALUES ('$id', 
                                        '$nomor_rm',
                                        '$data_dibuat',
@@ -436,8 +432,7 @@ class MedicalRecord{
     public function cekAxis(){
         # memuat ulang data dari data base menggunakn id
         $id = $this->_id;
-        $conn = new DbConfig();
-        $link  = $conn->StartConnection();
+        $link  = mysqli_connect(DB_HOST, DB_USER, DB_PASS, "simpusle_simpus_lerep");
         $query = mysqli_query($link, "SELECT id FROM data_rm WHERE id = '$id' ");
         if( mysqli_num_rows( $query ) == 1 ){
             return true;

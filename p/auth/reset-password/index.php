@@ -14,7 +14,8 @@ if( !$auth->TrushClient() ){
 ?>
 <?php 
 # property
-$user = new User($auth->getUserName());
+$user_name = $auth->getUserName();
+$user = new User($user_name);
 $display_name = $user->getDisplayName();
 
 

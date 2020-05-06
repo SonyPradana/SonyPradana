@@ -30,8 +30,7 @@ class EmailAuth{
      */
     public function __construct($email){
         # koneksi data base
-        $conn = new DbConfig();
-        $link  = $conn->StartConnection();
+        $link  = mysqli_connect(DB_HOST, DB_USER, DB_PASS, "simpusle_simpus_lerep");
         $query = mysqli_query($link, "SELECT user FROM profiles WHERE email = '$email' ");
         if( mysqli_num_rows( $query ) == 1) {
             $row = mysqli_fetch_assoc($query);
@@ -62,8 +61,7 @@ class EmailAuth{
         # random int bwettwen 10.00.00 - 99.99.99.99
         $val = rand(100000, 999999);
         # simpaan ke data bsae
-        $conn = new DbConfig();
-        $link  = $conn->StartConnection();
+        $link  = mysqli_connect(DB_HOST, DB_USER, DB_PASS, "simpusle_simpus_lerep");
         $query = mysqli_query($link, "INSERT INTO reset_pwd VALUE ('',  '$key', '$val')");
         mysqli_query($link, $query);
         # hasil key

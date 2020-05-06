@@ -3,7 +3,6 @@
 require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/core/auth/init.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/core/library/init.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/core/simpus/init.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/config/DbConfig.php';
 ?>
 <?php
 #Aunt cek

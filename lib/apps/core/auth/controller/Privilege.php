@@ -29,8 +29,7 @@ class Privilege{
      */
     public function MasterPrivilage($target){
         # buat koneksi
-        $conn = new DbConfig();
-        $link  = $conn->StartConnection();
+        $link  = mysqli_connect(DB_HOST, DB_USER, DB_PASS, "simpusle_simpus_lerep");
         $query = mysqli_query($link, "SELECT target, privilege FROM privilege_controler WHERE target = '$target'");
         if( mysqli_num_rows( $query ) == 1 ){
             $row = mysqli_fetch_assoc( $query );
@@ -50,8 +49,7 @@ class Privilege{
     public function ReadAcces($target_acces = "default"){
         $user_name = $this->_userName;
         # buat koneksi
-        $conn = new DbConfig();
-        $link  = $conn->StartConnection();
+        $link  = mysqli_connect(DB_HOST, DB_USER, DB_PASS, "simpusle_simpus_lerep");
         $query = mysqli_query($link, "SELECT * FROM privilege WHERE user = '$user_name' AND target = '$target_acces'");
         if( mysqli_num_rows( $query ) == 1 ){
             $row = mysqli_fetch_assoc( $query );

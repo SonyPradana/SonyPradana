@@ -11,8 +11,6 @@ class Auth{
     private $uName, $uId, $expt, $ip, $uAgent;
     /** @var boolean  */
     private $_trushClinet = false;
-    /** @var DbConaction  */
-    private $conn;
 
     /** @return boolean getter */
     public function TrushClient(){
@@ -53,8 +51,7 @@ class Auth{
         # default token is false
         if( substr_count($token, ".") < 2) return; #prevent not string token
         # koneksi database
-        $this->conn = new DbConfig();
-        $link = $this->conn->StartConnection();
+        $link = mysqli_connect(DB_HOST, DB_USER, DB_PASS, "simpusle_simpus_lerep");
         # ambil secreatkey dr data  base dengan ifo yg tersedian di payloadnya
         $splitToken = explode('.', $token);
         $payLoad = $splitToken[1];

@@ -46,8 +46,7 @@ class ForgotPassword{
                 # key tidak boleh kadaluarsa
 
                 # koneksi data base
-                $conn = new DbConfig();
-                $link  = $conn->StartConnection();            
+                $link  = mysqli_connect(DB_HOST, DB_USER, DB_PASS, "simpusle_simpus_lerep");         
                 $query = mysqli_query($link, "SELECT * FROM reset_pwd WHERE link = '$key' ");
 
                 if( mysqli_num_rows( $query ) == 1 ){
@@ -75,8 +74,7 @@ class ForgotPassword{
     public function NewPassword($new_password){
         if( $this->_verifyKey ){
             #koneksi data base
-            $conn = new DbConfig();
-            $link = $conn->StartConnection();
+            $link = mysqli_connect(DB_HOST, DB_USER, DB_PASS, "simpusle_simpus_lerep");
             #set property
             $user_name = $this->userName;
             $time = time() - 1;
@@ -111,8 +109,7 @@ class ForgotPassword{
         if( $this->_verifyKey){
             $id = $this->_idKey;
             # koneksi data base
-            $conn = new DbConfig();
-            $link  = $conn->StartConnection();            
+            $link  = mysqli_connect(DB_HOST, DB_USER, DB_PASS, "simpusle_simpus_lerep");       
             $query = "DELETE FROM `reset_pwd` WHERE id = '$id'";
             mysqli_query($link, $query);
         }
