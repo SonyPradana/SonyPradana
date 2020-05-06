@@ -86,7 +86,7 @@ class Registartion{
      */
     public function AddToArchive(){
         # koneksi data base
-        $link = mysqli_connect(DB_HOST, DB_USER, DB_PASS, "simpusle_simpus_lerep");
+        $db = new MyPDO();
         # query data base
         $user = $this->_userName;
         $email = $this->_email;
@@ -94,10 +94,16 @@ class Registartion{
         $pwd = password_hash($pwd, PASSWORD_DEFAULT);
         $disp_name = $this->_disName;
         # simpan kedata base
-        $query = "INSERT INTO registration VALUES ('', '$user', '$email', '$pwd', '$disp_name', 1)";
-        mysqli_query($link, $query);
+        $db->query('INSERT INTO `registration` (`id`, `user`, `email`, `pwd`, `disp_name`, `stat`) VALUES (:id, :user, :email, :pwd, :disp_name, :stat)');
+        $db->bind(':id', '');
+        $db->bind(':user', $user);
+        $db->bind(':email', $email);
+        $db->bind(':pwd', $pwd);
+        $db->bind(':disp_name', $disp_name);
+        $db->bind(':stat', 1);
+        $db->execute();
         # result
-        $res = mysqli_affected_rows($link);
+        $res = $db->rowCount();
         if( $res > 0){
             return true;
         }

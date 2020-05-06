@@ -38,14 +38,18 @@ class ResetPassword{
      */
     public function newPassword($new_Passsword){
         if( $this->password_veryfy){
-            $link = mysqli_connect(DB_HOST, DB_USER, DB_PASS, "simpusle_simpus_lerep");
+            $db = new MyPDO();
             #query data base
             $user_name = $this->userName;
             $time = time() - 1;
             $new_Passsword = password_hash($new_Passsword, PASSWORD_DEFAULT);
-            $query = "UPDATE users SET pwd = '$new_Passsword' , stat = 25, bane = $time WHERE user = '$user_name'";
-            mysqli_query($link, $query);
-            return true;
+            $db->query('UPDATE `users` SET pwd=:pwd , stat=:stat, bane=:bane WHERE user=:user');
+            $db->bind(':pwd', $new_Passsword);
+            $db->bind(':stat', 25);
+            $db->bind(':bane', $time());
+            $db->bind(':user', $user_name);
+            $db->execute();
+            if( $db->rowCount() > 0 ) return true;
         }
         return false;
     }

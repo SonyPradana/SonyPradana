@@ -51,7 +51,7 @@ class Auth{
         # default token is false
         if( substr_count($token, ".") < 2) return; #prevent not string token
         # koneksi database
-        $link = mysqli_connect(DB_HOST, DB_USER, DB_PASS, "simpusle_simpus_lerep");
+        $db = new MyPDO();
         # ambil secreatkey dr data  base dengan ifo yg tersedian di payloadnya
         $splitToken = explode('.', $token);
         $payLoad = $splitToken[1];
@@ -65,10 +65,11 @@ class Auth{
         $this->ip = $payLoad->ip;
         $this->uAgent = $payLoad->uAgent;
         # cek database
-        $query = mysqli_query( $link, "SELECT * FROM auths WHERE id ='$this->uId'" );
-        if( mysqli_num_rows( $query ) === 1 )  {            
+        $db->query('SELECT * FROM auths WHERE id=:id');
+        $db->bind(':id', $this->uId);
+        if( $db->single() )  {            
             # jika id terdafatar 
-            $row = mysqli_fetch_assoc( $query );  
+            $row = $db->single();  
             
             # Cek jika secretKey benar 
             # CeK Token aktif enggak

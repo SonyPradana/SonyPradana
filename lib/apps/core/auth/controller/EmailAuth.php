@@ -30,10 +30,11 @@ class EmailAuth{
      */
     public function __construct($email){
         # koneksi data base
-        $link  = mysqli_connect(DB_HOST, DB_USER, DB_PASS, "simpusle_simpus_lerep");
-        $query = mysqli_query($link, "SELECT user FROM profiles WHERE email = '$email' ");
-        if( mysqli_num_rows( $query ) == 1) {
-            $row = mysqli_fetch_assoc($query);
+        $db = new MyPDO();
+        $db->query('SELECT `user` FROM `profiles` WHERE email=:email');
+        $db->bind(':email', $email);
+        if( $db->single() ) {
+            $row = $db->single();
             #simpan parameter
             $this-> _userVerify = true;
             $this->_userName = $row['user'];

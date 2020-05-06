@@ -29,10 +29,11 @@ class Privilege{
      */
     public function MasterPrivilage($target){
         # buat koneksi
-        $link  = mysqli_connect(DB_HOST, DB_USER, DB_PASS, "simpusle_simpus_lerep");
-        $query = mysqli_query($link, "SELECT target, privilege FROM privilege_controler WHERE target = '$target'");
-        if( mysqli_num_rows( $query ) == 1 ){
-            $row = mysqli_fetch_assoc( $query );
+        $db = new MyPDO();
+        $db->query('SELECT `target`, `privilege` FROM `privilege_controler` WHERE `target`=:target');
+        $db->bind(':target', $target);
+        if( $db->single() ){
+            $row = $db->single();
             # mengambil nilai privilege di data base
             return $row['privilege'];
         }
@@ -49,10 +50,12 @@ class Privilege{
     public function ReadAcces($target_acces = "default"){
         $user_name = $this->_userName;
         # buat koneksi
-        $link  = mysqli_connect(DB_HOST, DB_USER, DB_PASS, "simpusle_simpus_lerep");
-        $query = mysqli_query($link, "SELECT * FROM privilege WHERE user = '$user_name' AND target = '$target_acces'");
-        if( mysqli_num_rows( $query ) == 1 ){
-            $row = mysqli_fetch_assoc( $query );
+        $db = new MyPDO();
+        $db->query('SELECT * FROM privilege WHERE `user`=:user AND target=:target');
+        $db->bind(':user', $user_name);
+        $db->bind(':target', $target_acces);
+        if( $db->single() ){
+            $row = $db->single();
             # mengambil nilai privilege di data base
             return $row['privilege'];
         }
@@ -66,12 +69,17 @@ class Privilege{
      */
     public function CreatAcces($target_acces = "default", $privilege){
         # koneksi dan simpan privile baru ke data base
-        $query = "INSERT INTO privilege VALUES ('', '$this->_userName', '$target_acces', '$privilege')";
+         $db = new MyPDO();
+         $db->query('INSERT INTO `privilege` (`id`, `user`, `target`, `privilege`) VALUES (:id, :user, :target, :privilege)');
+         $db->bind(':id', '');
+         $db->bind(':user', $this->_userName);
+         $db->bind(':target', $target_acces);
+         $db->bind(':privilege', $privilege);
 
         #simpan ke databe 'auts'
-        mysqli_query($this->conn, $query);
+        $db->execute();
         # ambil id terahir bila berhasil disimpan
-        return mysqli_insert_id($this->conn);
+        return $db->lastInsertId();
     }
 
     /**

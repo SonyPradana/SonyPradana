@@ -24,10 +24,6 @@ class Login{
      * @var boolean ke aslian jwt
      */
     private $_verifyJWT = false;  
-    /**
-     * @var mysqli_conection koneksi ke data base
-     */
-    private $conn ;
     
     /**
      * secretKey adalah secreat key sebagai kunci diJWT signature. 
@@ -72,11 +68,12 @@ class Login{
         $this->_userName = strtolower( $user_name );
         $this->_password = $password;
         #koneksi databse
-        $this->conn = mysqli_connect(DB_HOST, DB_USER, DB_PASS, "simpusle_simpus_lerep");
+        $db = new MyPDO();
         #query data base
-        $query = mysqli_query($this->conn, "SELECT pwd, stat FROM users WHERE user = '$user_name'");
-        if( mysqli_num_rows( $query ) === 1 )  {
-            $row = mysqli_fetch_assoc( $query );
+        $db->query('SELECT `pwd`, `stat` FROM `users` WHERE `user`=:user');
+        $db->bind(':user', $user_name);
+        if( $db->single() )  {
+            $row = $db->single();
             #cek password 
             if( password_verify($this->_password, $row['pwd'])){
                 #berhasil login
@@ -89,12 +86,17 @@ class Login{
                 if( $minusStat === 0 ){
                     #jika salah > 8 x user dabe 8 jam
                     $baneUntil = time() + (3600 * 8);
-                    $query = "UPDATE users SET `stat` = 0, `bane` = '$baneUntil' WHERE `user` = '$user_name'";
+                    $db->query('UPDATE `users` SET `stat`=:stat, `bane`=:bane WHERE `user`=:user');
+                    $db->bind(':stat', 0);
+                    $db->bind(':bane', $baneUntil);
+                    $db->bind(':user', $user_name);
                 }else{
-                    $query = "UPDATE users SET `stat` = '$minusStat' WHERE `user` = '$user_name'";
+                    $db->query('UPDATE `users` SET `stat`=:stat WHERE `user`=:user');
+                    $db->bind(':stat', $minusStat);
+                    $db->bind(':user', $user_name);
                 }
                 #simpan query
-                mysqli_query($this->conn, $query);
+                $db->execute();
             }
         }
     }
@@ -135,11 +137,16 @@ class Login{
      * @param mixed $secrerKey secret kay yg akan digunakn dan disimpan
      */
     private function SaveJWTInfo($secretKey){
-        $query = "INSERT INTO auths VALUES ('', '$this->_userName', 1, '$secretKey')";
+        $db = new MyPDO();
+        $db->query('INSERT INTO `auths` (`id`, `user`, `stat`, `secret_key`) VALUES (:id, :user, :stat, :secretKey)');
+        $db->bind(':id', '');
+        $db->bind(':user', $this->_userName);
+        $db->bind(':stat', 1);
+        $db->bind(':secretKey', $secretKey);
 
         #simpan ke databe 'auts'
-        mysqli_query($this->conn, $query);
-        return mysqli_insert_id($this->conn);
+        $db->execute();
+        return $db->lastInsertId();
     }    
 
     /**
@@ -152,10 +159,11 @@ class Login{
      */
     public static function BaneFase($user_name){       
         #koneksi data base
-        $link = mysqli_connect(DB_HOST, DB_USER, DB_PASS, "simpusle_simpus_lerep");
-        $query = mysqli_query($link, "SELECT user, stat, bane FROM users WHERE user ='$user_name'");
-        if( mysqli_num_rows( $query ) === 1 )  {           
-            $row = mysqli_fetch_assoc( $query );
+        $db = new MyPDO();
+        $db->query('SELECT user, stat, bane FROM users WHERE user=:user');
+        $db->bind(':user', $user_name);
+        if( $db->single() )  {           
+            $row = $db->single();
             if( $row['stat'] > 0 AND $row['bane'] < time()) {
                 # jika jumlah kesalahan lebih dari 0 dan
                 # tidak dalam waktu bane (8 jam dri ksealahan terakhir)
@@ -174,14 +182,18 @@ class Login{
      */
     public static function RefreshBaneFase($user_name){
         #koneksi data base
-        $link = mysqli_connect(DB_HOST, DB_USER, DB_PASS, "simpusle_simpus_lerep");
-        $query = mysqli_query($link, "SELECT user, stat, bane FROM users WHERE user ='$user_name'");
-        if( mysqli_num_rows( $query ) === 1 )  {           
-            $row = mysqli_fetch_assoc( $query );
+        $db = new MyPDO();
+        $db->query('SELECT `user`, `stat`, `bane` FROM `users` WHERE `user`=:user');
+        $db->bind(':user', $user_name);
+        if( $db->single() )  {           
+            $row = $db->single();
             if( $row['stat'] == 0 AND $row['bane'] < time()) {
                 #set user ke defult / hapus bane
-                $query = "UPDATE users SET `stat` = 25, `bane` = time() WHERE `user` = '$user_name'";
-                mysqli_query($link, $query);
+                $db->query('UPDATE `users` SET `stat`:stat, `bane`:bane WHERE `user`=:user');
+                $db->bind(':stat', 25);
+                $db->bind(':bane', time());
+                $db->bind(':user', $user_name);
+                $db->execute();
             }
         }
     }
@@ -195,11 +207,12 @@ class Login{
      * @return boolean user dan password banar atau tidak
      */
     public static function PasswordVerify($user_name, $password){
-        $link = mysqli_connect(DB_HOST, DB_USER, DB_PASS, "simpusle_simpus_lerep");
+        $db = new MyPDO();
         #query data base
-        $query = mysqli_query($link, "SELECT pwd, stat FROM users WHERE user ='$user_name'");
-        if( mysqli_num_rows( $query ) === 1 )  {
-            $row = mysqli_fetch_assoc( $query );
+        $db->query('SELECT `pwd`, `stat` FROM `users` WHERE `user`=:user');
+        $db->bind(':user', $user_name);
+        if( $db->single() )  {
+            $row = $db->single();
             #cek password 
             if( password_verify($password, $row['pwd'])){
                 return true;

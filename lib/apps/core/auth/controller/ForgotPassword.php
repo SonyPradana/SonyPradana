@@ -46,11 +46,12 @@ class ForgotPassword{
                 # key tidak boleh kadaluarsa
 
                 # koneksi data base
-                $link  = mysqli_connect(DB_HOST, DB_USER, DB_PASS, "simpusle_simpus_lerep");         
-                $query = mysqli_query($link, "SELECT * FROM reset_pwd WHERE link = '$key' ");
+                $db = new MyPDO();
+                $db->query('SELECT * FROM reset_pwd WHERE link=:link');
+                $db->bind(':link', $key);
 
-                if( mysqli_num_rows( $query ) == 1 ){
-                    $row = mysqli_fetch_assoc($query);
+                if( $db->single() ){
+                    $row = $db->single();
                     # mencocokan code ke data base
                     if( $code == $row['code']){
                         $this->_verifyKey = true;
@@ -74,19 +75,25 @@ class ForgotPassword{
     public function NewPassword($new_password){
         if( $this->_verifyKey ){
             #koneksi data base
-            $link = mysqli_connect(DB_HOST, DB_USER, DB_PASS, "simpusle_simpus_lerep");
+            $db = new MyPDO();
             #set property
             $user_name = $this->userName;
             $time = time() - 1;
             $newPasssword = password_hash($new_password, PASSWORD_DEFAULT);
 
             #password baru dibuat
-            $query = "UPDATE users SET pwd = '$newPasssword', stat = 50, bane = $time WHERE user = '$user_name'";         
-            mysqli_query($link, $query);
+            $db->query('UPDATE `users` SET `pwd`=:pwd, `stat`=:stat, `bane`=:bane WHERE `user`=:user');
+            $db->bind(':pwd', $newPasssword);
+            $db->bind(':stat', 50);
+            $db->bind(':bane', $time);
+            $db->bind(':user', $user_name);
+            $db->execute();
 
             #logout all user 
-            $query = "UPDATE auths SET `stat` = 0 WHERE `user` = '$user_name'"; 
-            mysqli_query($link, $query); 
+            $db->query('UPDATE `auths` SET `stat`=:stat WHERE `user`=:user');
+            $db->bind(':stat', 0);            
+            $db->bind(':user', $user_name);
+            $db->execute();
 
             #disable key setalah berhasil menyimpan 
             // if( $disable_key ){
@@ -109,9 +116,10 @@ class ForgotPassword{
         if( $this->_verifyKey){
             $id = $this->_idKey;
             # koneksi data base
-            $link  = mysqli_connect(DB_HOST, DB_USER, DB_PASS, "simpusle_simpus_lerep");       
-            $query = "DELETE FROM `reset_pwd` WHERE id = '$id'";
-            mysqli_query($link, $query);
+            $db = new MyPDO();
+            $db->query('DELETE FROM `reset_pwd` WHERE `id`=:id');
+            $db->bind(':id', $id);
+            $db->execute();
         }
     }
 

@@ -21,12 +21,14 @@ class Logout{
             #decode token
             $tokenId = $verify->getId();
             # koneksi data base
-            $link = mysqli_connect(DB_HOST, DB_USER, DB_PASS, "simpusle_simpus_lerep");
+            $db = new MyPDO();
             # query data base
-            $query = "UPDATE auths SET `stat` = 0 WHERE `id` = '$tokenId'"; 
-            mysqli_query($link, $query); 
+            $db->query('UPDATE `auths` SET `stat`=:stat WHERE `id`=:id');
+            $db->bind(':stat', 0);
+            $db->bind(':id', $tokenId);
+            $db->execute();
             # bila berhasil return true
-            $res = mysqli_affected_rows($link);
+            $res = $db->rowCount();
             if( $res > 0){
                 return true;
             }
