@@ -173,7 +173,7 @@ ul.crumb {
 }
 ul.crumb li {
     display: inline;
-    font-size: 14px;
+    font-size: 1rem;
 }
 ul.crumb li+li:before {
     padding: 4px;
@@ -315,6 +315,7 @@ footer .footnote p a{
     padding: 8px;
     width: 100px;
 }
+.sparator-title h3{margin: 0; font-weight: normal; font-size: 1rem;}
 .sparator.blue{border-bottom: 3px solid #55b9f3}
 .sparator.blue .sparator-title{background: #55b9f3}
 

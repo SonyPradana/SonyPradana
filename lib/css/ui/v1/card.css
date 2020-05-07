@@ -1,0 +1,28 @@
+/* our-team card */
+.team-card{
+    width: 200px; min-height: 250px;
+    display: flex;
+    flex-direction: column;
+    -webkit-box-shadow: 2px 2px 8px 0px rgba(217,217,217,1);
+    -moz-box-shadow: 2px 2px 8px 0px rgba(217,217,217,1);
+    box-shadow: 2px 2px 8px 0px rgba(217,217,217,1);
+    border-radius: 8px;            
+    margin: 0 16px;
+}
+.team-card .card.image{
+    width: 200px; height: 200px;
+}
+.team-card .card.image img{border-top-left-radius: 8px; border-top-right-radius: 8px}
+.team-card .card.content{
+    width: auto; height: auto;
+    padding:8px;
+    text-align: center
+}
+.team-card .card.content .title{
+    font-size: 1.4rem;
+    color: #2f2f2f;
+}
+.team-card .card.content .subtitle{
+    font-size: 1.2rem;
+    color: #999;
+}
