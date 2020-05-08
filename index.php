@@ -246,7 +246,6 @@
             var xhr = new XMLHttpRequest();
             xhr.onreadystatechange = function(){
                 if( this.readyState == 4 && this.status == 200){
-                    // berhasil memanggil
                     var json = JSON.parse( this.responseText);
                     var jateng = json.find(json => json['attributes']['Provinsi'] == 'Jawa Tengah');
 
@@ -260,7 +259,7 @@
                     info_one.innerHTML = jateng['attributes']['Kasus_Meni'] + ' meninggal';
                 }
             }
-            xhr.open('GET', 'https://api.kawalcorona.com/indonesia/provinsi/', true);
+            xhr.open('GET', '/lib/ajax/json/public/kawalcorona/index.php', true);
             xhr.send();
         })
         // sticky header
