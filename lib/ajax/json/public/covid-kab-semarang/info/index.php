@@ -10,7 +10,6 @@
     header_remove("Server");
     header("Cache-Control:	private");
     header("Content-Type: application/json;charset=utf-8");
-    header("content-encoding:br");
 
     $result = [];
     // get param dari url
@@ -54,6 +53,6 @@
         // data berhasil ditemukan
         $result = $data->getData($id);
     }
-    // mengembalikan dalam bentuk JSON, dengan satus kode berhasil
+    // mengembalikan dalam bentuk JSON, dengan satus kode
     header("HTTP/1.1 200 ok");
     echo json_encode( $result );
