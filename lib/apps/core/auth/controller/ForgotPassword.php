@@ -85,7 +85,7 @@ class ForgotPassword{
             $db->query('UPDATE `users` SET `pwd`=:pwd, `stat`=:stat, `bane`=:bane WHERE `user`=:user');
             $db->bind(':pwd', $newPasssword);
             $db->bind(':stat', 50);
-            $db->bind(':bane', $time);
+            $db->bind(':bane', "$time");
             $db->bind(':user', $user_name);
             $db->execute();
 

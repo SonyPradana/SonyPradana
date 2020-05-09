@@ -46,7 +46,7 @@ class ResetPassword{
             $db->query('UPDATE `users` SET pwd=:pwd , stat=:stat, bane=:bane WHERE user=:user');
             $db->bind(':pwd', $new_Passsword);
             $db->bind(':stat', 25);
-            $db->bind(':bane', $time());
+            $db->bind(':bane', "$time()");
             $db->bind(':user', $user_name);
             $db->execute();
             if( $db->rowCount() > 0 ) return true;

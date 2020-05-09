@@ -191,7 +191,7 @@ class Login{
                 #set user ke defult / hapus bane
                 $db->query('UPDATE `users` SET `stat`:stat, `bane`:bane WHERE `user`=:user');
                 $db->bind(':stat', 25);
-                $db->bind(':bane', time());
+                $db->bind(':bane', "time()");
                 $db->bind(':user', $user_name);
                 $db->execute();
             }
