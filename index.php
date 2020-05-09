@@ -106,7 +106,7 @@
     </div>
     <aside class="top">
         <div class="boxs-header">
-            <p>Info Covid (jawa tengah) <span><a href="https://kawalcorona.com/">i</a></span></p>
+            <p>Info Covid (kabupaten semarang) <span><a href="https://corona.semarangkab.go.id/covid/">i</a></span></p>
         </div>
         <div class="boxs-info">
             <div class="info one">
@@ -241,25 +241,24 @@
         </div>
     </footer>
     <script>
-        // memuat info Covid, source https://kawalcorona.com/api/
+        // memuat info Covid, source https://corona.semarangkab.go.id/covid/
         window.addEventListener('load', event => {
             var xhr = new XMLHttpRequest();
             xhr.onreadystatechange = function(){
                 if( this.readyState == 4 && this.status == 200){
                     var json = JSON.parse( this.responseText);
-                    var jateng = json.find(json => json['attributes']['Provinsi'] == 'Jawa Tengah');
 
                     var info_one = document.querySelector('.info.one .item-info.right');
-                    info_one.innerHTML = jateng['attributes']['Kasus_Posi'] + ' positif';
+                    info_one.innerHTML = json['kasus_posi'] + ' positif';
 
                     var info_one = document.querySelector('.info.two .item-info.right');
-                    info_one.innerHTML = jateng['attributes']['Kasus_Semb'] + ' sembuh';
+                    info_one.innerHTML = json['kasus_semb'] + ' sembuh';
 
                     var info_one = document.querySelector('.info.three .item-info.right');
-                    info_one.innerHTML = jateng['attributes']['Kasus_Meni'] + ' meninggal';
+                    info_one.innerHTML = json['kasus_meni'] + ' meninggal';
                 }
             }
-            xhr.open('GET', '/lib/ajax/json/public/kawalcorona/index.php', true);
+            xhr.open('GET', '/lib/ajax/json/public/covid-kab-semarang/info/index.php', true);
             xhr.send();
         })
         // sticky header
