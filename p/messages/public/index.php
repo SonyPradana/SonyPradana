@@ -43,9 +43,9 @@ $user = new User($auth->getUserName());
             grid-template-columns: 1fr minmax(250px, 280px);
             grid-column-gap: 24px; grid-row-gap: 24px;
         }        
-        /* main.message{            
-            background: red
-        }         */
+        main.message{            
+            overflow-x: hidden
+        }        
         aside.side{
             background-color: green
         }
@@ -71,7 +71,7 @@ $user = new User($auth->getUserName());
             <h2>Pesan Masuk</h2>
             <div class="toolbox"></div>
             <div class="table-boxs">
-                <table>
+                <table class="info-covid">
                     <thead>
                         <tr>
                             <th>No</th>

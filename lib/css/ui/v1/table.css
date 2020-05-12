@@ -49,13 +49,16 @@ table {
     padding: 5px;
     font-family: Arial, Helvetica, sans-serif;
     border-collapse: collapse;
-    width: 100%;
     line-height: 29px;
 }
 td, th {
     border: 1px solid #f0f0f0;
     text-align: left;
     padding: 8px;
+}
+thead tr td,
+tbody tr th.number{
+    text-align: center;
 }
 
 tr:nth-child(even) {

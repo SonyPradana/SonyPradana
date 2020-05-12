@@ -126,14 +126,6 @@
             <div class="boxs-card">
                 <div class="cards">
                     <div class="card title">
-                        <p>15000</p>
-                    </div>
-                    <div class="card content">
-                        <p>Data RM</p>
-                    </div>
-                </div>
-                <div class="cards">
-                    <div class="card title">
                         <p><?= $jumlah_rm?></p>
                     </div>
                     <div class="card content">
@@ -146,6 +138,13 @@
                     </div>
                     <div class="card content">
                         <p>Prosentase </p>
+                    </div>
+                </div>
+                <div class="cards">
+                    <div class="card content">
+                        <a href="/p/info/covid-kabupaten-semarang/">
+                        <h3>Info Covid Ungaran</h3>
+                        </a>
                     </div>
                 </div>
             </div>
