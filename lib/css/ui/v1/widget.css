@@ -48,44 +48,6 @@ aside.top .boxs-info .info .item-info.right{
     align-items: center;
 }
 
-/* card info rm */
-.boxs-card{
-    overflow-x: auto;
-    display: flex;
-    flex-direction: row
-}
-.boxs-card .cards{
-    min-width: 200px;
-    height: 80px;
-    padding: 8px;
-    margin-right: 12px;
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    /* align-items: center; */
-    justify-content: center;
-    
-    /* style */
-    border-radius: 12px;
-    background: #fa2500;
-    background: -moz-linear-gradient(-45deg, #fa2500 0%, #e6de00 85%, #e6de00 100%);
-    background: -webkit-gradient(left top, right bottom, color-stop(0%, #fa2500), color-stop(85%, #e6de00), color-stop(100%, #e6de00));
-    background: -webkit-linear-gradient(-45deg, #fa2500 0%, #e6de00 85%, #e6de00 100%);
-    background: -o-linear-gradient(-45deg, #fa2500 0%, #e6de00 85%, #e6de00 100%);
-    background: -ms-linear-gradient(-45deg, #fa2500 0%, #e6de00 85%, #e6de00 100%);
-    background: linear-gradient(135deg, #fa2500 0%, #e6de00 85%, #e6de00 100%);
-    
-    box-shadow: 5px 8px 14px -8px #000000bf;
-}
-.boxs-card .cards p{margin: 0; color: #fff; }
-.cards .card.title p{
-    font-size: 2.5rem;
-}
-.cards .card.content p{
-    font-size: 1.3rem;
-}
-.cards .card.content h3{ text-align: center}
-
 /* aside sided */
 /* box review */
 .boxs-review{
@@ -271,19 +233,4 @@ aside.top .boxs-info .info .item-info.right{
     margin: 0 4px;
     font-size: .97rem;
     padding: 4px 0;
-}
-/* tablet view */
-@media screen  and (max-width: 767px) {
-    .boxs-card .cards{
-        min-width: 110px;
-        height: 56px;
-        padding: 8px;
-    }
-    .boxs-card .cards p{text-align: center; }
-    .cards .card.title p{
-        font-size: 1.4rem;
-    }
-    .cards .card.content p{
-        font-size: .8rem;
-    }
 }

@@ -32,8 +32,9 @@
     <meta name="theme-color" content="#ffffff">
 
     <link rel="stylesheet" href="lib/css/main.css">
-    <link rel="stylesheet" href="lib/css/ui/v1/control.costume.css">
+    <link rel="stylesheet" href="lib/css/ui/v1/widget.css">
     <link rel="stylesheet" href="lib/css/ui/v1/control.css">
+    <link rel="stylesheet" href="lib/css/ui/v1/card.css">
     <script src="lib/js/index.js"></script>
     <script src="lib/js/bundles/message.js"></script>
     <style>
@@ -50,6 +51,12 @@
         aside.side{
             background-color: #fff
         }
+        
+        .boxs-card{
+            overflow-x: auto;
+            display: flex;
+            min-height: 115px;
+        }
         /* tablet vie view */
         @media screen  and (max-width: 767px) {
             /* costume main container */
@@ -57,6 +64,7 @@
                 display: grid;
                 grid-template-columns: 1fr;
             }
+            .boxs-card{min-height: 80px}
         }
     </style>
 </head>
@@ -124,26 +132,19 @@
     <div class="container width-view">
         <main class="news">
             <div class="boxs-card">
-                <div class="cards">
+                <div class="rm-card">
                     <div class="card title">
                         <p><?= $jumlah_rm?></p>
+                        <span class="detail"> ~<?= round( ($jumlah_rm / 15000) * 100, 1) ?>%</span>
                     </div>
                     <div class="card content">
                         <p>Data RM Terdata</p>
                     </div>
                 </div>
-                <div class="cards">
-                    <div class="card title">
-                        <p><?= round( ($jumlah_rm / 15000) * 100, 1) ?>% </p>
-                    </div>
-                    <div class="card content">
-                        <p>Prosentase </p>
-                    </div>
-                </div>
-                <div class="cards">
-                    <div class="card content">
+                <div class="covid-card gradient-two medium shadow">
+                    <div class="card link">
                         <a href="/p/info/covid-kabupaten-semarang/">
-                        <h3>Info Covid Ungaran</h3>
+                        Info Covid Ungaran
                         </a>
                     </div>
                 </div>

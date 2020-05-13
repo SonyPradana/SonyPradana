@@ -57,7 +57,8 @@
         .media.note p{color: #a2a2a2; margin: 0}
         .table-boxs{
             display: flex;
-            justify-content: center
+            justify-content: center;
+            overflow-x: auto;
         }
         table.info-covid{max-width: 500px; min-width: 400px;}
         .article.body{margin: 16px 0;}
@@ -66,7 +67,10 @@
         /* tablet vie view */
         @media screen and (max-width: 767px) {
             .container.width-view{grid-template-columns: 1fr}
+            .box.cards{justify-content: unset}
+            .table-boxs{justify-content: unset}
         }
+        /* hai youtube */
     </style>
 </head>
 <body>
@@ -116,7 +120,7 @@
                         </div>
                     </div>
                     <div class="media note">
-                        <p>Data Pasien Wilayah Kabupaten Semarang</p>
+                        <p>Data Pasien Wilayah Kabupaten Semarang (Update Otomatis)</p>
                         <p>Sumber: corona.semarangkab.go.id </p>
                     </div>
                 </div>
@@ -133,7 +137,7 @@
                                     <td>PDP Meninggal</td>
                                     <td>Positf</td>
                                     <td>Positf Sembuh</td>
-                                    <td>Meninggal Meninggal</td>
+                                    <td>Meninggal</td>
                                 </tr>
                             </thead>
                             <tbody>
