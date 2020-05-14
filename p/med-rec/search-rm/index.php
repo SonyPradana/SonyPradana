@@ -102,6 +102,11 @@
             grid-column-gap: 10px;
         }
         .boxs .box.left{margin-right: 24px;}
+        .box.left form.search-box{
+            position: -webkit-sticky;
+            position: sticky;
+            top: 80px;
+        }
         .boxs .box.left .box-input.button-grub{
             margin-top: 10px;
             display: grid;
@@ -135,6 +140,10 @@
         }
         /* mobile */
         @media screen and (max-width: 600px) {                
+            .box.left form.search-box {
+                position: unset;
+                top: unset;
+            }
             .boxs{
                 display: block
             }
@@ -159,7 +168,7 @@
             <h1>Cari Data Rekam Medis</h1>
             <div class="boxs">
                 <div class="box left">
-                    <form action="" method="get">
+                    <form action="" method="get" class="search-box">
                         <input type="text" name="main-search" id="input-main-search" placeholder="cari nama" value="<?= $main_search ?>">
                         <div class="box-input button-grub">
                             <div class="box-input-left">
