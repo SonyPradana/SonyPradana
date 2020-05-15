@@ -169,7 +169,7 @@ if( !$auth->TrushClient() ){
                     <h1>Edit data Rekam Medis</h1>
                     <form action="" method="post">
                         <input type="text" name="nomor_rm" id="input-nomor-rm" placeholder="nomor rekam medis" value="<?= isset($load_rm) ? $nomorRM : '' ?>" maxlength="6" inputmode="numeric" pattern="[0-9]*">                        
-                        <div class="input-information">
+                        <div class="input-information warning">
                         <?php if( $status_double ) : ?>
                             <p>nomor rekam medis sama :
                                 <a href="/p/med-rec/search-rm/?nomor-rm-search=<?= $nomorRM ?>"
@@ -210,123 +210,10 @@ if( !$auth->TrushClient() ){
     <footer>
         <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/footer/footer.html') ?>
     </footer>
-    <script>
-        //DOM property
-        var tambah_no_rm = document.querySelector('#tambah-nomor-rm')
-        var tandai_sbg_kk = document.querySelector('#input-mark-as-kk');
-        var dom_no_rm_kk = document.querySelector('#input-nama-kk');
-        var dom_no_rm = document.querySelector('#input-nomor-rm');        
-        
-        // cari nomor rm kk jika ada
-        dom_no_rm.addEventListener('input', (event) => {
-            if( dom_no_rm.value == '')  return;
-            xhr_cek_rm_terdaftar();
-        });
-        
-        // cari nomor rm kk jika ada
-        dom_no_rm_kk.addEventListener('input', (event) => {
-            xhr_cek_rm_kk();
-        });
-
-        // checkbox kk
-        tandai_sbg_kk.onclick = () => {        
-            let input_noRm = document.querySelector("#input-nomor-rm");
-            let input_nama = document.querySelector("#input-nama");
-            let input_no_Rm_kk = document.querySelector("#input-nomor-rm-kk");
-            let input_nama_kk = document.querySelector("#input-nama-kk");
-            // If the checkbox is checked, display the output text
-            if (tandai_sbg_kk.checked == true){
-                input_no_Rm_kk.value = input_noRm.value;
-                input_nama_kk.value = input_nama.value;
-            }else{
-                input_no_Rm_kk.value = "";
-                input_nama_kk.value = "";
-            }
-            xhr_cek_rm_kk();
-        };
-
-        // function
-        function xhr_cek_rm_kk() {
-            var sendAjax = new XMLHttpRequest();
-            let nm = document.querySelector("#input-nama").value;
-            let n = document.querySelector("#input-nama-kk").value;
-            let a = document.querySelector("#input-alamat").value;
-            let r = document.querySelector("#input-nomor-rt").value;
-            let w = document.querySelector("#input-nomor-rw").value;
-            // property lainnay            
-            let info_rm_kk = document.querySelector('.input-information.no-rm-kk');
-
-            sendAjax.onreadystatechange = function () {
-                if (this.readyState == 4 && this.status == 200) {
-                    // parse json
-                    const json = JSON.parse(this.responseText);
-                    const nrk = json['nomor_rm_kk'];
-                    //berhasil dipanggil
-                    var para2 = document.createElement('p');
-                    var alink2 = document.createElement('a');
-                    info_rm_kk.textContent = '';
-                    if( nrk != ''){
-                        para2.innerHTML = 'nomor rm kk : ';
-                        alink2.href = 'javascript:void(0)';
-                        alink2.id = 'tambah-nomor-rm-kk';
-                        alink2.tabIndex = 12;
-                        alink2.innerHTML = nrk;
-                        para2.appendChild(alink2);
-                        info_rm_kk.appendChild(para2);
-                        alink2.addEventListener('click', (event) => {
-                            var input_no_rm_kk = document.querySelector("#input-nomor-rm-kk");
-                            input_no_rm_kk.value = nrk;
-                        })
-                    }
-                    // nama kk yang sama
-                    let info_kk = document.querySelector('.input-information.kk-sama');
-                    var para = document.createElement('p');
-                    var alink = document.createElement('a');
-                    info_kk.textContent = '';
-                    if( nrk != '' && n == nm ){
-                        para.innerHTML = 'nama kk indentik : '
-                        alink.href ='/p/med-rec/search-rm/?strict-search=on&alamat-search='+ a +'&no-rt-search=' + r + '&no-rw-search=' + w + '&nama-kk-search=' + n;
-                        alink.innerHTML = 'lihat'
-                        alink.target = '_blank';
-                        para.appendChild(alink);
-                        info_kk.appendChild(para);
-                    }
-                }else if(this.readyState == 4 && this.status == 400){ // handle kita respone ditolak
-                    info_rm_kk.textContent = '';
-                }
-            }
-            sendAjax.open('GET', "/lib/ajax/json/private/med-rec/cari-nomor-rm-kk/?n="+ n + "&a=" + a + "&r=" + r + "&w=" + w, true);
-            sendAjax.send();
-        }
-
-        function xhr_cek_rm_terdaftar(params) {
-            if( dom_no_rm.value == '')  return;
-            // remove element
-            var sendAjax = new XMLHttpRequest();
-            sendAjax.onreadystatechange = function () {
-                if (this.readyState == 4 && this.status == 200) {            
-                    //berhasil dipanggil
-                    let res = document.querySelector('.input-information');
-                    var para = document.createElement("p");
-                    var alink = document.createElement('a');
-                    res.textContent = '';
-                    para.innerHTML = 'nomor rekam medis sama : ';
-                    alink.href = '/p/med-rec/search-rm/?nomor-rm-search=' + dom_no_rm.value;
-                    alink.innerHTML = 'lihat'
-                    alink.target = '_blank';
-                    para.appendChild(alink);
-                    // parse json
-                    const json = JSON.parse(this.responseText);
-                    const nrm = json['found'];
-                    if( nrm > 0){
-                        res.appendChild(para);
-                    }
-                }
-            }
-            let nr = dom_no_rm.value;
-            sendAjax.open('GET', "/lib/ajax/json/private/med-rec/cek-nomor-rm/?nr="+ nr, true);
-            sendAjax.send();
-        }
+</body>
+<script src="/lib/js/controller/form-rm/index.js"></script>
+<script src="/lib/js/index.end.js"></script>
+<script>
         // sticky header
         window.onscroll = function(){stickyHeader('82px')};
         var mycontent = document.querySelector('main');
@@ -338,7 +225,5 @@ if( !$auth->TrushClient() ){
         function redirect_login(){
             window.location.href = "/";
         }
-    </script>
-    <script src="/lib/js/index.end.js"></script>
-</body>
+</script>
 </html>
