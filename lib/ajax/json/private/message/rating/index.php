@@ -10,12 +10,13 @@ header_remove("Connection");
 header_remove("Server");
 header("Cache-Control:	private");
 header("Content-Type: application/json; charset=utf-8");
-
+$data = file_get_contents('php://input');
+$data = json_decode($data, true);
 # init componet ->url
 $sender = $_SERVER['REMOTE_ADDR'];
-$rating = isset( $_GET['rating'] ) ? $_GET['rating'] : null;
-$max_rating = isset( $_GET['mrating'] ) ? $_GET['mrating'] : null;
-$unit = isset( $_GET['unit'] ) ? $_GET['unit'] : null;
+$rating = isset( $data['rating'] ) ? $data['rating'] : null;
+$max_rating = isset( $data['mrating'] ) ? $data['mrating'] : null;
+$unit = isset( $data['unit'] ) ? $data['unit'] : null;
 
 #header exit, jika url kosong
 if( $sender == null || $rating == null || $max_rating == null || $unit == null){

@@ -31,17 +31,24 @@ abstract class Message{
     */
     public function kirimPesan(){
         // koneksi data base
-        $link = mysqli_connect(DB_HOST, DB_USER, DB_PASS, "simpusle_simpus_lerep");
+        $db = new MyPDO();
 
         $sender = $this->_sender; $resiver = $this->_resiver;
         $type = $this->_type; $date = $this->_date;
         $msg = $this->_message; $meta = $this->_meta;
-        // query
-        $query = "INSERT INTO `public_message` (`id`, `sender`, `resiver`, `type`, `date`, `message`, `meta`) VALUES ('', '$sender', '$resiver', '$type', '$date', '$msg', '$meta')";              
+        // query      
+        $db->query('INSERT INTO `public_message` (`id`, `sender`, `resiver`, `type`, `date`, `message`, `meta`) VALUES (:id, :sender, :resiver, :type, :date, :msg, :meta)');
+        $db->bind(':id', '');
+        $db->bind(':sender', $sender);
+        $db->bind(':resiver', $resiver);
+        $db->bind(':type', $type);
+        $db->bind(':date', $date);
+        $db->bind(':msg', $msg);
+        $db->bind(':meta', $meta);
         // esekusi query
-        mysqli_query($link, $query);
+        $db->execute();
         // bila berhasil return true
-        if( mysqli_affected_rows($link) > 0){
+        if( $db->rowCount() > 0){
             return true;
         }
         // defult nya adalah salah

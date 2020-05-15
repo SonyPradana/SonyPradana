@@ -12,6 +12,25 @@
     # mengambil data rm
     $data_rm = new View_RM();    
     $jumlah_rm = $data_rm->maxData();
+
+    # jadwal pelayana
+    $jadwal = [
+        1 => ["day" => "Senin", "time" => "08:00 AM-12:00 AM"],
+        2 => ["day" => "Selasa", "time" => "08:00 AM-12:00 AM"],
+        3 => ["day" => "Rabu", "time" => "08:00 AM-12:00 AM"],
+        4 => ["day" => "Kamis", "time" => "08:00 AM-12:00 AM"],
+        5 => ["day" => "Jumat", "time" => "08:00 AM-10:30 AM"],
+        6 => ["day" => "Sabtu", "time" => "08:00 AM-11:00 AM"],
+        7 => ["day" => "Minggu", "time" => "Tutup"],
+    ];
+    $sort_day = [];
+    $n = date('N');
+    for($i = $n; $i <= 7; $i++) { 
+        $sort_day[$i] = $jadwal[$i];
+    }
+    for ($i = 1; $i < $n ; $i++) { 
+        $sort_day[$i] = $jadwal[$i];
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -184,34 +203,12 @@
                         <h3>Jadwal Pelayanan</h3>
                     </div>
                     <div class="timetable hours">
-                        <div class="box-day <?= date('D') == 'Mon' ? 'active' : ''?>">
-                            <div class="day"><p>Senin</p></div>
-                            <div class="hour"><p>08:00 AM-12:00 AM</p></div>
+                    <?php foreach ($sort_day as $key => $value) :?>
+                        <div class="box-day <?= date('N') == $key ? 'active' : ''?>">
+                            <div class="day"><p><?= $value['day'] ?></p></div>
+                            <div class="hour"><p><?= $value['time'] ?></p></div>
                         </div>
-                        <div class="box-day <?= date('D') == 'Tue' ? 'active' : ''?>">
-                            <div class="day"><p>Selasa</p></div>
-                            <div class="hour"><p>08:00 AM-12:00 AM</p></div>
-                        </div>
-                        <div class="box-day <?= date('D') == 'Wed' ? 'active' : ''?>">
-                            <div class="day"><p>Rabu</p></div>
-                            <div class="hour"><p>08:00 AM-12:00 AM</p></div>
-                        </div>
-                        <div class="box-day <?= date('D') == 'Thu' ? 'active' : ''?>">
-                            <div class="day"><p>Kamis</p></div>
-                            <div class="hour"><p>08:00 AM-12:00 AM</p></div>
-                        </div>
-                        <div class="box-day <?= date('D') == 'Fri' ? 'active' : ''?>">
-                            <div class="day"><p>Jumat</p></div>
-                            <div class="hour"><p>08:00 AM-10:30 AM</p></div>
-                        </div>
-                        <div class="box-day <?= date('D') == 'Sat' ? 'active' : ''?>">
-                            <div class="day"><p>Sabtu</p></div>
-                            <div class="hour"><p>08:00 AM-11:00 AM</p></div>
-                        </div>
-                        <div class="box-day <?= date('D') == 'Sun' ? 'active' : ''?>">
-                            <div class="day"><p>Minggu</p></div>
-                            <div class="hour"><p>Tutup</p></div>
-                        </div>
+                    <?php endforeach; ?>
                     </div>
                     <div class="timtable note">
                         <p>Note: Tanggal merah dan libur tutup</p>
@@ -243,23 +240,26 @@
     <script>
         // memuat info Covid, source https://corona.semarangkab.go.id/covid/
         window.addEventListener('load', event => {
-            var xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = function(){
-                if( this.readyState == 4 && this.status == 200){
-                    var json = JSON.parse( this.responseText);
+            const render = async() => {
+                const fetchJSON = await fetch('/lib/ajax/json/public/covid-kab-semarang/info/index.php',{
+                    headers:{
+                        'Content-Type': 'application/json'
+                    }
+                })
+                return fetchJSON.json();
+            }
 
-                    var info_one = document.querySelector('.info.one .item-info.right');
+            render()
+                .then( json => {
+                    let info_one = document.querySelector('.info.one .item-info.right');
                     info_one.innerHTML = json['kasus_posi'] + ' positif';
 
-                    var info_one = document.querySelector('.info.two .item-info.right');
-                    info_one.innerHTML = json['kasus_semb'] + ' sembuh';
+                    let info_two = document.querySelector('.info.two .item-info.right');
+                    info_two.innerHTML = json['kasus_semb'] + ' sembuh';
 
-                    var info_one = document.querySelector('.info.three .item-info.right');
-                    info_one.innerHTML = json['kasus_meni'] + ' meninggal';
-                }
-            }
-            xhr.open('GET', '/lib/ajax/json/public/covid-kab-semarang/info/index.php', true);
-            xhr.send();
+                    let info_three = document.querySelector('.info.three .item-info.right');
+                    info_three.innerHTML = json['kasus_meni'] + ' meninggal';
+                })
         })
         // sticky header
         window.onscroll = function(){stickyHeader()};
@@ -270,10 +270,10 @@
         const r_med = document.querySelector('.respone.med');
         const r_hig = document.querySelector('.respone.hig');
         const s_msg = document.querySelector('#input-comment');
-        // hidem elemnt
-        var cls_result = document.querySelector('.review.results');
-        var cls_respones = document.querySelector('.review.respones');
-        var cls_comment = document.querySelector('.review.comment');
+        // hiden elemnt
+        let cls_result = document.querySelector('.review.results');
+        let cls_respones = document.querySelector('.review.respones');
+        let cls_comment = document.querySelector('.review.comment');
         const cls_res_done = document.querySelector('.result.done');
 
         const hidden_cls_result = () =>{
@@ -286,22 +286,22 @@
             cls_respones.removeAttribute("hidden");
             cls_comment.removeAttribute("hidden");
         };
+        function newRating( rating ){
+            Rating(rating, 3, 'Rekam Medis').then(json =>{
+                if( json['status'] == 'ok'){
+                    hidden_cls_result()
+                }
+            })
+        }
 
-        var messageStatus = (val) =>{
-            console.log(val);
-            if( val == 'ok'){
-                hidden_cls_result();
-            }
-        };
-                
         r_low.addEventListener('click', function(){
-            Rating(1, 3, 'Rekam Medis', messageStatus);
+            newRating(1)
         });
         r_med.addEventListener('click', function(){
-            Rating(2, 3, 'Rekam Medis', messageStatus);
+            newRating(2)
         });
         r_hig.addEventListener('click', function(){
-            Rating(3, 3, 'Rekam Medis', messageStatus);
+            newRating(3)
         });
         s_msg.addEventListener('click', function(){
             window.location = '/p/contact/contactus/';
