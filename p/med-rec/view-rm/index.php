@@ -255,6 +255,7 @@
         <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/footer/footer.html') ?>
     </footer>
 </body>
+<script src="/lib/js/index.end.js"></script>
 <script>
     //menampilkan/menyembunyikan panel
     var btnFilter =  document.querySelector("#btnFilter");
@@ -300,5 +301,4 @@
         window.location.href = "/";
     }
 </script>
-    <script src="/lib/js/index.end.js"></script>
 </html>

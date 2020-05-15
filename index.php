@@ -237,6 +237,7 @@
             <p class="note-footer">creat by <a href="https://twitter.com/AnggerMPd">amp</a></p>
         </div>
     </footer>
+    <script src="lib/js/index.end.js"></script>
     <script>
         // memuat info Covid, source https://corona.semarangkab.go.id/covid/
         window.addEventListener('load', event => {
@@ -311,6 +312,5 @@
         });
 
     </script>
-    <script src="lib/js/index.end.js"></script>
 </body>
 </html>

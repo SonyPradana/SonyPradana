@@ -158,7 +158,7 @@
         <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/footer/footer.html') ?>
     </footer>
 </body>
-
+<script src="/lib/js/index.end.js"></script>
 <script>    
     // sticky header
     window.onscroll = function(){stickyHeader('82px', '32px')};
@@ -226,5 +226,4 @@
             })
     }
 </script>
-<script src="/lib/js/index.end.js"></script>
 </html>
