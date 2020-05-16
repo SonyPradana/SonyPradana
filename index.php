@@ -56,6 +56,7 @@
     <link rel="stylesheet" href="lib/css/ui/v1/card.css">
     <script src="lib/js/index.js"></script>
     <script src="lib/js/bundles/message.js"></script>
+    <script src="lib/js/vendor/vue/vue.min.js"></script>
     <style>
         /* costume main container */
         .container.width-view{
@@ -135,17 +136,19 @@
         <div class="boxs-header">
             <p>Info Covid (kabupaten semarang) <span><a href="https://corona.semarangkab.go.id/covid/">i</a></span></p>
         </div>
-        <div class="boxs-info">
+        <div class="boxs-info" id="c-covid">
             <div class="info one">
                 <div class="item-info left"></div>
-                <div class="item-info right">xxx positif</div>
+                <div class="item-info right">{{ msgPosi }}</div>
             </div>
             <div class="info two">
                 <div class="item-info left"></div>
-                <div class="item-info right">xxx sembuh</div></div>
+                <div class="item-info right">{{ msgSemb }}</div>
+            </div>
             <div class="info three">
                 <div class="item-info left"></div>
-            <div class="item-info right">xxx meninggal</div></div>
+                <div class="item-info right">{{ msgMeni }}</div>
+            </div>
         </div>
     </aside>
     <div class="container width-view">
@@ -177,20 +180,20 @@
         </main>
         <aside class="side">
             <div class="boxs-review">
-                <div class="reviews">
+                <div class="reviews" id="w-reviews">
                     <div class="review title">
                         <h3>Ulasan untuk Kami</h3>
                     </div>
-                    <div class="review results" hidden>
-                        <div class="result done">
+                    <div class="review results" v-if="seenResult">
+                        <div class="result done" v-on:click="togle(false)">
                             <p>Terimakasih</p>
                         </div>
                     </div>
-                    <div class="review respones">
-                        <div class="respone low">
+                    <div class="review respones" v-if="seenRespones">
+                        <div class="respone low" v-on:click="newRating(1)">
                         </div>
-                        <div class="respone med"></div>
-                        <div class="respone hig"></div>
+                        <div class="respone med" v-on:click="newRating(2)"></div>
+                        <div class="respone hig" v-on:click="newRating(3)"></div>
                     </div>
                     <div class="review comment">
                         <input type="text" id="input-comment" placeholder="Kritik dan saran">
@@ -238,7 +241,24 @@
         </div>
     </footer>
     <script src="lib/js/index.end.js"></script>
-    <script>
+    <script>        
+        let togleReviews = new Vue({
+            el: '#w-reviews',
+            data:{
+                seenResult: false,
+                seenRespones: true
+            }
+        });
+
+        let infoCovid = new Vue({
+            el: '#c-covid',
+            data:{
+                msgPosi: 'xxx positif',
+                msgSemb: 'xxx sembuh',
+                msgMeni: 'xxx meninggal'
+            }
+        })
+
         // memuat info Covid, source https://corona.semarangkab.go.id/covid/
         window.addEventListener('load', event => {
             const render = async() => {
@@ -252,63 +272,36 @@
 
             render()
                 .then( json => {
-                    let info_one = document.querySelector('.info.one .item-info.right');
-                    info_one.innerHTML = json['kasus_posi'] + ' positif';
-
-                    let info_two = document.querySelector('.info.two .item-info.right');
-                    info_two.innerHTML = json['kasus_semb'] + ' sembuh';
-
-                    let info_three = document.querySelector('.info.three .item-info.right');
-                    info_three.innerHTML = json['kasus_meni'] + ' meninggal';
+                    infoCovid.msgPosi = json['kasus_posi'] + ' positif';
+                    infoCovid.msgSemb = json['kasus_semb'] + ' sembuh';
+                    infoCovid.msgMeni = json['kasus_meni'] + ' meninggal';
                 })
         })
         // sticky header
         window.onscroll = function(){stickyHeader()};
         var mycontent = document.querySelector('aside');
 
-        // write review
-        const r_low = document.querySelector('.respone.low');
-        const r_med = document.querySelector('.respone.med');
-        const r_hig = document.querySelector('.respone.hig');
-        const s_msg = document.querySelector('#input-comment');
-        // hiden elemnt
-        let cls_result = document.querySelector('.review.results');
-        let cls_respones = document.querySelector('.review.respones');
-        let cls_comment = document.querySelector('.review.comment');
-        const cls_res_done = document.querySelector('.result.done');
+        function togle( show ){
+            if( show ){
+                togleReviews.seenResult = true;
+                togleReviews.seenRespones = false;
+            }else{
+                togleReviews.seenResult = false;
+                togleReviews.seenRespones = true;
+            }
+        }
 
-        const hidden_cls_result = () =>{
-            cls_result.removeAttribute("hidden");
-            cls_respones.setAttribute("hidden", "");
-            cls_comment.setAttribute("hidden", "");            
-        };
-        const show_cls_result = () =>{
-            cls_result.setAttribute("hidden", "");
-            cls_respones.removeAttribute("hidden");
-            cls_comment.removeAttribute("hidden");
-        };
         function newRating( rating ){
             Rating(rating, 3, 'Rekam Medis').then(json =>{
                 if( json['status'] == 'ok'){
-                    hidden_cls_result()
+                    togle(true)
                 }
             })
         }
 
-        r_low.addEventListener('click', function(){
-            newRating(1)
-        });
-        r_med.addEventListener('click', function(){
-            newRating(2)
-        });
-        r_hig.addEventListener('click', function(){
-            newRating(3)
-        });
+        const s_msg = document.querySelector('#input-comment');
         s_msg.addEventListener('click', function(){
             window.location = '/p/contact/contactus/';
-        });
-        cls_res_done.addEventListener('click', function(){
-            show_cls_result();  
         });
 
     </script>
