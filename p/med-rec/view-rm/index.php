@@ -104,8 +104,8 @@
     </header>
     <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/control/modal.html') ?>
     <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/control/alert.html') ?>
-    <main>
-        <div class="container">
+    <div class="container">
+        <main>
             <div class="coit breadcrumb">
                 <ul class="crumb">
                     <li><a href="/">Home</a></li>
@@ -113,7 +113,7 @@
                 </ul>
             </div>
             <h1>Lihat Data Rekam Medis</h1>
-            <button id="btnFilter">Costume Filter</button>
+            <button class="btn outline blue rounded small block" id="btnFilter">Costume Filter</button>
         <?php if ( $get_data ): ?>
             <div class="boxs">
                 <div class="box-left">
@@ -171,41 +171,45 @@
                             </div>
                         </form>
                             <div class="input-groub">
-                                <button name="submit" class="submit">Terapkan</button>
-                                <button name="reset">Reset</button>
+                                <button class="btn outline blue rounded small" name="submit" id="submit">Terapkan</button>
+                                <button class="btn outline blue rounded small" name="reset">Reset</button>
                             </div>
                     </div>
 
                 </div>
                 <div class="box-right">
                     <!-- table -->
-                    <table>                
-                        <tr>
-                            <th>No.</th>
-                            <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="GDcostumeFilter('nomor_rm', <?= $order == 'ASC' && $sort == 'nomor_rm' ? "'DESC'" : "'ASC'" ?>, <?= $page ?>, [])">No RM</a></th>
-                            <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="GDcostumeFilter('nama', <?= $order == 'ASC' && $sort == 'nama' ? "'DESC'" : "'ASC'" ?>, <?= $page ?>, [])">Nama</a></th>
-                            <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="GDcostumeFilter('tanggal_lahir', <?= $order == 'ASC' && $sort == 'tanggal_lahir' ? "'DESC'" : "'ASC'"?>, <?= $page ?>, [])">Tanggal Lahir</a></th>
-                            <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="GDcostumeFilter('alamat', <?= $order == 'ASC' && $sort == 'alamat' ? "'DESC'" : "'ASC'"?>, <?= $page ?>, [])">Alamat</a></th>
-                            <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="GDcostumeFilter('nomor_rw',<?= $order == 'ASC' && $sort == 'nomor_rt' ? "'DESC'" : "'ASC'"?>, <?= $page ?>, [])">RT / RW</a></th>
-                            <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="GDcostumeFilter('nama_kk',<?= $order == 'ASC' && $sort == 'nama_kk' ? "'DESC'" : "'ASC'"?>, <?= $page ?>, [])">Nama KK</a></th>
-                            <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="GDcostumeFilter('nomor_rm_kk', <?= $order == 'ASC' && $sort == 'nomor_rm_kk' ? "'DESC'" : "'ASC'"?>, <?= $page ?>, [])">No. Rm KK</a></th>
-                            <th><a href="javascript:void(0)">Action</a></th>
-                        </tr>                         
-                    <?php $idnum = (int) ($page * 25) - 24; ?>
-                    <?php foreach( $get_data as $data) :?>            
-                        <tr>       
-                            <th><?= $idnum ?></th>
-                            <th><?= $data['nomor_rm']?></th>
-                            <th><?= ucwords( $data['nama'] )?></th>
-                            <th><?= date("d-m-Y", strtotime( $data['tanggal_lahir']))  ?></th>
-                            <th><?= ucwords( $data['alamat'] )?></th>
-                            <th><?= $data['nomor_rt'] . ' / ' . $data['nomor_rw']?></th>
-                            <th <?= $data['nama_kk'] == $data['nama'] ? 'class="mark"' : ""?>><?= ucwords( $data['nama_kk'] )?></th>
-                            <th><?= $data['nomor_rm_kk']?></th>
-                            <th><a class="link" href="/p/med-rec/edit-rm/index.php?document_id=<?= $data['id']?>">edit</a><?= $data['nama_kk'] == $data['nama'] ? '<a class="link" href="/p/med-rec/search-rm/?submit=&no-rm-kk-search=' . $data['nomor_rm_kk']. '">view</a>' : ""?> </th>
-                        </tr>                       
-                        <?php $idnum++; ?>
-                    <?php endforeach ; ?>
+                    <table>       
+                        <thead>
+                            <tr>
+                                <th>No.</th>
+                                <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="GDcostumeFilter('nomor_rm', <?= $order == 'ASC' && $sort == 'nomor_rm' ? "'DESC'" : "'ASC'" ?>, <?= $page ?>, [])">No RM</a></th>
+                                <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="GDcostumeFilter('nama', <?= $order == 'ASC' && $sort == 'nama' ? "'DESC'" : "'ASC'" ?>, <?= $page ?>, [])">Nama</a></th>
+                                <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="GDcostumeFilter('tanggal_lahir', <?= $order == 'ASC' && $sort == 'tanggal_lahir' ? "'DESC'" : "'ASC'"?>, <?= $page ?>, [])">Tanggal Lahir</a></th>
+                                <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="GDcostumeFilter('alamat', <?= $order == 'ASC' && $sort == 'alamat' ? "'DESC'" : "'ASC'"?>, <?= $page ?>, [])">Alamat</a></th>
+                                <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="GDcostumeFilter('nomor_rw',<?= $order == 'ASC' && $sort == 'nomor_rt' ? "'DESC'" : "'ASC'"?>, <?= $page ?>, [])">RT / RW</a></th>
+                                <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="GDcostumeFilter('nama_kk',<?= $order == 'ASC' && $sort == 'nama_kk' ? "'DESC'" : "'ASC'"?>, <?= $page ?>, [])">Nama KK</a></th>
+                                <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="GDcostumeFilter('nomor_rm_kk', <?= $order == 'ASC' && $sort == 'nomor_rm_kk' ? "'DESC'" : "'ASC'"?>, <?= $page ?>, [])">No. Rm KK</a></th>
+                                <th><a href="javascript:void(0)">Action</a></th>
+                            </tr>                         
+                        </thead>
+                        <tbody>
+                        <?php $idnum = (int) ($page * 25) - 24; ?>
+                        <?php foreach( $get_data as $data) :?>            
+                            <tr>       
+                                <th><?= $idnum ?></th>
+                                <th><?= $data['nomor_rm']?></th>
+                                <th><?= ucwords( $data['nama'] )?></th>
+                                <th><?= date("d-m-Y", strtotime( $data['tanggal_lahir']))  ?></th>
+                                <th><?= ucwords( $data['alamat'] )?></th>
+                                <th><?= $data['nomor_rt'] . ' / ' . $data['nomor_rw']?></th>
+                                <th <?= $data['nama_kk'] == $data['nama'] ? 'class="mark"' : ""?>><?= ucwords( $data['nama_kk'] )?></th>
+                                <th><?= $data['nomor_rm_kk']?></th>
+                                <th><a class="link" href="/p/med-rec/edit-rm/index.php?document_id=<?= $data['id']?>">edit</a><?= $data['nama_kk'] == $data['nama'] ? '<a class="link" href="/p/med-rec/search-rm/?submit=&no-rm-kk-search=' . $data['nomor_rm_kk']. '">view</a>' : ""?> </th>
+                            </tr>                       
+                            <?php $idnum++; ?>
+                        <?php endforeach ; ?>                            
+                        </tbody>
                     </table>
                     <div class="box-pagination">
                         <div class="pagination">
@@ -248,8 +252,8 @@
         <?php else : ?>
             <p>gagal memuat data</p>
         <?php endif; ?>
-        </div>
-    </main>
+        </main>
+    </div>
     <div class="gotop" onclick="gTop()"></div>
     <footer>
         <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/footer/footer.html') ?>
@@ -257,44 +261,43 @@
 </body>
 <script src="/lib/js/index.end.js"></script>
 <script>
+    let boxLeft = document.querySelector(".box-left");
     //menampilkan/menyembunyikan panel
-    var btnFilter =  document.querySelector("#btnFilter");
+    let btnFilter =  document.querySelector("#btnFilter");
     btnFilter.addEventListener("click", event => {
-        var boxLeft = document.querySelector(".box-left");
         boxLeft.style.width = "250px";
     });
-    var btnFilter =  document.querySelector(".closebtn");
-    btnFilter.addEventListener("click", event => {
-        var boxLeft = document.querySelector(".box-left");
+    let btnClose =  document.querySelector(".closebtn");
+    btnClose.addEventListener("click", event => {
         boxLeft.style.width = "0px";
     });
 
     //filter data menggunakan xhr
-    var btnTerapkan  = document.querySelector('.submit');
+    let btnTerapkan  = document.querySelector('#submit');
     //event handler
     btnTerapkan.addEventListener("click", event=> {
         //get data
-        var formGET = document.querySelector('.form-filter');
-        var formData = new FormData( formGET );
-        var rangeUmur = formData.get('filter-umur');
-        var cbandarjo = formData.get('filter-alamat-bandarjo');
-        var cbranjang = formData.get('filter-alamat-branjang');
-        var cKalisidi = formData.get('filter-alamat-kalisidi');
-        var cKeji = formData.get('filter-alamat-keji');
-        var cLerep = formData.get('filter-alamat-lerep');
-        var cNyatnyono = formData.get('filter-alamat-nyatnyono');
-        var cStatusKK = formData.get('filter-kk');
+        let formGET = document.querySelector('.form-filter');
+        let formData = new FormData( formGET );
+        let rangeUmur = formData.get('filter-umur');
+        let cbandarjo = formData.get('filter-alamat-bandarjo');
+        let cbranjang = formData.get('filter-alamat-branjang');
+        let cKalisidi = formData.get('filter-alamat-kalisidi');
+        let cKeji = formData.get('filter-alamat-keji');
+        let cLerep = formData.get('filter-alamat-lerep');
+        let cNyatnyono = formData.get('filter-alamat-nyatnyono');
+        let cStatusKK = formData.get('filter-kk');
 
-        var filters = [rangeUmur, cbandarjo, cbranjang, cKalisidi, cKeji, cLerep, cNyatnyono, cStatusKK];
+        let filters = [rangeUmur, cbandarjo, cbranjang, cKalisidi, cKeji, cLerep, cNyatnyono, cStatusKK];
         GDcostumeFilter('alamat', 'asc', <?= $page ?>, filters);
     });
     
     // sticky header
-    window.onscroll = function(){stickyHeader('82px')};
-    var mycontent = document.querySelector('main');
+    window.onscroll = function(){stickyHeader('82px', '32px')};
+    var mycontent = document.querySelector('.container');
 
     // keep alive    
-    var dom_alert = document.querySelector('.modal.alert');
+    let dom_alert = document.querySelector('.modal.alert');
     
     keepalive(dom_alert);
     function redirect_login(){

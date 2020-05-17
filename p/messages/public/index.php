@@ -29,7 +29,6 @@ $user = new User($auth->getUserName());
 <?php include($_SERVER['DOCUMENT_ROOT'] . '/include/html/metatag.html') ?>
 
     <link rel="stylesheet" href="/lib/css/main.css">
-    <link rel="stylesheet" href="/lib/css/ui/v1/control.default.css">
     <link rel="stylesheet" href="/lib/css/ui/v1/alert.css">
     <link rel="stylesheet" href="/lib/css/ui/v1/control.css">
     <link rel="stylesheet" href="/lib/css/ui/v1/table.css">

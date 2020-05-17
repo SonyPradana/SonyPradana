@@ -106,32 +106,37 @@
 ?>
     <?php if ( $get_data ): ?>
         <table>
-            <tr>
-                <th>No.</th>
-                <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="GDcostumeFilter('nomor_rm', <?= $order == 'ASC' && $sort == 'nomor_rm' ? "'DESC'" : "'ASC'"?>, <?= $page ?>, <?= $arr?>)">No RM</a></th>
-                <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="GDcostumeFilter('nama', <?= $order == 'ASC' && $sort == 'nama' ? "'DESC'" : "'ASC'"?>, <?= $page ?>, <?= $arr ?>)">Nama</a></th>
-                <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="GDcostumeFilter('tanggal_lahir', <?= $order == 'ASC' && $sort == 'tanggal_lahir' ? "'DESC'" : "'ASC'"?>, <?= $page ?>, <?= $arr ?>)">Tanggal Lahir</a></th>
-                <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="GDcostumeFilter('alamat', <?= $order == 'ASC' && $sort == 'alamat' ? "'DESC'" : "'ASC'"?>, <?= $page ?>, <?= $arr ?>)">Alamat</a></th>
-                <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="GDcostumeFilter('nomor_rw',<?= $order == 'ASC' && $sort == 'nomor_rt' ? "'DESC'" : "'ASC'"?>, <?= $page ?>, <?= $arr ?>)">RT / RW</a></th>
-                <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="GDcostumeFilter('nama_kk',<?= $order == 'ASC' && $sort == 'nama_kk' ? "'DESC'" : "'ASC'"?>, <?= $page ?>, <?= $arr ?>)">Nama KK</a></th>
-                <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="GDcostumeFilter('nomor_rm_kk', <?= $order == 'ASC' && $sort == 'nomor_rm_kk' ? "'DESC'" : "'ASC'"?>, <?= $page ?>, <?= $arr ?>)">No. Rm KK</a></th>
-                <th><a href="javascript:void(0)">Action</a></th>
-            </tr>                         
-        <?php $idnum = (int) ($page * 25) - 24; ?>
-        <?php foreach( $get_data as $data) :?>            
-            <tr>       
-                <th><?= $idnum ?></th>
-                <th><?= $data['nomor_rm']?></th>
-                <th><?= ucwords( $data['nama'] )?></th>
-                <th><?= date("d-m-Y", strtotime( $data['tanggal_lahir']))  ?></th>
-                <th><?= ucwords( $data['alamat'] )?></th>
-                <th><?= $data['nomor_rt'] . ' / ' . $data['nomor_rw']?></th>
-                <th <?= $data['nama_kk'] == $data['nama'] ? 'class="mark"' : ""?>><?= ucwords( $data['nama_kk'] )?></th>
-                <th><?= $data['nomor_rm_kk']?></th>
-                <th><a class="link" href="/p/med-rec/edit-rm/index.php?document_id=<?= $data['id']?>">edit</a><?= $data['nama_kk'] == $data['nama'] ? '<a class="link" href="/p/med-rec/search-rm/?submit=&no-rm-kk-search=' . $data['nomor_rm_kk']. '">view</a>' : ""?> </th>
-            </tr>                       
-            <?php $idnum++; ?>
-        <?php endforeach ; ?>
+            <thead>
+                <tr>
+                    <th>No.</th>
+                    <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="GDcostumeFilter('nomor_rm', <?= $order == 'ASC' && $sort == 'nomor_rm' ? "'DESC'" : "'ASC'"?>, <?= $page ?>, <?= $arr?>)">No RM</a></th>
+                    <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="GDcostumeFilter('nama', <?= $order == 'ASC' && $sort == 'nama' ? "'DESC'" : "'ASC'"?>, <?= $page ?>, <?= $arr ?>)">Nama</a></th>
+                    <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="GDcostumeFilter('tanggal_lahir', <?= $order == 'ASC' && $sort == 'tanggal_lahir' ? "'DESC'" : "'ASC'"?>, <?= $page ?>, <?= $arr ?>)">Tanggal Lahir</a></th>
+                    <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="GDcostumeFilter('alamat', <?= $order == 'ASC' && $sort == 'alamat' ? "'DESC'" : "'ASC'"?>, <?= $page ?>, <?= $arr ?>)">Alamat</a></th>
+                    <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="GDcostumeFilter('nomor_rw',<?= $order == 'ASC' && $sort == 'nomor_rt' ? "'DESC'" : "'ASC'"?>, <?= $page ?>, <?= $arr ?>)">RT / RW</a></th>
+                    <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="GDcostumeFilter('nama_kk',<?= $order == 'ASC' && $sort == 'nama_kk' ? "'DESC'" : "'ASC'"?>, <?= $page ?>, <?= $arr ?>)">Nama KK</a></th>
+                    <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="GDcostumeFilter('nomor_rm_kk', <?= $order == 'ASC' && $sort == 'nomor_rm_kk' ? "'DESC'" : "'ASC'"?>, <?= $page ?>, <?= $arr ?>)">No. Rm KK</a></th>
+                    <th><a href="javascript:void(0)">Action</a></th>
+                </tr>      
+            </thead>
+            <tbody>                               
+            <?php $idnum = (int) ($page * 25) - 24; ?>
+            <?php foreach( $get_data as $data) :?>            
+                <tr>       
+                    <th><?= $idnum ?></th>
+                    <th><?= $data['nomor_rm']?></th>
+                    <th><?= ucwords( $data['nama'] )?></th>
+                    <th><?= date("d-m-Y", strtotime( $data['tanggal_lahir']))  ?></th>
+                    <th><?= ucwords( $data['alamat'] )?></th>
+                    <th><?= $data['nomor_rt'] . ' / ' . $data['nomor_rw']?></th>
+                    <th <?= $data['nama_kk'] == $data['nama'] ? 'class="mark"' : ""?>><?= ucwords( $data['nama_kk'] )?></th>
+                    <th><?= $data['nomor_rm_kk']?></th>
+                    <th><a class="link" href="/p/med-rec/edit-rm/index.php?document_id=<?= $data['id']?>">edit</a><?= $data['nama_kk'] == $data['nama'] ? '<a class="link" href="/p/med-rec/search-rm/?submit=&no-rm-kk-search=' . $data['nomor_rm_kk']. '">view</a>' : ""?> </th>
+                </tr>                       
+                <?php $idnum++; ?>
+            <?php endforeach ; ?>
+        
+            </tbody>
         </table>
         <div class="box-pagination">
             <div class="pagination">

@@ -87,7 +87,6 @@
     <link rel="stylesheet" href="/lib/css/main.css">
     <link rel="stylesheet" href="/lib/css/ui/v1/table.css">    
     <link rel="stylesheet" href="/lib/css/ui/v1/pagination.css">
-    <link rel="stylesheet" href="/lib/css/ui/v1/control.default.css">
     <link rel="stylesheet" href="/lib/css/ui/v1/alert.css">
     <link rel="stylesheet" href="/lib/css/ui/v1/control.css">
 
@@ -101,13 +100,20 @@
             grid-template-columns: minmax(250px, 300px) minmax(30%, auto);
             grid-column-gap: 10px;
         }
-        .boxs .box.left{margin-right: 24px;}
+        .boxs .box.left { margin-right: 24px }
         .box.left form.search-box{
             position: -webkit-sticky;
             position: sticky;
             top: 80px;
         }
-        .boxs .box.left .box-input.button-grub{
+        .box.left form > input{
+            width: 100%
+        }
+        .box.left form > input:not(:first-child),
+        .box.left form > .grub-control.horizontal{
+            margin-top: 10px
+        }
+        /* .boxs .box.left .box-input.button-grub{
             margin-top: 10px;
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -132,12 +138,11 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             grid-column-gap: 16px;
-        }
-        .boxs .box.right{margin-top: 10px}
+        } */
         .boxs .box.right .box-right {
             width: 100%;
             overflow-x: auto;
-        }
+        } 
         /* mobile */
         @media screen and (max-width: 600px) {                
             .box.left form.search-box {
@@ -157,8 +162,8 @@
     </header>
     <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/control/modal.html') ?>
     <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/control/alert.html') ?>
-    <main>
-        <div class="container">
+    <div class="container">
+        <main>
             <div class="coit breadcrumb">
                 <ul class="crumb">
                     <li><a href="/">Home</a></li>
@@ -169,29 +174,27 @@
             <div class="boxs">
                 <div class="box left">
                     <form action="" method="get" class="search-box">
-                        <input type="text" name="main-search" id="input-main-search" placeholder="cari nama" value="<?= $main_search ?>">
-                        <div class="box-input button-grub">
-                            <div class="box-input-left">
-
-                            </div>
-                            <div class="box-input-right">
-                                <button type="submit" id="submit">Cari</button>
-                                <button type="reset" id="reset-btn">Batal</button>                            
-                            </div>
+                        <input class="textbox outline black rounded small block" type="text" name="main-search" id="input-main-search" placeholder="cari nama" value="<?= $main_search ?>">
+                        <div class="grub-control horizontal right">
+                                <button class="btn rounded small blue" type="submit" id="submit">Cari</button>
+                                <div class="gap-space"><!-- helper --></div>
+                                <button class="btn rounded small blue" type="reset" id="reset-btn">Batal</button>
                         </div>
-                        <div class="box-input checkbox-grub">
+                        <div class="grub-control horizontal">
                             <input type="checkbox" name="strict-search" id="input-strict-search" <?= $strict_search == true ? "checked" : ""?>>
                             <label for="input-strict-search">Pencarian Mendalam</label>
                         </div>
-                        <input type="text" name="nomor-rm-search" id="input-nomor-rm-seacrh" placeholder="cari nomor rm" value="<?= $nomor_rm_search ?>">
-                        <input type="date" name="tgl-search" id="input-tgl-search" data-date-format="DD MMMM YYYY" value="<?= (isset($_GET['tgl-search'])) ? $_GET['tgl-search'] : '' ?>">
-                        <input type="text" name="alamat-search" id="input-alamat-seacrh" placeholder="cari alamat" value="<?= $alamat_search ?>">
-                        <div class="box-input text-grub">
-                            <input type="text" name="no-rt-search" id="input-no-rt-search" placeholder="cari almat rt" value="<?= $no_rt_search ?>">
-                            <input type="text" name="no-rw-search" id="input-no-rw-search" placeholder="cari alamat rw" value="<?= $no_rw_search ?>">
+                        <input class="textbox outline black rounded small block" type="text" name="nomor-rm-search" id="input-nomor-rm-seacrh" placeholder="cari nomor rm" value="<?= $nomor_rm_search ?>">
+                        <input class="textbox outline black rounded small block" type="date" name="tgl-search" id="input-tgl-search" data-date-format="DD MMMM YYYY" value="<?= (isset($_GET['tgl-search'])) ? $_GET['tgl-search'] : '' ?>">
+                        <input class="textbox outline black rounded small block" type="text" name="alamat-search" id="input-alamat-seacrh" placeholder="cari alamat" value="<?= $alamat_search ?>">
+                        <div class="grub-control horizontal">
+                            <input class="textbox outline black rounded small block" type="text" name="no-rt-search" id="input-no-rt-search" placeholder="cari alamat rt" value="<?= $no_rt_search ?>">
+                            <div class="gap-space"><!-- helper --></div>
+                            <div class="gap-space"><!-- helper --></div>
+                            <input class="textbox outline black rounded small block" type="text" name="no-rw-search" id="input-no-rw-search" placeholder="cari alamat rw" value="<?= $no_rw_search ?>">
                         </div>
-                        <input type="text" name="nama-kk-search" id="input-nama-kk-search" placeholder="cari nama kk" value="<?= $nama_kk_search ?>">
-                        <input type="text" name="no-rm-kk-search" id="input-no-rm-kk" placeholder="cari nomor rm kk" value="<?= $no_rm_kk_search ?>">
+                        <input class="textbox outline black rounded small block" type="text" name="nama-kk-search" id="input-nama-kk-search" placeholder="cari nama kk" value="<?= $nama_kk_search ?>">
+                        <input class="textbox outline black rounded small block" type="text" name="no-rm-kk-search" id="input-no-rm-kk" placeholder="cari nomor rm kk" value="<?= $no_rm_kk_search ?>">
                     </form>
                 </div>
                 <div class="box right">                        
@@ -202,8 +205,8 @@
                     </div> 
                 </div>
             </div>
-        </div>
-    </main>
+        </main>
+    </div>
     <div class="gotop" onclick="gTop()"></div>
     <footer>
         <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/footer/footer.html') ?>
@@ -237,8 +240,8 @@
     // console.log(href.toString());
     
     // sticky header
-    window.onscroll = function(){stickyHeader('82px')};
-    var mycontent = document.querySelector('main');
+    window.onscroll = function(){stickyHeader('82px', '32px')};
+    var mycontent = document.querySelector('.container');
     
     // keep alive    
     var dom_alert = document.querySelector('.modal.alert');

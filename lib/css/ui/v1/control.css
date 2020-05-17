@@ -13,28 +13,38 @@
     padding: 12px 24px;
     border: 2px solid #000000;
 }
-
+.btn.block, .textbox.block{
+    display: block;
+}
 
 /* input ui (outline) */
+.textbox { outline: none }
 .textbox.outline{
-    width: 100%;
     min-width: 100px;
     box-sizing: border-box;
     background-color: #fff !important;
+    font-size: 1.063rem;
 }
 /* blue color */
-.textbox.blue{
-    border-color: #2196F3;
+.textbox.blue{ border-color: #2196F3; }
+.textbox.black{ border-color: #333; }
+/* menyembukan upp-down button */
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
-
+/* Firefox */
+input[type=number] { -moz-appearance: textfield; }
 
 /* button ui (outline style) */
+.btn { cursor: pointer }
 .btn.outline{
     border: 2px solid black;
     background-color: transparent;
     color: black;
-    font-size: 16px;
-    cursor: pointer;
+    font-size: 1.063rem;
     text-decoration: none;
 }
 /* blue color */
@@ -67,9 +77,12 @@
 
 /* grub control */
 .grub-control.horizontal{
-    display: flex
+    display: flex;
+    align-items: center;
 }
 .grub-control.vertical{
     display: flex;
     flex-flow: column;
 }
+.grub-control.horizontal.right { justify-content: flex-end }
+.grub-control .gap-space { width: 10px }

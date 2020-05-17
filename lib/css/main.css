@@ -9,7 +9,7 @@ body {
     background-color: #f0f0f0;
 }
 body h1{
-    margin: 15px 0;
+    margin: 12px 0;
 }
 
 /* kerangka header*/
@@ -163,7 +163,7 @@ header .header.menu .account .boxs-account .box-account.right p{
 
 /*breadcrumb*/
 .coit.breadcrumb{
-    margin: 20px 0;
+    margin: 12px 0;
 }
 ul.crumb {
     padding: 0px;

@@ -99,48 +99,39 @@ if( !$auth->TrushClient() ){
 <?php include($_SERVER['DOCUMENT_ROOT'] . '/include/html/metatag.html') ?>
 
     <link rel="stylesheet" href="/lib/css/main.css">
-    <link rel="stylesheet" href="/lib/css/ui/v1/control.default.css">
     <link rel="stylesheet" href="/lib/css/ui/v1/alert.css">
     <link rel="stylesheet" href="/lib/css/ui/v1/control.css">
     <script src="/lib/js/index.js"></script>
     <script src="/lib/js/bundles/keepalive.js"></script>
     <style>
+        
         .boxs{
-            width: 100%;
-            height: 100%;
+            width: 100%; height: 100%;
             display: grid;
             grid-template-columns: 1fr 1fr;
         }
-        .box.right{
-            padding: 10px 100px 20px 20px;
-        }        
+        .box.right { padding: 8px 16px }
         .input-information p,
         .input-information p a{
             margin: 0;
             color: #7f6cff;
         }
-        button{
-            margin-top: 15px;
-            padding: 10px 6px;
-            border-radius: 5px;
-            cursor: pointer;
+
+        form { max-width: 500px }
+        form > input:not(:first-child),
+        form > button,
+        .grub-control.horizontal{
+            margin-top: 10px
         }
-        input[type=checkbox]{
-            margin: 0 !important;
-            width: 0 !important;
-        }
-        .form-box.bottom{
-            margin-top: 10px !important;
+        form > input { width: 100% }
+        .grub-control.horizontal > .textbox{
+            width: 100px;
         }
 
         /* mobile */
         @media screen and (max-width: 600px) {            
-            .boxs{
-                grid-template-columns: 1fr;
-            }
-            .box.right{
-                padding: 5px
-            }
+            .boxs { grid-template-columns: 1fr }
+            .box.right { padding: 5px }
         }
     </style>
 </head>
@@ -151,8 +142,8 @@ if( !$auth->TrushClient() ){
     </header>
     <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/control/modal.html') ?>
     <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/control/alert.html') ?>
-    <main>
-        <div class="container">
+    <div class="container">
+        <main>
             <div class="coit breadcrumb">
                 <ul class="crumb">
                     <li><a href="/">Home</a></li>
@@ -168,7 +159,7 @@ if( !$auth->TrushClient() ){
                 <?php else:?>
                     <h1>Edit data Rekam Medis</h1>
                     <form action="" method="post">
-                        <input type="text" name="nomor_rm" id="input-nomor-rm" placeholder="nomor rekam medis" value="<?= isset($load_rm) ? $nomorRM : '' ?>" maxlength="6" inputmode="numeric" pattern="[0-9]*">                        
+                        <input class="textbox outline black rounded small block" type="text" name="nomor_rm" id="input-nomor-rm" placeholder="nomor rekam medis" value="<?= isset($load_rm) ? $nomorRM : '' ?>" maxlength="6" inputmode="numeric" pattern="[0-9]*">                        
                         <div class="input-information warning">
                         <?php if( $status_double ) : ?>
                             <p>nomor rekam medis sama :
@@ -177,30 +168,34 @@ if( !$auth->TrushClient() ){
                             </p>
                         <?php endif; ?>
                         </div>
-                        <input type="text" name="nama" id="input-nama" placeholder="nama" value="<?= isset($load_rm) ? $nama : '' ?>" maxlength="50">
-                        <input type="date" name="tgl_lahir" id="input-tgl-lahir" value="<?= isset($load_rm) ? $tanggalLahir : '' ?>">
-                        <input type="text" name="alamat" id="input-alamat" placeholder="alamat tanpa rt/rw" value="<?= isset($load_rm) ? $alamat : '' ?>">
-                        <div class="form-box">
-                            <input type="text" name="nomor_rt" id="input-nomor-rt" placeholder="nomor rt" max="2" value="<?= isset($load_rm) ? $nomorRt : '' ?>" inputmode="numeric" pattern="[0-9]*">
-                            <input type="text" name="nomor_rw" id="input-nomor-rw" placeholder="nomor rw" max="2" value="<?= isset($load_rm) ? $nomorRw : '' ?>" inputmode="numeric" pattern="[0-9]*">
+                        <input class="textbox outline black rounded small block" type="text" name="nama" id="input-nama" placeholder="nama" value="<?= isset($load_rm) ? $nama : '' ?>" maxlength="50">
+                        <input class="textbox outline black rounded small block" type="date" name="tgl_lahir" id="input-tgl-lahir" value="<?= isset($load_rm) ? $tanggalLahir : '' ?>">
+                        <input class="textbox outline black rounded small block" type="text" name="alamat" id="input-alamat" placeholder="alamat tanpa rt/rw" value="<?= isset($load_rm) ? $alamat : '' ?>">
+                        <div class="grub-control horizontal">
+                            <input class="textbox outline black rounded small" type="text" name="nomor_rt" id="input-nomor-rt" placeholder="nomor rt" max="2" value="<?= isset($load_rm) ? $nomorRt : '' ?>" inputmode="numeric" pattern="[0-9]*">
+                            <div class="gap-space"><!-- helper --></div>
+                            <input class="textbox outline black rounded small" type="text" name="nomor_rw" id="input-nomor-rw" placeholder="nomor rw" max="2" value="<?= isset($load_rm) ? $nomorRw : '' ?>" inputmode="numeric" pattern="[0-9]*">
                         </div>
-                        <div class="form-box bottom">
+                        <div class="grub-control horizontal">
                             <input type="checkbox" name="tandai_sebagai_kk" id="input-mark-as-kk" tabindex="11" <?= $status_kk == true ? "checked" : ""?>>
                             <label for="input-mark-as-kk">Tandai sebagai kk</label>
                         </div>  
-                        <input type="text" name="nama_kk" id="input-nama-kk" placeholder="nama kepala keluarga" value="<?= isset($load_rm) ? $namaKK : '' ?>">
-                        <input type="text" name="nomor_rm_kk" id="input-nomor-rm-kk" placeholder="nomor rm kepla keluarga" value="<?= isset($load_rm) ? $nomorRM_KK : '' ?>" maxlength="6" inputmode="numeric" pattern="[0-9]*">
+                        <input class="textbox outline black rounded small block" type="text" name="nama_kk" id="input-nama-kk" placeholder="nama kepala keluarga" value="<?= isset($load_rm) ? $namaKK : '' ?>">
+                        <input class="textbox outline black rounded small block" type="text" name="nomor_rm_kk" id="input-nomor-rm-kk" placeholder="nomor rm kepla keluarga" value="<?= isset($load_rm) ? $nomorRM_KK : '' ?>" maxlength="6" inputmode="numeric" pattern="[0-9]*">
                         <div class="input-information no-rm-kk"></div>
                         <div class="input-information kk-sama"></div>
                     
-                        <button type="submit" name="submit">Edit Data RM</button>
-                        <button type="button" onclick="window.history.back()">Batal Perubahan</button>
+                        <div class="grub-control horizontal">
+                            <button class="btn rounded small blue outline" type="submit" name="submit">Edit Data RM</button>
+                            <div class="gap-space"><!-- helper --></div>
+                            <button class="btn rounded small blue outline" type="button" onclick="window.history.back()">Batal Perubahan</button>
+                        </div>
                     </form>           
                 <?php endif; ?>
                 </div>
             </div>
-        </div>
-    </main>
+        </main>
+    </div>
     <div class="gotop" onclick="gTop()"></div>
     <?php if( isset( $msg ) ) :?>
         <div class="snackbar">
@@ -215,8 +210,8 @@ if( !$auth->TrushClient() ){
 <script src="/lib/js/index.end.js"></script>
 <script>
         // sticky header
-        window.onscroll = function(){stickyHeader('82px')};
-        var mycontent = document.querySelector('main');
+        window.onscroll = function(){stickyHeader('82px', '32px')};
+        var mycontent = document.querySelector('.container');
         
         // keep alive    
         var dom_alert = document.querySelector('.modal.alert');

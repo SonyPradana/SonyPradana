@@ -64,7 +64,7 @@ tbody tr th.number{
 tr:nth-child(even) {
     background-color: #f6f6f6de;
 }
-tr:hover:not(:first-child ){
+tbody tr:hover{
     background-color: #f9ffc4;
 }
 th.mark{
