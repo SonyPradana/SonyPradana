@@ -278,8 +278,9 @@
                 })
         })
         // sticky header
-        window.onscroll = function(){stickyHeader()};
-        var mycontent = document.querySelector('aside');
+        window.addEventListener('scroll', () => {
+            stickyHeader('aside')
+        })
 
         function togle( show ){
             if( show ){

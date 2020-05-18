@@ -94,6 +94,8 @@
         }
         
         .input-groub{margin-bottom: 8px}
+
+        table { width: 100% }
     </style>
     <script src="/lib/js/ajax/html/GetData.js"></script>
 </head>
@@ -293,8 +295,9 @@
     });
     
     // sticky header
-    window.onscroll = function(){stickyHeader('82px', '32px')};
-    var mycontent = document.querySelector('.container');
+    window.onscroll = function(){
+            stickyHeader('.container', '82px', '32px')
+    }
 
     // keep alive    
     let dom_alert = document.querySelector('.modal.alert');

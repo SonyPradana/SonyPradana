@@ -151,7 +151,8 @@
 <script src="/lib/js/index.end.js"></script>
 <script>    
     // sticky header
-    window.onscroll = function(){stickyHeader('82px', '32px')};
-    var mycontent = document.querySelector('.container');
+    window.onscroll = function(){
+            stickyHeader('.container', '82px', '32px')
+    }
 </script>
 </html>
