@@ -284,19 +284,42 @@ footer .footnote p a{
 /* snackbar */
 .snackbar{
     visibility: hidden;
-    min-width: 150px;
-    background-color: #ff6000;
-    color: #fff;
-    text-align: center;
+    min-width: 150px;    
     border-radius: 26px;
-    padding: 16px;
+    padding: 12px;
     position: fixed;
     z-index: 1;
     left: 50%;
     transform: translateX(-50%);
-    top: 160px;
-    font-size: 16px;
+    top: 130px;
+    display: flex;
+    align-items: end;
+    justify-content: flex-start;
+    box-shadow:
+    3px 5px 5px 1px #937676ab;
+  
 }
+.snackbar .message{
+    text-align: center;
+    color: #fff;
+    text-align: center;    
+    font-size: 18px;
+}
+.snackbar .icon{
+    height: 18px; width: 18px;
+    margin-right: 8px;
+}
+
+.snackbar.success { background-color: #ff3c00 }
+.snackbar.danger { background-color: #ff0101 }
+.snackbar.warning { background-color: #ffe600 }
+.snackbar.info { background-color: #ae00ff }
+
+.snackbar.success .icon { background-image: url('/lib/css/ui/v1/asset/notif/success.svg') }
+.snackbar.danger .icon { background-image: url('/lib/css/ui/v1/asset/notif/danger.svg') }
+.snackbar.warning .icon { background-image: url('/lib/css/ui/v1/asset/notif/warning.svg') }
+.snackbar.info .icon { background-image: url('/lib/css/ui/v1/asset/notif/info.svg') }
+
 .snackbar.show{
     visibility: visible;
     animation: snackFadein .5s, snackFadeout .5s 2.5s;
@@ -320,12 +343,12 @@ footer .footnote p a{
 .sparator.blue .sparator-title{background: #55b9f3}
 
 @keyframes snackFadein{
-    from{top: 100px; opacity: 0;}
-    to{top: 160px; opacity: 1;}
+    from{top: 80px; opacity: 0;}
+    to{top: 130px; opacity: 1;}
 }
 @keyframes snackFadeout{
-    from{top: 160px; opacity: 1;}
-    to{top: 100px; opacity: 0;}
+    from{top: 130px; opacity: 1;}
+    to{top: 80px; opacity: 0;}
 }
 /* tablet mode */
 @media screen and (max-width: 600px) {

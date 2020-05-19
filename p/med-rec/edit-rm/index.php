@@ -42,11 +42,15 @@ if( !$auth->TrushClient() ){
             #simpan data
             $simpan = $new_rm->save();
             if( $simpan && $last_data != $_POST){
-                $msg = 'berhasil disimpan';
+                $msg = [];
+                $msg['message'] = 'Berhasil disimpan';
+                $msg['type'] = 'success';
                 $_POST = [];$nomor_rm = isset( $_POST['nomor_rm'] ) ? $_POST['nomor_rm'] : '';
                 $_POST = [];
             } else{
-                $msg =  'gagal menyimpan';
+                $msg = [];
+                $msg['message'] = 'Gagal disimpan';
+                $msg['type'] = 'danger';
             }    
         }else{ # untuk menangkap data        
             // memuat data dari data base
@@ -154,7 +158,7 @@ if( !$auth->TrushClient() ){
                 <div class="box left"></div>
                 <div class="box right">
                 <?php if( isset( $msg ) ) :?>
-                    <p style="color: red"><?= $msg ?></p>
+                    <p style="color: red"><?= $msg['message'] ?></p>
                     <a href="/">kembali ke menu utama</a>
                 <?php else:?>
                     <h1>Edit data Rekam Medis</h1>
@@ -198,8 +202,13 @@ if( !$auth->TrushClient() ){
     </div>
     <div class="gotop" onclick="gTop()"></div>
     <?php if( isset( $msg ) ) :?>
-        <div class="snackbar">
-            <?= $msg ?>
+        <div class="snackbar <?= $msg['type'] ?>">
+            <div class="icon">
+                <!-- css image -->
+            </div>
+            <div class="message">
+                <?= $msg['message'] ?>
+            </div>
         </div>
     <?php endif; ?>
     <footer>

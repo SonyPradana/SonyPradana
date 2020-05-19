@@ -75,11 +75,6 @@
 </head>
 <body>
     <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/control/modal.html') ?>
-    <?php if( isset( $msg ) ) :?>
-        <div class="snackbar">
-            <?= $msg ?>
-        </div>
-    <?php endif; ?>
     <header>    
         <?php $active_menu = 'home' ?>
         <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/header/header.html') ?>

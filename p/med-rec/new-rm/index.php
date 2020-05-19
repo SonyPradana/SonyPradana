@@ -53,12 +53,16 @@ if( !$auth->TrushClient() ){
         #simpan data
         $simpan = $new_rm->insertNewOne();
         if( $simpan && $last_data != $_POST){
-            $msg = 'berhasil disimpan';
+            $msg = [];
+            $msg['message'] = 'Berhasil disimpan';
+            $msg['type'] = 'success';
             $_SESSION['last_data'] = $_POST;
             $_POST = [];$nomor_rm = isset( $_POST['nomor_rm'] ) ? $_POST['nomor_rm'] : '';
             $nama = $tgl_lahir = $alamat = $nomor_rt = $nomor_rw = $nama_kk = $nomor_rm_kk = null;
         } else{
-            $msg =  'gagal menyimpan';
+            $msg = [];
+            $msg['message'] = 'Gagal disimpan';
+            $msg['type'] = 'danger';
         }
 
         # merefrresh nomor rm terakhir saad form dikirim
@@ -144,7 +148,7 @@ if( !$auth->TrushClient() ){
                 <div class="box right">
                     <h1>Data Rekam Medis Baru</h1>
                     <?php if( isset( $msg ) ) :?>
-                        <p style="color: red"><?= $msg ?></p>         
+                        <p style="color: red"><?= $msg['message'] ?></p>         
                     <?php endif; ?>
                         <form class="new-rm" action="" method="post">
                             <input class="textbox outline black rounded small block" type="number" name="nomor_rm" id="input-nomor-rm" placeholder="nomor rekam medis" value="<?= $nomor_rm ?>" maxlength="6" inputmode="numeric" pattern="[0-9]*">
@@ -176,8 +180,13 @@ if( !$auth->TrushClient() ){
     </div>
     <div class="gotop" onclick="gTop()"></div>
     <?php if( isset( $msg ) ) :?>
-        <div class="snackbar">
-            <?= $msg ?>
+        <div class="snackbar <?= $msg['type'] ?>">
+            <div class="icon">
+                <!-- css image -->
+            </div>
+            <div class="message">
+                <?= $msg['message'] ?>
+            </div>
         </div>
     <?php endif; ?>
     <footer>

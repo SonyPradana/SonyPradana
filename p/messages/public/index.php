@@ -93,11 +93,6 @@ $user = new User($auth->getUserName());
     </div>
 
     <div class="gotop" onclick="gTop()"></div>
-    <?php if( isset( $msg ) ) :?>
-        <div class="snackbar">
-            <?= $msg ?>
-        </div>
-    <?php endif; ?>
     <footer>
         <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/footer/footer.html') ?>
     </footer>
