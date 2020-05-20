@@ -161,7 +161,7 @@
         <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/header/header.html') ?>
     </header>
     <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/control/modal.html') ?>
-    <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/control/alert.html') ?>
+    
     <div class="container">
         <main>
             <div class="coit breadcrumb">
@@ -244,12 +244,9 @@
             stickyHeader('.container', '82px', '32px')
     }
     
-    // keep alive    
-    var dom_alert = document.querySelector('.modal.alert');
-    
-    keepalive(dom_alert);
-    function redirect_login(){
-        window.location.href = "/";
-    }
+    // keep alive
+    keepalive(() => {
+        window.location.href = "/p/auth/login/"
+    });
 </script>
 </html>

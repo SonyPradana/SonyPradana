@@ -1,6 +1,5 @@
 /* kerangka modal alert */
 .modal.alert{
-    display: none;
     position: fixed;
     z-index: 1;
     padding-top: 50px;
@@ -27,7 +26,7 @@
     cursor: pointer;
     color:  #aaa;
 }
-.modal.alert .modal-box .box-menu{
+.modal.alert .modal-box .box-content{
     display: flex;
     align-items: center;
     justify-items: center;
@@ -39,11 +38,11 @@
     justify-content: flex-end;
 }
 /* style */
-.modal.alert .modal-box .box-menu .title{
+.modal.alert .modal-box .box-content .title{
     font-size: 1.5rem;
     margin-bottom: 8px;
 }
-.modal.alert .modal-box .box-menu .text{
+.modal.alert .modal-box .box-content .text{
     font-size: 1rem;
     margin-bottom: 8px;
     color: #8e8e8e;

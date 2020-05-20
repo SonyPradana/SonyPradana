@@ -30,9 +30,7 @@
     <link rel="stylesheet" href="/lib/css/main.css">
     <link rel="stylesheet" href="/lib/css/ui/v1/control.css">    
     <link rel="stylesheet" href="/lib/css/ui/v1/card.css">
-    <link rel="stylesheet" href="/lib/css/ui/v1/alert.css">
     <script src="/lib/js/index.js"></script>
-    <script src="/lib/js/bundles/keepalive.js"></script>
     <style>
         .container{
             display: grid;
@@ -75,7 +73,6 @@
         <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/header/header.html') ?>
     </header>
     <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/control/modal.html') ?>
-    <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/control/alert.html') ?>
     
     <div class="container">
         <main>
