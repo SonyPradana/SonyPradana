@@ -8,6 +8,11 @@
     $auth = new Auth($token, 2);
     $user = new User($auth->getUserName());
 ?>
+<?php 
+    $db = new MyPDO();
+    $db->query('SELECT `id`, `date`, `note`, `ver` FROM `version`  ORDER BY `version`.`id` ASC');
+    $data = $db->resultset();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -77,54 +82,14 @@
                     </div>
                     <div class="boxs-timeline">
                         <ul class="time-line">
+                        <?php foreach( $data as $row ): ?>
                             <li class="story">
-                                <div class="time">21 Maret 2020</div>
+                                <div class="time"><?= $row['date'] ?></div>
                                 <div class="message">
-                                    <p>I was born, Website pertama kali di publish</p>
+                                    <p><?= $row['note'] ?></p>
                                 </div>
                             </li>
-                            <li class="story">
-                                <div class="time">28 Maret 2020</div>
-                                <div class="message">
-                                    <p>Data Rekam Medis Pertama dibuat</p>
-                                </div>
-                            </li>
-                            <li class="story">
-                                <div class="time">30 Maret 2020</div>
-                                <div class="message">
-                                    <p>Logo dan Merek dibuat</p>
-                                </div>
-                            </li>
-                            <li class="story">
-                                <div class="time">1 April 2020</div>
-                                <div class="message">
-                                    <p>Penambahan fitur filter di Lihat Data Rekam Medis</p>
-                                </div>
-                            </li>
-                            <li class="story">
-                                <div class="time">8 April 2020</div>
-                                <div class="message">
-                                    <p>Perbaikan Search Result (Hasil Pencaria) Data Rekam Medis lebih tepat / relevant</p>
-                                </div>
-                            </li>
-                            <li class="story">
-                                <div class="time">22 April 2020</div>
-                                <div class="message">
-                                    <p>Pemberithuan(Alert) bila seeson logintelah berahir</p>
-                                </div>
-                            </li>
-                            <li class="story">
-                                <div class="time">1 May 2020</div>
-                                <div class="message">
-                                    <p>Penambahan fitur Ulasan atau Review untuk pelayanan Kami, berseta laporan kritik dan saran.</p>
-                                </div>
-                            </li>
-                            <li class="story">
-                                <div class="time">7 May 2020</div>
-                                <div class="message">
-                                    <p>Peningkatan Keamanan authorization dan authentication dari injection.</p>
-                                </div>
-                            </li>
+                        <?php endforeach; ?>                            
                         </ul>
                     </div>
                 </atricle>
