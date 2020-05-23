@@ -122,14 +122,14 @@ class Login{
         $userAgent = $_SERVER['HTTP_USER_AGENT'];      
         $JWT_PayLoad = ['uId'=> $userId, 
                         'uName'=> $this->_userName,
-                        'expt'=> $expt,
+                        'exp'=> $expt,
                         'ip'=> $ip,
                         'uAgent'=> $userAgent];
         
         #buat JWT
-        $JWT = new JsonWebToken($JWT_Header, $JWT_PayLoad);
+        $JWT = new EncodeJWT($JWT_Header, $JWT_PayLoad);
         #hasil dari jwt 
-        $this->_JWTResult = $JWT->CreatJWT($secretKey);
+        $this->_JWTResult = $JWT->hashCode($secretKey);
     }
     /**
      * simpan keyJWT ke database server guna verivikasi token

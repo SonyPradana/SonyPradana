@@ -7,10 +7,10 @@
  * @author sonypradana@gmail.com
  */
 class Auth{
-    /** @var string property */
-    private $uName, $uId, $expt, $ip, $uAgent;
     /** @var boolean  */
     private $_trushClinet = false;
+    /** @var JsonWebToken this Json Web Token */
+    private $_jwt;
 
     /** @return boolean getter */
     public function TrushClient(){
@@ -19,13 +19,13 @@ class Auth{
     /** @return string getter user name */
     public function getUserName(){
         if( $this->_trushClinet){
-            return $this->uName;
+            return $this->_jwt->User_Name;
         }
     }
     /** @return int getter Id databe */
     public function getId(){
         if( $this->_trushClinet){
-            return $this->uId;
+            return $this->_jwt->User_ID;
         }
     }
 
@@ -48,35 +48,24 @@ class Auth{
      * @return boolean 
      */
     public function __construct($token, $securityLevel = 0){
-        # default token is false
-        if( substr_count($token, ".") < 2) return; #prevent not string token
         # koneksi database
         $db = new MyPDO();
-        # ambil secreatkey dr data  base dengan ifo yg tersedian di payloadnya
-        $splitToken = explode('.', $token);
-        $payLoad = $splitToken[1];
-        $payLoad = base64_decode($payLoad);
-        $payLoad = json_decode($payLoad);
-        # muat ulang payloadnya
-        if( !isset($payLoad) ) return; # prevent non json in token
-        $this->uName = $payLoad->uName;
-        $this->uId = $payLoad->uId;
-        $this->expt = $payLoad->expt;
-        $this->ip = $payLoad->ip;
-        $this->uAgent = $payLoad->uAgent;
+        $new_jwt = new DecodeJWT($token);
+        $JWT = $new_jwt->JWT();
+        $this->_jwt = $JWT;
         # cek database
         $db->query('SELECT * FROM auths WHERE id=:id');
-        $db->bind(':id', $this->uId);
+        $db->bind(':id', $JWT->User_ID);
         if( $db->single() )  {            
             # jika id terdafatar 
             $row = $db->single();  
             
             # Cek jika secretKey benar 
             # CeK Token aktif enggak
-            # Cek masa expt udah lewat blm
-            if( self::compireToken($token, $row['secret_key'])
-             AND $row['stat'] == 1
-             AND $this->expt > time()){
+            # Cek masa expired udah lewat blm
+            if( $new_jwt->validate( $row['secret_key'] )
+             && $row['stat'] == 1
+             && $JWT->expired > time()){
                  
                 # cek ip dan user agent
                 $ip = $_SERVER['REMOTE_ADDR'];             
@@ -86,54 +75,31 @@ class Auth{
                 switch ($securityLevel) {
                     case 1:
                         # salah satu user agent dan ip sama
-                        if( $this->ip == $ip OR $this->uAgent == $userAgent ){
+                        if( $JWT->IP == $ip OR $JWT->User_Agent == $userAgent ){
                             $this->_trushClinet = true;
                         }
                         break;
                     case 2:
                         # user agent dan ip sama
-                        if( $this->ip == $ip AND $this->uAgent == $userAgent ){
+                        if( $JWT->IP == $ip AND $JWT->User_Agent == $userAgent ){
                             $this->_trushClinet = true;
                         }
                         break;
                     case 3:
                         # user name hrs ada dan ip/user-agnet hrs sama
-                        if( $this->uName == $row['user'] AND ($this->ip == $ip OR $this->uAgent == $userAgent) ){
+                        if( $JWT->User_Agent == $row['user'] AND ($JWT->IP == $ip OR $JWT->User_Agent == $userAgent) ){
                             $this->_trushClinet = true;
                         }
                         break;
                     default:
                         # ip sama
-                        if( $this->ip == $ip ) {
+                        if( $JWT->IP == $ip ) {
                             $this->_trushClinet = true;
                         }
                         
                 }
             } 
         }            
-    }
-
-    /**
-     * membandingkan signauture denagan header dan payloadnya,
-     * denagn mencocokna dengan secreat key nya
-     * 
-     * @param string $token JWT token yg duji
-     * @param string $secretKey kunci utama untuk mengetes
-     * @return boolean hasil dari kombinasi headaer payload dan signature
-     */
-    public static function compireToken($token, $secretKey){
-        $spitToken = explode('.', $token);
- 
-         // Buat Signature dengan metode HMAC256
-         $signature = hash_hmac('sha256', $spitToken[0] . "." . $spitToken[1], $secretKey, true);
-         // Encode Signature menjadi Base64Url String
-         $base64UrlSignature = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($signature));
-         $newJWT = $spitToken[0] . "." . $spitToken[1] . "." . $base64UrlSignature;
-
-        if( $newJWT == $token) {
-            return true;
-        }
-        return false;
     }
 
     /**

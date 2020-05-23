@@ -41,8 +41,8 @@ class ForgotPassword{
         $decodeKey = base64_decode($key);
         $decodeKey = json_decode($decodeKey, true);
         # cek expt terdaftar atau tidak dan expt timenya (kurang dari 30 menit)
-        if( isset( $decodeKey['expt']) ){
-            if( $decodeKey['expt'] > time()){
+        if( isset( $decodeKey['exp']) ){
+            if( $decodeKey['exp'] > time()){
                 # key tidak boleh kadaluarsa
 
                 # koneksi data base

@@ -56,7 +56,7 @@ class EmailAuth{
         $expt = time() + 1800; #30 menit
         # menyusun key        
         $key = ['user'=>$user,
-                'expt'=>$expt];
+                'exp'=>$expt];
         $key = json_encode($key);
         $key = base64_encode($key);
         # random int bwettwen 10.00.00 - 99.99.99.99
