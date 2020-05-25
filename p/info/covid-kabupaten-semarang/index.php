@@ -20,6 +20,7 @@
     <link rel="stylesheet" href="/lib/css/ui/v1/control.css">
     <link rel="stylesheet" href="/lib/css/ui/v1/table.css">
     <link rel="stylesheet" href="/lib/css/ui/v1/card.css">
+    <link rel="stylesheet" href="/lib/css/ui/v1/alert.css">
     <script src="/lib/js/index.js"></script>
     <script src="/lib/js/bundles/keepalive.js"></script>
     <style>
@@ -159,7 +160,12 @@
     window.onscroll = function(){
             stickyHeader('.container', '82px', '32px')
     }
-
+    
+    // keep alive
+    keepalive(() => {
+        location.reload()
+    })
+    
     // menagbil data
     async function getData(url){
         const response = await fetch(url);

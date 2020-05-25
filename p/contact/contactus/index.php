@@ -155,11 +155,10 @@
             stickyHeader('.container', '82px', '32px')
     }
 
-     // keep alive    
-    //  var dom_alert = document.querySelector('.modal.alert');
-    // keepalive(dom_alert);
-    // function redirect_login(){
-    //     window.location.href = "/";
-    // }
+    // keep alive
+    keepalive(() => {
+        location.reload()
+    })
+
 </script>
 </html>

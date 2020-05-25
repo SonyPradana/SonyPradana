@@ -30,7 +30,9 @@
     <link rel="stylesheet" href="/lib/css/main.css">
     <link rel="stylesheet" href="/lib/css/ui/v1/control.css">    
     <link rel="stylesheet" href="/lib/css/ui/v1/card.css">
+    <link rel="stylesheet" href="/lib/css/ui/v1/alert.css">
     <script src="/lib/js/index.js"></script>
+    <script src="/lib/js/bundles/keepalive.js"></script>
     <style>
         .container{
             display: grid;
@@ -116,5 +118,10 @@
     window.onscroll = function(){
             stickyHeader('.container', '82px', '32px')
     }
+        
+    // keep alive
+    keepalive(() => {
+        location.reload()
+    })
 </script>
 </html>

@@ -54,8 +54,10 @@
     <link rel="stylesheet" href="lib/css/ui/v1/widget.css">
     <link rel="stylesheet" href="lib/css/ui/v1/control.css">
     <link rel="stylesheet" href="lib/css/ui/v1/card.css">
+    <link rel="stylesheet" href="lib/css/ui/v1/alert.css">
     <script src="lib/js/index.js"></script>
     <script src="lib/js/bundles/message.js"></script>
+    <script src="lib/js/bundles/keepalive.js"></script>
     <script src="lib/js/vendor/vue/vue.min.js"></script>
     <style>
         /* costume main container */
@@ -280,6 +282,11 @@
         // sticky header
         window.addEventListener('scroll', () => {
             stickyHeader('aside')
+        })
+
+        // keep alive
+        keepalive(() => {
+            location.reload()
         })
 
         function togle( show ){
