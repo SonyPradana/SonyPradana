@@ -79,6 +79,11 @@
             display: flex;
             min-height: 115px;
         }
+
+        .covid-card .card.action .btn{            
+            width: 64px;
+            text-align: center;    
+        }
         /* tablet vie view */
         @media screen  and (max-width: 767px) {
             /* costume main container */
@@ -165,11 +170,12 @@
                         <p>Data RM Terdata</p>
                     </div>
                 </div>
-                <div class="covid-card gradient-two medium shadow">
-                    <div class="card link">
-                        <a href="/p/info/covid-kabupaten-semarang/">
+                <div class="covid-card gradient-one medium shadow">
+                    <div class="card title">
                         Info Covid Ungaran
-                        </a>
+                    </div>
+                    <div class="card action">
+                        <a href="/p/info/covid-kabupaten-semarang/" class="btn fill blue small rounded">Lihat</a>
                     </div>
                 </div>
             </div>

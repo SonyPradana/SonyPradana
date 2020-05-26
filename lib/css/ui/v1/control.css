@@ -28,8 +28,7 @@
 /* blue color */
 .textbox.blue{ border-color: #2196F3; }
 .textbox.black{ border-color: #333; }
-/* menyembukan upp-down button */
-/* Chrome, Safari, Edge, Opera */
+/* menyembunyikan up-down button Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
@@ -47,32 +46,55 @@ input[type=number] { -moz-appearance: textfield; }
     font-size: 1.063rem;
     text-decoration: none;
 }
-/* blue color */
-.btn.blue{
+.btn.fill{
+    border: unset;
+    font-size: 1.063rem;
+    text-decoration: none;
+}
+/* blue color - outline */
+.btn.outline.blue{
     border-color: #2196F3;
     color: dodgerblue
 }
-.btn.blue:hover{
+.btn.outline.blue:hover{
     background: #2196F3;
     color: white;
 }
-/* green color */
-.btn.green{
+/* green color - outline */
+.btn.outline.green{
     border-color: #4CAF50;
     color: green
 }
-.btn.green:hover{    
+.btn.outline.green:hover{    
     background-color: #4CAF50;
     color: white;
 }
-/* red ccolor */
-.btn.red{
+/* red ccolor - outline */
+.btn.outline.red{
     border-color: #f44336;
     color: red
 }
-.btn.red:hover{    
+.btn.outline.red:hover{    
     background: #f44336;
     color: white;
+}
+/* blue color - fill*/
+.btn.fill.blue{
+    background-color: #2196F3;
+    color: #fff;
+}
+.btn.fill.blue:hover{
+    background-color: #469de3;
+}
+/* green color - fill*/
+.btn.fill.green{
+    background-color: #4CAF50;
+    color: #fff;
+}
+/* red color - fill*/
+.btn.fill.red{
+    background-color: #f44336;
+    color: #fff;
 }
 
 /* grub control */

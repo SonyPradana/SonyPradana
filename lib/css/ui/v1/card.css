@@ -35,15 +35,15 @@
 
 /* covid medium card */
 .covid-card{
-    cursor: pointer;
+    cursor: default;
     padding: 16px;
     border-radius: 12px;
     min-width: 150px;
-    color: #fff;            
+    color: #fff;
 }
 .covid-card.gradient-one{
     background-color: #08AEEA;
-    background-image: linear-gradient(0deg, #08AEEA 0%, #2AF598 100%);
+    background-image: linear-gradient(340deg, #08AEEA 0%, #2AF598 100%);
 }
 .covid-card.gradient-two{
     background-color: #FEE140;
@@ -51,13 +51,16 @@
 }
 .covid-card.gradient-three{
     background-color: #FFE53B;
-    background-image: linear-gradient(147deg, #FFE53B 0%, #FF2525 74%);
+    background-image: linear-gradient(147deg, #FFE53B 0%, #FF2525 94%);
 }
 .covid-card.shadow{
     box-shadow: 5px 8px 14px -8px #000000bf;
 }
+.covid-card .card.title{
+    font-size: 1.4rem;
+}
 .covid-card .card.content{
-    font-size: 1.8rem;
+    font-size: 2.4rem;
     font-weight: 700;
 }
 .covid-card .card.link a{
@@ -66,6 +69,12 @@
     font-size: 1.3rem;
     font-weight: 400;
     text-align: center;
+}
+.covid-card .card.action{
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: start;
 }
 .covid-card.medium{ height: 72px;}
 
