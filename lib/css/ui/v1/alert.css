@@ -6,8 +6,7 @@
     left: 0; top: 0;
     width: 100%; height: 100%;
     overflow: auto;
-    background-color: #000000;
-    background-color: #0000004d;
+    background-color: #00000073;
 }
 .modal.alert .modal-box{      
     margin: auto;
@@ -15,6 +14,9 @@
     width: 300px;
     /* style */
     background-color: #fff;
+    position: relative;
+    animation-name: animatetop;
+    animation-duration: .35s
 }
 .modal.alert .modal-box .close{
     display: flex;
@@ -46,4 +48,10 @@
     font-size: 1rem;
     margin-bottom: 8px;
     color: #8e8e8e;
+}
+/* animation */
+@keyframes animatetop {
+    0% {top: -300px; transform: scale(0, .3)}
+    95% {transform: scale(1.05, 1.05)}
+    100% {top: 0px; transform: scale(1, 1)}
 }

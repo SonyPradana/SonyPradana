@@ -175,7 +175,7 @@
                         Info Covid Ungaran
                     </div>
                     <div class="card action">
-                        <a href="/p/info/covid-kabupaten-semarang/" class="btn fill blue small rounded">Lihat</a>
+                        <a href="/p/info/covid-kabupaten-semarang/" class="btn fill blue small rounded">Lihat &raquo</a>
                     </div>
                 </div>
             </div>
