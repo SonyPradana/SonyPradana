@@ -48,7 +48,7 @@
         }
         .header-article .article.breadcrumb > div{ font-size: 1rem; color: #9aa6ad}
         .box.cards{
-            overflow-x: auto;
+            overflow-x: visible;
             display: flex;
             flex-direction: row;
             padding: 16px 0;
@@ -71,6 +71,12 @@
             .box.cards{justify-content: unset}
             .table-boxs{justify-content: unset}
         }
+        @media screen and (max-width: 1000px) {
+            .box.cards{
+                overflow: auto;
+            }
+        }
+        
         /* hai youtube */
     </style>
 </head>
@@ -99,17 +105,17 @@
                 </div>
                 <div class="media-article">
                     <div class="box cards">
-                        <div class="covid-card gradient-one">
+                        <div class="covid-card gradient-one" data-tooltips="Pasien Positif">
                             <div class="card title">Pasien Positif</div>
                             <div class="card content">XXX</div>
                             <div class="card note">Orang</div>
                         </div>
-                        <div class="covid-card gradient-two">
+                        <div class="covid-card gradient-two" data-tooltips="Pasien Sembuh">
                             <div class="card title">Pasien Sembuh</div>
                             <div class="card content">XXX</div>
                             <div class="card note">Orang</div>
                         </div>
-                        <div class="covid-card gradient-three">
+                        <div class="covid-card gradient-three" data-tooltips="Pasien Meninggal">
                             <div class="card title">Pasien Meninggal</div>
                             <div class="card content">XXX</div>
                             <div class="card note">Orang</div>
@@ -225,7 +231,29 @@
         getData('/lib/ajax/json/public/covid-kab-semarang/info/')
             .then( data => {
                 renderCard(data['kasus_posi'], data['kasus_semb'], data['kasus_meni']);
+                grapInfo(data);
             })
+
+    }
+
+    async function grapInfo(data){
+        await data['data'].forEach(event => {
+            let dom_posi = document.querySelector('.covid-card.gradient-one')
+            let posi = dom_posi.getAttribute('data-tooltips')
+            if( event['kasus_posi'] != 0){
+                dom_posi.setAttribute('data-tooltips', posi + ', ' + event['kecamatan'] + `(${event['kasus_posi']})`)
+            }
+            let dom_semb = document.querySelector('.covid-card.gradient-two')
+            let semb = dom_semb.getAttribute('data-tooltips')
+            if( event['kasus_semb'] != 0){
+                dom_semb.setAttribute('data-tooltips', semb + ', ' + event['kecamatan'] + `(${event['kasus_semb']})`)
+            }
+            let dom_meni = document.querySelector('.covid-card.gradient-three')
+            let meni = dom_meni.getAttribute('data-tooltips')
+            if( event['kasus_meni'] != 0){
+                dom_meni.setAttribute('data-tooltips', meni + ', ' + event['kecamatan'] + `(${event['kasus_meni']})`)
+            }
+        })
     }
 </script>
 </html>

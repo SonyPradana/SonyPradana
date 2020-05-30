@@ -38,8 +38,9 @@
     cursor: default;
     padding: 16px;
     border-radius: 12px;
-    min-width: 150px;
-    color: #fff;
+    min-width: 180px;
+    color: #fff;    
+    position: relative;
 }
 .covid-card.gradient-one{
     background-color: #08AEEA;
@@ -57,7 +58,7 @@
     box-shadow: 5px 8px 14px -8px #000000bf;
 }
 .covid-card .card.title{
-    font-size: 1.4rem;
+    font-size: 1.3rem;
 }
 .covid-card .card.content{
     font-size: 2.4rem;
@@ -120,6 +121,9 @@
         display: flex;
         align-items: center;
     }
+    .covid-card .card.title{
+        font-size: 1rem;
+    }
 
     /* info-rm card */
     .rm-card{
@@ -131,4 +135,46 @@
     .rm-card .card.title p,
     .rm-card .card.title .detail{font-size: 1.3rem;}
     .rm-card .card.content p{text-align: center; font-size: .8rem;}
+}
+/* laptop/pc view */
+@media screen and (min-width: 1000px){
+    /* covid-card tooltips */
+    .covid-card::before,
+    .covid-card::after{
+        --scale: 0;
+        --arrow-size: 5px;
+        --tooltips-color: #333333e3; 
+
+        position: absolute;
+        bottom: -.25rem;
+        left: 50%;
+        transform: translateX(-50%) translateY(var(--translate-y, 0)) scale(var(--scale));
+        transition: 100ms transform;
+        transform-origin: top center;
+    }
+    .covid-card::before{
+        --translate-y: calc(100% + var(--arrow-size));
+
+        content: attr(data-tooltips);
+        font-size: .8rem;
+        padding: .5rem;
+        width: max-content;
+        max-width: 100%;
+        border-radius: .3rem;
+        background: var(--tooltips-color);
+        color: #fff;
+        text-align: center;
+    }
+    .covid-card:hover::before,
+    .covid-card:hover::after{
+        --scale: 1;
+    }
+    .covid-card::after{
+        --translate-y: var(--arrow-size);
+
+        content: '';
+        border: var(--arrow-size) solid transparent;
+        border-bottom-color: var(--tooltips-color);;
+        transform-origin: bottom center;
+    }
 }

@@ -75,7 +75,7 @@
         }
         
         .boxs-card{
-            overflow-x: auto;
+            overflow-x: visible;
             display: flex;
             min-height: 115px;
         }
@@ -92,6 +92,11 @@
                 grid-template-columns: 1fr;
             }
             .boxs-card{min-height: 80px}
+        }
+        @media screen and (max-width: 1000px) {
+            .boxs-card{
+                overflow: auto;
+            }
         }
     </style>
 </head>
@@ -170,7 +175,7 @@
                         <p>Data RM Terdata</p>
                     </div>
                 </div>
-                <div class="covid-card gradient-one medium shadow">
+                <div class="covid-card gradient-one medium shadow" data-tooltips="click untuk melihat">
                     <div class="card title">
                         Info Covid Ungaran
                     </div>
