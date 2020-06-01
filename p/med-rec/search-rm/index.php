@@ -91,7 +91,6 @@
     <link rel="stylesheet" href="/lib/css/ui/v1/control.css">
 
     <script src="/lib/js/index.js"></script>         
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="/lib/js/ajax/html/GetData.js"></script>
     <script src="/lib/js/bundles/keepalive.js"></script>
     <style>
@@ -113,32 +112,6 @@
         .box.left form > .grub-control.horizontal{
             margin-top: 10px
         }
-        /* .boxs .box.left .box-input.button-grub{
-            margin-top: 10px;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-        }
-        .boxs .box.left .box-input.button-grub .box-input-right{
-            display: flex;
-            justify-content: flex-end;
-        }
-        .boxs .box.left button{
-            height: 32px;
-            width: 56px;
-        }
-        .boxs .box.left button#submit{
-            margin-right: 4px
-        }
-        .boxs .box.left .box-input.checkbox-grub{
-            display: flex;
-            justify-content: baseline;
-            margin-top: 10px;
-        }
-        .boxs .box.left .box-input.text-grub{
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            grid-column-gap: 16px;
-        } */
         .boxs .box.right .box-right {
             width: 100%;
             overflow-x: auto;
@@ -214,15 +187,14 @@
 </body>
 <script src="/lib/js/index.end.js"></script>
 <script type="text/javascript">
-    (function($) {
-        $('form').submit(function() {
-            $('form input').each(function() { 
-                if ($(this).val().length == 0) { 
-                    $(this).attr('disabled', true); 
-                }
-            });
-        });
-    })(jQuery);
+    let myform = document.querySelector('form.search-box');
+    myform.addEventListener('submit', () => {
+        elements = myform.elements
+        for (let i = 0, element; element = elements[i++];) {
+            if ((element.type === "text" || element.type === "date") && element.value === "")
+                element.disabled = true
+        }
+    })
 
     //claer button    
     var btnBack = document.querySelector('#reset-btn');
