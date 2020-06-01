@@ -93,6 +93,7 @@
     <script src="/lib/js/index.js"></script>         
     <script src="/lib/js/ajax/html/GetData.js"></script>
     <script src="/lib/js/bundles/keepalive.js"></script>
+    <script src="/lib/js/controller/table-rm/index.js"></script>
     <style>
         .boxs{
             display: grid;
@@ -172,9 +173,28 @@
                 </div>
                 <div class="box right">                        
                     <div class="box-right">   
-                        <script>
-                            getTableSearch( '<?= $sort ?>', '<?= $order ?>', '<?= $page ?>' , <?= $parram ?>)
-                        </script>
+                        <table class="data-rm">
+                            <thead>
+                                <tr>
+                                    <th>No.</th>
+                                    <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="sort_table('nomor_rm')">No RM</a></th>
+                                    <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="sort_table('nama')">Nama</a></th>
+                                    <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="sort_table('tanggal_lahir')">Tanggal Lahir</a></th>
+                                    <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="sort_table('alamat')">Alamat</a></th>
+                                    <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="sort_table('nomor_rw')">RT / RW</a></th>
+                                    <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="sort_table('nama_kk')">Nama KK</a></th>
+                                    <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="sort_table('nomor_rm_kk')">No. Rm KK</a></th>
+                                    <th>Action</th>                                                     
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                        <div class="box-pagination">
+                            <div class="pagination">
+                                <!-- pagination -->
+                            </div>
+                        </div>
                     </div> 
                 </div>
             </div>
@@ -187,6 +207,7 @@
 </body>
 <script src="/lib/js/index.end.js"></script>
 <script type="text/javascript">
+    // clear url
     let myform = document.querySelector('form.search-box');
     myform.addEventListener('submit', () => {
         elements = myform.elements
@@ -206,11 +227,23 @@
             document.querySelector('#input-no-rw-search').setAttribute('value', '');
             document.querySelector('#input-nama-kk-search').setAttribute('value', '');
             document.querySelector('#input-no-rm-kk').setAttribute('value', '');
-    };
-    // var href = new URL('http://localhost/p/med-rec/search-rm/?main-search=agus');
-    // href.searchParams.set('page', 1);
-    // console.log(href.toString());
+    };    
     
+    window.addEventListener('load', () => {
+        // get data from DOM or URL
+        const queryString = window.location.search
+        let searchParams = new URLSearchParams(queryString)
+
+        _search_name = searchParams.get('main-search')
+        _search_name_kk = searchParams.get('nama-kk-search')
+
+        let query = '&' + searchParams.toString()
+        if( query != '&'){
+            getData(_sort, _order, _cure_page, query)
+            _search_query = query
+        }
+    })
+
     // sticky header
     window.onscroll = function(){
             stickyHeader('.container', '82px', '32px')
