@@ -199,7 +199,7 @@ ul.crumb li a:hover {
 /* go top button */
 .gotop{
     display: none;  position: fixed;
-    bottom: 20px; right: 10px;
+    bottom: 24px; right: 24px;
     z-index: 20;
 
     width: 50px; height: 50px;
@@ -276,16 +276,40 @@ footer .footnote{
     width: 100%;
     background-color: #092037;
     margin-top: 18px;
+    padding: 4px;
+    box-sizing: border-box;
 }
 footer .footnote p{
     color: #fff;
     margin: 0;
     text-align: right;
+    cursor: ;
 }
 footer .footnote p a{
     text-decoration: none;
     color: #fff;
     margin-right: 12px;
+}
+footer .footnote p .love{
+    color: red;
+}
+footer .footnote p:hover .love{    
+    display: inline-block;
+    transform: scale(1);
+    animation: heart;
+    animation-duration: 1.5s;
+    animation-iteration-count: infinite;
+}
+@keyframes heart{
+    0%{
+        transform: scale(1);
+    }
+    50%{
+        transform: scale(1.25);
+    }
+    100%{
+        transform: scale(1.5);
+    }
 }
 
 /* interface dan lain-lain */

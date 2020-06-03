@@ -250,7 +250,7 @@
             </div>
         </div>
         <div class="footnote">
-            <p class="note-footer">creat by <a href="https://twitter.com/AnggerMPd">amp</a></p>
+            <p class="note-footer"><a href="https://twitter.com/AnggerMPd">Made with <span class="love">&#9829;</span> by amp</a></p>
         </div>
     </footer>
     <script src="lib/js/index.end.js"></script>
