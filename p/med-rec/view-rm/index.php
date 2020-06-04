@@ -52,6 +52,7 @@
     <link rel="stylesheet" href="/lib/css/ui/v1/control.css">
     <script src="/lib/js/index.js"></script>
     <script src="/lib/js/bundles/keepalive.js"></script>
+    <script src="/lib/js/controller/table-rm/view/index.js"></script>
     <style>
         button{
             margin: 7px 0;
@@ -97,7 +98,6 @@
 
         table { width: 100% }
     </style>
-    <script src="/lib/js/ajax/html/GetData.js"></script>
 </head>
 <body>
     <header>
@@ -173,26 +173,26 @@
                         </form>
                             <div class="input-groub">
                                 <button class="btn outline blue rounded small" name="submit" id="submit">Terapkan</button>
-                                <button class="btn outline blue rounded small" name="reset">Reset</button>
+                                <button class="btn outline blue rounded small" name="reset" id="reset">Reset</button>
                             </div>
                     </div>
 
                 </div>
                 <div class="box-right">
                     <!-- table -->
-                    <table>       
+                    <table class="data-rm">       
                         <thead>
                             <tr>
                                 <th>No.</th>
-                                <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="GDcostumeFilter('nomor_rm', <?= $order == 'ASC' && $sort == 'nomor_rm' ? "'DESC'" : "'ASC'" ?>, <?= $page ?>, [])">No RM</a></th>
-                                <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="GDcostumeFilter('nama', <?= $order == 'ASC' && $sort == 'nama' ? "'DESC'" : "'ASC'" ?>, <?= $page ?>, [])">Nama</a></th>
-                                <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="GDcostumeFilter('tanggal_lahir', <?= $order == 'ASC' && $sort == 'tanggal_lahir' ? "'DESC'" : "'ASC'"?>, <?= $page ?>, [])">Tanggal Lahir</a></th>
-                                <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="GDcostumeFilter('alamat', <?= $order == 'ASC' && $sort == 'alamat' ? "'DESC'" : "'ASC'"?>, <?= $page ?>, [])">Alamat</a></th>
-                                <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="GDcostumeFilter('nomor_rw',<?= $order == 'ASC' && $sort == 'nomor_rt' ? "'DESC'" : "'ASC'"?>, <?= $page ?>, [])">RT / RW</a></th>
-                                <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="GDcostumeFilter('nama_kk',<?= $order == 'ASC' && $sort == 'nama_kk' ? "'DESC'" : "'ASC'"?>, <?= $page ?>, [])">Nama KK</a></th>
-                                <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="GDcostumeFilter('nomor_rm_kk', <?= $order == 'ASC' && $sort == 'nomor_rm_kk' ? "'DESC'" : "'ASC'"?>, <?= $page ?>, [])">No. Rm KK</a></th>
-                                <th><a href="javascript:void(0)">Action</a></th>
-                            </tr>                         
+                                <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="sort_table('nomor_rm')">No RM</a></th>
+                                <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="sort_table('nama')">Nama</a></th>
+                                <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="sort_table('tanggal_lahir')">Tanggal Lahir</a></th>
+                                <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="sort_table('alamat')">Alamat</a></th>
+                                <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="sort_table('nomor_rw')">RT / RW</a></th>
+                                <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="sort_table('nama_kk')">Nama KK</a></th>
+                                <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="sort_table('nomor_rm_kk')">No. Rm KK</a></th>
+                                <th>Action</th>                                                     
+                            </tr>                       
                         </thead>
                         <tbody>
                         <?php $idnum = (int) ($page * 25) - 24; ?>
@@ -214,38 +214,6 @@
                     </table>
                     <div class="box-pagination">
                         <div class="pagination">
-                            <?php if( $page > 1  ):?>
-                                <a href="javascript:void(0)" onclick="GDcostumeFilter('<?= $sort ?>', '<?= $order ?>', <?= $page -1 ?>, [])">&laquo;</a>
-                            <?php endif;?>                            
-                            <?php if( $max_page > 5 ):?>
-                                <!-- satu depan -->
-                                <a <?= 1 == $page ? 'class="active"' : '' ?> href="javascript:void(0)" onclick="GDcostumeFilter('<?= $sort ?>', '<?= $order ?>', 1, [])">1</a>
-                                <!-- tiga tengah -->                                
-                                <?php if( $page  > 2 && $page < ($max_page - 1) ):?>
-                                    <a href="javascript:void(0)" class="sperator">...</a>
-                                    <a href="javascript:void(0)" onclick="GDcostumeFilter('<?= $sort ?>', '<?= $order ?>', <?= $page - 1 ?>, [])"><?= $page - 1 ?></a>
-                                    <a class="active" href="javascript:void(0)" onclick="GDcostumeFilter('<?= $sort ?>', '<?= $order ?>', <?= $page ?>, [])"><?= $page ?></a>
-                                    <a href="javascript:void(0)" onclick="GDcostumeFilter('<?= $sort ?>', '<?= $order ?>', <?= $page + 1 ?>, [])"><?= $page + 1 ?></a>
-                                    <a href="javascript:void(0)" class="sperator">...</a>
-                                <?php elseif( $page < 4 ):?> 
-                                    <a <?= 2 == $page ? 'class="active"' : '' ?> href="javascript:void(0)" onclick="GDcostumeFilter('<?= $sort ?>', '<?= $order ?>', 2, [])">2</a>
-                                    <a <?= 3 == $page ? 'class="active"' : '' ?> href="javascript:void(0)" onclick="GDcostumeFilter('<?= $sort ?>', '<?= $order ?>', 3, [])">3</a>
-                                    <a href="javascript:void(0)" class="sperator">...</a>
-                                <?php elseif( $page > ($max_page - 2) ):?>  
-                                    <a href="javascript:void(0)" class="sperator">...</a>
-                                    <a <?= $max_page - 2 == $page ? 'class="active"' : '' ?> href="javascript:void(0)" onclick="GDcostumeFilter('<?= $sort ?>', '<?= $order ?>', <?= $max_page - 2 ?>, [])"><?= $max_page - 2 ?></a>
-                                    <a <?= $max_page - 1 == $page ? 'class="active"' : '' ?> href="javascript:void(0)" onclick="GDcostumeFilter('<?= $sort ?>', '<?= $order ?>', <?= $max_page - 1 ?>, [])"><?= $max_page -1 ?></a>
-                                <?php endif;?>  
-                                <!-- satu belakang -->
-                                <a href="javascript:void(0)" onclick="GDcostumeFilter('<?= $sort ?>', '<?= $order ?>', <?= $max_page ?>, [])"><?= $max_page ?></a>
-                            <?php elseif( $max_page < 6 ):?>
-                                <?php for ($i=1; $i <= $max_page; $i++) :?>
-                                    <a <?= $i == $page ? 'class="active"' : '' ?> href="javascript:void(0)" onclick="GDcostumeFilter('<?= $sort ?>', '<?= $order ?>', <?= $i ?>, [])"><?= $i ?></a>
-                                <?php endfor;?>
-                            <?php endif;?>  
-                            <?php if( $page < $max_page ):?>  
-                                <a href="javascript:void(0)" onclick="GDcostumeFilter('<?= $sort ?>', '<?= $order ?>', <?= $page +1 ?>, [])">&raquo;</a>
-                            <?php endif;?>
                         </div>
                     </div>
                 </div>
@@ -275,7 +243,6 @@
 
     //filter data menggunakan xhr
     let btnTerapkan  = document.querySelector('#submit');
-    //event handler
     btnTerapkan.addEventListener("click", event=> {
         //get data
         let formGET = document.querySelector('.form-filter');
@@ -289,10 +256,30 @@
         let cNyatnyono = formData.get('filter-alamat-nyatnyono');
         let cStatusKK = formData.get('filter-kk');
 
-        let filters = [rangeUmur, cbandarjo, cbranjang, cKalisidi, cKeji, cLerep, cNyatnyono, cStatusKK];
-        GDcostumeFilter('alamat', 'asc', <?= $page ?>, filters);
+        let q = ''
+        if( cbandarjo == 'on'){ q += 'bandarjo-' }
+        if( cbranjang == 'on'){ q += 'branjang-' }
+        if( cKalisidi == 'on'){ q += 'kalisidi-' }
+        if( cKeji == 'on'){ q += 'keji-' }
+        if( cLerep == 'on'){ q += 'lerep-' }
+        if( cNyatnyono == 'on'){ q += 'nyatnyono' }
+
+        let query_desa = q == '' ? '' : `&desa=${q}`
+        let query = `&umur=${rangeUmur}${query_desa}&status_kk=${cStatusKK}`
+        getData(_sort, _order, _cure_page, query);
     });
-    
+
+    let btnReset = document.querySelector('#reset');
+    btnReset.addEventListener("click", event=> {
+        document.querySelector(".form-filter").reset(); 
+    })
+
+    // onload
+    window.addEventListener('load', () => {
+        set_maks_page(<?= $max_page ?>)
+        render_pagination()
+    })
+
     // sticky header
     window.onscroll = function(){
             stickyHeader('.container', '82px', '32px')

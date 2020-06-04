@@ -352,6 +352,8 @@ class View_RM{
             $strLen = strlen ($query) ;
             $query = substr_replace($query, '', $strLen - 4, -1);
         }
+        // enkapsulasi query
+        $query = $query == '' ? $query : '( ' . $query . ') ';
         # menambah query lain
         # query range
         $min = $this->_filter_range_min_tgl;
