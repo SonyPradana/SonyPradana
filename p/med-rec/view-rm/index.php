@@ -52,7 +52,7 @@
     <link rel="stylesheet" href="/lib/css/ui/v1/control.css">
     <script src="/lib/js/index.js"></script>
     <script src="/lib/js/bundles/keepalive.js"></script>
-    <script src="/lib/js/controller/table-rm/view/index.js"></script>
+    <script src="/lib/js/controller/table-rm/index.js"></script>
     <style>
         button{
             margin: 7px 0;
@@ -201,7 +201,8 @@
                                 <th><?= $idnum ?></th>
                                 <th><?= $data['nomor_rm']?></th>
                                 <th><?= ucwords( $data['nama'] )?></th>
-                                <th><?= date("d-m-Y", strtotime( $data['tanggal_lahir']))  ?></th>
+                                <?php $new_date = date("d-m-Y", strtotime( $data['tanggal_lahir'])) ?>
+                                <th><?= $new_date == '01-01-1970' ? '00-00-0000' : $new_date ?></th>
                                 <th><?= ucwords( $data['alamat'] )?></th>
                                 <th><?= $data['nomor_rt'] . ' / ' . $data['nomor_rw']?></th>
                                 <th <?= $data['nama_kk'] == $data['nama'] ? 'class="mark"' : ""?>><?= ucwords( $data['nama_kk'] )?></th>
@@ -264,9 +265,18 @@
         if( cLerep == 'on'){ q += 'lerep-' }
         if( cNyatnyono == 'on'){ q += 'nyatnyono' }
 
-        let query_desa = q == '' ? '' : `&desa=${q}`
-        let query = `&umur=${rangeUmur}${query_desa}&status_kk=${cStatusKK}`
-        getData(_sort, _order, _cure_page, query);
+        if( rangeUmur == '0-100' && 
+        cbandarjo == null && cbranjang == null && cKalisidi == null &&
+        cKeji == null && cLerep == null && cNyatnyono == null &&
+        cStatusKK == null){
+            _search_query = '&all'
+        }else{            
+            let query_desa = q == '' ? '' : `&desa=${q}`
+            let query = `&umur=${rangeUmur}${query_desa}&status_kk=${cStatusKK}`
+            _search_query = query
+        }
+
+        getData(_sort, _order, _cure_page, _search_query)
     });
 
     let btnReset = document.querySelector('#reset');
@@ -276,7 +286,9 @@
 
     // onload
     window.addEventListener('load', () => {
-        set_maks_page(<?= $max_page ?>)
+        table_type = "view"
+        _maks_page = <?= $max_page ?>;
+        _search_query = '&all'
         render_pagination()
     })
 

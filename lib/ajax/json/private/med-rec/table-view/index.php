@@ -37,7 +37,7 @@
     // ambil prameter dari url
     $umur = isset( $_GET['umur'] ) ? $_GET['umur'] : '0-100';
     $desa = isset( $_GET['desa'] ) ? $_GET['desa'] : "bandarjo-branjang-kalisidi-keji-lerep-nyatnyono";
-    $status_kk = isset( $_GET['status_kk'] ) ? $_GET['status_kk'] : 'off';
+    $status_kk = isset( $_GET['status_kk'] ) ? $_GET['status_kk'] : 'null';
 
     // ambil semua data bila diminta
     if( isset( $_GET['all'] ) ){
@@ -65,24 +65,25 @@
     }
 
     // parse range umur
-    $min_max = explode("-", $umur);
-    if( count( $min_max) < 2){
-        // reject sintaks yang tidak valid
-        header("HTTP/1.1 400 Bad Request");
-        echo '{"status":"bad request"}';
-        exit();
+    if( $umur != '0-100' ){
+        $min_max = explode("-", $umur);
+        if( count( $min_max) < 2){
+            // reject sintaks yang tidak valid
+            header("HTTP/1.1 400 Bad Request");
+            echo '{"status":"bad request"}';
+            exit();
+        }
+        $min =  $min_max[0];
+        $max =  $min_max[1];
+        if(is_numeric($min) == false || is_numeric($max) == false){
+            // reject sintaks yang tidak valid
+            header("HTTP/1.1 400 Bad Request");
+            echo '{"status":"bad request"}';
+            exit();
+        }
+        $min  = date("Y-m-d", time() - ($min * 31536000) );
+        $max  = date("Y-m-d", time() - ($max * 31536000) ); 
     }
-    $min =  $min_max[0];
-    $max =  $min_max[1];
-    if(is_numeric($min) == false || is_numeric($max) == false){
-        // reject sintaks yang tidak valid
-        header("HTTP/1.1 400 Bad Request");
-        echo '{"status":"bad request"}';
-        exit();
-    }
-    $min  = date("Y-m-d", time() - ($min * 31536000) );
-    $max  = date("Y-m-d", time() - ($max * 31536000) ); 
-
     // parse desa / alamat
     $valid_desa = ["bandarjo", "branjang", "kalisidi", "keji", "lerep", "nyatnyono"];
     $arr_desa = explode('-', $desa);
@@ -96,7 +97,9 @@
     $data->limitView(25);
 
     // filter range waktu
-    $data->filterRangeTanggalLahir($min, $max);
+    if( isset($min_max) ){
+        $data->filterRangeTanggalLahir($min, $max);
+    }
     // filter desa
     for( $i = 0; $i < count($arr_desa); $i++){
         if( in_array($arr_desa[$i], $valid_desa) ){

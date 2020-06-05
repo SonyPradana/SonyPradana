@@ -16,13 +16,6 @@
     $user = new User($auth->getUserName());
     
     # ambil parameter dari url
-    $sort = isset( $_GET['sort'] ) ? $_GET['sort'] : 'nomor_rm';
-    $order = isset( $_GET['order'] ) ? $_GET['order'] : 'ASC';
-    $page = isset( $_GET['page'] ) ? $_GET['page'] : 1;
-    $page = is_numeric($page) ? $page : 1;
-    $max_page = 1;
-    $limit = 10;
-    # parameter untuk search data
     $main_search = isset( $_GET['main-search'] ) ? $_GET['main-search'] : '';
     $nomor_rm_search = isset( $_GET['nomor-rm-search']) ? $_GET['nomor-rm-search'] : '';
     $alamat_search = isset( $_GET['alamat-search'] ) ? $_GET['alamat-search'] : '';
@@ -32,43 +25,6 @@
     $no_rm_kk_search = isset( $_GET['no-rm-kk-search'] ) ? $_GET['no-rm-kk-search'] : '';
     $strict_search = isset( $_GET['strict-search'] ) ? true : false;    
 
-    # defultnya false agar tidak menampilkan table ketika kosong/pertama
-    $get_data = false;
-    
-    if( isset( $_GET['main-search']) || 
-        isset( $_GET['nomor-rm-search']) ||
-        isset( $_GET['alamat-search']) ||
-        isset( $_GET['no-rt-search']) ||
-        isset( $_GET['no-rw-search']) ||
-        isset( $_GET['nama-kk-search']) ||
-        isset( $_GET['no-rm-kk-search']) ){
-            
-            # cari data
-            $show_data = new View_RM();
-
-            # setup data
-            $show_data->sortUsing($sort);
-            $show_data->orderUsing($order);
-            $show_data->limitView($limit);
-
-            # query data
-            $show_data->filterByNama( $main_search );
-            $show_data->filterByNomorRm( $nomor_rm_search);
-            $show_data->filterByAlamat($alamat_search );
-            $show_data->filterByRt( $no_rt_search );
-            $show_data->filterByRw( $no_rw_search );
-            $show_data->filterByNamaKK( $nama_kk_search );
-            $show_data->filterByNomorRmKK( $no_rm_kk_search );
-                    
-            # setup page
-            $max_page = $show_data->maxPage();
-            $page = $page > $max_page ? $max_page : $page;
-            $show_data->currentPage($page);
-
-            # excute query
-            $get_data = $show_data->result( $strict_search );
-    }
-    $parram = "'$main_search', '$nomor_rm_search', '$strict_search', '', '$alamat_search', '$no_rt_search', '$no_rw_search', '$nama_kk_search', '$no_rm_kk_search'";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -91,7 +47,6 @@
     <link rel="stylesheet" href="/lib/css/ui/v1/control.css">
 
     <script src="/lib/js/index.js"></script>         
-    <script src="/lib/js/ajax/html/GetData.js"></script>
     <script src="/lib/js/bundles/keepalive.js"></script>
     <script src="/lib/js/controller/table-rm/index.js"></script>
     <style>
@@ -220,13 +175,14 @@
     //claer button    
     var btnBack = document.querySelector('#reset-btn');
     btnBack.onclick = function () {
-            document.querySelector('#input-main-search').setAttribute('value', '');
-            document.querySelector('#input-tgl-search').setAttribute('value', '');
-            document.querySelector('#input-alamat-seacrh').setAttribute('value', '');
-            document.querySelector('#input-no-rt-search').setAttribute('value', '');
-            document.querySelector('#input-no-rw-search').setAttribute('value', '');
-            document.querySelector('#input-nama-kk-search').setAttribute('value', '');
-            document.querySelector('#input-no-rm-kk').setAttribute('value', '');
+        document.querySelector('#input-main-search').setAttribute('value', '');
+        document.querySelector('#input-nomor-rm-seacrh').setAttribute('value', '');
+        document.querySelector('#input-tgl-search').setAttribute('value', '');
+        document.querySelector('#input-alamat-seacrh').setAttribute('value', '');
+        document.querySelector('#input-no-rt-search').setAttribute('value', '');
+        document.querySelector('#input-no-rw-search').setAttribute('value', '');
+        document.querySelector('#input-nama-kk-search').setAttribute('value', '');
+        document.querySelector('#input-no-rm-kk').setAttribute('value', '');
     };    
     
     window.addEventListener('load', () => {
