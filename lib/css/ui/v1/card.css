@@ -124,13 +124,6 @@
 /* media query */
 /* tablet view */
 @media screen  and (max-width: 767px) {
-    /* covid medium card */
-    .covid-card.medium{
-        height: 56px; max-width: 100px !important;
-        padding: 8px;
-        display: flex;
-        align-items: center;
-    }
     .covid-card .card.title{
         font-size: 1rem;
     }
@@ -145,6 +138,18 @@
     .rm-card .card.title p,
     .rm-card .card.title .detail{font-size: 1.3rem;}
     .rm-card .card.content p{text-align: center; font-size: .8rem;}
+
+    /* respone card */
+    .respone-card{
+        height: 56px; max-width: 100px !important;
+        padding: 8px;
+        display: flex;
+        align-items: center;
+    }
+    .respone-card .card.title{
+        font-size: 1rem;
+    }
+    
 }
 /* laptop/pc view */
 @media screen and (min-width: 1000px){
