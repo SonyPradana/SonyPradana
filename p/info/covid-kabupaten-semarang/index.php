@@ -107,19 +107,19 @@
                 </div>
                 <div class="media-article">
                     <div class="box cards">
-                        <div class="card covid-card grad-blue" data-tooltips="Pasien Positif">
+                        <div class="card covid-card grad-blue" id="card-positif" data-tooltips="Pasien Positif">
                             <div class="card title">Pasien Positif</div>
                             <div class="card content">XXX</div>
                             <div class="card note">Orang</div>
                         </div>
                         <div class="gap-space"></div>
-                        <div class="card covid-card grad-pinktoyellow" data-tooltips="Pasien Sembuh">
+                        <div class="card covid-card grad-pinktoyellow" id="card-sembuh" data-tooltips="Pasien Sembuh">
                             <div class="card title">Pasien Sembuh</div>
                             <div class="card content">XXX</div>
                             <div class="card note">Orang</div>
                         </div>
                         <div class="gap-space"></div>
-                        <div class="card covid-card grad-yellowtored" data-tooltips="Pasien Meninggal">
+                        <div class="card covid-card grad-yellowtored"  id="card-meninggal" data-tooltips="Pasien Meninggal">
                             <div class="card title">Pasien Meninggal</div>
                             <div class="card content">XXX</div>
                             <div class="card note">Orang</div>
@@ -184,9 +184,9 @@
 
     // render card
     function renderCard(postif, sembuh, meninggal){
-        let card_postif = document.querySelector('.covid-card.gradient-one .card.content');
-        let card_sembuh = document.querySelector('.covid-card.gradient-two .card.content');
-        let card_meninggal = document.querySelector('.covid-card.gradient-three .card.content');
+        let card_postif = document.querySelector('#card-positif .card.content');
+        let card_sembuh = document.querySelector('#card-sembuh .card.content');
+        let card_meninggal = document.querySelector('#card-meninggal .card.content');
 
         card_postif.innerHTML = postif;
         card_sembuh.innerHTML = sembuh;
@@ -242,17 +242,17 @@
 
     async function grapInfo(data){
         await data['data'].forEach(event => {
-            let dom_posi = document.querySelector('.covid-card.gradient-one')
+            let dom_posi = document.querySelector('#card-positif')
             let posi = dom_posi.getAttribute('data-tooltips')
             if( event['kasus_posi'] != 0){
                 dom_posi.setAttribute('data-tooltips', posi + ', ' + event['kecamatan'] + `(${event['kasus_posi']})`)
             }
-            let dom_semb = document.querySelector('.covid-card.gradient-two')
+            let dom_semb = document.querySelector('#card-sembuh')
             let semb = dom_semb.getAttribute('data-tooltips')
             if( event['kasus_semb'] != 0){
                 dom_semb.setAttribute('data-tooltips', semb + ', ' + event['kecamatan'] + `(${event['kasus_semb']})`)
             }
-            let dom_meni = document.querySelector('.covid-card.gradient-three')
+            let dom_meni = document.querySelector('#card-meninggal')
             let meni = dom_meni.getAttribute('data-tooltips')
             if( event['kasus_meni'] != 0){
                 dom_meni.setAttribute('data-tooltips', meni + ', ' + event['kecamatan'] + `(${event['kasus_meni']})`)
