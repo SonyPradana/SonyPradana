@@ -1,8 +1,29 @@
 /* table of content
+ * a. plan card -> default property
  * 1. out-team card
  * 2. covid medium card 
  * 3. info-rm card
+ * 4. respone card
  */
+
+ /* plan card */
+ /* gradient color */
+.card.grad-blue{
+    background-color: #08AEEA;
+    background-image: linear-gradient(340deg, #08AEEA 0%, #2AF598 100%);
+ }
+.card.grad-pinktoyellow{     
+    background-color: #FEE140;
+    background-image: linear-gradient(90deg, #FEE140 0%, #FA709A 100%);
+ }
+.card.grad-yellowtored{     
+    background-color: #FFE53B;
+    background-image: linear-gradient(147deg, #FFE53B 0%, #FF2525 94%);
+ }
+ /* shadow */
+ .card.shadow-bottom-left-medium{
+    box-shadow: 5px 8px 14px -8px #000000bf;
+ }
 
 /* our-team card */
 .team-card{
@@ -42,21 +63,6 @@
     color: #fff;    
     position: relative;
 }
-.covid-card.gradient-one{
-    background-color: #08AEEA;
-    background-image: linear-gradient(340deg, #08AEEA 0%, #2AF598 100%);
-}
-.covid-card.gradient-two{
-    background-color: #FEE140;
-    background-image: linear-gradient(90deg, #FEE140 0%, #FA709A 100%);
-}
-.covid-card.gradient-three{
-    background-color: #FFE53B;
-    background-image: linear-gradient(147deg, #FFE53B 0%, #FF2525 94%);
-}
-.covid-card.shadow{
-    box-shadow: 5px 8px 14px -8px #000000bf;
-}
 .covid-card .card.title{
     font-size: 1.3rem;
 }
@@ -64,20 +70,6 @@
     font-size: 2.4rem;
     font-weight: 700;
 }
-.covid-card .card.link a{
-    text-decoration: none;
-    color: #fff;
-    font-size: 1.3rem;
-    font-weight: 400;
-    text-align: center;
-}
-.covid-card .card.action{
-    height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: start;
-}
-.covid-card.medium{ height: 72px;}
 
 /* info-rm card */
 .rm-card{
@@ -100,14 +92,32 @@
     background: -o-linear-gradient(-45deg, #fa2500 0%, #e6de00 85%, #e6de00 100%);
     background: -ms-linear-gradient(-45deg, #fa2500 0%, #e6de00 85%, #e6de00 100%);
     background: linear-gradient(135deg, #fa2500 0%, #e6de00 85%, #e6de00 100%);
-    
-    box-shadow: 5px 8px 14px -8px #000000bf;
 }
 .rm-card p{margin: 0; color: #fff; }
 .rm-card .card.title{display: flex;}
 .rm-card .card.title p{font-size: 2.5rem;}
 .rm-card .card.title .detail{font-size: 2.5rem; color: purple;}
 .rm-card .card.content p{font-size: 1.3rem;}
+
+/* respone card */
+.respone-card{
+    cursor: default;
+    padding: 16px;
+    border-radius: 12px;
+    min-width: 180px;
+    height: 72px;
+    color: #fff;    
+    position: relative;
+}
+.respone-card .card.title{
+    font-size: 1.3rem;
+}
+.respone-card .card.action{
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+}
 
 /* end of card */
 

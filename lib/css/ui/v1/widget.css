@@ -78,7 +78,7 @@ aside.top .boxs-info .info .item-info.right{
 .review.respones{
     margin: 16px 0;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, 77.3334px);
     grid-column-gap: 8px;
     justify-content: center;
 }

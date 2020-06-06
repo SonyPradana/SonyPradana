@@ -116,7 +116,8 @@ if( !$auth->TrushClient() ){
         }
         .box.right { padding: 8px 16px }
         .input-information p,
-        .input-information p a{
+        .input-information p a,
+        p.dusun{
             margin: 0;
             color: #7f6cff;
         }
@@ -178,6 +179,8 @@ if( !$auth->TrushClient() ){
                             <input class="textbox outline black rounded small" type="text" name="nomor_rt" id="input-nomor-rt" placeholder="nomor rt" max="2" value="<?= isset($load_rm) ? $nomorRt : '' ?>" inputmode="numeric" pattern="[0-9]*">
                             <div class="gap-space"><!-- helper --></div>
                             <input class="textbox outline black rounded small" type="text" name="nomor_rw" id="input-nomor-rw" placeholder="nomor rw" max="2" value="<?= isset($load_rm) ? $nomorRw : '' ?>" inputmode="numeric" pattern="[0-9]*">
+                            <div class="gap-space"><!-- helper --></div>
+                            <p class="dusun"></p>
                         </div>
                         <div class="grub-control horizontal">
                             <input type="checkbox" name="tandai_sebagai_kk" id="input-mark-as-kk" tabindex="11" <?= $status_kk == true ? "checked" : ""?>>
@@ -217,13 +220,18 @@ if( !$auth->TrushClient() ){
 <script src="/lib/js/controller/form-rm/index.js"></script>
 <script src="/lib/js/index.end.js"></script>
 <script>
+        // onload
+        window.addEventListener('load', () => {
+            cekDesa()
+        })
+        
         // sticky header
         window.onscroll = function(){
                 stickyHeader('.container', '82px', '32px')
         }
         
         // keep alive
-        kkeepalive(() => {
+        keepalive(() => {
             window.location.href = "/p/auth/login/"
         });
 </script>

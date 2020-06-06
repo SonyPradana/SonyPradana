@@ -295,20 +295,14 @@ footer .footnote p .love{
 }
 footer .footnote p:hover .love{    
     display: inline-block;
-    transform: scale(1);
+    transform: scale(.8);
     animation: heart;
     animation-duration: 1.5s;
     animation-iteration-count: infinite;
 }
 @keyframes heart{
-    0%{
-        transform: scale(1);
-    }
-    50%{
-        transform: scale(1.25);
-    }
-    100%{
-        transform: scale(1.5);
+    to{
+        transform: scale(1.2);
     }
 }
 

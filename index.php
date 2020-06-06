@@ -80,7 +80,7 @@
             min-height: 115px;
         }
 
-        .covid-card .card.action .btn{            
+        .respone-card .card.action .btn{            
             width: 64px;
             text-align: center;    
         }
@@ -166,7 +166,7 @@
     <div class="container width-view">
         <main class="news">
             <div class="boxs-card">
-                <div class="rm-card">
+                <div class="card rm-card shadow-bottom-left-medium">
                     <div class="card title">
                         <p><?= $jumlah_rm?></p>
                         <span class="detail"> ~<?= round( ($jumlah_rm / 15000) * 100, 1) ?>%</span>
@@ -175,7 +175,7 @@
                         <p>Data RM Terdata</p>
                     </div>
                 </div>
-                <div class="covid-card gradient-one medium shadow" data-tooltips="click untuk melihat">
+                <div class="card respone-card grad-blue shadow-bottom-left-medium" data-tooltips="click untuk melihat">
                     <div class="card title">
                         Info Covid Ungaran
                     </div>

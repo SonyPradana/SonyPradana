@@ -102,7 +102,8 @@ if( !$auth->TrushClient() ){
         }
         .box.right { padding: 8px 16px }
         .input-information p,
-        .input-information p a{
+        .input-information p a,
+        p.dusun{
             margin: 0;
             color: #7f6cff;
         }
@@ -160,6 +161,8 @@ if( !$auth->TrushClient() ){
                                 <input class="textbox outline black rounded small" type="text" name="nomor_rt" id="input-nomor-rt" placeholder="rt" maxlength="2" value="<?= $nomor_rt ?>" inputmode="numeric" pattern="[0-9]*">
                                 <div class="gap-space"><!-- helper --></div>
                                 <input class="textbox outline black rounded small" type="text" name="nomor_rw" id="input-nomor-rw" placeholder="rw" maxlength="2" value="<?= $nomor_rw ?>" inputmode="numeric" pattern="[0-9]*">
+                                <div class="gap-space"><!-- helper --></div>
+                                <p class="dusun"></p>
                             </div>
                             <!-- <p style="margin: 10px 0 5px 0">data pelengkpa (opsonal)</p> -->
                             <div class="grub-control horizontal">

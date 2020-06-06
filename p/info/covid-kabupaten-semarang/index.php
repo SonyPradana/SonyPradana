@@ -53,7 +53,9 @@
             flex-direction: row;
             padding: 16px 0;
             justify-content: center;
-            gap: 12px;
+        }
+        .box.cards .gap-space{
+            min-width: 12px;
         }
         .media.note p{color: #a2a2a2; margin: 0}
         .table-boxs{
@@ -105,17 +107,19 @@
                 </div>
                 <div class="media-article">
                     <div class="box cards">
-                        <div class="covid-card gradient-one" data-tooltips="Pasien Positif">
+                        <div class="card covid-card grad-blue" data-tooltips="Pasien Positif">
                             <div class="card title">Pasien Positif</div>
                             <div class="card content">XXX</div>
                             <div class="card note">Orang</div>
                         </div>
-                        <div class="covid-card gradient-two" data-tooltips="Pasien Sembuh">
+                        <div class="gap-space"></div>
+                        <div class="card covid-card grad-pinktoyellow" data-tooltips="Pasien Sembuh">
                             <div class="card title">Pasien Sembuh</div>
                             <div class="card content">XXX</div>
                             <div class="card note">Orang</div>
                         </div>
-                        <div class="covid-card gradient-three" data-tooltips="Pasien Meninggal">
+                        <div class="gap-space"></div>
+                        <div class="card covid-card grad-yellowtored" data-tooltips="Pasien Meninggal">
                             <div class="card title">Pasien Meninggal</div>
                             <div class="card content">XXX</div>
                             <div class="card note">Orang</div>
