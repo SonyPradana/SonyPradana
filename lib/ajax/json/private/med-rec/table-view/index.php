@@ -115,13 +115,37 @@
     $max_page = $data->maxPage();
     $page = $page > $max_page ? $max_page : $page;
     $data->currentPage($page);
+
+    // hasil
+    $result = $data->results();
     
+    if( isset( $_GET['duplicate'] ) ){
+        $filter_query = $data->getFilterQuery(true, false);
+        $duplicate = in_array($_GET['duplicate'], $data->getColumnSupport()) ? $_GET['duplicate'] : 'alamat';
+        $db = new MyPDO();
+        $db->query("
+                    SELECT
+                        y.*
+                        FROM data_rm y
+                            INNER JOIN (SELECT
+                                            *, COUNT(*) AS CountOf
+                                            FROM data_rm
+                                            GROUP BY nama, $duplicate
+                                            HAVING COUNT(*) > 1 AND ($filter_query)
+                                        ) dt ON y.nama = dt.nama AND y.$duplicate = dt.$duplicate
+                    ORDER BY y.nama, y.$duplicate
+                    ");
+        $max_page = 1;
+        $page = 1;
+        $result = $db->resultset();
+    }
+
+
     $res = [
         "status" => "ok",
-        "staus_kk" => $status_kk,
         "maks_page" => (int) $max_page,
         "cure_page" => (int) $page,
-        "data" => $data->results()
+        "data" => $result
     ];
     
     echo json_encode($res);

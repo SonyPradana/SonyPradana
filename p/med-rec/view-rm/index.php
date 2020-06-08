@@ -64,6 +64,7 @@
             width: 100%;
             overflow-x: auto;
         }
+        .box-right p.info{ display: none;}
     
         .box-left{
             height: 100%; 
@@ -170,6 +171,21 @@
                                 <input type="checkbox" name="filter-kk" id="input-kk">
                                 <label for="input-kk">Kepala Keluarga</label>
                             </div>
+                            <div class="label-alamat"><p>Duplikat Data:</p></div>
+                            <div class="form-groub filter-alamat">
+                                <div class="input-groub">
+                                    <input type="radio" name="duplicate" id="input-duplicate-tgl" value="tanggal_lahir">
+                                    <label for="input-duplicate-tgl">Duplikat Tanggal Lahir</label>
+                                </div>
+                                <div class="input-groub">
+                                    <input type="radio" name="duplicate" id="input-duplicate-alamat" value="alamat">
+                                    <label for="input-duplicate-alamat">Duplikat Alamat</label>
+                                </div>
+                                <div class="input-groub">
+                                    <input type="radio" name="duplicate" id="input-duplicate-kk" value="nama_kk">
+                                    <label for="input-duplicate-kk">Duplikat Nama KK</label>
+                                </div>
+                            </div>
                         </form>
                             <div class="input-groub">
                                 <button class="btn outline blue rounded small" name="submit" id="submit">Terapkan</button>
@@ -213,6 +229,7 @@
                         <?php endforeach ; ?>                            
                         </tbody>
                     </table>
+                    <p class="info">Data tidak ditemukan</p>
                     <div class="box-pagination">
                         <div class="pagination">
                         </div>
@@ -264,15 +281,19 @@
         if( cKeji == 'on'){ q += 'keji-' }
         if( cLerep == 'on'){ q += 'lerep-' }
         if( cNyatnyono == 'on'){ q += 'nyatnyono' }
+        
+        // duplicate data
+        let dupl = document.querySelector('input[name="duplicate"]:checked')
 
         if( rangeUmur == '0-100' && 
         cbandarjo == null && cbranjang == null && cKalisidi == null &&
         cKeji == null && cLerep == null && cNyatnyono == null &&
-        cStatusKK == null){
+        cStatusKK == null && dupl == null){
             _search_query = '&all'
-        }else{            
+        }else{                
             let query_desa = q == '' ? '' : `&desa=${q}`
             let query = `&umur=${rangeUmur}${query_desa}&status_kk=${cStatusKK}`
+            query = dupl == null ? query : `${query}&duplicate=${dupl.value}`
             _search_query = query
         }
 

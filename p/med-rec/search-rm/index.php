@@ -68,6 +68,7 @@
         .box.left form > .grub-control.horizontal{
             margin-top: 10px
         }
+        .box-right p.info{ display: none}
         .boxs .box.right .box-right {
             width: 100%;
             overflow-x: auto;
@@ -145,6 +146,7 @@
                             <tbody>
                             </tbody>
                         </table>
+                        <p class="info">Data tidak ditemukan</p>
                         <div class="box-pagination">
                             <div class="pagination">
                                 <!-- pagination -->

@@ -21,7 +21,7 @@ class View_RM{
 
     # filter add
     private $_filters_alamat = [];
-    
+
     #costume filter
     private $_filter_range_min_tgl;
     private $_filter_range_max_tgl;
@@ -156,6 +156,34 @@ class View_RM{
     }
 
     /**
+     * mengambil hasil query sting dari filter yang dibuat (hasil query builder).
+     * rekomendasi:
+     * - filter = true,  strict = true
+     * - filter = false, strict = false
+     * @param  bool   $filters query menggunakan multi search atau tidak
+     * @param  bool   $strict  true, query menggunakan logica AND
+     * @return string query string (sebelum di esekusi / dipanggil)
+     */
+    public function getQuery(bool $filters = false, bool $strict = false):string{
+        $filter_type = $filters ? $this->filters( $strict ) : $this->filter( $strict );
+
+        return $this->query( $filter_type );
+    }
+
+    /**
+     * mengambil hasil query filter sting dari filter yang dibuat (hasil filterbuilder).
+     * rekomendasi:
+     * - filter = true,  strict = true
+     * - filter = false, strict = false
+     * @param  bool   $filters query menggunakan multi search atau tidak
+     * @param  bool   $strict  true, query menggunakan logica AND
+     * @return string filter string (raw dari query)
+     */
+    public function getFilterQuery(bool $filters = false, bool $strict = false):string{
+        return $filters ? $this->filters( $strict ) : $this->filter( $strict );
+    }
+
+    /**
      * jumlah data yang ditampilkan per halaman
      * min 10, maks 100
      */
@@ -248,9 +276,26 @@ class View_RM{
         return (int) ceil($this->maxData() / $this->_limit);
     }
 
+    /**
+     * mengambil column data base yang dapat di sort/diorder
+     * @return array nama column
+     */
+    public function getColumnSupport():array{
+        return $this->_sortSupport;
+    }
+
     public function __construct(){
         
     }   
+
+    private function query(string $query_filter){
+        $sort  = $this->_sort;
+        $order = $this->_order;
+        $start_data = ($this->_current_pos * $this->_limit) - $this->_limit;
+        $limit = $this->_limit;
+        $sort_order = ', tanggal_lahir';
+        return "SELECT * FROM data_rm WHERE $query_filter ORDER BY $sort $order $sort_order LIMIT $start_data, $limit";  
+    }
 
     /**
      * filter hasil query data base berdasarkan proprty yg telah ditentukan sebeeelumnya
@@ -404,15 +449,9 @@ class View_RM{
         $queryFilter = $this->filter($strict);
         if( $queryFilter == ''){
             # mencegah (query kosong) ketika filter tidak di setting
-            // $query = "SELECT * FROM data_rm ORDER BY id ASC";
             return [];
         } else{
-            $sort = $this->_sort;
-            $order = $this->_order;
-            $start_data = ($this->_current_pos * $this->_limit) - $this->_limit;
-            $limit = $this->_limit;
-            $sort_order = ', tanggal_lahir';
-            $query = "SELECT * FROM data_rm WHERE $queryFilter ORDER BY $sort $order $sort_order LIMIT $start_data, $limit";
+            $query = $this->query( $queryFilter );
         }
         # mengambil dari table
         $result = mysqli_query($link, $query);
@@ -477,15 +516,9 @@ class View_RM{
        $queryFilter = $this->filters($strict);
        if( $queryFilter == ''){
            # mencegah (query kosong) ketika filter tidak di setting
-           // $query = "SELECT * FROM data_rm ORDER BY id ASC";
            return [];
        } else{
-           $sort = $this->_sort;
-           $order = $this->_order;
-           $start_data = ($this->_current_pos * $this->_limit) - $this->_limit;
-           $limit = $this->_limit;
-           $sort_order = ', tanggal_lahir';
-           $query = "SELECT * FROM data_rm WHERE $queryFilter ORDER BY $sort $order $sort_order LIMIT $start_data, $limit";
+           $query = $this->query( $queryFilter );
        }
        # mengambil dari table
        $result = mysqli_query($link, $query);
