@@ -54,6 +54,9 @@
     <script src="/lib/js/bundles/keepalive.js"></script>
     <script src="/lib/js/controller/table-rm/index.js"></script>
     <style>
+        body{
+            transition: margin-left .3s;
+        }
         button{
             margin: 7px 0;
         }
@@ -77,7 +80,7 @@
             color: #fff;
             overflow-x: hidden; 
             padding-top: 60px; 
-            transition: 0.2s; 
+            transition: .3s; 
         }
 
         .container-filter{padding-left: 30px}
@@ -94,10 +97,27 @@
             top: 0;
             right: 25px;
         }
-        
-        .input-groub{margin-bottom: 8px}
+
+        .form-filter,
+        .input-groub.button{
+            max-width: 250px;
+        }
+
+        .label{ min-width: 200px;}
+
+        .input-groub{
+            margin-bottom: 8px;
+            min-width: 200px;
+        }
 
         table { width: 100% }
+        /* tablet mode */
+        @media screen and (max-width: 479px) {
+            .form-filter,
+            .input-groub.button{
+                margin: 0 auto;
+            }
+        }   
     </style>
 </head>
 <body>
@@ -122,7 +142,7 @@
                     <a href="javascript:void(0)" class="closebtn">&times;</a>
                     <div class="container-filter">
                         <form action="" method="post" class="form-filter">
-                            <div class="label-Umur"><p>Umur:</p></div>
+                            <div class="label label-Umur"><p>Umur:</p></div>
                             <div class="form-groub">
                                 <select id="input-umur" name="filter-umur">                            
                                     <option value="0-100">--</option>
@@ -139,7 +159,7 @@
                                     <option value="60-100">60-100</option>
                                 </select>
                             </div>
-                            <div class="label-alamat"><p>Alamat:</p></div>
+                            <div class="label label-alamat"><p>Alamat:</p></div>
                             <div class="form-groub filter-alamat">
                                 <div class="input-groub">
                                     <input type="checkbox" name="filter-alamat-bandarjo" id="input-alamat-bandarjo">
@@ -166,28 +186,28 @@
                                     <label for="input-alamat-nyatnyono">Nyatnyono</label>
                                 </div>
                             </div>
-                            <div class="label-alamat"><p>Status:</p></div>
+                            <div class="label label-alamat"><p>Status:</p></div>
                             <div class="input-groub">
                                 <input type="checkbox" name="filter-kk" id="input-kk">
                                 <label for="input-kk">Kepala Keluarga</label>
                             </div>
-                            <div class="label-alamat"><p>Duplikat Data:</p></div>
+                            <div class="label label-duplikat"><p>Duplikat Data:</p></div>
                             <div class="form-groub filter-alamat">
                                 <div class="input-groub">
                                     <input type="radio" name="duplicate" id="input-duplicate-tgl" value="tanggal_lahir">
-                                    <label for="input-duplicate-tgl">Duplikat Tanggal Lahir</label>
+                                    <label for="input-duplicate-tgl">Tanggal Lahir</label>
                                 </div>
                                 <div class="input-groub">
                                     <input type="radio" name="duplicate" id="input-duplicate-alamat" value="alamat">
-                                    <label for="input-duplicate-alamat">Duplikat Alamat</label>
+                                    <label for="input-duplicate-alamat">Alamat</label>
                                 </div>
                                 <div class="input-groub">
                                     <input type="radio" name="duplicate" id="input-duplicate-kk" value="nama_kk">
-                                    <label for="input-duplicate-kk">Duplikat Nama KK</label>
+                                    <label for="input-duplicate-kk">Nama KK</label>
                                 </div>
                             </div>
                         </form>
-                            <div class="input-groub">
+                            <div class="input-groub button">
                                 <button class="btn outline blue rounded small" name="submit" id="submit">Terapkan</button>
                                 <button class="btn outline blue rounded small" name="reset" id="reset">Reset</button>
                             </div>
@@ -248,18 +268,36 @@
 </body>
 <script src="/lib/js/index.end.js"></script>
 <script>
-    let boxLeft = document.querySelector(".box-left");
     //menampilkan/menyembunyikan panel
+    let show_panel = false
     let btnFilter =  document.querySelector("#btnFilter");
     btnFilter.addEventListener("click", event => {
-        boxLeft.style.width = "250px";
+        show_panel = show_panel ? false : true 
+        togle_panel(show_panel)
     });
     let btnClose =  document.querySelector(".closebtn");
     btnClose.addEventListener("click", event => {
-        boxLeft.style.width = "0px";
+        show_panel = false
+        togle_panel(show_panel)
     });
+    function togle_panel(val){
+        if( val ){            
+            if( mobile_view.matches ){
+                document.querySelector(".box-left").style.width = "100%"
+                document.querySelector('body').style.marginLeft = "100%"
+            }else{
+                document.querySelector(".box-left").style.width = "250px"
+                document.querySelector('body').style.marginLeft = "250px"
+            }
+        }else{
+            document.querySelector(".box-left").style.width = "0px"
+            document.querySelector('body').style.marginLeft = "0px"
+        }
+    }
+    // medai query
+    let mobile_view = window.matchMedia("screen and (max-width: 479px)")
 
-    //filter data menggunakan xhr
+    //filter data menggunakan ajax
     let btnTerapkan  = document.querySelector('#submit');
     btnTerapkan.addEventListener("click", event=> {
         //get data
