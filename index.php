@@ -107,6 +107,7 @@
             <p>Welcome To Simpus Lerep</p>
         </div>
         <div class="header menu">
+            <div class="margin-left"></div>
             <div class="logo">
                 <a href="/">Simpus</a>
             </div>
@@ -131,6 +132,7 @@
                     <a class="btn outline blue small" href="/p/auth/login">login</a>
                 <?php endif; ?>
             </div>
+            <div class="margin-right"></div>
         </div>
     </header>
     <div class="modal account">
