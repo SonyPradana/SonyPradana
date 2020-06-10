@@ -126,7 +126,7 @@ if( !$auth->TrushClient() ){
         }
     </style>
     <script>
-        let last_nomor_rm = <?= $last_nomor_rm ?>;
+        let last_nomor_rm = <?= (int) $last_nomor_rm ?>;
     </script>
 </head>
 <body>
