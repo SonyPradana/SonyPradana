@@ -95,6 +95,11 @@ class ForgotPassword{
             $db->bind(':user', $user_name);
             $db->execute();
 
+            // user log
+            $log = new Log($user_name);
+            $log->set_event_type('auth');
+            $log->save('forgot password');
+
             #disable key setalah berhasil menyimpan 
             // if( $disable_key ){
             //     $query = "UPDATE reset_pwd SET `stat` = 0 WHERE `user` = '$user_name'"; 

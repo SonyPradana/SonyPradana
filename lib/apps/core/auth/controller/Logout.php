@@ -30,6 +30,11 @@ class Logout{
             # bila berhasil return true
             $res = $db->rowCount();
             if( $res > 0){
+                // user log
+                $log = new Log( $verify->getUserName() );
+                $log->set_event_type('auth');
+                $log->save('success logout');
+                                
                 return true;
             }
 

@@ -25,6 +25,9 @@ class MedicalRecord{
     /** @var string No Rekam Medis Kepala Keluarga*/
     protected $_nomorRM_KK;
 
+    /** @var string last query used */
+    private $_last_query;
+
 #region getter dan setter
     // getter
     /**
@@ -95,6 +98,13 @@ class MedicalRecord{
         return $this->_nomorRM_KK;
     }
 
+    /**
+     * get last use query
+     * @return string last query used
+     */
+    public function getLastQuery():string{
+        return $this->_last_query;
+    }
 
     // setter
 
@@ -338,6 +348,7 @@ class MedicalRecord{
         mysqli_query($link, $query);
         # bila berhasil return true
         if( mysqli_affected_rows($link) > 0){
+            $this->_last_query = $query;
             return true;
         }
         #defult nya adalah salah
@@ -359,7 +370,8 @@ class MedicalRecord{
         #esekusi query /delet
         mysqli_query($link, $query);
         # bila berhasil return true
-        if( mysqli_affected_rows($link) > 0){
+        if( mysqli_affected_rows($link) > 0){            
+            $this->_last_query = $query;
             return true;
         }
         #defult nya adalah salah
@@ -423,6 +435,7 @@ class MedicalRecord{
         mysqli_query($link, $query);
         # bila berhasil return true
         if( mysqli_affected_rows($link) > 0){
+            $this->_last_query = $query;
             return true;
         }
         #defult nya adalah salah

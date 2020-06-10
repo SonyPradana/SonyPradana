@@ -88,5 +88,10 @@ class User{
         $db->bind(':section', $section);
         $db->bind(':user', $user_name);
         $db->execute();
+        // user log
+        $log = new Log( $user_name );
+        $log->set_event_type('auth');
+        $log->save('success profile changes');
+        
     }
 }

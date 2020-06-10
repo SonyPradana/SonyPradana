@@ -80,6 +80,10 @@ class Login{
                 #jwt dibuat
                 $this->CreatJWT();
                 $this->_verifyJWT = true;
+                // user log
+                $log = new Log($user_name);
+                $log->set_event_type('auth');
+                $log->save('success login');
             }else{
                 #password salah kirm ke database
                 $minusStat = $row['stat'] - 1;

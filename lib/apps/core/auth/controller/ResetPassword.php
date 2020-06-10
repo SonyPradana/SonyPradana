@@ -49,6 +49,11 @@ class ResetPassword{
             $db->bind(':bane', "$time()");
             $db->bind(':user', $user_name);
             $db->execute();
+            // user log
+            $log = new Log($user_name);
+            $log->set_event_type('auth');
+            $log->save('reset password');
+
             if( $db->rowCount() > 0 ) return true;
         }
         return false;

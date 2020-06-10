@@ -52,6 +52,12 @@ if( !$auth->TrushClient() ){
                 $msg['message'] = 'Gagal disimpan';
                 $msg['type'] = 'danger';
             }    
+            
+            // user log
+            $log = new Log( $auth->getUserName() );
+            $log->set_event_type('med-rec');
+            $log->save( $new_rm->getLastQuery() );
+
         }else{ # untuk menangkap data        
             // memuat data dari data base
             $load_rm = MedicalRecord::withId($id);
