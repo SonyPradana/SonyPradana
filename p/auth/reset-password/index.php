@@ -60,7 +60,7 @@ if( isset( $_POST['reset']) ){
     <meta name="description" content="sisteminformasi kesehatan puskesmas Lerep">
     <meta name="keywords" content="simpus lerep, pkm lerep">
     <meta name="author" content="amp">
-<?php include($_SERVER['DOCUMENT_ROOT'] . '/include/html/metatag.html') ?>
+<?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/meta/metatag.html') ?>
        
     <style>
         body {

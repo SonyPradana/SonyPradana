@@ -11,11 +11,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta content="id" name="language">
+    <meta content="id" name="geo.country">
+    <meta http-equiv="content-language" content="In-Id">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Info Covid 19 Ungaran Barat</title>
     <meta name="description" content="Data Pasien Dalam Pengawasan dan Positif di Wilayah Kecamtan Ungaran Barat">
     <meta name="keywords" content="simpus lerep, info covid, kawal covid, covid ungaran, covid branjang, wilyah ungran, pdp, pasien dalam pengawasan">
+    <meta name="author" content="amp">
+<?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/meta/metatag.html') ?>
+
     <link rel="stylesheet" href="/lib/css/main.css">
     <link rel="stylesheet" href="/lib/css/ui/v1/control.css">
     <link rel="stylesheet" href="/lib/css/ui/v1/table.css">

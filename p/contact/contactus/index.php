@@ -45,7 +45,7 @@
     <meta name="description" content="Sistem Informasi Manajemen Puskesmas SIMPUS Lerep">
     <meta name="keywords" content="simpus lerep, puskesmas lerep, puskesmas, hubungi kami, contact us, kritik dan saran, masukan pasien, review pasien">
     <meta name="author" content="amp">
-<?php include($_SERVER['DOCUMENT_ROOT'] . '/include/html/metatag.html') ?>
+<?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/meta/metatag.html') ?>
 
     <link rel="stylesheet" href="/lib/css/main.css">
     <link rel="stylesheet" href="/lib/css/ui/v1/control.css">

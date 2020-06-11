@@ -106,7 +106,7 @@ if( !$auth->TrushClient() ){
     <meta name="description" content="Sistem Informasi Manajemen Puskesmas SIMPUS Lerep">
     <meta name="keywords" content="simpus lerep, puskesmas lerep, puskesmas, ungaran, kabupaten semarang">
     <meta name="author" content="amp">
-<?php include($_SERVER['DOCUMENT_ROOT'] . '/include/html/metatag.html') ?>
+<?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/meta/metatag.html') ?>
 
     <link rel="stylesheet" href="/lib/css/main.css">
     <link rel="stylesheet" href="/lib/css/ui/v1/alert.css">

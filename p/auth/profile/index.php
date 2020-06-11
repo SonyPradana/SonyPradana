@@ -46,7 +46,7 @@ if( !$new_auth->TrushClient() ){
     <meta name="description" content="Edit Profile, Sistem informasi manajeman puskesmas, lerep">
     <meta name="keywords" content="simpus lerep, puskesmas lerep, puskesmas, ungaran, kabupaten semarang, edit profile">
     <meta name="author" content="amp">
-<?php include($_SERVER['DOCUMENT_ROOT'] . '/include/html/metatag.html') ?>
+<?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/meta/metatag.html') ?>
        
     <style>
         body{background-color: #d2d6de;}
