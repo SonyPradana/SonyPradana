@@ -57,9 +57,8 @@
         body{
             transition: margin-left .3s;
         }
-        button{
-            margin: 7px 0;
-        }
+        button{ margin: 8px 0;}
+        p{ margin: 16px 0 }
         .boxs{
             width: 100%;
         }
@@ -87,7 +86,7 @@
         a.closebtn {
             padding: 8px 8px 8px 32px;
             text-decoration: none;
-            font-size: 50px;
+            font-size: 48px;
             color: #818181;
             display: block;
         }a:hover.closebtn {color: #f1f1f1;}
@@ -99,7 +98,7 @@
         }
 
         .form-filter,
-        .input-groub.button{
+        .input-groub{
             max-width: 250px;
         }
 
@@ -109,15 +108,13 @@
             margin-bottom: 8px;
             min-width: 200px;
         }
+        .button-groub{
+            margin-top: 8px;
+            min-width: 200px;
+        }
+        
 
-        table { width: 100% }
-        /* tablet mode */
-        @media screen and (max-width: 479px) {
-            .form-filter,
-            .input-groub.button{
-                margin: 0 auto;
-            }
-        }   
+        table { width: 100% }  
     </style>
 </head>
 <body>
@@ -207,9 +204,10 @@
                                 </div>
                             </div>
                         </form>
-                            <div class="input-groub button">
+                            <div class="button-groub grub-control horizontal">
                                 <button class="btn outline blue rounded small" name="submit" id="submit">Terapkan</button>
-                                <button class="btn outline blue rounded small" name="reset" id="reset">Reset</button>
+                                <div class="gap-space"><!-- helper --></div>
+                                <button class="btn outline green rounded small" name="reset" id="reset">Reset</button>
                             </div>
                     </div>
 

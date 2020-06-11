@@ -14,6 +14,13 @@ if( !$auth->TrushClient() ){
 ?>
 <?php 
     $user = new User($auth->getUserName());
+   
+    // detacting do not track header
+    $DNT_Enable = false;
+    if( isset( $_SERVER['HTTP_DNT']) && $_SERVER['HTTP_DNT'] == 1){
+        $DNT_Enable = true;
+    }
+
     # ambil id dari url jika tidak ada akes ditolak
     if( isset( $_GET['document_id'])){
         # ambil data rm menggunakn  id
@@ -132,7 +139,7 @@ if( !$auth->TrushClient() ){
         form > input:not(:first-child),
         form > button,
         .grub-control.horizontal{
-            margin-top: 10px
+            margin-top: 12px
         }
         form > input { width: 100% }
         .grub-control.horizontal > .textbox{
@@ -178,9 +185,9 @@ if( !$auth->TrushClient() ){
                             </p>
                         <?php endif; ?>
                         </div>
-                        <input class="textbox outline black rounded small block" type="text" name="nama" id="input-nama" placeholder="nama" value="<?= isset($load_rm) ? $nama : '' ?>" maxlength="50">
+                        <input class="textbox outline black rounded small block" type="text" name="nama" id="input-nama" placeholder="nama" value="<?= isset($load_rm) ? $nama : '' ?>" maxlength="50" <?= $DNT_Enable ? 'autocomplete="off"' : 'autocomplete="on"' ?>>
                         <input class="textbox outline black rounded small block" type="date" name="tgl_lahir" id="input-tgl-lahir" value="<?= isset($load_rm) ? $tanggalLahir : '' ?>">
-                        <input class="textbox outline black rounded small block" type="text" name="alamat" id="input-alamat" placeholder="alamat tanpa rt/rw" value="<?= isset($load_rm) ? $alamat : '' ?>">
+                        <input class="textbox outline black rounded small block" type="text" name="alamat" id="input-alamat" placeholder="alamat tanpa rt/rw" value="<?= isset($load_rm) ? $alamat : '' ?>" <?= $DNT_Enable ? 'autocomplete="off"' : 'autocomplete="on"' ?>>
                         <div class="grub-control horizontal">
                             <input class="textbox outline black rounded small" type="text" name="nomor_rt" id="input-nomor-rt" placeholder="nomor rt" max="2" value="<?= isset($load_rm) ? $nomorRt : '' ?>" inputmode="numeric" pattern="[0-9]*">
                             <div class="gap-space"><!-- helper --></div>
@@ -192,7 +199,7 @@ if( !$auth->TrushClient() ){
                             <input type="checkbox" name="tandai_sebagai_kk" id="input-mark-as-kk" tabindex="11" <?= $status_kk == true ? "checked" : ""?>>
                             <label for="input-mark-as-kk">Tandai sebagai kk</label>
                         </div>  
-                        <input class="textbox outline black rounded small block" type="text" name="nama_kk" id="input-nama-kk" placeholder="nama kepala keluarga" value="<?= isset($load_rm) ? $namaKK : '' ?>">
+                        <input class="textbox outline black rounded small block" type="text" name="nama_kk" id="input-nama-kk" placeholder="nama kepala keluarga" value="<?= isset($load_rm) ? $namaKK : '' ?>" <?= $DNT_Enable ? 'autocomplete="off"' : 'autocomplete="on"' ?>>
                         <input class="textbox outline black rounded small block" type="text" name="nomor_rm_kk" id="input-nomor-rm-kk" placeholder="nomor rm kepla keluarga" value="<?= isset($load_rm) ? $nomorRM_KK : '' ?>" maxlength="6" inputmode="numeric" pattern="[0-9]*">
                         <div class="input-information no-rm-kk"></div>
                         <div class="input-information kk-sama"></div>
@@ -200,7 +207,7 @@ if( !$auth->TrushClient() ){
                         <div class="grub-control horizontal">
                             <button class="btn rounded small blue outline" type="submit" name="submit">Edit Data RM</button>
                             <div class="gap-space"><!-- helper --></div>
-                            <button class="btn rounded small blue outline" type="button" onclick="window.history.back()">Batal Perubahan</button>
+                            <button class="btn rounded small red text" type="button" onclick="window.history.back()">Batal Perubahan</button>
                         </div>
                     </form>           
                 <?php endif; ?>

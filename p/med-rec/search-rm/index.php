@@ -14,6 +14,12 @@
 ?>
 <?php
     $user = new User($auth->getUserName());
+
+    // detacting do not track header
+    $DNT_Enable = false;
+    if( isset( $_SERVER['HTTP_DNT']) && $_SERVER['HTTP_DNT'] == 1){
+        $DNT_Enable = true;
+    }
     
     # ambil parameter dari url
     $main_search = isset( $_GET['main-search'] ) ? $_GET['main-search'] : '';
@@ -104,11 +110,11 @@
             <div class="boxs">
                 <div class="box left">
                     <form action="" method="get" class="search-box">
-                        <input class="textbox outline black rounded small block" type="text" name="main-search" id="input-main-search" placeholder="cari nama" value="<?= $main_search ?>">
+                        <input class="textbox outline black rounded small block" type="text" name="main-search" id="input-main-search" placeholder="cari nama" value="<?= $main_search ?>" <?= $DNT_Enable ? 'autocomplete="off"' : 'autocomplete="on"' ?>>
                         <div class="grub-control horizontal right">
-                                <button class="btn rounded small blue" type="submit" id="submit">Cari</button>
+                                <button class="btn rounded light blue outline" type="submit" id="submit">Cari</button>
                                 <div class="gap-space"><!-- helper --></div>
-                                <button class="btn rounded small blue" type="reset" id="reset-btn">Batal</button>
+                                <button class="btn rounded light red outline" type="reset" id="reset-btn">Batal</button>
                         </div>
                         <div class="grub-control horizontal">
                             <input type="checkbox" name="strict-search" id="input-strict-search" <?= $strict_search == true ? "checked" : ""?>>
@@ -116,14 +122,14 @@
                         </div>
                         <input class="textbox outline black rounded small block" type="text" name="nomor-rm-search" id="input-nomor-rm-seacrh" placeholder="cari nomor rm" value="<?= $nomor_rm_search ?>">
                         <input class="textbox outline black rounded small block" type="date" name="tgl-search" id="input-tgl-search" data-date-format="DD MMMM YYYY" value="<?= (isset($_GET['tgl-search'])) ? $_GET['tgl-search'] : '' ?>">
-                        <input class="textbox outline black rounded small block" type="text" name="alamat-search" id="input-alamat-seacrh" placeholder="cari alamat" value="<?= $alamat_search ?>">
+                        <input class="textbox outline black rounded small block" type="text" name="alamat-search" id="input-alamat-seacrh" placeholder="cari alamat" value="<?= $alamat_search ?>" <?= $DNT_Enable ? 'autocomplete="off"' : 'autocomplete="on"' ?>>
                         <div class="grub-control horizontal">
                             <input class="textbox outline black rounded small block" type="text" name="no-rt-search" id="input-no-rt-search" placeholder="cari alamat rt" value="<?= $no_rt_search ?>">
                             <div class="gap-space"><!-- helper --></div>
                             <div class="gap-space"><!-- helper --></div>
                             <input class="textbox outline black rounded small block" type="text" name="no-rw-search" id="input-no-rw-search" placeholder="cari alamat rw" value="<?= $no_rw_search ?>">
                         </div>
-                        <input class="textbox outline black rounded small block" type="text" name="nama-kk-search" id="input-nama-kk-search" placeholder="cari nama kk" value="<?= $nama_kk_search ?>">
+                        <input class="textbox outline black rounded small block" type="text" name="nama-kk-search" id="input-nama-kk-search" placeholder="cari nama kk" value="<?= $nama_kk_search ?>" <?= $DNT_Enable ? 'autocomplete="off"' : 'autocomplete="on"' ?>>
                         <input class="textbox outline black rounded small block" type="text" name="no-rm-kk-search" id="input-no-rm-kk" placeholder="cari nomor rm kk" value="<?= $no_rm_kk_search ?>">
                     </form>
                 </div>

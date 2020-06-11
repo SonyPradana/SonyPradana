@@ -16,6 +16,12 @@ if( !$auth->TrushClient() ){
     $user = new User($auth->getUserName());
     # validasi tombol submit di click
 
+    // detacting do not track header
+    $DNT_Enable = false;
+    if( isset( $_SERVER['HTTP_DNT']) && $_SERVER['HTTP_DNT'] == 1){
+        $DNT_Enable = true;
+    }
+
     # property
     $nomor_rm = isset( $_POST['nomor_rm'] ) ? $_POST['nomor_rm'] : '';
     $nama = isset( $_POST['nama'] ) ? $_POST['nama'] : '';
@@ -112,7 +118,7 @@ if( !$auth->TrushClient() ){
         form > input:not(:first-child),
         form > button,
         .grub-control.horizontal{
-            margin-top: 10px
+            margin-top: 12px
         }
         form > input { width: 100% }
         .grub-control.horizontal > .textbox{
@@ -147,16 +153,13 @@ if( !$auth->TrushClient() ){
                 <div class="box left"></div>
                 <div class="box right">
                     <h1>Data Rekam Medis Baru</h1>
-                    <?php if( isset( $msg ) ) :?>
-                        <p style="color: red"><?= $msg['message'] ?></p>         
-                    <?php endif; ?>
                         <form class="new-rm" action="" method="post">
                             <input class="textbox outline black rounded small block" type="number" name="nomor_rm" id="input-nomor-rm" placeholder="nomor rekam medis" value="<?= $nomor_rm ?>" maxlength="6" inputmode="numeric" pattern="[0-9]*">
                             <div class="input-information"><p>nomor rm terahir : <a href="javascript:void(0)" id="tambah-nomor-rm" tabindex="10"><?= $last_nomor_rm ?></a></p></div>
                             <div class="input-information warning"></div>
-                            <input class="textbox outline black rounded small block" type="text" name="nama" id="input-nama" placeholder="nama" value="<?= $nama ?>" maxlength="50">
+                            <input class="textbox outline black rounded small block" type="text" name="nama" id="input-nama" placeholder="nama" value="<?= $nama ?>" maxlength="50" <?= $DNT_Enable ? 'autocomplete="off"' : 'autocomplete="on"' ?>>
                             <input class="textbox outline black rounded small block" type="date" name="tgl_lahir" id="input-tgl-lahir" value="<?= $tgl_lahir ?>">
-                            <input class="textbox outline black rounded small block" type="text" name="alamat" id="input-alamat" placeholder="alamat tanpa rt/rw" value="<?= $alamat ?>">
+                            <input class="textbox outline black rounded small block" type="text" name="alamat" id="input-alamat" placeholder="alamat tanpa rt/rw" value="<?= $alamat ?>" <?= $DNT_Enable ? 'autocomplete="off"' : 'autocomplete="on"' ?>>
                             <div class="grub-control horizontal">
                                 <input class="textbox outline black rounded small" type="text" name="nomor_rt" id="input-nomor-rt" placeholder="rt" maxlength="2" value="<?= $nomor_rt ?>" inputmode="numeric" pattern="[0-9]*">
                                 <div class="gap-space"><!-- helper --></div>
@@ -169,7 +172,7 @@ if( !$auth->TrushClient() ){
                                 <input type="checkbox" name="tandai_sebagai_kk" id="input-mark-as-kk" tabindex="11">
                                 <label for="input-mark-as-kk">Tandai sebagai kk</label>
                             </div>                            
-                            <input class="textbox outline black rounded small block" type="text" name="nama_kk" id="input-nama-kk" placeholder="nama kepala keluarga" value="<?= $nama_kk ?>">
+                            <input class="textbox outline black rounded small block" type="text" name="nama_kk" id="input-nama-kk" placeholder="nama kepala keluarga" value="<?= $nama_kk ?>" <?= $DNT_Enable ? 'autocomplete="off"' : 'autocomplete="on"' ?>>
                             <input class="textbox outline black rounded small block" type="text" name="nomor_rm_kk" id="input-nomor-rm-kk" placeholder="nomor rm kepla keluarga" value="<?= $nomor_rm_kk ?>" maxlength="6" maxlength="6" inputmode="numeric" pattern="[0-9]*" >
                             <div class="input-information no-rm-kk"></div>
                             <div class="input-information kk-sama"></div>

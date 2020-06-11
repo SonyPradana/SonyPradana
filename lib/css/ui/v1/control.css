@@ -3,6 +3,11 @@
 .textbox.rounded{
     border-radius: 4px;
 }
+.btn.light,
+.textbox.light{
+    padding: 4px 12px;
+    border: 1px solid #000;
+}
 .btn.small,
 .textbox.small{
     padding: 8px 12px;
@@ -39,6 +44,13 @@ input[type=number] { -moz-appearance: textfield; }
 
 /* button ui (outline style) */
 .btn { cursor: pointer }
+.btn.text{
+    border: 2px solid transparent;
+    color: black;
+    font-size: 1.063rem;
+    text-decoration: none;
+    background-color: #fff;
+}
 .btn.outline{
     border: 2px solid black;
     background-color: transparent;
@@ -47,7 +59,7 @@ input[type=number] { -moz-appearance: textfield; }
     text-decoration: none;
 }
 .btn.fill{
-    border: unset;
+    border: 2px solid transparent;
     font-size: 1.063rem;
     text-decoration: none;
 }
@@ -91,10 +103,34 @@ input[type=number] { -moz-appearance: textfield; }
     background-color: #4CAF50;
     color: #fff;
 }
+.btn.fill.green:hover{
+    background-color: #51a554;
+}
 /* red color - fill*/
 .btn.fill.red{
     background-color: #f44336;
     color: #fff;
+}
+.btn.fill.red:hover{
+    background-color: #e4473c;
+}
+/* blue color - Button text*/
+.btn.text.blue{ color: #2196F3 }
+.btn.text.blue:hover{ 
+    background: #4c8ec4;
+    color: white; 
+}
+/* green color - Button text */
+.btn.text.green{ color: #4CAF50 }
+.btn.text.green:hover{ 
+    background: #51a554;
+    color: white; 
+}
+/* red color - Button text */
+.btn.text.red{ color: #f44336 }
+.btn.text.red:hover{ 
+    background: #e4473c;
+    color: white; 
 }
 
 /* grub control */
