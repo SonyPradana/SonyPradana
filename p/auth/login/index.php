@@ -63,15 +63,15 @@ if( isset( $_POST['login'] )
     
     # session bane logic
     if( $Verify_jwt){
-        #redirect ke url yg dituju jika ada
-        $url = isset( $_GET['url'] ) ? $_GET['url'] : '/';
-        header("Location: " .  $url );
         #reset before closing
         $stat_bane = 5;
         $exp_bane = time();        
         #simpan session bane
         $_SESSION['na'] = $stat_bane;
         $_SESSION['to'] = $exp_bane;
+        #redirect ke url yg dituju jika ada
+        $url = isset( $_GET['url'] ) ? $_GET['url'] : '/';
+        header("Location: " .  $url );
         exit();
     }else{
         #refresh session bane

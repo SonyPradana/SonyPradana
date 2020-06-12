@@ -215,7 +215,7 @@
     
     // keep alive
     keepalive(() => {
-        window.location.href = "/p/auth/login/"
+        window.location.href = "/p/auth/login/?url=<?= $_SERVER['REQUEST_URI'] ?>"
     });
 </script>
 </html>
