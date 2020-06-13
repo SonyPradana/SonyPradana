@@ -139,7 +139,7 @@
         <div class="modal-box">
             <span class="close" onclick="close_modal()">&times;</span>
             <div class="boxs-menu">
-                <a href="/p/auth/profile/">Edit profile</a>
+                <a href="/p/auth/profile/?url=/">Edit profile</a>
                 <a href="/p/messages/public/">Pesan Masuk</a>
                 <a href="/p/auth/reset-password/">Ganti Pasword</a>
                 <a href="/p/auth/logout/">Log Out</a>

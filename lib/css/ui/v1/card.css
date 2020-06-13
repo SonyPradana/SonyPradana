@@ -39,6 +39,9 @@
 .team-card .card.image{
     width: 200px; height: 200px;
 }
+.team-card .card.image img{
+    max-width: 200px; max-height: 200px;
+}
 .team-card .card.image img{border-top-left-radius: 8px; border-top-right-radius: 8px}
 .team-card .card.content{
     width: auto; height: auto;

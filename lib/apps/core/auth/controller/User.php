@@ -15,6 +15,8 @@ class User{
     private $_email;
     /** @var string unit kerja */
     private $_section;
+    /** @var string Display picture */
+    private $_displayPicture;
 
     /** @return boolean Mengecek validitas user */
     public function userVerify(){
@@ -31,6 +33,10 @@ class User{
     /** @return string Unit kerja / bagian */
     public function getSection(){
         return $this->_section;
+    }
+    /** @return string url image display picture */
+    public function getDisplayPicture():string{
+        return $this->_displayPicture;
     }
     // setter
     /** 
@@ -53,6 +59,13 @@ class User{
 
         $this->_section = $val;
     }
+    /**
+     * mengganti alamat display picture
+     * @param string url display picture
+     */
+    public function setDisplayPicture(string $val){
+        $this->_displayPicture = $val;
+    }
 
     /**
      * mencari data denagn user name yang sesaui
@@ -69,10 +82,12 @@ class User{
         $db->query('SELECT * FROM `profiles` WHERE `user`=:user');
         $db->bind(':user', $user_name);
         if( $db->single() ){
+            $row = $db->single();
             $this->_exisUser = true;
-            $this->_email = $db->single()['email'];
-            $this->_displayName = $db->single()['display_name'];
-            $this->_section = $db->single()['section'];
+            $this->_email = $row['email'];
+            $this->_displayName = $row['display_name'];
+            $this->_section = $row['section'];
+            $this->_displayPicture = $row['display_picture'];
         }
     }
 
@@ -81,12 +96,14 @@ class User{
         $user_name = $this->_user;
         $display_name = $this->_displayName;
         $section = $this->_section;
+        $dp = $this->_displayPicture;
 
         $db = new MyPDO();
-        $db->query('UPDATE `profiles` SET `display_name`=:dname, `section`=:section WHERE `user`=:user');
+        $db->query('UPDATE `profiles` SET `display_name`=:dname, `section`=:section, `display_picture`=:dp WHERE `user`=:user');
         $db->bind(':dname', $display_name);
         $db->bind(':section', $section);
         $db->bind(':user', $user_name);
+        $db->bind(':dp', $dp);
         $db->execute();
         // user log
         $log = new Log( $user_name );

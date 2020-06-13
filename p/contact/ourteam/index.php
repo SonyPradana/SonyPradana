@@ -10,7 +10,7 @@
 ?>
 <?php
     $db = new MyPDO();
-    $db->query('SELECT `display_name`, `section` FROM `profiles`');
+    $db->query('SELECT `display_name`, `section`, `display_picture` FROM `profiles`');
     $result = $db->resultset();
 ?>
 <!DOCTYPE html>
@@ -91,7 +91,7 @@
                     <?php foreach ($result as $value) :?>
                     <div class="team-card">
                         <div class="card image">
-                            <img src="/data/img/display-picture/no-image.png" alt="profile ">
+                            <img src="<?= $value['display_picture'] ?>" alt="profile @<?= $value['display_name'] ?>">
                         </div>
                         <div class="card content">
                             <div class="title"><?= $value['display_name'] ?></div>
