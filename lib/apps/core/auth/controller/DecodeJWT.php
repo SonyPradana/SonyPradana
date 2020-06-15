@@ -82,7 +82,7 @@ class DecodeJWT{
      * @param string @secreat_key Secreat key diambil manual dari data base
      * @return boolean valid atau tidak valid
      */
-    public function validate( $secreat_key ){
+    public function validate( $secreat_key ):bool{
         if( $this->allow ){
             $new_jwt = new EncodeJWT($this->_algo, $this->_paylaod);
             $jwt = $new_jwt->hashCode( $secreat_key );
@@ -99,7 +99,7 @@ class DecodeJWT{
      * 
      * @return JsonWebToken convert ke Obejct JWT
      * */ 
-    public function JWT(){
+    public function JWT():JsonWebToken{
         $new_jwt = new JsonWebToken();
         $new_jwt->Type = $this->_algo['typ'];
         $new_jwt->Algo = $this->_algo['alg'];

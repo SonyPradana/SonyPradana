@@ -60,7 +60,7 @@ class Login{
      * @param string $password password
      * @return JWT Untuk Verifikasi login berikutnya
      */
-    public function __construct($user_name, $password){
+    public function __construct(string $user_name, string $password){
         # sanitalizier input
         // $user_name = StringSanitization::removeHtmlTags($user_name);
 
@@ -161,7 +161,7 @@ class Login{
      * @param mixe $user_name user name
      * @return boolean user valid atau tidak
      */
-    public static function BaneFase($user_name){       
+    public static function BaneFase($user_name):bool{       
         #koneksi data base
         $db = new MyPDO();
         $db->query('SELECT user, stat, bane FROM users WHERE user=:user');
@@ -210,7 +210,7 @@ class Login{
      * @param string $password password
      * @return boolean user dan password banar atau tidak
      */
-    public static function PasswordVerify($user_name, $password){
+    public static function PasswordVerify(string $user_name, string $password){
         $db = new MyPDO();
         #query data base
         $db->query('SELECT `pwd`, `stat` FROM `users` WHERE `user`=:user');

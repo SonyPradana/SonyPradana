@@ -5,7 +5,7 @@
 <?php
     #Aunt cek
     session_start();
-    $token = (isset($_SESSION['token']) ) ? $_SESSION['token'] : '';
+    $token = $_SESSION['token'] ?? '';
     $new_auth = new Auth($token, 3);
     if( $new_auth->TrushClient() ){
         #reddirect jika jwt aktif

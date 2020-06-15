@@ -13,7 +13,7 @@ class EmailAuth{
     private $_userVerify = false;
 
     /** @var boolean cek user tedaftar atau tidak */
-    public function userVerify(){
+    public function userVerify():bool{
         return $this-> _userVerify;
     }
     /** @var string hasil key / link */

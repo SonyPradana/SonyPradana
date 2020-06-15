@@ -2,7 +2,7 @@
     require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/init.php';
 
 session_start();
-$token = (isset($_SESSION['token']) ) ? $_SESSION['token'] : '';
+$token = $_SESSION['token'] ?? '';
 $test_auth = new Auth($token, 2);
 if( $test_auth->TrushClient() == true){
     echo 'logout diterima, user berhasil logout';

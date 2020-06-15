@@ -23,7 +23,7 @@ class ForgotPassword{
      * cek kombinasi passwod dan code sudah benar atau belum
      * @return boolean verifikasi key
      */
-    public function verifyKey(){
+    public function verifyKey():bool{
         return (boolean) $this->_verifyKey;
     }
     
@@ -36,7 +36,7 @@ class ForgotPassword{
      * @param string $code code 
      * 6 digit angka
      */
-    public function __construct($key, $code){
+    public function __construct(string $key, int $code){
         #decode from 64 base url
         $decodeKey = base64_decode($key);
         $decodeKey = json_decode($decodeKey, true);
@@ -72,7 +72,7 @@ class ForgotPassword{
      * @param string $new_password new password
      * @return boolean password baru tersimpan atau tidak
      */
-    public function NewPassword($new_password){
+    public function NewPassword($new_password):bool{
         if( $this->_verifyKey ){
             #koneksi data base
             $db = new MyPDO();
@@ -99,13 +99,7 @@ class ForgotPassword{
             $log = new Log($user_name);
             $log->set_event_type('auth');
             $log->save('forgot password');
-
-            #disable key setalah berhasil menyimpan 
-            // if( $disable_key ){
-            //     $query = "UPDATE reset_pwd SET `stat` = 0 WHERE `user` = '$user_name'"; 
-            //     mysqli_query($link, $query); 
-            // }
-            #hasil/kembalian adalah true
+            
             return true;
         }
         return false;

@@ -5,7 +5,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/init.php';
 <?php
 #Aunt cek
 session_start();
-$token = (isset($_SESSION['token']) ) ? $_SESSION['token'] : '';
+$token = $_SESSION['token'] ?? '';
 $auth = new Auth($token, 2);
 if( !$auth->TrushClient() ){
     header("Location: /p/auth/login");   

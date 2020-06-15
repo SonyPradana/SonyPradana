@@ -50,7 +50,7 @@ class Registartion{
      * @param string $email Cek email terdaftar
      * @return int 1-4 code error pengecekan
      */
-    public function Verify($user_name, $email){
+    public function Verify($user_name, $email):int{
         # cek user name
         $newUser = new User($user_name);
         $veifyUser = $newUser->userVerify();
@@ -84,7 +84,7 @@ class Registartion{
      * 
      * @return boolean disimpan atau tidak
      */
-    public function AddToArchive(){
+    public function AddToArchive():bool{
         # koneksi data base
         $db = new MyPDO();
         # query data base

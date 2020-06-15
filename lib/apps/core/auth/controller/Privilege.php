@@ -26,8 +26,9 @@ class Privilege{
      * Mengambil privilege master dari setiap pages.
      * privilege ini bersifat readonly dari database
      * @param string $taget Target page/service
+     * @return string previlage dari database
      */
-    public function MasterPrivilage($target){
+    public function MasterPrivilage($target):string{
         # buat koneksi
         $db = new MyPDO();
         $db->query('SELECT `target`, `privilege` FROM `privilege_controler` WHERE `target`=:target');
@@ -45,9 +46,9 @@ class Privilege{
     /**
      * Melihat privilage user dari database
      * @param string $target_acces target page yang akan di cek
-     * @return privilege user
+     * @return string privilege user
      */
-    public function ReadAcces($target_acces = "default"){
+    public function ReadAcces($target_acces = "default"):string{
         $user_name = $this->_userName;
         # buat koneksi
         $db = new MyPDO();
@@ -67,7 +68,7 @@ class Privilege{
      * @param string $target_acces target Page yang akan di simpan
      * @param string $privilege Nilai privilege yang akan disimpan
      */
-    public function CreatAcces($target_acces = "default", $privilege){
+    public function CreatAcces($target_acces = "default", $privilege):int{
         # koneksi dan simpan privile baru ke data base
          $db = new MyPDO();
          $db->query('INSERT INTO `privilege` (`id`, `user`, `target`, `privilege`) VALUES (:id, :user, :target, :privilege)');

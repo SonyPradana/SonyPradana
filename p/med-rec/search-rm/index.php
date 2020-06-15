@@ -5,7 +5,7 @@
 <?php
     #Aunt cek
     session_start();
-    $token = (isset($_SESSION['token']) ) ? $_SESSION['token'] : '';
+    $token = $_SESSION['token'] ?? '';
     $auth = new Auth($token, 2);
     if( !$auth->TrushClient() ){
         header("Location: /p/auth/login");   
@@ -22,14 +22,14 @@
     }
     
     # ambil parameter dari url
-    $main_search = isset( $_GET['main-search'] ) ? $_GET['main-search'] : '';
-    $nomor_rm_search = isset( $_GET['nomor-rm-search']) ? $_GET['nomor-rm-search'] : '';
-    $alamat_search = isset( $_GET['alamat-search'] ) ? $_GET['alamat-search'] : '';
-    $no_rt_search = isset( $_GET['no-rt-search'] ) ? $_GET['no-rt-search'] : '';
-    $no_rw_search = isset( $_GET['no-rw-search'] ) ? $_GET['no-rw-search'] : '';
-    $nama_kk_search = isset( $_GET['nama-kk-search'] ) ? $_GET['nama-kk-search'] : '';
-    $no_rm_kk_search = isset( $_GET['no-rm-kk-search'] ) ? $_GET['no-rm-kk-search'] : '';
-    $strict_search = isset( $_GET['strict-search'] ) ? true : false;    
+    $main_search     = $_GET['main-search'] ?? '';
+    $nomor_rm_search = $_GET['nomor-rm-search'] ?? '';
+    $alamat_search   = $_GET['alamat-search'] ?? '';
+    $no_rt_search    = $_GET['no-rt-search'] ?? '';
+    $no_rw_search    = $_GET['no-rw-search'] ?? '';
+    $nama_kk_search  = $_GET['nama-kk-search'] ?? '';
+    $no_rm_kk_search = $_GET['no-rm-kk-search'] ?? '';
+    $strict_search   = isset( $_GET['strict-search'] ) ? true : false;    
 
 ?>
 <!DOCTYPE html>

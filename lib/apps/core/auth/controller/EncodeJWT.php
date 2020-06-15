@@ -38,7 +38,7 @@ class EncodeJWT{
      * @param string $secretKey kata kunci 
      * @return string JWt 
      */
-    public function hashCode($secretKey){
+    public function hashCode($secretKey):string{
          // Buat Array untuk header lalu convert menjadi JSON
          $header = json_encode($this->_Header);
          // Encode header menjadi Base64Url String

@@ -6,8 +6,7 @@ use StringValidation as sv;
 <?php
 #Aunt cek
 session_start();
-$token = (isset($_SESSION['token']) ) ? $_SESSION['token'] : '';
-#$token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1SWQiOjE0LCJ1TmFtZSI6ImFuZ2dlciIsImV4cHQiOjE1ODI3NTA0ODgsImlwIjoiOjoxIiwidUFnZW50IjoiTW96aWxsYVwvNS4wIChXaW5kb3dzIE5UIDEwLjA7IFdpbjY0OyB4NjQ7IHJ2OjczLjApIEdlY2tvXC8yMDEwMDEwMSBGaXJlZm94XC83My4wIn0.nrx0rBqneP1-ErORCIj6kBWzXXyIWKMVrSJRu1D5Sdo';
+$token = $_SESSION['token'] ?? '';
 $test_auth = new Auth($token, 2);
 if( $test_auth->TrushClient() == true){
     header("Location: /");   
@@ -18,9 +17,9 @@ if( $test_auth->TrushClient() == true){
 # cek session bane 
 $session_bane_fase = true;
 # melihat sisa bane di session max: 5. 0 atrinya sedang dibane
-$stat_bane = isset( $_SESSION['na'] ) ? $_SESSION['na'] : 5;
+$stat_bane = $_SESSION['na'] ?? 5;
 # melihat sisa waktu bane di session max: 2 menit
-$exp_bane = isset( $_SESSION['to'] ) ? $_SESSION['to'] : time() - 1;
+$exp_bane  = $_SESSION['to'] ?? time() - 1;
 # reset timer & status bane, jika sudah melawati bane fase
 if( $exp_bane < time() AND $stat_bane == 0){
     $stat_bane = 5;
@@ -39,8 +38,8 @@ if( $stat_bane == 0 OR $exp_bane > time()){
 $Verify_jwt = false; # default status login
 
 # form di isi    
-$user_name = isset( $_POST['userName'] ) ? $_POST['userName'] : '';
-$password = isset( $_POST['password'] ) ? $_POST['password'] : '';   
+$user_name = $_POST['userName'] ?? '';
+$password  = $_POST['password'] ?? '';   
 
 if( isset( $_POST['login'] ) 
         && $user_name != ''
@@ -80,7 +79,7 @@ if( isset( $_POST['login'] )
         $_SESSION['na'] = $stat_bane;
         $_SESSION['to'] = $exp_bane;
         #redirect ke url yg dituju jika ada
-        $url = isset( $_GET['url'] ) ? $_GET['url'] : '/';
+        $url = $_GET['url'] ?? '/';
         header("Location: " .  $url );
         exit();
     }else{

@@ -6,7 +6,7 @@ use StringValidation as sv;
 <?php
 #authorization token
 session_start();
-$token = (isset($_SESSION['token']) ) ? $_SESSION['token'] : '';
+$token = $_SESSION['token'] ?? '';
 $new_auth = new Auth($token, 2);
 if( $new_auth->TrushClient() ){
     #redirect ke home page
@@ -18,11 +18,11 @@ if( $new_auth->TrushClient() ){
 #main code
 
 # identifikasi form input
-$user_name = isset( $_POST['userName']) ? $_POST['userName'] : '';
-$email = isset( $_POST['email'] ) ? $_POST['email'] : '';
-$password = isset( $_POST['password'] ) ?$_POST['password'] : '';
-$confirm_password = isset( $_POST['password2'] ) ? $_POST['password2'] : '';
-$display_name = isset( $_POST['dispName'] ) ? $_POST['dispName'] : '';
+$user_name = $_POST['userName'] ?? '';
+$email     = $_POST['email'] ?? '';
+$password  = $_POST['password'] ?? '';
+$confirm_password = $_POST['password2'] ?? '';
+$display_name     = $_POST['dispName'] ?? '';
 
 if( isset( $_POST['submit'])){
     # verifikasi user input

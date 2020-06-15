@@ -13,8 +13,8 @@ class Auth{
     private $_jwt;
 
     /** @return boolean getter */
-    public function TrushClient(){
-        return $this->_trushClinet;
+    public function TrushClient():bool{
+        return (bool) $this->_trushClinet;
     }
     /** @return string getter user name */
     public function getUserName(){
@@ -45,9 +45,8 @@ class Auth{
      * 
      * @param string $token jwt token 
      * @param int $securityLevel
-     * @return boolean 
      */
-    public function __construct($token, $securityLevel = 0){
+    public function __construct(string $token, int $securityLevel = 0){
         # koneksi database
         $db = new MyPDO();
         $new_jwt = new DecodeJWT($token);
@@ -112,7 +111,7 @@ class Auth{
      * @return boolean 
      * sudah memnuhi atau belum
      */
-    public function privilege($target){
+    public function privilege($target):bool{
         #login cek
         if( !$this->_trushClinet) return false;
         # tampilkan privilege
@@ -135,7 +134,6 @@ class Auth{
     /**
      * Sigle line authentication, cek auth dan jika salah akan di redirect ke login
      * @param string $redirect target lokasi redirect
-     * @return False->redirect ke link
      */
     public function authing($redirect = '/p/auth/login/'){
         if( !$this->_trushClinet){              

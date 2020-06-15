@@ -19,7 +19,7 @@ class User{
     private $_displayPicture;
 
     /** @return boolean Mengecek validitas user */
-    public function userVerify(){
+    public function userVerify():bool{
         return $this->_exisUser;
     }
     /** @return string Mendapatkan Nama tampilan user*/
@@ -35,7 +35,7 @@ class User{
         return $this->_section;
     }
     /** @return string url image display picture */
-    public function getDisplayPicture():string{
+    public function getDisplayPicture(){
         return $this->_displayPicture;
     }
     // setter
@@ -91,6 +91,9 @@ class User{
         }
     }
 
+    /**
+     * menyimpan perubahan profile ke dalam data base
+     */
     public function saveProfile(){
         if( $this->_exisUser == false ) return false;
         $user_name = $this->_user;

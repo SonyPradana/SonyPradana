@@ -5,7 +5,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/init.php';
 <?php
 #Aunt cek
 session_start();
-$token = (isset($_SESSION['token']) ) ? $_SESSION['token'] : '';
+$token = $_SESSION['token'] ?? '';
 $auth = new Auth($token, 2);
 if( !$auth->TrushClient() ){
     header("Location: /p/auth/login");   
@@ -23,14 +23,14 @@ if( !$auth->TrushClient() ){
     }
 
     # property
-    $nomor_rm = isset( $_POST['nomor_rm'] ) ? $_POST['nomor_rm'] : '';
-    $nama = isset( $_POST['nama'] ) ? $_POST['nama'] : '';
-    $tgl_lahir = isset( $_POST['tgl_lahir'] ) ? $_POST['tgl_lahir'] : '';
-    $alamat = isset( $_POST['alamat'] ) ? $_POST['alamat'] : '';
-    $nomor_rt = isset( $_POST['nomor_rt'] ) ? $_POST['nomor_rt'] : '';
-    $nomor_rw = isset( $_POST['nomor_rw'] ) ? $_POST['nomor_rw'] : '';
-    $nama_kk = isset( $_POST['nama_kk'] ) ? $_POST['nama_kk'] : '';
-    $nomor_rm_kk = isset( $_POST['nomor_rm_kk'] ) ? $_POST['nomor_rm_kk'] : '';
+    $nomor_rm    = $_POST['nomor_rm'] ?? '';
+    $nama        = $_POST['nama'] ?? '';
+    $tgl_lahir   = $_POST['tgl_lahir'] ?? '';
+    $alamat      = $_POST['alamat'] ?? '';
+    $nomor_rt    = $_POST['nomor_rt'] ?? '';
+    $nomor_rw    = $_POST['nomor_rw'] ?? '';
+    $nama_kk     = $_POST['nama_kk'] ?? '';
+    $nomor_rm_kk = $_POST['nomor_rm_kk'] ?? '';
 
     # ambil nomor rm terakhir
     $data = new View_RM();
@@ -41,7 +41,7 @@ if( !$auth->TrushClient() ){
 
     if( isset( $_POST['submit']) ){
         # validasi form jika ada yg kurang atau salah permintaaan ditolak
-        $last_data = isset( $_SESSION['last_data']) ? $_SESSION['last_data'] : [];
+        $last_data = $_SESSION['last_data'] ?? [];
 
         # kita anggap semua field form sudah benar
         $new_rm = new MedicalRecord();
@@ -63,7 +63,8 @@ if( !$auth->TrushClient() ){
             $msg['message'] = 'Berhasil disimpan';
             $msg['type'] = 'success';
             $_SESSION['last_data'] = $_POST;
-            $_POST = [];$nomor_rm = isset( $_POST['nomor_rm'] ) ? $_POST['nomor_rm'] : '';
+            $_POST = [];
+            $nomor_rm = $_POST['nomor_rm'] ?? '';
             $nama = $tgl_lahir = $alamat = $nomor_rt = $nomor_rw = $nama_kk = $nomor_rm_kk = null;
         } else{
             $msg = [];

@@ -13,7 +13,7 @@ class ResetPassword{
     private $userName;
 
     /** @return boolean password atau user banar atau tidak */
-    public function passwordVerify(){
+    public function passwordVerify():bool{
         return $this->password_veryfy;
     }
 
@@ -36,7 +36,7 @@ class ResetPassword{
      * @param string password baru
      * @return boolean berhasil atau tidak
      */
-    public function newPassword($new_Passsword){
+    public function newPassword($new_Passsword):bool{
         if( $this->password_veryfy){
             $db = new MyPDO();
             #query data base

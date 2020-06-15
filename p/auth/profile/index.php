@@ -19,7 +19,7 @@ if( !$new_auth->TrushClient() ){
 
     # cek form
     if( isset($_POST['submit'])){
-        $url_picture = isset( $_POST['url-display-picture'] ) ? $_POST['url-display-picture'] : '/data/img/display-picture/no-image.png';
+        $url_picture    = $_POST['url-display-picture'] ?? '/data/img/display-picture/no-image.png';
         $request_upload = isset( $_FILES['display-picture']) ? true :false;
 
         // upload image

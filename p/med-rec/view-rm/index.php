@@ -5,7 +5,7 @@
 <?php
     #Aunt cek
     session_start();
-    $token = (isset($_SESSION['token']) ) ? $_SESSION['token'] : '';
+    $token = $_SESSION['token'] ?? '';
     $auth = new Auth($token, 2);
     if( !$auth->TrushClient() ){
         header("Location: /p/auth/login");   
@@ -18,7 +18,7 @@
     #config
     $sort = 'nomor_rm';
     $order = 'ASC';
-    $page = isset( $_GET['page'] ) ? $_GET['page'] : 1;
+    $page = $_GET['page'] ?? 1;
     $page = is_numeric($page) ? $page : 1;
 
     # ambil data
