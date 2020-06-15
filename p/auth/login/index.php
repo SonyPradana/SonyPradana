@@ -1,6 +1,7 @@
 <?php
 #import modul 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/init.php';
+use StringValidation as sv;
 ?>
 <?php
 #Aunt cek
@@ -46,8 +47,17 @@ if( isset( $_POST['login'] )
         && $password != '' ) {
 
     # verrifikasi user input
+    // cek login menggunakan email atau user name
+    if( sv::EmailValidation( $user_name ) ){
+        $db = new MyPDO();
+        $db->query('SELECT `user` FROM `profiles` WHERE `email`=:email');
+        $db->bind(':email', $user_name);
+        if( $db->single() ){
+            $user_name = $db->single()['user'];
+        }
+    }
     # 1. format username benar 
-    $validate_user_name = StringValidation::UserValidation($user_name, 2, 32);
+    $validate_user_name = sv::UserValidation($user_name, 2, 32);
 
     #cek dalam session bane tidak
     if( !$session_bane_fase && $validate_user_name ){
