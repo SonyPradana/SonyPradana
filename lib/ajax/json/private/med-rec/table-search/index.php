@@ -44,7 +44,7 @@
     $strict_search = isset( $_GET['strict-search'] ) ? true : false;
 
     // cari data
-    $show_data = new View_RM();
+    $show_data = new MedicalRecords();
 
     // setup data
     $show_data->sortUsing($sort);

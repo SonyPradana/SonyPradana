@@ -10,7 +10,7 @@
 ?>
 <?php
     # mengambil data rm
-    $data_rm = new View_RM();    
+    $data_rm = new MedicalRecords();    
     $jumlah_rm = $data_rm->maxData();
 
     # jadwal pelayana

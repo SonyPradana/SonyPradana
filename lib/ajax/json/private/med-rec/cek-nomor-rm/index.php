@@ -38,7 +38,7 @@
     }
 
     // cari data ke data base
-    $sData= new View_RM();
+    $sData= new MedicalRecords();
     $sData->filterByNomorRm($nomor_rm);
     // configure filter
     $sData->forceLimitView(2);

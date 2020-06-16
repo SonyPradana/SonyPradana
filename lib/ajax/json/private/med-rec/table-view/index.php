@@ -41,7 +41,7 @@
 
     // ambil semua data bila diminta
     if( isset( $_GET['all'] ) ){
-        $data = new View_RM();
+        $data = new MedicalRecords();
 
         // set-up data
         $data->sortUsing($sort);
@@ -89,7 +89,7 @@
     $arr_desa = explode('-', $desa);
         
     // cari data
-    $data = new View_RM();
+    $data = new MedicalRecords();
 
     // set-up data
     $data->sortUsing($sort);

@@ -82,7 +82,7 @@ if( !$auth->TrushClient() ){
                 $status_kk = true;
             }
             # cari rm yang sama
-            $cari_rm = new View_RM();
+            $cari_rm = new MedicalRecords();
             $cari_rm->filterByNomorRm($nomorRM);
             $cari_rm->forceLimitView(2);
             if( $cari_rm->maxData() > 1){

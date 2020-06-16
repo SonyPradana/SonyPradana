@@ -43,7 +43,7 @@
     }
 
     // cari data ke data base
-    $sData= new View_RM();
+    $sData= new MedicalRecords();
     $sData->filterByNamaKK($nama_kk);
     $sData->filterByAlamat($alamat);
     $sData->filterByRt($rt);

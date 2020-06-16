@@ -22,7 +22,7 @@
     $page = is_numeric($page) ? $page : 1;
 
     # ambil data
-    $show_data = new View_RM();
+    $show_data = new MedicalRecords();
     $show_data->sortUsing($sort);
     $show_data->orderUsing($order);
     $show_data->limitView(25);

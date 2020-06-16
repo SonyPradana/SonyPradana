@@ -33,7 +33,7 @@ if( !$auth->TrushClient() ){
     $nomor_rm_kk = $_POST['nomor_rm_kk'] ?? '';
 
     # ambil nomor rm terakhir
-    $data = new View_RM();
+    $data = new MedicalRecords();
     $data->limitView(1);
     $data->sortUsing('nomor_rm');
     $data->orderUsing("DESC");
@@ -74,7 +74,7 @@ if( !$auth->TrushClient() ){
 
         # merefrresh nomor rm terakhir saad form dikirim
         # ambil nomor rm terakhir
-        $data = new View_RM();
+        $data = new MedicalRecords();
         $data->forceLimitView(1);
         $data->sortUsing('nomor_rm');
         $data->orderUsing("DESC");

@@ -1,13 +1,12 @@
 <?php
 /**
- * class ini befungsi untuk mengambil data-data rm dari data base
+ * class ini befungsi untuk mengambil data rekam medis dari data base
  * dengan parameter tertentu, seperti nama, tanggal lahir alamat, dan nama kepala keluarga
- * (mengumpulkan data berdasarkan filter yg ada)
- * 
+ * (mengumpulkan data berdasarkan filter yg ada) 
  * 
  * @author sonypradana@gmail.com
  */
-class View_RM{
+class MedicalRecords{
     # filert by
     /** @var string 6 digit */
     private $_filter_nomor_rm;
