@@ -19,11 +19,12 @@ class MedicalRecord{
     protected $_nomorRt;
     /** @var int Nomor RW */
     protected $_nomorRw;    
-    
     /** @var string Nama Kepla Keluarga*/
     protected $_namaKK;
     /** @var string No Rekam Medis Kepala Keluarga*/
     protected $_nomorRM_KK;
+    /** @var string Status grub kesehatan (string in array) */
+    protected $_status = "null";
 
     /** @var string last query used */
     private $_last_query;
@@ -96,6 +97,13 @@ class MedicalRecord{
      */
     public function getNomorRM_KK(){
         return $this->_nomorRM_KK;
+    }
+    /**
+     * get status grup kesehatan
+     * @return string Get status grup kesehatan
+     */
+    public function getStatus(){
+        return $this->_status;
     }
 
     /**
@@ -210,6 +218,16 @@ class MedicalRecord{
             $this->_nomorRM_KK = $val;
         }
     }
+    /**
+     * Set status grup kesehatan
+     */
+    public function setStatus(string $val){
+        $verify = StringValidation::NoHtmlTagValidation( $val );
+        if( $verify ){
+            $val = strtolower( $val );
+            $this->_status = $val;
+        }
+    }
 #endregion
 
     /** buat class baru */
@@ -258,6 +276,7 @@ class MedicalRecord{
      * - nomorRw        -> nomor_rw
      * - namaKK         -> nama_kk
      * - nomorRM_KK     -> nomor_rm_kk
+     * - status         -> status
      * 
      */
     private function convertFromData($data){
@@ -271,6 +290,7 @@ class MedicalRecord{
         $this->_nomorRw = (int) $data['nomor_rw'];
         $this->_namaKK = $data['nama_kk'];
         $this->_nomorRM_KK = $data['nomor_rm_kk'];     
+        $this->_status = $data['status'];
     }
     /**
      * fungsinya untuk mengkonfersi proprti kelas ke data array
@@ -287,24 +307,23 @@ class MedicalRecord{
         $data[] = $this->_nomorRw;
         $data[] = $this->_namaKK;
         $data[] = $this->_nomorRM_KK;
+        $data[] = $this->_status;
 
         return $data;
     }
 
     /**
-     * refresh/ambil semua data dari database, munggunakn id
+     * refresh/ambil/pull semua data dari database, munggunakn id
      * @return boolean 
      * bila berhasil di refresh nilainya true
      */
     public function refresh(){
         # memuat ulang data dari data base menggunakn id
-        $id = $this->_id;
-
-        $link  = mysqli_connect(DB_HOST, DB_USER, DB_PASS, "simpusle_simpus_lerep");
-        $query = mysqli_query($link, "SELECT * FROM data_rm WHERE id = '$id' ");
-        if( mysqli_num_rows( $query ) == 1 ){
-            $row = mysqli_fetch_assoc( $query );
-            $this->convertFromData( $row );
+        $db = new MyPDO();
+        $db->query("SELECT * FROM `data_rm` WHERE `id` = :id");
+        $db->bind(':id', $this->_id);
+        if( $db->single() ){
+            $this->convertFromData( $db->single() );
             return true;
         }
         return false;
@@ -328,22 +347,24 @@ class MedicalRecord{
         $nomor_rw = $this->_nomorRw;
         $nama_kk = $this->_namaKK;
         $nomor_rm_kk = $this->_nomorRM_KK;
+        $status = $this->_status;
         
         # jika nama dan no rm kosong tidak disimpan
         if( $nomor_rm == '' && $nama == '') return false;  
 
         $link  = mysqli_connect(DB_HOST, DB_USER, DB_PASS, "simpusle_simpus_lerep");
-        $query = "UPDATE data_rm SET 
-                                    nomor_rm = '$nomor_rm',
-                                    data_dibuat = '$data_dibuat',
-                                    nama = '$nama',
-                                    tanggal_lahir = '$tanggal_lahir',
-                                    alamat = '$alamat',
-                                    nomor_rt = '$nomor_rt',
-                                    nomor_rw = '$nomor_rw',
-                                    nama_kk = '$nama_kk',
-                                    nomor_rm_kk = '$nomor_rm_kk'
-                                WHERE id = '$id' ";
+        $query = "UPDATE `data_rm` SET 
+                                    `nomor_rm` = '$nomor_rm',
+                                    `data_dibuat` = '$data_dibuat',
+                                    `nama` = '$nama',
+                                    `tanggal_lahir` = '$tanggal_lahir',
+                                    `alamat` = '$alamat',
+                                    `nomor_rt` = '$nomor_rt',
+                                    `nomor_rw` = '$nomor_rw',
+                                    `nama_kk` = '$nama_kk',
+                                    `nomor_rm_kk` = '$nomor_rm_kk',
+                                    `status` = '$status'
+                                WHERE `id` = '$id' ";
         #simpan query
         mysqli_query($link, $query);
         # bila berhasil return true
@@ -361,7 +382,6 @@ class MedicalRecord{
      * bila berhasil dihapus nilainya true
      */
     public function delete(){
-        # memuat ulang data dari data base menggunakn id
         $id = $this->_id;
 
         $link  = mysqli_connect(DB_HOST, DB_USER, DB_PASS, "simpusle_simpus_lerep");
@@ -414,12 +434,13 @@ class MedicalRecord{
         $nomor_rw = (int) $this->_nomorRw;
         $nama_kk = $this->_namaKK;
         $nomor_rm_kk = $this->_nomorRM_KK;
+        $status = $this->_status;
         
         # jika nama dan no rm kosong tidak disimpan
         if( $nomor_rm == '' && $nama == '') return false;        
         
         $link  = mysqli_connect(DB_HOST, DB_USER, DB_PASS, "simpusle_simpus_lerep");
-        $query = "INSERT INTO data_rm VALUES ('$id', 
+        $query = "INSERT INTO `data_rm` VALUES ('$id', 
                                        '$nomor_rm',
                                        '$data_dibuat',
                                        '$nama',
@@ -428,7 +449,8 @@ class MedicalRecord{
                                        '$nomor_rt',
                                        '$nomor_rw',
                                        '$nama_kk',
-                                       '$nomor_rm_kk'
+                                       '$nomor_rm_kk',
+                                       '$status'
                                        )";
             
         #esekusi query
