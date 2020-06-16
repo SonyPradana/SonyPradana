@@ -73,6 +73,7 @@ class User{
      * @param string $user_name User Name yang digunakna
      */
     public function __construct($user_name){
+        if( is_null($user_name) ) return;
         // senetalizer user_name
         $user_name = strtolower($user_name);
         $this->_user = $user_name;

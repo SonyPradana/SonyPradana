@@ -47,6 +47,7 @@ class Auth{
      * @param int $securityLevel
      */
     public function __construct(string $token, int $securityLevel = 0){
+        if( $token == "" ) return;
         # koneksi database
         $db = new MyPDO();
         $new_jwt = new DecodeJWT($token);

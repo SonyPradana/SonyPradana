@@ -4,7 +4,7 @@
 <?php 
     #Aunt cek
     session_start();
-    $token = (isset($_SESSION['token']) ) ? $_SESSION['token'] : '';
+    $token = $_SESSION['token'] ?? "";
     $auth = new Auth($token, 2);
     $user = new User($auth->getUserName());
 ?>
