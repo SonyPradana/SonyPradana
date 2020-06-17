@@ -38,6 +38,13 @@ class User{
     public function getDisplayPicture(){
         return $this->_displayPicture;
     }
+    public function getSmallDisplayPicture(){
+        $file_name = explode('/', $this->_displayPicture);
+        $file_name = end( $file_name );
+        $small_image = str_replace($file_name, "small-" . $file_name, $this->_displayPicture);
+        $return = file_exists( $_SERVER['DOCUMENT_ROOT'] . $small_image) ? $small_image : '/data/img/display-picture/user/small-no-image.png';
+        return $return;
+    }
     // setter
     /** 
      * menggati display name baru     * 

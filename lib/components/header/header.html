@@ -18,7 +18,7 @@
         <?php if( $auth->TrushClient()): ?>
         <div class="boxs-account" onclick="open_modal()">
             <div class="box-account left">
-                <div class="pic-box"></div>
+                <img class="pic-box" src="<?= $user->getSmallDisplayPicture() ?>" alt="@<?= $user->getDisplayName() ?>)">
             </div>
             <div class="box-account right">
                 <p><?= $user->getDisplayName()?></p>
