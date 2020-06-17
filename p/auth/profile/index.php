@@ -1,6 +1,11 @@
 <?php
-#import modul 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/init.php';
+    #import modul 
+    require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/init.php';
+    // image resizer
+    require_once $_SERVER['DOCUMENT_ROOT'] . '/vendor/gumlet/php-image-resize/ImageResize.php';
+    require_once $_SERVER['DOCUMENT_ROOT'] . '/vendor/gumlet/php-image-resize/ImageResizeException.php';
+
+    use \Gumlet\ImageResize;
 ?>
 <?php
 #authorization token
@@ -44,6 +49,12 @@ if( !$new_auth->TrushClient() ){
             if( $upload_url != $url_picture){
                 $upload->delete($url_picture);
             }
+            $small_image = str_replace($new_auth->getUserName(), "small-" . $new_auth->getUserName(), $url_picture);
+            $upload->delete($small_image);
+            $image = new ImageResize(BASEURL . $upload_url);
+            $image->resizeToShortSide(24);
+            $small_image = str_replace($new_auth->getUserName(), "small-" . $new_auth->getUserName(), $upload_url);
+            $image->save(BASEURL . $small_image);
         }
 
         $msg = $request_upload ? $upload->getError() : null;
