@@ -299,7 +299,7 @@
 
         // keep alive
         keepalive(() => {
-            location.reload()
+            window.location.href = "/p/auth/login/?url=<?= $_SERVER['REQUEST_URI'] ?>"
         })
 
         function togle( show ){

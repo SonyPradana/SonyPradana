@@ -6,15 +6,23 @@
  * @author sonypradana@gmail.com
  */
 class Logout{
+    /** @var bool User logout status */
+    private $_success = false;
+    /**
+     * User logout status
+     * @return bool True on success
+     */
+    public function isSuccess():bool{
+        return $this->_success;
+    }
 
     /**
      * logut dengan token
      * 
      * @param sting $token valid token
      * token yang di kirim harus token aktif dan memliliki token tersebut
-     * @return boolean logout diterima atau tidak
      */
-    public function __construct($token){
+    public function __construct(string $token){
         #veifikasi token
         $verify = new Auth($token, 2);
         if( $verify->TrushClient() ){
@@ -34,13 +42,12 @@ class Logout{
                 $log = new Log( $verify->getUserName() );
                 $log->set_event_type('auth');
                 $log->save('success logout');
-                                
-                return true;
+                
+                $this->_success = true;
+                exit();
             }
 
         }
-        #defult nya adalah false
-        return false;
     }
 }
 
