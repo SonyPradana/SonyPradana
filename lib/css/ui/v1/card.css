@@ -4,6 +4,8 @@
  * 2. covid medium card 
  * 3. info-rm card
  * 4. respone card
+ * 5. box card
+ * 6. event card
  */
 
  /* plan card */
@@ -122,6 +124,53 @@
     justify-content: start;
 }
 
+/* box card */
+
+.cards-box.blue{
+    padding: 16px;
+    background-color: #55b9f3;
+    border-radius: 12px;
+    box-shadow: 5px 10px 19px -10px #489dcf;
+    margin-bottom: 12px;
+}
+.cards-box .box-title{
+    font-size: 21px;
+    font-weight: 700;
+}
+.cards-box .box-container{
+    height: auto;
+    padding: 12px 4px;
+    display: grid;
+    grid-template-columns: minmax(270px, 300px) 12px minmax(270px, 300px) ;
+    overflow-x: auto;
+}
+
+/* card event */
+.card.event{
+    padding: 12px;
+    display: grid;
+    grid-template-columns: 64px 12px 200px;
+}
+.card.event .card-time{
+    height: 64px;
+    background-color: blue;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: column;
+}
+.card.card.event .card-time .mount{
+    font-size: 1.2rem;
+}
+.card.card.event .card-time .day{
+    font-size: 1.4rem;
+    font-weight: 700;
+}
+.card.card.event .card-content .description{
+    color: #606060;;
+}
+
 /* end of card */
 
 /* media query */
@@ -152,6 +201,14 @@
     .respone-card .card.title{
         font-size: 1rem;
     }
+
+    /* box card */
+    .cards-box{
+        height: auto;
+    }
+    .cards-box .box-container{
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 12px auto;
     
 }
 /* laptop/pc view */

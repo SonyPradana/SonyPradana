@@ -84,6 +84,10 @@
             width: 64px;
             text-align: center;    
         }
+
+        #jadwal-imunisasi{
+            margin-right: 12px;
+        }
         /* tablet vie view */
         @media screen  and (max-width: 767px) {
             /* costume main container */
@@ -175,6 +179,14 @@
                     </div>
                     <div class="card content">
                         <p>Data RM Terdata</p>
+                    </div>
+                </div>
+                <div class="card respone-card grad-pinktoyellow shadow-bottom-left-medium" data-tooltips="click untuk melihat" id="jadwal-imunisasi">
+                    <div class="card title">
+                        Jadwal Imunisai
+                    </div>
+                    <div class="card action">
+                        <a href="/p/info/jadwal-pelayanan/" class="btn fill blue small rounded">Lihat &raquo</a>
                     </div>
                 </div>
                 <div class="card respone-card grad-blue shadow-bottom-left-medium" data-tooltips="click untuk melihat">
