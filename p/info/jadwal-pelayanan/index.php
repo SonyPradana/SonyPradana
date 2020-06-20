@@ -278,14 +278,13 @@
             vdom_td_nomor.innerText = i
             vdom_td_vaksin.innerText = row
             
-            
             vdom_perrent_tr.appendChild( vdom_td_nomor )
             vdom_perrent_tr.appendChild( vdom_td_vaksin )
             dom_perent_body.appendChild(vdom_perrent_tr)
             arr['jadwal'].forEach(element => {
                 let vdom_td_jadwal = document.createElement('td')
 
-                vdom_td_jadwal.innerText =  arr['jadwal'].includes(element) ? 'Ya' : 'Tidak';
+                vdom_td_jadwal.innerText =  data[`${row}`].includes(element) ? 'Ya' : 'Tidak';
                 vdom_perrent_tr.appendChild( vdom_td_jadwal )
             })
             i++
