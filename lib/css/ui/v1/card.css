@@ -9,6 +9,12 @@
  */
 
  /* plan card */
+
+/* cads as link */
+a.card{
+    text-decoration: none;
+}
+
  /* gradient color */
 .card.grad-blue{
     background-color: #08AEEA;
@@ -79,9 +85,9 @@
 /* info-rm card */
 .rm-card{
     min-width: 200px;
-    height: 80px;
+    max-height: 80px;
     padding: 12px;
-    margin-right: 12px;
+    margin-right: 12px; margin-bottom: 12px;
     cursor: pointer;
     display: flex;
     flex-direction: column;
@@ -140,8 +146,6 @@
 .cards-box .box-container{
     height: auto;
     padding: 12px 4px;
-    display: grid;
-    grid-template-columns: minmax(270px, 300px) 12px minmax(270px, 300px) ;
     overflow-x: auto;
 }
 
@@ -209,7 +213,7 @@
     .cards-box .box-container{
         grid-template-columns: 1fr;
         grid-template-rows: auto 12px auto;
-    
+    }
 }
 /* laptop/pc view */
 @media screen and (min-width: 1000px){

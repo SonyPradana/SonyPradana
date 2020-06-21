@@ -147,6 +147,7 @@ if( !$auth->TrushClient() ){
             <div class="coit breadcrumb">
                 <ul class="crumb">
                     <li><a href="/">Home</a></li>
+                    <li><a href="/p/med-rec/">Rekam Medis</a></li>
                     <li>Buat Data Baru</li>
                 </ul>
             </div>

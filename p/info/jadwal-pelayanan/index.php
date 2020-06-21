@@ -51,6 +51,11 @@
         main{
             overflow-x: hidden
         }
+        /* Templatebox container */
+        .cards-box .box-container{
+            display: grid;
+            grid-template-columns: minmax(270px, 300px) 12px minmax(270px, 300px) ;
+        }
         
         .header-article{margin-bottom: 16px}
         .header-article h1{
@@ -208,7 +213,7 @@
 <script>    
     // sticky header
     window.onscroll = function(){
-            stickyHeader('.container', '82px', '32px')
+        stickyHeader('.container', '82px', '32px')
     }
     
     // keep alive
