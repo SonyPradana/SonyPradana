@@ -46,7 +46,7 @@
     <meta http-equiv="content-language" content="In-Id">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Liat data rm</title>
+    <title>Dashbor Rekam Medis - Simpus Lerep</title>
     <meta name="description" content="sisteminformasi kesehtan puskesmas Lerep">
     <meta name="keywords" content="simpus lerep, pkm lerep">
     <meta name="author" content="amp">
