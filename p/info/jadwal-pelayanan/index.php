@@ -91,6 +91,11 @@
         @media screen and (max-width: 767px) {
             .container.width-view{grid-template-columns: 1fr}
             .table-boxs{justify-content: unset}
+                        
+            .cards-box .box-container{
+                grid-template-columns: 1fr;
+                grid-template-rows: auto 12px auto;
+            }
         }
 
         

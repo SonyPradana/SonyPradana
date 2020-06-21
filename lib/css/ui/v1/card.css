@@ -210,10 +210,6 @@ a.card{
     .cards-box{
         height: auto;
     }
-    .cards-box .box-container{
-        grid-template-columns: 1fr;
-        grid-template-rows: auto 12px auto;
-    }
 }
 /* laptop/pc view */
 @media screen and (min-width: 1000px){
