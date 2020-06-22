@@ -119,6 +119,12 @@
                             <div class="card note">Orang</div>
                         </div>
                         <div class="gap-space"></div>
+                        <div class="card covid-card  grad-yellowtored" id="card-isolasi" data-tooltips="Pasien Isolasi">
+                            <div class="card title">Pasien Isolasi</div>
+                            <div class="card content">XXX</div>
+                            <div class="card note">Orang</div>
+                        </div>
+                        <div class="gap-space"></div>
                         <div class="card covid-card grad-pinktoyellow" id="card-sembuh" data-tooltips="Pasien Sembuh">
                             <div class="card title">Pasien Sembuh</div>
                             <div class="card content">XXX</div>
@@ -147,8 +153,9 @@
                                     <td>PDP</td>
                                     <td>PDP Sembuh</td>
                                     <td>PDP Meninggal</td>
-                                    <td>Positf</td>
-                                    <td>Positf Sembuh</td>
+                                    <td>Positif</td>
+                                    <td>Isolasi</td>
+                                    <td>Positif Sembuh</td>
                                     <td>Meninggal</td>
                                 </tr>
                             </thead>
@@ -189,12 +196,14 @@
     }
 
     // render card
-    function renderCard(postif, sembuh, meninggal){
+    function renderCard(postif, isolasi, sembuh, meninggal){
         let card_postif = document.querySelector('#card-positif .card.content');
+        let card_isolasi = document.querySelector('#card-isolasi .card.content');
         let card_sembuh = document.querySelector('#card-sembuh .card.content');
         let card_meninggal = document.querySelector('#card-meninggal .card.content');
 
         card_postif.innerHTML = postif;
+        card_isolasi.innerHTML = isolasi;
         card_sembuh.innerHTML = sembuh;
         card_meninggal.innerHTML = meninggal;
     }
@@ -207,6 +216,7 @@
             let th_n = document.createElement("th"); let th_ds= document.createElement("th");
             let th_op = document.createElement("th");  let th_os = document.createElement("th"); let th_om = document.createElement("th");
             let th_pp = document.createElement("th");  let th_ps = document.createElement("th"); let th_pm = document.createElement("th");
+            let th_pi = document.createElement("th");
 
             // mengambil nilai
             th_n.innerText = i;
@@ -217,16 +227,18 @@
             th_om.innerText = element['pdp']['meninggal'];
             // positif
             th_pp.innerText = element['positif']['dirawat'];
+            th_pi.innerText = element['positif']['isolasi'];
             th_ps.innerText = element['positif']['sembuh'];
             th_pm.innerText = element['positif']['meninggal'];
 
             // add classes
             th_op.classList.add("number"); th_os.classList.add("number"); th_om.classList.add("number");
-            th_pp.classList.add("number"); th_ps.classList.add("number"); th_pm.classList.add("number");
+            th_pp.classList.add("number"); th_pi.classList.add("number"); th_ps.classList.add("number"); th_pm.classList.add("number");
             // append child
             perrent_row.appendChild(th_n); perrent_row.appendChild(th_ds);
             perrent_row.appendChild(th_op); perrent_row.appendChild(th_os); perrent_row.appendChild(th_om);
-            perrent_row.appendChild(th_pp); perrent_row.appendChild(th_ps); perrent_row.appendChild(th_pm);
+            perrent_row.appendChild(th_pp); perrent_row.appendChild(th_pi); perrent_row.appendChild(th_ps); perrent_row.appendChild(th_pm);
+            
             // assamble
             perrent_table.appendChild(perrent_row);
             i++;
@@ -240,7 +252,7 @@
             });
         getData('/lib/ajax/json/public/covid-kab-semarang/info/')
             .then( data => {
-                renderCard(data['kasus_posi'], data['kasus_semb'], data['kasus_meni']);
+                renderCard(data['kasus_posi'], data['kasus_isol'], data['kasus_semb'], data['kasus_meni']);
                 grapInfo(data);
             })
 
@@ -252,6 +264,11 @@
             let posi = dom_posi.getAttribute('data-tooltips')
             if( event['kasus_posi'] != 0){
                 dom_posi.setAttribute('data-tooltips', posi + ', ' + event['kecamatan'] + `(${event['kasus_posi']})`)
+            }
+            let dom_isol = document.querySelector('#card-isolasi')
+            let isol = dom_isol.getAttribute('data-tooltips')
+            if( event['kasus_isol'] != 0){
+                dom_isol.setAttribute('data-tooltips', isol + ', ' + event['kecamatan'] + `(${event['kasus_isol']})`)
             }
             let dom_semb = document.querySelector('#card-sembuh')
             let semb = dom_semb.getAttribute('data-tooltips')

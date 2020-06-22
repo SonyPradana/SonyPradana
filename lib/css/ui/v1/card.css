@@ -70,15 +70,16 @@ a.card{
     cursor: default;
     padding: 16px;
     border-radius: 12px;
-    min-width: 180px;
+    width: 150px;
+    min-width: 150px;
     color: #fff;    
     position: relative;
 }
 .covid-card .card.title{
-    font-size: 1.3rem;
+    font-size: 1.25rem;
 }
 .covid-card .card.content{
-    font-size: 2.4rem;
+    font-size: 2.3rem;
     font-weight: 700;
 }
 
@@ -178,10 +179,16 @@ a.card{
 /* end of card */
 
 /* media query */
+/* mobile mode*/
+@media screen and (max-width: 479px) {
+    .covid-card{
+        min-width: 110px;
+    }
+}
 /* tablet view */
 @media screen  and (max-width: 767px) {
     .covid-card .card.title{
-        font-size: 1rem;
+        font-size: .95rem;
     }
 
     /* info-rm card */

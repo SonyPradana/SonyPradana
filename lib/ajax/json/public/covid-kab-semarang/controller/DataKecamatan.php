@@ -13,6 +13,8 @@
 class DataKecamatan{
     /** @var integer jumlah positif covid dirawat */
     private $_positif_dirawat = 0;
+    /** @var integer Jumlah isolasi */
+    private $_positif_isolasi = 0;
     /** @var integer jumlah positif covid sembuh */
     private $_positif_sembuh = 0;
     /** @var integer jumlah positif covid meninggal */
@@ -21,6 +23,10 @@ class DataKecamatan{
     /** @return integer jumlah positif covid dirawat*/
     public function positifDirawat(){
         return (int) $this->_positif_dirawat;
+    }
+    /** @return integer Jumlah pasien positif yang diisolasi */
+    public function positifIsolasi(){
+        return (int) $this->_positif_isolasi;
     }
     /** @return integer jumlah positif covid dirawat*/
     public function positifSembuh(){
@@ -61,6 +67,7 @@ class DataKecamatan{
     public function getData($nama_kecamatan){
         // parameter untukmendapatkan total data per request
         $positif_dirawat = 0;
+        $positif_isolasi = 0;
         $positif_sembuh = 0;
         $positif_meninggal = 0;
 
@@ -68,8 +75,12 @@ class DataKecamatan{
         $id = $this->Dafatar_Kecamatan[$nama_kecamatan];
         
         // memuat data mentah dari web dinkes
-        $url = "https://corona.semarangkab.go.id/covid/data_desa?id_kecamatan=$id";
-        $html = file_get_contents($url);
+        $ch = curl_init("https://corona.semarangkab.go.id/covid/data_desa?id_kecamatan=$id");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HEADER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        $html = curl_exec($ch);
+        curl_close($ch);
 
         // memuat data dalam bentuk DOM htlm -> mudah di parsing
         $dom = new DOMDocument();
@@ -95,12 +106,14 @@ class DataKecamatan{
 
                 $positif_covid = []; # grup array untuk grup positif covid
                 $positif_covid["dirawat"] = $this->removeDoubleSpace($td->item(6)->nodeValue);
-                $positif_covid["sembuh"] = $this->removeDoubleSpace($td->item(7)->nodeValue);
-                $positif_covid["meninggal"] = $this->removeDoubleSpace($td->item(8)->nodeValue);
-                $positif_covid["keterangan"] = $this->removeDoubleSpace($td->item(9)->nodeValue);
+                $positif_covid["isolasi"] = $this->removeDoubleSpace($td->item(7)->nodeValue);
+                $positif_covid["sembuh"] = $this->removeDoubleSpace($td->item(8)->nodeValue);
+                $positif_covid["meninggal"] = $this->removeDoubleSpace($td->item(9)->nodeValue);
+                $positif_covid["keterangan"] = $this->removeDoubleSpace($td->item(10)->nodeValue);
 
                 //  mengakumulasi jumlah pasien dalam satu kelurahan / request
                 $positif_dirawat += $positif_covid["dirawat"];
+                $positif_isolasi += $positif_covid["isolasi"];
                 $positif_sembuh += $positif_covid["sembuh"];
                 $positif_meninggal +=  $positif_covid["meninggal"];
 
@@ -118,6 +131,7 @@ class DataKecamatan{
         $paket = [
             "kecamatan" => $nama_kecamatan,
             "kasus_posi" => $positif_dirawat,
+            "kasus_isol" => $positif_isolasi,
             "kasus_semb" => $positif_sembuh,
             "kasus_meni" => $positif_meninggal,
             "data" => $desa
@@ -125,6 +139,7 @@ class DataKecamatan{
 
         // memberitahu ke clinet hasil komulatif data (internal class)
         $this->_positif_dirawat = $positif_dirawat;
+        $this->_positif_isolasi = $positif_isolasi;
         $this->_positif_sembuh = $positif_sembuh;
         $this->_positif_meninggal = $positif_meninggal;
 

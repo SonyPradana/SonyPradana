@@ -7,13 +7,13 @@ aside.top{
     justify-content: center;
     align-items: center;
     flex-flow: column;
-    height: 100px;
+    min-height: 100px;
     overflow-x: auto;
 }
 aside.top .boxs-info{
     display: grid;
-    grid-template-columns: repeat(3, 130px);
-    grid-column-gap: 12px;
+    grid-template-columns: repeat(4, 130px);
+    gap: 12px;
     align-items: center;
 }
 aside.top .boxs-info .info{
@@ -24,7 +24,8 @@ aside.top .boxs-info .info{
 }
 /* sttyle aside top */
 aside.top .boxs-header p{
-    margin: 8px 0px;
+    font-size: 1.3rem;
+    margin: 8px 0px 12px;
 }
 aside.top .boxs-info .info{
     height: 36px;
@@ -34,11 +35,11 @@ aside.top .boxs-info .info{
 }
 aside.top .boxs-info .info .item-info.left{
     /* background-color: #c1b659; */
-    background-image: url(/lib/css/ui/v1/asset/corona-virus.png);
+    background-image: url(/lib/css/ui/v1/asset/coronavirus.svg);
     background-repeat: no-repeat;
     background-size: cover;
     width: 24px; height: 24px;
-    border-radius: 50%;     
+    border-radius: 50%;         
     display: flex;
     align-items: center;       
 }
@@ -223,4 +224,12 @@ aside.top .boxs-info .info .item-info.right{
     margin: 0 4px;
     font-size: .97rem;
     padding: 4px 0;
+}
+
+/* media query */
+/* tablet view */
+@media screen  and (max-width: 767px) {        
+    aside.top .boxs-info{
+        grid-template-columns: repeat(2, 130px);
+    }
 }

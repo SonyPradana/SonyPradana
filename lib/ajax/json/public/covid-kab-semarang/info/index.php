@@ -25,6 +25,7 @@
     if( $id == null){
         // akumulasi data (se kabupaten)
         $kasus_positif = 0;
+        $kasus_isolasi = 0;
         $kasus_sembuh = 0;
         $kasus_meninggal = 0;
         $res = [];
@@ -32,6 +33,7 @@
         foreach( $dafar as $key => $value){
             $res[] = $data->getData($key);
             $kasus_positif += $data->positifDirawat();
+            $kasus_isolasi += $data->positifIsolasi();
             $kasus_sembuh += $data->positifSembuh();
             $kasus_meninggal += $data->positifMeninggal();
         }
@@ -39,6 +41,7 @@
         $result =[
             "kabupaten" => "semarang",
             "kasus_posi" => $kasus_positif,
+            "kasus_isol" => $kasus_isolasi,
             "kasus_semb" => $kasus_sembuh,
             "kasus_meni" => $kasus_meninggal,
             "data" => $res

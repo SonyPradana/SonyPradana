@@ -159,6 +159,10 @@
                 <div class="item-info left"></div>
                 <div class="item-info right">{{ msgPosi }}</div>
             </div>
+            <div class="info three">
+                <div class="item-info left"></div>
+                <div class="item-info right">{{ msgIsol }}</div>
+            </div>
             <div class="info two">
                 <div class="item-info left"></div>
                 <div class="item-info right">{{ msgSemb }}</div>
@@ -172,7 +176,7 @@
     <div class="container width-view">
         <main class="news">
             <div class="boxs-card">
-                <div class="card rm-card shadow-bottom-left-medium">
+                <div class="card rm-card grad-yellowtored shadow-bottom-left-medium">
                     <div class="card title">
                         <p><?= $jumlah_rm?></p>
                         <span class="detail"> ~<?= round( ($jumlah_rm / 15000) * 100, 1) ?>%</span>
@@ -281,6 +285,7 @@
             el: '#c-covid',
             data:{
                 msgPosi: 'xxx positif',
+                msgIsol: 'xxx isolasi',
                 msgSemb: 'xxx sembuh',
                 msgMeni: 'xxx meninggal'
             }
@@ -302,6 +307,7 @@
                     infoCovid.msgPosi = json['kasus_posi'] + ' positif';
                     infoCovid.msgSemb = json['kasus_semb'] + ' sembuh';
                     infoCovid.msgMeni = json['kasus_meni'] + ' meninggal';
+                    infoCovid.msgIsol = json['kasus_isol'] + ' isolasi'
                 })
         })
         // sticky header
