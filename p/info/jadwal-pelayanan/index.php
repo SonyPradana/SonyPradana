@@ -20,6 +20,8 @@
     $jadwal_ketiga  = explode(' ', $data['jadwal'][2]);
 
     $avilable_month = $imun->getAvilabeMonth();
+
+    $author = new User("angger");
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -49,15 +51,15 @@
             grid-template-columns: 1fr 300px;
         }
         main{
-            overflow-x: hidden
+            overflow-x: hidden;
         }
         /* Templatebox container */
         .cards-box .box-container{
             display: grid;
-            grid-template-columns: minmax(270px, 300px) 12px minmax(270px, 300px) ;
+            grid-template-columns: minmax(270px, 320px) 16px minmax(270px, 320px);
         }
         
-        .header-article{margin-bottom: 16px}
+        .header-article{margin-bottom: 24px}
         .header-article h1{
             font-size: 2.3rem;
             font-weight: 700;
@@ -85,8 +87,8 @@
         }
 
         .gap{
-            width: 12px; height: 12px;
-            min-height: 12px; min-width: 12px;
+            width: 16px; height: 16px;
+            min-height: 16px; min-width: 16px;
         }
         @media screen and (max-width: 767px) {
             .container.width-view{grid-template-columns: 1fr}
@@ -94,12 +96,9 @@
                         
             .cards-box .box-container{
                 grid-template-columns: 1fr;
-                grid-template-rows: auto 12px auto;
+                grid-template-rows: auto 16px auto;
             }
         }
-
-        
-
     </style>
 </head>
 <body>
@@ -121,15 +120,18 @@
                 <div class="header-article">
                     <H1>Jadwal Pelayanan Poli KIA Anak (Imunisasi) Setiap Hari Jumat</H1>
                     <div class="article breadcrumb">
-                        <div class="author">Angger Mulia Pradana</div>
+                        <div class="author">
+                            <img src="<?= $author->getSmallDisplayPicture() ?>" alt="@<?= $author->getDisplayName() ?>" srcset="">    
+                            <div class="author-name"><a href="/p/contact/ourteam/"><?= $author->getDisplayName() ?></a></div>
+                        </div>
                         <div class="time">18 Juni 2020</div>
                     </div>
                 </div>
                 <div class="media-article">
                     <div class="cards-box blue">
-                        <div class="box-title">Jadwal Bulan Ini (Juni)</div>
+                        <div class="box-title">Jadwal Bulan Ini (<?= date('M') ?>)</div>
                         <div class="box-container">
-                            <div class="card event grad-blue shadow-bottom-left-medium" id="jumat-pertama">
+                            <div class="card event neum-blue neum-tiny neum-concave radius-small" id="jumat-pertama">
                                 <div class="card-time">
                                     <div class="mount"><?= $jadwal_pertama[1] ?></div>
                                     <div class="day"><?= $jadwal_pertama[0] ?></div>
@@ -142,7 +144,7 @@
                                 </div>
                             </div>
                             <div class="gab"></div>
-                            <div class="card event grad-blue shadow-bottom-left-medium" id="jumat-ketiga">
+                            <div class="card event neum-blue neum-tiny neum-concave radius-small" id="jumat-ketiga">
                                 <div class="card-time">
                                     <div class="mount"><?= $jadwal_ketiga[1] ?></div>
                                     <div class="day"><?= $jadwal_ketiga[0] ?></div>
@@ -303,7 +305,6 @@
 
     const selectElement = document.querySelector('#input-pilih-bulan');
     selectElement.addEventListener('change', (event) => {
-        console.log(event.target.value)
         getData(`/lib/ajax/json/public/jadwal-imunisasi/?month=${event.target.value}`)
             .then( data => {
                 renderCard(data);

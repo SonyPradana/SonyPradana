@@ -8,6 +8,10 @@
     $auth = new Auth($token, 2);
     $user = new User($auth->getUserName());
 ?>
+<?php 
+    // author
+    $author = new User("angger");
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -36,11 +40,11 @@
             grid-template-columns: 1fr 300px;
         }
         main{
-            overflow-x: hidden
+            overflow-x: hidden;
         }
 
         /* prototipe article - tamplate */
-        .header-article{margin-bottom: 16px}
+        .header-article{margin-bottom: 24px}
         .header-article h1{
             font-size: 2.3rem;
             font-weight: 700;
@@ -57,11 +61,11 @@
             overflow-x: visible;
             display: flex;
             flex-direction: row;
-            padding: 16px 0;
             justify-content: center;
+            margin-bottom: 12px;
         }
         .box.cards .gap-space{
-            min-width: 12px;
+            min-width: 16px;
         }
         .media.note p{color: #a2a2a2; margin: 0}
         .table-boxs{
@@ -107,7 +111,10 @@
                 <div class="header-article">
                     <H1>Info Covid Kabupaten Semarang (Kec Ungaran Barat)</H1>
                     <div class="article breadcrumb">
-                        <div class="author">Angger Mulia Pradana</div>
+                        <div class="author">
+                            <img src="<?= $author->getSmallDisplayPicture() ?>" alt="@<?= $author->getDisplayName() ?>" srcset="">    
+                            <div class="author-name"><a href="/p/contact/ourteam/"><?= $author->getDisplayName() ?></a></div>
+                        </div>
                         <div class="time">11 April 2020</div>
                     </div>
                 </div>

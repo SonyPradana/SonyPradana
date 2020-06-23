@@ -15,6 +15,10 @@ a.card{
     text-decoration: none;
 }
 
+/* flat color */
+.card.nocolor{
+    background-color: transparent;    
+}
  /* gradient color */
 .card.grad-blue{
     background-color: #08AEEA;
@@ -28,9 +32,25 @@ a.card{
     background-color: #FFE53B;
     background-image: linear-gradient(147deg, #FFE53B 0%, #FF2525 94%);
  }
+ /* Neumorphism */
+ .card.neum-blue.neum-tiny.neum-concave{
+    background: linear-gradient(145deg, #4da7db, #5bc6ff);
+    box-shadow:  4px 4px 12px #4da7db, 
+                 -4px -4px 12px #5eccff;
+ }
+ /* border-radius */
+ .card.radius-tiny{ border-radius: 4px; }
+ .card.radius-small{ border-radius: 8px; }
+ .card.radius-normal{ border-radius: 12px; }
+ .card.radius-large{ border-radius: 16px; }
+ .card.radius-huge{ border-radius: 24px; }
  /* shadow */
  .card.shadow-bottom-left-medium{
     box-shadow: 5px 8px 14px -8px #000000bf;
+ }
+ /* border line */
+ .card.border-line{
+     border: 1px solid #d3d3;
  }
 
 /* our-team card */
@@ -152,13 +172,13 @@ a.card{
 
 /* card event */
 .card.event{
-    padding: 12px;
+    padding: 16px;
     display: grid;
-    grid-template-columns: 64px 12px 200px;
+    grid-template-columns: 68px 16px 200px;
 }
 .card.event .card-time{
-    height: 64px;
-    background-color: blue;
+    height: 68px;
+    background-color: #2626fd;
     color: white;
     display: flex;
     justify-content: center;
@@ -172,8 +192,17 @@ a.card{
     font-size: 1.4rem;
     font-weight: 700;
 }
+.card.card.event .card-content .title{
+    font-weight: 700;
+    letter-spacing: 0.01rem;
+    font-size: 1.2rem;
+    color: #2b2424;
+}
 .card.card.event .card-content .description{
-    color: #606060;;
+    margin-top: 4px;
+    line-height: 1.2;
+    color: #4a4040;;
+    letter-spacing: 0.007em;
 }
 
 /* end of card */

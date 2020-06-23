@@ -84,14 +84,21 @@
         }
 
         input, label, select, textarea{font-size: 1rem}
-        #input-ampcaptcha{
-            width: 100px
-        }
+        #input-ampcaptcha{ width: 100px }
+
+        #input-submit{ margin-top: 12px }
 
         /* mobile */
-        @media screen and (max-width: 300px) {
+        @media screen and (max-width: 479px) {
             .container{
                 grid-template-columns: 1fr
+            }
+            main{
+                max-width: 478px;
+                min-width: 200px;
+            }
+            form{
+                overflow-x: auto;
             }
         }
     </style>
@@ -120,9 +127,10 @@
 
                     <label for="input-regarding">Regarding</label>
                     <select name="regarding" id="input-regarding" class="textbox outline blue rounded small">
-                        <option value="bug">Masalah pada website</option>
                         <option value="saran">Saran</option>
+                        <option value="keluhan">Keluhan pelanggan</option>
                         <option value="sponsor">Tertarik dengan Kami</option>
+                        <option value="bug">Masalah pada website</option>
                         <option value="other">Yang lainnya</option>
                     </select>
                     
@@ -134,7 +142,7 @@
                         <input type="text" name="ampcaptcha" id="input-ampcaptcha" class="textbox outline blue rounded small" placeholder="wajib diisi">
                     </div>
 
-                    <button type="submit" name="done" class="btn blue outline rounded normal">Kirim Pesan</button>
+                    <button type="submit" id="input-submit" name="done" class="btn blue outline rounded normal">Kirim Pesan</button>
                 </form>
             </div>
         </main>

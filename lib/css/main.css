@@ -381,6 +381,28 @@ footer .footnote p:hover .love{
 .sparator.blue{border-bottom: 3px solid #55b9f3}
 .sparator.blue .sparator-title{background: #55b9f3}
 
+/* breadcrumb author/article */        
+.article.breadcrumb .author{
+    display: flex;
+    align-items: center;
+
+}
+.article.breadcrumb .author img{
+    width: 24px; height: 24px;
+    border-radius: 12px;
+}
+.article.breadcrumb .author .author-name{
+    margin-left: 8px;
+}
+.article.breadcrumb .author a{
+    color: #9aa6ad;;
+    text-decoration: none;
+}
+.article.breadcrumb .author a:hover{
+    text-decoration: underline;
+    text-decoration-color: #000;
+}
+
 @keyframes snackFadein{
     from{top: 80px; opacity: 0;}
     to{top: 130px; opacity: 1;}

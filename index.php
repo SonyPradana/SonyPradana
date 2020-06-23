@@ -179,7 +179,7 @@
                 <div class="card rm-card grad-yellowtored shadow-bottom-left-medium">
                     <div class="card title">
                         <p><?= $jumlah_rm?></p>
-                        <span class="detail"> ~<?= round( ($jumlah_rm / 15000) * 100, 1) ?>%</span>
+                        <span class="detail">&nbsp;~<?= round( ($jumlah_rm / 15000) * 100, 1) ?>%</span>
                     </div>
                     <div class="card content">
                         <p>Data RM Terdata</p>
