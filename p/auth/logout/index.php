@@ -12,7 +12,6 @@ if( $test_auth->TrushClient() == true){
     echo '<h1>logout diterima, user berhasil logout</h1>';
     #logout data base
     $newLogout = new Logout($token);   
-
-    #logout seesion
-    unset($_SESSION["token"]);
 }
+#logout seesion
+unset($_SESSION["token"]);

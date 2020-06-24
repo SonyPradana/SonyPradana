@@ -224,9 +224,16 @@
     }
     
     // keep alive
-    keepalive(() => {
-        window.location.href = "/p/auth/login/?url=<?= $_SERVER['REQUEST_URI'] ?>"
-    })
+    keepalive(
+        () => {
+            // ok function : redirect logout and then redirect to login page to accses this page
+            window.location.href = "/p/auth/login/?url=<?= $_SERVER['REQUEST_URI'] ?>&logout=true"
+        },
+        () => {          
+            // close fuction : just logout
+            window.location.href = "/p/auth/logout/?url=<?= $_SERVER['REQUEST_URI'] ?>"
+        }
+    );
     
     // menagbil data
     async function getData(url){

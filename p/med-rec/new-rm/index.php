@@ -8,7 +8,7 @@ session_start();
 $token = $_SESSION['token'] ?? '';
 $auth = new Auth($token, 2);
 if( !$auth->TrushClient() ){
-    header("Location: /p/auth/login");   
+    header("Location: /p/auth/login/?url=" . $_SERVER['REQUEST_URI']);  
     exit();
 }
 ?>
@@ -210,8 +210,15 @@ if( !$auth->TrushClient() ){
     }
     
     // keep alive
-    keepalive(() => {
-        window.location.href = "/p/auth/login/?url=<?= $_SERVER['REQUEST_URI'] ?>"
-    });
+    keepalive(
+        () => {
+            // ok function : redirect logout and then redirect to login page to accses this page
+            window.location.href = "/p/auth/login/?url=<?= $_SERVER['REQUEST_URI'] ?>&logout=true"
+        },
+        () => {          
+            // close fuction : just logout
+            window.location.href = "/p/auth/logout/?url=<?= $_SERVER['REQUEST_URI'] ?>"
+        }
+    );
 </script>
 </html>

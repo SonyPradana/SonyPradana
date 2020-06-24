@@ -14,6 +14,11 @@ if( $test_auth->TrushClient() == true){
 }
 ?>
 <?php
+    // cek request cession cek out
+    $req_unset = $_GET['logout'] ?? false;
+    if( $req_unset ){
+        unset($_SESSION["token"]);
+    }
 # cek session bane 
 $session_bane_fase = true;
 # melihat sisa bane di session max: 5. 0 atrinya sedang dibane
