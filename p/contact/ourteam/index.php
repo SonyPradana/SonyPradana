@@ -58,7 +58,7 @@
             align-items: center;
             justify-content: center;
         }
-        .team-card{margin: 0 16px}
+        .team-card{margin: 0 16px; background-color: #fff;}
 
         @media screen and (max-width: 600px) {
             .container{grid-template-columns: 1fr}
@@ -91,7 +91,7 @@
                     <?php foreach ($result as $value) :?>
                     <div class="team-card">
                         <div class="card image">
-                            <img src="<?= $value['display_picture'] ?>" alt="profile @<?= $value['display_name'] ?>">
+                            <img data-src="<?= $value['display_picture'] ?>" src="/data/img/display-picture/user/blur-no-image.png" alt="profile @<?= $value['display_name'] ?>">
                         </div>
                         <div class="card content">
                             <div class="title"><?= $value['display_name'] ?></div>
@@ -130,5 +130,9 @@
             window.location.href = "/p/auth/logout/?url=<?= $_SERVER['REQUEST_URI'] ?>"
         }
     );
+
+    window.onload = function(){        
+        lazyImageLoader();
+    }
 </script>
 </html>
