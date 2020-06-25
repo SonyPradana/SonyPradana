@@ -155,7 +155,7 @@ class MedicalRecords{
     }
 
     /**
-     * mengambil hasil query sting dari filter yang dibuat (hasil query builder).
+     * Mengambil hasil full query dari query yang dibuat (query yang digunakan di result).
      * rekomendasi:
      * - filter = true,  strict = true
      * - filter = false, strict = false
@@ -170,7 +170,7 @@ class MedicalRecords{
     }
 
     /**
-     * mengambil hasil query filter sting dari filter yang dibuat (hasil filterbuilder).
+     * Mengambil hasil 'where condition' dari query yang dibuat.
      * rekomendasi:
      * - filter = true,  strict = true
      * - filter = false, strict = false
@@ -178,7 +178,7 @@ class MedicalRecords{
      * @param  bool   $strict  true, query menggunakan logica AND
      * @return string filter string (raw dari query)
      */
-    public function getFilterQuery(bool $filters = false, bool $strict = false):string{
+    public function getQueryStatment(bool $filters = false, bool $strict = false):string{
         return $filters ? $this->filters( $strict ) : $this->filter( $strict );
     }
 
@@ -533,5 +533,20 @@ class MedicalRecords{
             return json_encode($data);
         }
         return $data;
+    }
+
+    /**
+     * Shorthand untuk mengambil data di data base data_rm
+     * @param string $statement String query setelah where condition
+     * @param array  $params Parameter dalam array untuk mengisi bind pada query
+     * @return array Array assosiatif hasil pencarian
+     */
+    public function where(string $statement, array $params){
+        $db = new MyPDO();
+        $db->query("SELECT * FROM `data_rm` WHERE $statement");
+        foreach( $params as $param_key => $param_val){
+            $db->bind($param_key, $param_val);
+        }
+        return $db->resultset();
     }
 }

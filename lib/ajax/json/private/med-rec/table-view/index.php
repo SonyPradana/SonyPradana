@@ -120,7 +120,7 @@
     $result = $data->results();
     
     if( isset( $_GET['duplicate'] ) ){
-        $filter_query = $data->getFilterQuery(true, false);
+        $filter_query = $data->getQueryStatment(true, false);
         $duplicate = in_array($_GET['duplicate'], $data->getColumnSupport()) ? $_GET['duplicate'] : 'alamat';
         $db = new MyPDO();
         $db->query("
