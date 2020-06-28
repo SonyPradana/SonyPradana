@@ -112,7 +112,14 @@
         </div>
         <div class="header menu">
             <div class="margin-left"></div>
-            <div class="logo">
+            <div class="logo">                
+            <?php if( $auth->TrushClient()): ?>
+                <div class="burger-menu">
+                    <div class="bm-1"></div>
+                    <div class="bm-2"></div>
+                    <div class="bm-3"></div>
+                </div>
+            <?php endif; ?>
                 <a href="/">Simpus</a>
             </div>
             <div class="nav">                
@@ -133,7 +140,7 @@
                     </div>
                 </div>                
                 <?php else: ?>
-                    <a class="btn outline blue small" href="/p/auth/login">login</a>
+                    <a class="btn outline blue light rounded" href="/p/auth/login">login</a>
                 <?php endif; ?>
             </div>
             <div class="margin-right"></div>
