@@ -2,6 +2,7 @@
 data/img/display-picture/user
 test/
 vendor/
+lib/apps/config/
 
 ### MicrosoftOffice ###
 *.tmp
