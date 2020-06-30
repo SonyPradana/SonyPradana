@@ -1,0 +1,13 @@
+{
+    "name": "simpuslerep",
+    "description": "Sistem Informasi Manajemen Puskesmas di Puskesmas Lerep",
+    "homepage": "https://github.com/SonyPradana/simpuslerep",
+    "authors": [
+    {
+        "name": "Angger Mulia Pradana",
+        "homepage": "http://simpuslerep.com/"
+    }],
+    "require": {
+        "gumlet/php-image-resize": "^1.9"
+    }
+}
