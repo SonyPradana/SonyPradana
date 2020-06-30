@@ -2,8 +2,7 @@
     #import modul 
     require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/init.php';
     // image resizer
-    require_once $_SERVER['DOCUMENT_ROOT'] . '/vendor/gumlet/php-image-resize/ImageResize.php';
-    require_once $_SERVER['DOCUMENT_ROOT'] . '/vendor/gumlet/php-image-resize/ImageResizeException.php';
+    require_once $_SERVER['DOCUMENT_ROOT'] . '/vendor/gumlet/php-image-resize/lib/ImageResize.php';
 
     use \Gumlet\ImageResize;
 ?>
