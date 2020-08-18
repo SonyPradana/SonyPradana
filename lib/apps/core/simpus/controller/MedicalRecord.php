@@ -3,6 +3,9 @@
  * Perent Class fungsinya untuk menampung semua filed Rekam Medis
  */
 class MedicalRecord{
+    /** @var MyPDO Instant PDO */
+    private $PDO;
+
     /** @var int id record */ 
     protected $_id;
     /** @var string No Rekam Medis */
@@ -112,6 +115,10 @@ class MedicalRecord{
      */
     public function getLastQuery():string{
         return $this->_last_query;
+    }
+
+    public function getData():array{
+        return $this->convertToData();
     }
 
     // setter
@@ -228,10 +235,23 @@ class MedicalRecord{
             $this->_status = $val;
         }
     }
+
+    /**
+     * Convert array ke parameter
+     * @param array $data Array to convert
+     */
+    public function convertFromArray(array $data){
+        $this->convertFromData( $data );
+    }
 #endregion
 
     /** buat class baru */
-    public function __construct(){
+    public function __construct($pdo = null){
+        if($pdo == null){
+            $this->PDO = new MyPDO();
+        }else{
+            $this->PDO = $pdo;
+        }
     }    
     
     /**
@@ -280,17 +300,17 @@ class MedicalRecord{
      * 
      */
     private function convertFromData($data){
-        $this->_id = (int) $data['id'];
-        $this->_nomorRM = $data['nomor_rm'];
-        $this->_dataDibuat = (int) $data['data_dibuat'];
-        $this->_nama = $data['nama'];
-        $this->_tanggalLahir = $data['tanggal_lahir'];
-        $this->_alamat = $data['alamat'];
-        $this->_nomorRt = (int) $data['nomor_rt'];
-        $this->_nomorRw = (int) $data['nomor_rw'];
-        $this->_namaKK = $data['nama_kk'];
-        $this->_nomorRM_KK = $data['nomor_rm_kk'];     
-        $this->_status = $data['status'];
+        $this->_id           = $data['id'] ?? $this->_id;;
+        $this->_nomorRM      = $data['nomor_rm'] ?? $this->_nomorRM;;
+        $this->_dataDibuat   = $data['data_dibuat'] ?? $this->_dataDibuat;
+        $this->_nama         = $data['nama'] ?? $this->_nama;
+        $this->_tanggalLahir = $data['tanggal_lahir'] ?? $this->_tanggalLahir;
+        $this->_alamat       = $data['alamat'] ?? $this->_alamat;
+        $this->_nomorRt      = $data['nomor_rt'] ?? $this->_nomorRt;
+        $this->_nomorRw      = $data['nomor_rw'] ?? $this->_nomorRw;
+        $this->_namaKK       = $data['nama_kk'] ?? $this->_namaKK;
+        $this->_nomorRM_KK   = $data['nomor_rm_kk'] ?? $this->_nomorRM_KK;
+        $this->_status       = $data['status'] ?? $this->_status;
     }
     /**
      * fungsinya untuk mengkonfersi proprti kelas ke data array
@@ -298,16 +318,16 @@ class MedicalRecord{
      */
     private function convertToData(){
         $data = [];
-        $data[] = $this->_nomorRM;
-        $data[] = $this->_dataDibuat;
-        $data[] = $this->_nama;
-        $data[] = $this->_tanggalLahir;
-        $data[] = $this->_alamat;
-        $data[] = $this->_nomorRt;
-        $data[] = $this->_nomorRw;
-        $data[] = $this->_namaKK;
-        $data[] = $this->_nomorRM_KK;
-        $data[] = $this->_status;
+        $data['nomor_rm'] = $this->_nomorRM;
+        $data['data_dibuat'] = $this->_dataDibuat;
+        $data['nama'] = $this->_nama;
+        $data['tanggal_lahir'] = $this->_tanggalLahir;
+        $data['alamat'] = $this->_alamat;
+        $data['nomor_rt'] = $this->_nomorRt;
+        $data['nomor_rm'] = $this->_nomorRw;
+        $data['nama_kk'] = $this->_namaKK;
+        $data['nomor_rm_kk'] = $this->_nomorRM_KK;
+        $data['status'] = $this->_status;
 
         return $data;
     }
@@ -329,13 +349,44 @@ class MedicalRecord{
         return false;
     }
 
+    /**
+     * refresh/ambil/pull semua data dari database, munggunakn hash_id
+     * @return boolean 
+     * True jika data berhasil diambil
+     */
+    public function refreshUsingIdHash($Id_hash){
+        // ambil id dari hash_code nya
+        $this->PDO->query("SELECT *
+                    FROM(
+                        SELECT
+                            *
+                        FROM
+                            `data_rm`
+                        UNION
+                        SELECT
+                            *
+                        FROM
+                            `staging_rm`
+                        ) AS U
+                    WHERE
+                        U.data_dibuat = :tmstamp                        
+                    ");
+        $this->PDO->bind(":tmstamp", $Id_hash);
+        if( $this->PDO->single() ){
+            $this->convertFromData( $this->PDO->single() );
+            return true;
+        }
+        return false;
+    }
+
     // method
     /**
      *  update / simpan data ke data base
      * @return boolean 
      * bila berhasil disimpan nilaninya true
      */
-    public function save(){
+    public function save($table_nama = "data_rm"){
+        $table_nama = $table_nama == 'data_rm' ? 'data_rm' : 'staging_rm';              // mencegah input nama table lain
         # memuat ulang data dari data base menggunakn id
         $id = $this->_id;
         $nomor_rm = $this->_nomorRM;
@@ -353,7 +404,7 @@ class MedicalRecord{
         if( $nomor_rm == '' && $nama == '') return false;  
 
         $link  = mysqli_connect(DB_HOST, DB_USER, DB_PASS, "simpusle_simpus_lerep");
-        $query = "UPDATE `data_rm` SET 
+        $query = "UPDATE `$table_nama` SET 
                                     `nomor_rm` = '$nomor_rm',
                                     `data_dibuat` = '$data_dibuat',
                                     `nama` = '$nama',
@@ -423,7 +474,7 @@ class MedicalRecord{
      * @return boolean 
      * bila berhasil disimpan nilainya true
      */
-    public function insertNewOne($id = ''){
+    public function insertNewOne($id = '', $table_name = 'data_rm'){
         # menimpan data ke data base menggunakn id
         $nomor_rm = $this->_nomorRM;
         $data_dibuat = (int) $this->_dataDibuat;
@@ -440,7 +491,7 @@ class MedicalRecord{
         if( $nomor_rm == '' && $nama == '') return false;        
         
         $link  = mysqli_connect(DB_HOST, DB_USER, DB_PASS, "simpusle_simpus_lerep");
-        $query = "INSERT INTO `data_rm` VALUES ('$id', 
+        $query = "INSERT INTO `$table_name` VALUES ('$id', 
                                        '$nomor_rm',
                                        '$data_dibuat',
                                        '$nama',

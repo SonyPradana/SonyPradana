@@ -3,15 +3,15 @@ class MyPDO{
     private $host = DB_HOST;
     private $user = DB_USER;
     private $pass = DB_PASS;
-    private $dbname = 'simpusle_simpus_lerep';
     
     private $dbh;
     private $stmt;
 
-    public function __construct()
+    public function __construct(string $database_name = "simpusle_simpus_lerep")
     {        
+
         // konfigurasi driver
-        $dsn = 'mysql:host=' . $this->host . ';dbname=' . $this->dbname;
+        $dsn = 'mysql:host=' . $this->host . ';dbname=' . $database_name;
         $option = [
             PDO::ATTR_PERSISTENT => true,
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION

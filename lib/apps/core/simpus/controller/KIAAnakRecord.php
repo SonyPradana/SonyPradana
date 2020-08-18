@@ -1,0 +1,224 @@
+<?php
+
+class KIAAnakRecord{
+    private $_id_hash = null;
+    // tambah id ibu
+    private $_jenis_kelamin = 0;
+    // biodata anak - kia-anak
+    private $_bbl = 0;
+    private $_pbl = 0;
+    private $_kia = "";
+    private $_imd = 0;
+    private $_asi_eks = 0;
+    private $_grups_posyandu = 0;
+    // data pemeriksaan
+    private $_data_rm ; // data rm/staging rm
+    private $_data_posyandu = []; // array data posyandu
+
+    // property - getter
+    public function getJenisKelamin(){
+        return $this->_jenis_kelamin;
+    }
+    public function getBeratBayiLahir(){
+        return $this->_bbl;
+    }
+    public function getPanjangBayiLahir(){
+        return $this->_pbl;
+    }
+    public function getKIA(){
+        return $this->_kia;
+    }
+    public function getIndeksMasaTubuh(){
+        return $this->_imd;
+    }
+    public function getAsiEks(){
+        return $this->_asi_eks;
+    }
+    public function getGroubsPosyandu(){
+        return $this->_grups_posyandu;
+    }
+    public function getDataPosyandu(){
+        return $this->_data_posyandu;
+    }
+    // property - setter
+    public function setIdHash(string $value){
+        $this->_id_hash = $value;
+    }
+    public function setBeratBayiLahir(int $value){
+        $this->_bbl = $value;
+    }
+    public function setPanjangBayiLahir(int $value){
+        $this->_pbl = $value;
+    }
+    public function setKIA($value){
+        $this->_kia = $value;
+    }
+    public function setIndeksMasaTubuh($value){
+        $this->_imd = $value;
+    }
+    public function setASIEksklusif(bool $value){
+        $this->_asi_eks = $value;
+    }
+    public function setGrubPosyandu(int $value){
+        $this->_grups_posyandu = $value;
+    }
+    public function tambahDataPosyanduBaru(PosyanduRecord $value){        
+        // membuat data baru di data base dan juga di kelas ini
+        $this->_data_posyandu[] = $value;
+        $value->creat( $this->_id_hash );
+    }
+
+    // constructor
+    public function __construct(){
+    }
+    public function loadWithID($id_hash, bool $refresh = true){
+        $this->_id_hash = $id_hash;
+        if( $refresh ){
+            $this->refresh();
+        }
+    }
+    // function
+    /** 
+     * Memuat ulang data berdasarkan id yang telah dibuat sebelumnya
+     * @return bool True ketika data berhasil di muat ulang
+     */
+    public function refresh():bool{
+        if( $this->_id_hash != null ){
+            // koneksi table data_kia_anak
+            $db_kia = new MyPDO();
+            $db_kia->query("SELECT * FROM `data_kia_anak` WHERE `id_hash` = :id_hash");
+            $db_kia->bind(":id_hash", $this->_id_hash, PDO::PARAM_STR);
+            if( $db_kia->single() ){
+                // ambil data di table data_kia_anak
+                $this->convertFromArray( $db_kia->single() );
+                return true;
+            }
+        }
+        return false;
+    }
+    public function creat($id_hash):bool{
+        // creat data biodata anak baru
+        $db = new MyPDO();
+        $db->query("INSERT INTO
+                        `data_kia_anak`
+                    (
+                         `id`,
+                         `id_hash`,
+                         `tanggal_dibuat`,
+                         `last_update`,
+                         `jenis_kelamin`,
+                         `bbl`,
+                         `pbl`,
+                         `kia`,
+                         `imd`,
+                         `asi_eks`,
+                         `grups_posyandu`
+                    )                        
+                    VALUES (
+                        :id,
+                        :id_hash,
+                        :tanggal_dibuat,
+                        :last_update,
+                        :jenis_kelamin,
+                        :bbl,
+                        :pbl,
+                        :kia,
+                        :imd,
+                        :asi_eks,
+                        :grups_posyandu
+                    )");
+        $db->bind(':id', '');
+        $db->bind(':id_hash', $id_hash);
+        $db->bind(':tanggal_dibuat', time());
+        $db->bind(':last_update', time());
+        $db->bind(':jenis_kelamin', $this->_jenis_kelamin);
+        $db->bind(':bbl', $this->_bbl);
+        $db->bind(':pbl', $this->_pbl);
+        $db->bind(':kia', $this->_kia);
+        $db->bind(':imd', $this->_imd);
+        $db->bind(':asi_eks', $this->_asi_eks);
+        $db->bind(':grups_posyandu', $this->_grups_posyandu);
+        // menyimpan ke data base
+        $db->execute();
+        if( $db->rowCount() > 0){
+            return true;
+        }
+        return false;
+    }
+    /**
+     * Menyipan data baru
+     * @return bool True jika databerhasil disimpan data tidak ada data duplikat
+     */
+    public function update(){
+        // prpare update biodata
+        $db = new MyPDO();
+        $db->query("UPDATE
+                        `data_kia_anak`
+                    SET 
+                        `last_update` = :last_update,
+                        `jenis_kelamin` = :jk,
+                        `bbl` = :bbl,
+                        `pbl` = :pbl,
+                        `kia` = :kia,
+                        `imd` = :imd,
+                        `asi_eks` = :asi_eks,
+                        `grups_posyandu` = :grups_posyandu
+                    WHERE
+                        `id_hash` = :id_hash              
+                    ");
+        $db->bind(':last_update', time());
+        $db->bind(':jk', $this->_jenis_kelamin);
+        $db->bind(':bbl', $this->_bbl);
+        $db->bind(':pbl', $this->_pbl);
+        $db->bind(':kia', $this->_kia);
+        $db->bind(':imd', $this->_imd);
+        $db->bind(':asi_eks', $this->_asi_eks);
+        $db->bind(':grups_posyandu', $this->_grups_posyandu);
+        $db->bind(':id_hash', $this->_id_hash);
+        // update biodata
+        $db->execute();
+        if( $db->rowCount() > 0){
+            return true;
+        }
+        return false;
+    }
+    public function cekExist():bool{
+        $db = new MyPDO();
+        $db->query("SELECT `id_hash` FROM `data_kia_anak` WHERE `id_hash` = :id_hash");
+        $db->bind(":id_hash", $this->_id_hash);
+        if( $db->single() ){
+            return true;
+        }
+        return false;
+    }
+
+    // data posyandu
+
+
+    // konverter
+    public function convertFromArray(array $data_kia):bool{
+        $this->_jenis_kelamin   = $data_kia['jenis_kelamin'] ?? 1;
+        $this->_bbl             = $data_kia['bbl'] ?? 0;
+        $this->_pbl             = $data_kia['pbl'] ?? 0;
+        $this->_kia             = $data_kia['kia'] ?? 0;
+        $this->_imd             = $data_kia['imd'] ?? 0;
+        $asi_eks                = $data_kia['asi_eks'] ?? 0;        
+        $this->_asi_eks         = $asi_eks == 'on' ? 1 : ($asi_eks ==  1 ? 1 : 0);        // convert string to int value
+        $this->_grups_posyandu  = $data_kia['grups_posyandu'] ?? 0;
+
+        return true;                                                                    // todo: inputvalidate
+    }
+    public function convertToArray():array{
+        $data                   = [];
+        $data['jenis_kelamin']  = $this->_jenis_kelamin;
+        $data['bbl']            = $this->_bbl;
+        $data['pbl']            = $this->_pbl;
+        $data['kia']            = $this->_kia;
+        $data['imd']            = $this->_imd;
+        $data['asi_eks']        = $this->_asi_eks;
+        $data['grups_posyandu'] = $this->_grups_posyandu;
+
+        return $data;        
+    }
+    
+}
