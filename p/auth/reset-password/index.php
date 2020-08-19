@@ -8,7 +8,7 @@ session_start();
 $token = $_SESSION['token'] ?? '';
 $auth = new Auth($token, 2);
 if( !$auth->TrushClient() ){
-    header("Location: /p/auth/login");   
+    header("Location: /login");   
     exit();
 }
 ?>
@@ -35,7 +35,7 @@ if( isset( $_POST['reset']) ){
         if( $new_pass->passwordVerify() ){ 
             $new_pass->newPassword($p2);    
 
-            header("Location: /p/auth/logout/index.php?url=/p/auth/login");    
+            header("Location: /logout?url=/login");    
             exit() ;
         }else{
             # password salah

@@ -40,7 +40,7 @@
                 $newPassword->deleteSection();
     
                 #header ke login
-                header("Location: /p/auth/login");   
+                header("Location: /login");   
                 exit();                        
             }           
         }

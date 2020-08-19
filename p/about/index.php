@@ -80,7 +80,7 @@
                         <h2>Hubungi Kami</h2>
                         <p>Kami sangat gembira menerima chat Anda. Sangat bagus apablia ingin memberikan masukan dengan email: <a href="mailto:support@simpuslerep.com">support@simpuslerep.com</a></p>
                         <h2>Kontribusi Bersama</h2>
-                        <p>Untuk semua Pegawai puskesmas Lerep dapat ikut perkontribusi langsung melalui Registrasi langsung di <a href="/p/auth/register/">Register User Baru</a></p>
+                        <p>Untuk semua Pegawai puskesmas Lerep dapat ikut perkontribusi langsung melalui Registrasi langsung di <a href="/register">Register User Baru</a></p>
                     </div>
                     <div class="sparator blue">
                         <div class="sparator-title"><h3>Lini Masa</h3></div>
@@ -121,11 +121,11 @@
     keepalive(
         () => {
             // ok function : redirect logout and then redirect to login page to accses this page
-            window.location.href = "/p/auth/login/?url=<?= $_SERVER['REQUEST_URI'] ?>&logout=true"
+            window.location.href = "/login?url=<?= $_SERVER['REQUEST_URI'] ?>&logout=true"
         },
         () => {          
             // close fuction : just logout
-            window.location.href = "/p/auth/logout/?url=<?= $_SERVER['REQUEST_URI'] ?>"
+            window.location.href = "/logout?url=<?= $_SERVER['REQUEST_URI'] ?>"
         }
     );
 </script>

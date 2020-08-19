@@ -125,7 +125,7 @@
                     <div class="article breadcrumb">
                         <div class="author">
                             <img src="<?= $author->getSmallDisplayPicture() ?>" alt="@<?= $author->getDisplayName() ?>" srcset="">    
-                            <div class="author-name"><a href="/p/contact/ourteam/"><?= $author->getDisplayName() ?></a></div>
+                            <div class="author-name"><a href="/Ourteam"><?= $author->getDisplayName() ?></a></div>
                         </div>
                         <div class="time">18 Juni 2020</div>
                     </div>
@@ -230,11 +230,11 @@
     keepalive(
         () => {
             // ok function : redirect logout and then redirect to login page to accses this page
-            window.location.href = "/p/auth/login/?url=<?= $_SERVER['REQUEST_URI'] ?>&logout=true"
+            window.location.href = "/login?url=<?= $_SERVER['REQUEST_URI'] ?>&logout=true"
         },
         () => {          
             // close fuction : just logout
-            window.location.href = "/p/auth/logout/?url=<?= $_SERVER['REQUEST_URI'] ?>"
+            window.location.href = "/logout?url=<?= $_SERVER['REQUEST_URI'] ?>"
         }
     );
     

@@ -8,7 +8,7 @@ session_start();
 $token = (isset($_SESSION['token']) ) ? $_SESSION['token'] : '';
 $auth = new Auth($token, 2);
 if( !$auth->TrushClient() ){
-    header("Location: /p/auth/login/?url=" . $_SERVER['REQUEST_URI']);   
+    header("Location: /login?url=" . $_SERVER['REQUEST_URI']);   
     exit();
 }
 
@@ -110,11 +110,11 @@ $user = new User($auth->getUserName());
     keepalive(
         () => {
             // ok function : redirect logout and then redirect to login page to accses this page
-            window.location.href = "/p/auth/login/?url=<?= $_SERVER['REQUEST_URI'] ?>&logout=true"
+            window.location.href = "/login?url=<?= $_SERVER['REQUEST_URI'] ?>&logout=true"
         },
         () => {          
             // close fuction : just logout
-            window.location.href = "/p/auth/logout/?url=<?= $_SERVER['REQUEST_URI'] ?>"
+            window.location.href = "/logout?url=<?= $_SERVER['REQUEST_URI'] ?>"
         }
     );
 

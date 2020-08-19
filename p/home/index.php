@@ -44,11 +44,7 @@
     <meta name="description" content="Sistem Informasi Manajemen Puskesmas SIMPUS Lerep">
     <meta name="keywords" content="simpus lerep, puskesmas lerep, puskesmas, ungaran, kabupaten semarang">
     <meta name="author" content="amp">
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" sizes="16x16 24x24 32x32 64x64">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <meta name="msapplication-TileColor" content="#da532c">
-    <meta name="theme-color" content="#ffffff">
+    <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/meta/metatag.html') ?>
 
     <link rel="stylesheet" href="/lib/css/main.css">
     <link rel="stylesheet" href="/lib/css/ui/v1/widget.css">
@@ -106,57 +102,14 @@
 </head>
 <body>
     <header>
-        <?php $active_menu = 'home' ?>
-        <div class="header title">
-            <p>Welcome To Simpus Lerep</p>
-        </div>
-        <div class="header menu">
-            <div class="margin-left"></div>
-            <div class="logo">                
-            <?php if( $auth->TrushClient()): ?>
-                <div class="burger-menu">
-                    <div class="bm-1"></div>
-                    <div class="bm-2"></div>
-                    <div class="bm-3"></div>
-                </div>
-            <?php endif; ?>
-                <a href="/">Simpus</a>
-            </div>
-            <div class="nav">                
-                <?php if( $auth->TrushClient()): ?>                
-                <a href="/p/med-rec/view-rm/" <?= $active_menu == 'lihat data'? 'class="active"' : ''?>>Lihat RM</a>
-                <a href="/p/med-rec/search-rm/" <?= $active_menu == 'cari data'? 'class="active"' : ''?>>Cari RM</a>
-                <a href="/p/med-rec/new-rm/" <?= $active_menu == 'buat data'? 'class="active"' : ''?>>Buat RM</a>
-                <?php endif; ?>
-            </div>
-            <div class="account">
-                <?php if( $auth->TrushClient()): ?>
-                <div class="boxs-account"  onclick="open_modal()">
-                    <div class="box-account left">
-                        <img class="pic-box" src="<?= $user->getSmallDisplayPicture() ?>" alt="@<?= $user->getDisplayName() ?>)">
-                    </div>
-                    <div class="box-account right">
-                        <p><?= $user->getDisplayName()?></p>
-                    </div>
-                </div>                
-                <?php else: ?>
-                    <a class="btn outline blue light rounded" href="/p/auth/login">login</a>
-                <?php endif; ?>
-            </div>
-            <div class="margin-right"></div>
-        </div>
+        <?php 
+            $active_menu = null;
+            $menu_link = [["Lihat RM", "/p/med-rec/view-rm/"], ["Cari RM", "/p/med-rec/search-rm/"], ["Buat RM", "/p/med-rec/new-rm/"] ];
+            include(BASEURL . '/lib/components/header/header.php')
+        ?>
     </header>
-    <div class="modal account">
-        <div class="modal-box">
-            <span class="close" onclick="close_modal()">&times;</span>
-            <div class="boxs-menu">
-                <a href="/p/auth/profile/?url=/">Edit profile</a>
-                <a href="/p/messages/public/">Pesan Masuk</a>
-                <a href="/p/auth/reset-password/">Ganti Pasword</a>
-                <a href="/p/auth/logout/">Log Out</a>
-            </div>
-        </div>
-    </div>
+    <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/control/modal.html') ?>
+
     <aside class="top">
         <div class="boxs-header">
             <p>Info Covid (kabupaten semarang) <span><a href="https://corona.semarangkab.go.id/covid/">i</a></span></p>
@@ -197,7 +150,7 @@
                         Jadwal Imunisai
                     </div>
                     <div class="card action">
-                        <a href="/p/info/jadwal-pelayanan/" class="btn fill blue small rounded">Lihat &raquo</a>
+                        <a href="/info/jadwal-pelayanan/" class="btn fill blue small rounded">Lihat &raquo</a>
                     </div>
                 </div>
                 <div class="card respone-card grad-blue shadow-bottom-left-medium" data-tooltips="click untuk melihat">
@@ -205,7 +158,7 @@
                         Info Covid Ungaran
                     </div>
                     <div class="card action">
-                        <a href="/p/info/covid-kabupaten-semarang/" class="btn fill blue small rounded">Lihat &raquo</a>
+                        <a href="/info/covid-kabupaten-semarang" class="btn fill blue small rounded">Lihat &raquo</a>
                     </div>
                 </div>
             </div>
@@ -261,22 +214,7 @@
     </div>
     <div class="gotop" onclick="gTop()"></div>
     <footer>
-        <div class="line"></div>
-        <p class="big-footer">SIMPUS LEREP</p>
-        <div class="boxs footer">
-            <div class="box about">
-                <a href="/p/about/">About</a>
-            </div>
-            <div class="box ourteam">
-                <a href="/p/contact/ourteam/">Meet Our Team</a>
-            </div>
-            <div class="box contact">
-                <a href="/p/contact/contactus/">Contact Us</a>
-            </div>
-        </div>
-        <div class="footnote">
-            <p class="note-footer"><a href="https://twitter.com/AnggerMPd">Made with <span class="love">&#9829;</span> by amp</a></p>
-        </div>
+        <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/footer/footer.html') ?>
     </footer>
     <script src="/lib/js/index.end.js"></script>
     <script>        
@@ -326,11 +264,11 @@
         keepalive(
             () => {
                 // ok function : redirect logout and then redirect to login page to accses this page
-                window.location.href = "/p/auth/login/?url=<?= $_SERVER['REQUEST_URI'] ?>&logout=true"
+                window.location.href = "/login?url=<?= $_SERVER['REQUEST_URI'] ?>&logout=true"
             },
             () => {          
                 // close fuction : just logout
-                window.location.href = "/p/auth/logout/?url=<?= $_SERVER['REQUEST_URI'] ?>"
+                window.location.href = "/logout?url=<?= $_SERVER['REQUEST_URI'] ?>"
             }
         );
 
@@ -354,7 +292,7 @@
 
         const s_msg = document.querySelector('#input-comment');
         s_msg.addEventListener('click', function(){
-            window.location = '/p/contact/contactus/';
+            window.location = '/Contactus';
         });
 
     </script>

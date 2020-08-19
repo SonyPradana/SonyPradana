@@ -35,7 +35,7 @@
             </div>
         </div>                
         <?php else: ?>
-            <a class="btn outline blue light rounded" href="/login/?url=<?= $_SERVER['REQUEST_URI'] ?>">login</a>
+            <a class="btn outline blue light rounded" href="/login?url=<?= $_SERVER['REQUEST_URI'] ?>">login</a>
         <?php endif; ?>
     </div>
     <div class="margin-right"></div>
