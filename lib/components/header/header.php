@@ -1,11 +1,14 @@
 
+<?php
+    $header_login   = isset( $auth ) ? $auth->TrushClient() : false;
+?>
 <div class="header title">
     <p>Welcome To Simpus Lerep</p>
 </div>
 <div class="header menu">
     <div class="margin-left"></div>
     <div class="logo">
-        <?php if( $auth->TrushClient()): ?>
+        <?php if( $header_login ): ?>
         <div class="burger-menu">
             <div class="bm-1"></div>
             <div class="bm-2"></div>
@@ -15,14 +18,14 @@
         <a href="/">Simpus</a>
     </div>
     <div class="nav">                
-    <?php if( $auth->TrushClient()): ?>
+    <?php if( $header_login ): ?>
         <?php foreach( $menu_link as $ml ) : ?>
-        <a href="<?= $ml[1] ?>" <?= $active_menu == $ml ? 'class="active"' : ''?>><?= $ml[0] ?></a>
+        <a href="<?= $ml[1] ?>" <?= $active_menu == $ml[0] ? 'class="active"' : ''?>><?= $ml[0] ?></a>
         <?php endforeach ; ?>
     <?php endif; ?>
     </div>
     <div class="account">
-        <?php if( $auth->TrushClient()): ?>
+        <?php if( $header_login ): ?>
         <div class="boxs-account" onclick="open_modal()">
             <div class="box-account left">
                 <img class="pic-box" src="<?= $user->getSmallDisplayPicture() ?>" alt="@<?= $user->getDisplayName() ?>)">

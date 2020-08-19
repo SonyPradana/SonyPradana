@@ -94,9 +94,12 @@
 </head>
 <body>
     <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/control/modal.html') ?>
-    <header>    
-        <?php $active_menu = 'home' ?>
-        <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/header/header.html') ?>
+    <header>
+        <?php 
+            $active_menu = null;
+            $menu_link = [["Lihat RM", "/p/med-rec/view-rm/"], ["Cari RM", "/p/med-rec/search-rm/"], ["Buat RM", "/p/med-rec/new-rm/"] ];
+            include(BASEURL . '/lib/components/header/header.php')
+        ?>
     </header>
     <div class="container width-view">
         <main>

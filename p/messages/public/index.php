@@ -52,8 +52,11 @@ $user = new User($auth->getUserName());
 </head>
 <body>
     <header>
-        <?php $active_menu = 'none'?>
-        <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/header/header.html') ?>
+        <?php 
+            $active_menu = null;
+            $menu_link = [["Lihat RM", "/p/med-rec/view-rm/"], ["Cari RM", "/p/med-rec/search-rm/"], ["Buat RM", "/p/med-rec/new-rm/"] ];
+            include(BASEURL . '/lib/components/header/header.php')
+        ?>
     </header>
     <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/control/modal.html') ?>
     
