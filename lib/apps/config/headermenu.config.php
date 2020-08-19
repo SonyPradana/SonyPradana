@@ -1,8 +1,17 @@
 <?php
     // medical record header menu
-    define('MENU_MEDREC', [["Lihat RM", "/p/med-rec/view-rm/"], ["Cari RM", "/p/med-rec/search-rm/"], ["Buat RM", "/p/med-rec/new-rm/"] ]);
+    define('MENU_MEDREC', [
+        ["Lihat RM", "/rekam-medis/view"], 
+        ["Cari RM", "/rekam-medis/search"], 
+        ["Buat RM", "/rekam-medis/new"] ]);
     // kia-anak header meni
-    define('MENU_KIA_ANAK', [["Lihat Data KIA", "/p/kia-anak/biodata/view/"], ["Cari Data KIA", "/p/kia-anak/biodata/search/"], ["Buat Data KIA", "/p/kia-anak/biodata/new/"] ]);
+    define('MENU_KIA_ANAK', [
+        ["Lihat Data KIA", "/kia-anak/view/biodata"], 
+        ["Cari Data KIA", "/kia-anak/search/biodata"], 
+        ["Buat Data KIA", "/kia-anak/new/biodata"] ]);
     // poasayndu header menu
-    define('MENU_POSYANDU', [["Lihat Data Posyandu", "/p/kia-anak/posyandu/view/"], ["Cari Data Posyandu", "/p/kia-anak/biodata/search/"], ["Buat Data Posyandu", "/p/kia-anak/posyandu/new/"] ]);
+    define('MENU_POSYANDU', [
+        ["Lihat Data Posyandu", "/kia-anak/view/posyandu"], 
+        ["Cari Data Posyandu", "/kia-anak/search/posyandu"], 
+        ["Buat Data Posyandu", "/kia-anak/search/posyandu"] ]);
 

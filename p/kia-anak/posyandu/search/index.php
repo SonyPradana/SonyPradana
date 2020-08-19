@@ -104,8 +104,8 @@
 <body>
     <header>
         <?php 
-            $active_menu = 'Cari Data KIA';
-            $menu_link = MENU_KIA_ANAK;
+            $active_menu = 'Cari Data Posyandu';
+            $menu_link = MENU_POSYANDU;
         ?>
         <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/header/header.php') ?>
     </header>

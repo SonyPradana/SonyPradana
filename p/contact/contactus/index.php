@@ -107,7 +107,7 @@
     <header>
         <?php 
             $active_menu = null;
-            $menu_link = [["Lihat RM", "/p/med-rec/view-rm/"], ["Cari RM", "/p/med-rec/search-rm/"], ["Buat RM", "/p/med-rec/new-rm/"] ];
+            $menu_link = MENU_MEDREC;
             include(BASEURL . '/lib/components/header/header.php')
         ?>
     </header>

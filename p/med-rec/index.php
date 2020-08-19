@@ -121,7 +121,7 @@
     <header>
         <?php 
             $active_menu = null;
-            $menu_link = [["Lihat RM", "/p/med-rec/view-rm/"], ["Cari RM", "/p/med-rec/search-rm/"], ["Buat RM", "/p/med-rec/new-rm/"] ];
+            $menu_link = MENU_MEDREC;
             include(BASEURL . '/lib/components/header/header.php')
         ?>
     </header>
@@ -160,7 +160,7 @@
                     <div class="box-title"><h2>Data RM Perdesa</h2></div>
                     <div class="box-container">
                     <?php foreach( $arr_data as $desa => $jumlah ): ?>
-                        <a href="/p/med-rec/search-rm/?alamat-search=<?= $desa ?>" class="card rm-card grad-pinktoyellow shadow-bottom-left-medium">
+                        <a href="/rekam-medis/search?alamat-search=<?= $desa ?>" class="card rm-card grad-pinktoyellow shadow-bottom-left-medium">
                             <div class="card title">
                                 <p><?= $jumlah ?></p>
                                 <span class="detail">&nbsp;~ <?= round( ($jumlah / $jumlah_rm ) * 100, 1) ?>%</span>

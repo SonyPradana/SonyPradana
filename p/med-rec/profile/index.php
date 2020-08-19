@@ -8,7 +8,7 @@ session_start();
 $token = $_SESSION['token'] ?? '';
 $auth = new Auth($token, 2);
 if( !$auth->TrushClient() ){
-    header("Location: /login?url=" . $_SERVER['REQUEST_URI']); 
+    header("Location: /login/?url=" . $_SERVER['REQUEST_URI']); 
     exit();
 }
 ?>
@@ -126,7 +126,7 @@ if( !$auth->TrushClient() ){
     <header>
         <?php 
             $active_menu = null;
-            $menu_link = [["Lihat RM", "/p/med-rec/view-rm/"], ["Cari RM", "/p/med-rec/search-rm/"], ["Buat RM", "/p/med-rec/new-rm/"] ];
+            $menu_link = MENU_MEDREC;
             include(BASEURL . '/lib/components/header/header.php')
         ?>
     </header>
@@ -136,7 +136,7 @@ if( !$auth->TrushClient() ){
             <div class="coit breadcrumb">
                 <ul class="crumb">
                     <li><a href="/">Home</a></li>
-                    <li><a href="/p/med-rec/">Rekam Medis</a></li>
+                    <li><a href="/rekam-medis">Rekam Medis</a></li>
                     <li>Biodata</li>
                 </ul>
             </div>
@@ -155,7 +155,7 @@ if( !$auth->TrushClient() ){
                             <div class="content">
                                 <div class="grup-name">Grup:</div>
                                 <div class="grup-itmes box-grup">
-                                    <a href="/p/med-rec/view-rm/" class="grup btn rounded light blue text"><?= $person->getStatus() == 'null' ? "Rekam Medis" : $person->getStatus()?></a>
+                                    <a href="/rekam-medis/view" class="grup btn rounded light blue text"><?= $person->getStatus() == 'null' ? "Rekam Medis" : $person->getStatus()?></a>
                                 </div>
                             </div>
                         </div>
@@ -174,7 +174,7 @@ if( !$auth->TrushClient() ){
                             <div class="title">
                                 <h2>Rekam Medis</h2>
                                 <div class="action">
-                                    <a class="btn rounded light blue fill" href="/p/med-rec/edit-rm/index.php?document_id=<?= $person_id ?>">Edit</a>
+                                    <a class="btn rounded light blue fill" href="/rekam-medis/edit?document_id=<?= $person_id ?>">Edit</a>
                                 </div>
                             </div>
                             <div class="box-section">
@@ -249,7 +249,7 @@ if( !$auth->TrushClient() ){
     keepalive(
         () => {
             // ok function : redirect logout and then redirect to login page to accses this page
-            window.location.href = "/login?url=<?= $_SERVER['REQUEST_URI'] ?>&logout=true"
+            window.location.href = "/login/?url=<?= $_SERVER['REQUEST_URI'] ?>&logout=true"
         },
         () => {          
             // close fuction : just logout

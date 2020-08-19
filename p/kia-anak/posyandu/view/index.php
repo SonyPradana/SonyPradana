@@ -45,8 +45,7 @@
     
     for ($i=0; $i < count($count); $i++) {      
         $filrer_by = $count[$i]['id_hash'];
-        $count[$i]['data'] = array_filter($raw, function($e){
-            global $filrer_by;
+        $count[$i]['data'] = array_filter($raw, function($e) use ($filrer_by){
             return $e['id_hash'] == $filrer_by;
         });
         sort( $count[$i]['data']);
@@ -117,10 +116,10 @@
 <body>
     <header>
         <?php 
-            $menu_link = [["Lihat Data KIA", "/p/kia-anak/biodata/view/"], ["Cari Data KIA", "/p/kia-anak/biodata/search/"], ["Buat Data KIA", "/p/kia-anak/biodata/new/"] ];
-            $active_menu = $menu_link[0];
+            $active_menu = "Lihat Data Posyandu";
+            $menu_link = MENU_POSYANDU;
+            include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/header/header.php')
         ?>
-        <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/header/header.php') ?>
     </header>
     <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/control/modal.html') ?>
     <div class="container">
@@ -128,7 +127,7 @@
             <div class="coit breadcrumb">
                 <ul class="crumb">
                     <li><a href="/">Home</a></li>
-                    <li><a href="/p/med-rec/">KIA Anak</a></li>
+                    <li><a href="/rekam-medis">KIA Anak</a></li>
                     <li>Lihat Data</li>
                 </ul>
             </div>

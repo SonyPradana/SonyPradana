@@ -140,7 +140,7 @@ if( !$auth->TrushClient() ){
     <header>
         <?php 
             $active_menu = "Buat RM";
-            $menu_link = [["Lihat RM", "/p/med-rec/view-rm/"], ["Cari RM", "/p/med-rec/search-rm/"], ["Buat RM", "/p/med-rec/new-rm/"] ];
+            $menu_link = MENU_MEDREC;
             include(BASEURL . '/lib/components/header/header.php')
         ?>
     </header>
@@ -150,7 +150,7 @@ if( !$auth->TrushClient() ){
             <div class="coit breadcrumb">
                 <ul class="crumb">
                     <li><a href="/">Home</a></li>
-                    <li><a href="/p/med-rec/">Rekam Medis</a></li>
+                    <li><a href="/rekam-medis">Rekam Medis</a></li>
                     <li>Buat Data Baru</li>
                 </ul>
             </div>

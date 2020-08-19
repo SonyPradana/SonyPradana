@@ -121,7 +121,7 @@
     <header>
         <?php 
             $active_menu = "Lihat RM";
-            $menu_link = [["Lihat RM", "/p/med-rec/view-rm/"], ["Cari RM", "/p/med-rec/search-rm/"], ["Buat RM", "/p/med-rec/new-rm/"] ];
+            $menu_link = MENU_MEDREC;
             include(BASEURL . '/lib/components/header/header.php')
         ?>
     </header>
@@ -131,7 +131,7 @@
             <div class="coit breadcrumb">
                 <ul class="crumb">
                     <li><a href="/">Home</a></li>
-                    <li><a href="/p/med-rec/">Rekam Medis</a></li>
+                    <li><a href="/rekam-medis">Rekam Medis</a></li>
                     <li>Lihat Data</li>
                 </ul>
             </div>
@@ -245,7 +245,7 @@
                                 <th><?= $data['nomor_rt'] . ' / ' . $data['nomor_rw']?></th>
                                 <th <?= $data['nama_kk'] == $data['nama'] ? 'class="mark"' : ""?>><?= ucwords( $data['nama_kk'] )?></th>
                                 <th><?= $data['nomor_rm_kk']?></th>
-                                <th><a class="link" href="/p/med-rec/edit-rm/index.php?document_id=<?= $data['id']?>">edit</a><?= $data['nama_kk'] == $data['nama'] ? '<a class="link" href="/p/med-rec/search-rm/?submit=&no-rm-kk-search=' . $data['nomor_rm_kk']. '">view</a>' : ""?> </th>
+                                <th><a class="link" href="/rekam-medis/edit?document_id=<?= $data['id']?>">edit</a><?= $data['nama_kk'] == $data['nama'] ? '<a class="link" href="/rekam-medis/search?submit=&no-rm-kk-search=' . $data['nomor_rm_kk']. '">view</a>' : ""?> </th>
                             </tr>                       
                             <?php $idnum++; ?>
                         <?php endforeach ; ?>                            

@@ -92,10 +92,10 @@
 <body>
     <header>
         <?php 
-            $menu_link = [["Lihat Data KIA", "/p/kia-anak/biodata/view/"], ["Cari Data KIA", "/p/kia-anak/biodata/search/"], ["Buat Data KIA", "/p/kia-anak/biodata/new/"] ];
-            $active_menu = $menu_link[2];
+            $active_menu = "Buat Data Posyandu";
+            $menu_link = MENU_POSYANDU;
+            include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/header/header.php') 
         ?>
-        <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/header/header.php') ?>
     </header>
     <div class="modals">
         <!-- modal menu -->
@@ -109,7 +109,7 @@
             <div class="coit breadcrumb">
                 <ul class="crumb">
                     <li><a href="/">Home</a></li>
-                    <li><a href="/p/med-rec/">KIA Anak</a></li>
+                    <li><a href="/rekam-medis">KIA Anak</a></li>
                     <li>Buat Data Baru</li>
                 </ul>
             </div>

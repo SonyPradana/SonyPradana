@@ -155,8 +155,8 @@ $user = new User($auth->getUserName());
 <body>
     <header>
         <?php 
-            $active_menu = "none";
-            $menu_link = [["Lihat Data KIA", "/p/kia-anak/biodata/view/"], ["Cari Data KIA", "/p/kia-anak/biodata/search/"], ["Buat Data KIA", "/p/kia-anak/biodata/new/"] ];
+            $active_menu = null;
+            $menu_link = MENU_KIA_ANAK;
             include(BASEURL . '/lib/components/header/header.php')
         ?>
     </header>
@@ -166,7 +166,7 @@ $user = new User($auth->getUserName());
             <div class="coit breadcrumb">
                 <ul class="crumb">
                     <li><a href="/">Home</a></li>
-                    <li><a href="/p/med-rec/">KIA Anak</a></li>
+                    <li><a href="/rekam-medis">KIA Anak</a></li>
                     <li>Edit Data</li>
                 </ul>
             </div>

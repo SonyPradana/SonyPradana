@@ -157,7 +157,7 @@ if( !$auth->TrushClient() ){
     <header>
         <?php 
             $active_menu = null;
-            $menu_link = [["Lihat RM", "/p/med-rec/view-rm/"], ["Cari RM", "/p/med-rec/search-rm/"], ["Buat RM", "/p/med-rec/new-rm/"] ];
+            $menu_link = MENU_MEDREC;
             include(BASEURL . '/lib/components/header/header.php')
         ?>
     </header>
@@ -167,7 +167,7 @@ if( !$auth->TrushClient() ){
             <div class="coit breadcrumb">
                 <ul class="crumb">
                     <li><a href="/">Home</a></li>
-                    <li><a href="/p/med-rec/">Rekam Medis</a></li>
+                    <li><a href="/rekam-medis">Rekam Medis</a></li>
                     <li>Edit Data Rekam Medis</li>
                 </ul>
             </div>
@@ -184,7 +184,7 @@ if( !$auth->TrushClient() ){
                         <div class="input-information warning">
                         <?php if( $status_double ) : ?>
                             <p>nomor rekam medis sama :
-                                <a href="/p/med-rec/search-rm/?nomor-rm-search=<?= $nomorRM ?>"
+                                <a href="/rekam-medis/search?nomor-rm-search=<?= $nomorRM ?>"
                                     target="_blank">lihat</a>
                             </p>
                         <?php endif; ?>

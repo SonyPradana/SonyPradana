@@ -116,8 +116,8 @@ function header_exit(){
 <body>
     <header>
         <?php 
-            $active_menu = "none";
-            $menu_link = [["Lihat Data KIA", "/p/kia-anak/biodata/view/"], ["Cari Data KIA", "/p/kia-anak/biodata/search/"], ["Buat Data KIA", "/p/kia-anak/biodata/new/"] ];
+            $active_menu = 'Edit Data Posyandu';
+            $menu_link = MENU_POSYANDU;
             include(BASEURL . '/lib/components/header/header.php')
         ?>
     </header>
@@ -127,7 +127,7 @@ function header_exit(){
             <div class="coit breadcrumb">
                 <ul class="crumb">
                     <li><a href="/">Home</a></li>
-                    <li><a href="/p/med-rec/">KIA Anak</a></li>
+                    <li><a href="/rekam-medis">KIA Anak</a></li>
                     <li>Edit Data</li>
                 </ul>
             </div>
