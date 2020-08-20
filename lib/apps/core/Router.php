@@ -1,14 +1,27 @@
 <?php
 namespace Simpus;
+
+use HttpRequest;
+use HttpRespone;
+
 class Route {
 
   private static $routes = Array();
   private static $pathNotFound = null;
   private static $methodNotAllowed = null;
 
-  public static function match($method, $uri, $callback){
+  public static $patterns = Array(
+          '(:num)' => '([0-9]*)',
+          '(:text)' => '([a-zA-Z]*)',
+          '(:any)' => '([a-zA-Z_-]*)'
+  );
+
+  public static function match($method, $uri, $callback){    
+    $user_pattern   = array_keys(self::$patterns);
+    $allow_pattern  = array_values(self::$patterns);
+    $new_uri        = str_replace($user_pattern, $allow_pattern, $uri);
     array_push(self::$routes, Array(
-      'expression' => $uri,
+      'expression' => $new_uri,
       'function' => $callback,
       'method' => $method
     ));    
@@ -21,11 +34,7 @@ class Route {
     *
     */
   public static function any($expression, $function){
-    array_push(self::$routes, Array(
-      'expression' => $expression,
-      'function' => $function,
-      'method' => ['get','post', 'put', 'patch', 'delete', 'options']
-    ));
+    self::match(['get','post', 'put', 'patch', 'delete', 'options'], $expression, $function);
   }
 
   /**
@@ -35,11 +44,7 @@ class Route {
     *
     */
   public static function get($expression, $function){
-    array_push(self::$routes, Array(
-      'expression' => $expression,
-      'function' => $function,
-      'method' => 'get'
-    ));
+    self::match('get', $expression, $function);
   }
 
   /**
@@ -49,11 +54,7 @@ class Route {
     *
     */
   public static function post($expression, $function){
-    array_push(self::$routes, Array(
-      'expression' => $expression,
-      'function' => $function,
-      'method' => 'post'
-    ));
+    self::match('post', $expression, $function);
   }
   
 
@@ -115,20 +116,25 @@ class Route {
       $route['expression'] = $route['expression'].'$';
 
       // Check path match
-      if (preg_match('#'.$route['expression'].'#'.($case_matters ? '' : 'i'), $path, $matches)) {
+      if (preg_match('#'.$route['expression'].'#'.($case_matters ? '' : 'i'), $path, $args)) {
         $path_match_found = true;
 
         // Cast allowed method to array if it's not one already, then run through all methods
         foreach ((array)$route['method'] as $allowedMethod) {
             // Check method match
           if (strtolower($method) == strtolower($allowedMethod)) {
-            array_shift($matches); // Always remove first element. This contains the whole string
+            array_shift($args); // Always remove first element. This contains the whole string
 
             if ($basepath != '' && $basepath != '/') {
-              array_shift($matches); // Remove basepath
+              array_shift($args); // Remove basepath
             }
 
-            call_user_func_array($route['function'], $matches);
+            // grouping params
+            $req    = new HttpRequest();
+            $res    = new HttpRespone();
+            $params = array($req, $res, $args);
+            
+            call_user_func_array($route['function'], $params);
 
             $route_match_found = true;
 

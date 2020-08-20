@@ -13,5 +13,5 @@
     define('MENU_POSYANDU', [
         ["Lihat Data Posyandu", "/kia-anak/view/posyandu"], 
         ["Cari Data Posyandu", "/kia-anak/search/posyandu"], 
-        ["Buat Data Posyandu", "/kia-anak/search/posyandu"] ]);
+        ["Buat Data Posyandu", "/kia-anak/new/posyandu"] ]);
 

@@ -49,9 +49,9 @@
     });
 
     // info    
-    $app->get('/info/([a-zA-Z0-9_-]*)', function($var1) {
-        if( file_exists(BASEURL . '/p/info/' . $var1 .  '/index.php') ){            
-            require_once BASEURL . '/p/info/' . $var1 . '/index.php';
+    $app->get('/info/(:any)', function(HttpRequest $req, HttpRespone $res, array $args) {
+        if( file_exists(BASEURL . '/p/info/' . $args[0] .  '/index.php') ){            
+            require_once BASEURL . '/p/info/' . $args[0] . '/index.php';
         }else{
             not_found();
         }
@@ -62,27 +62,21 @@
     $app->get('/rekam-medis', function(){
         require_once BASEURL . '/p/med-rec/index.php';
     });
-    $app->match(['get', 'post'], '/rekam-medis/([a-zA-Z]*)', function($var){
-        if( file_exists(BASEURL . '/p/med-rec/'. $var . '-rm/index.php')){
-            require_once BASEURL . '/p/med-rec/'. $var . '-rm/index.php'; 
+    $app->match(['get', 'post'], '/rekam-medis/(:text)', function(HttpRequest $req, HttpRespone $res, array $args){
+        if( file_exists(BASEURL . '/p/med-rec/'. $args[0] . '-rm/index.php')){
+            require_once BASEURL . '/p/med-rec/'. $args[0] . '-rm/index.php'; 
         }else{
-            not_found();
+            require_once BASEURL . '/p/med-rec/index.php';
         }
     });
-    // kia-anak biodata
-    $app->match(['get', 'post'], '/kia-anak/([a-zA-Z]*)/biodata', function($var){
-        if( file_exists(BASEURL . '/p/kia-anak/biodata/'. $var . '/index.php')){
-            require_once BASEURL . '/p/kia-anak/biodata/'. $var . '/index.php'; 
-        }else{
-            not_found();
-        }
-    });
-    // kia-anak lansia
-    $app->match(['get', 'post'], '/kia-anak/([a-zA-Z]*)/posyandu', function($var){
-        if( file_exists(BASEURL . '/p/kia-anak/posyandu/'. $var . '/index.php')){
-            require_once BASEURL . '/p/kia-anak/posyandu/'. $var . '/index.php'; 
-        }else{
-            not_found();
+    // kia-anak biodata/posyandu
+    $app->match(['get', 'post'], '/(:any)/(:text)/(:text)', function(HttpRequest $req, HttpRespone $res, array $args){
+        if( $args[0] == 'kia-anak'){
+            if( file_exists(BASEURL . '/p/' . $args[0] . '/' . $args[2] . '/'. $args[1] . '/index.php')){
+                require_once BASEURL . '/p/' . $args[0] . '/' . $args[2] . '/'. $args[1] . '/index.php'; 
+            }else{
+                not_found();
+            }
         }
     });
 
