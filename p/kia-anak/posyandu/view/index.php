@@ -12,6 +12,9 @@
         exit();
     }
     $user = new User($auth->getUserName());
+    if( isset( $_GET['active_menu'] ) ){
+        $_SESSION['active_menu'] = MENU_POSYANDU;
+    }
 ?>
 <?php
     $pdo = new MyPDO();

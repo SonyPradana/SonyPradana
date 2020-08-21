@@ -11,9 +11,12 @@
         header("Location: /login?url=" . $_SERVER['REQUEST_URI']);   
         exit();
     }
+    $user = new User($auth->getUserName());
+    if( isset( $_GET['active_menu'] ) ){
+        $_SESSION['active_menu'] = MENU_MEDREC;
+    }
 ?>
 <?php
-    $user = new User($auth->getUserName());
 
     #config
     $sort = 'nomor_rm';

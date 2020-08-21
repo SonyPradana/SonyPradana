@@ -12,6 +12,9 @@
         exit();
     }
     $user = new User($auth->getUserName());
+    if( isset( $_GET['active_menu'] ) ){
+        $_SESSION['active_menu'] = MENU_KIA_ANAK;
+    }
 ?>
 <?php
     // load data rm dan staging yang terdaftar kia anak

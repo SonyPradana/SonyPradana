@@ -53,8 +53,8 @@
 <body>    
     <header>
         <?php 
-            $active_menu = null;
-            $menu_link = MENU_MEDREC;
+            $active_menu = null;            
+            $menu_link = $_SESSION['active_menu'] ?? MENU_MEDREC;
             include(BASEURL . '/lib/components/header/header.php')
         ?>
     </header>

@@ -2,6 +2,17 @@
 <?php
     $header_login   = isset( $auth ) ? $auth->TrushClient() : false;
 ?>
+<?php if( $header_login ): ?>
+<div class="header navbar">
+    <div class="margin-left"></div>
+    <div class="navbar-box">
+        <a href="/rekam-medis/view?active_menu">Rekam Medis</a>
+        <a href="/kia-anak/view/biodata?active_menu">Kia Anak</a>
+        <a href="/kia-anak/view/posyandu?active_menu">Posyandu</a>
+    </div>
+    <div class="margin-right"></div>
+</div>
+<?php endif; ?>
 <div class="header title">
     <p>Welcome To Simpus Lerep</p>
 </div>
