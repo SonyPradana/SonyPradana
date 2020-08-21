@@ -171,7 +171,7 @@
                                 <?php for ($i=0; $i < $minus; $i++): ?>
                                     <th>--</th>
                                 <?php endfor; ?>
-                                <th><a href="javascript:void(0)" onclick="$work('<?= $data['id_hash'] ?>')">Lihat</a></th>
+                                <th><a class="btn rounded light blue fill number" href="/kia-anak/edit/biodata?document_id=<?= $data['id_hash']?>">edit</a></th>
                                 <?php $num++ ?>
                             </tr>
                             <?php endforeach ; ?>

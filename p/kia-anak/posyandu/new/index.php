@@ -14,10 +14,10 @@
     $user = new User($auth->getUserName());
 ?>
 <?php
-    if( isset($_POST['request']) && isset( $_POST['id_hash'] )){
-        if( $_POST['id_hash'] == '') return false;
+    if( isset($_POST['request']) && isset( $_POST['code_hash'] )){
+        if( $_POST['code_hash'] == '') return false;
 
-        $posyandu = new PosyanduRecord($_POST['id_hash']);
+        $posyandu = new PosyanduRecord($_POST['code_hash']);
         $posyandu->convertFromArray($_POST);
         if( $posyandu->creat() ){
             $msg = [];
@@ -128,6 +128,7 @@
                                     <th>Tanggal</th>
                                     <th>Tinngi Badan</th>
                                     <th>Berat Badan</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -141,7 +142,7 @@
                 <div class="box right">
                     <h2>Form Pemeriksaan</h2>
                     <form action="" method="post">
-                        <input type="hidden" name="id_hash" id="input-hash">
+                        <input type="hidden" name="code_hash" id="input-hash">
                         <section>
                             <label for="input-desa">Desa</label>
                             <select class="textbox outline black rounded small" name="desa" id="input-desa">
@@ -232,7 +233,7 @@
     // callback 
     pref.result = function(e){
         $id('res-details').innerText  = `Nama: ${e.nama}, ${e.tanggal_lahir}`;
-        $id('input-hash').value       = e.tanggal_dibuat;
+        $id('input-hash').value       = e.code_hash;
         if(e.desa != 'null'){
             $id('input-desa').value   = e.desa;
             getGrupPosyandu(e.desa, e.id_posyandu);             // TODO    defaultnya bukan desa tp alamat admin
@@ -277,6 +278,7 @@
                     dom_tr.appendChild( $creat('td', element.tanggal_pemeriksaan));
                     dom_tr.appendChild( $creat('td', element.tinggi_badan));
                     dom_tr.appendChild( $creat('td', element.berat_badan));
+                    dom_tr.appendChild( $creat('td', `<a class="btn rounded light blue fill number" href="/kia-anak/edit/posyandu?document_id=${element.id_hash}-${element.id}">edit</a>`));
 
                     $query('.table-posynadu table tbody').appendChild(dom_tr);
                     num++;

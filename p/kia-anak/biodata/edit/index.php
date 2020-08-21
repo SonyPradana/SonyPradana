@@ -23,17 +23,18 @@ $user = new User($auth->getUserName());
     }
 
     $success   = false;
-    $hash_id = $_GET['document_id'] ?? false;
-    if( $hash_id == false ){ 
-        deny();
-    }
+    $code_hash = $_GET['document_id'] ?? false;
+    if( $code_hash == false ) deny();
+    $get_code_hash = Relation::where('id_hash', $code_hash);
+    $id_hash     = $get_code_hash[0]['time_stamp'] ?? false;
+    if( $id_hash == false ) deny();
 
     // ambil data lama
     $data_rm = new MedicalRecord();                             // data rm
-    if($data_rm->refreshUsingIdHash($hash_id) == false) deny('document tidak ditemukan');
+    if($data_rm->refreshUsingIdHash( $id_hash ) == false) deny('document tidak ditemukan');
 
     $data_kia = new KIAAnakRecord();                            // data kia
-    $data_kia->loadWithID( CCode::ConvertToCode( $hash_id ) );
+    $data_kia->loadWithID( $code_hash );
     if( $data_kia->cekExist() == false ) deny('documnet tidak terdaftar');    
 
     // update data

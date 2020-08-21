@@ -72,8 +72,8 @@ class PosyanduRecord{
     }
 
 
-    public function __construct(int $id_hash){
-        $this->_code_hash = CCode::ConvertToCode($id_hash);
+    public function __construct(string $code_hash){
+        $this->_code_hash = $code_hash;
         $this->_isValid = $this->isValid( $this->_code_hash );      //  TODO data pertama selalu bernilai true
     }
 

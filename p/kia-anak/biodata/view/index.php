@@ -137,7 +137,7 @@
                                 <th><?= $data['imd'] ?></th>
                                 <th><?= $data['kia'] ?></th>
                                 <th><?= $data['asi_eks'] == 0 ? "Tidak" : "Iya" ?></th>
-                                <th>Aktion</th>
+                                <th><a class="btn rounded light blue fill number" href="/kia-anak/edit/biodata?document_id=<?= $data['id_hash']?>">edit</a></th>
                                 <?php $num++ ?>
                             </tr>
                             <?php endforeach ; ?>

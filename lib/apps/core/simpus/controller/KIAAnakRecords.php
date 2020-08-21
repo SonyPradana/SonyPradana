@@ -193,6 +193,7 @@ class KIAAnakRecords{
                         *
                     FROM(
                         SELECT      
+                            data_kia_anak.id_hash AS code_hash,
                             data_kia_anak.jenis_kelamin,
                             data_kia_anak.tanggal_dibuat,
                             data_kia_anak.bbl,
@@ -224,6 +225,7 @@ class KIAAnakRecords{
                         UNION ALL
 
                         SELECT      
+                            data_kia_anak.id_hash AS code_hash,
                             data_kia_anak.jenis_kelamin,
                             data_kia_anak.tanggal_dibuat,
                             data_kia_anak.bbl,

@@ -14,12 +14,12 @@ if( !$auth->TrushClient() ){
 
 $user        = new User($auth->getUserName());
 $document_id = $_GET['document_id'] ?? header_exit();
-$params      = explode('-', $document_id);                                // [0]: id_hash, [1]: id 
+$params      = explode('-', $document_id);                                // [0]: code_hash, [1]: id 
 //  
-$id_hash    = is_numeric( $params[0]) ? $params[0] : header_exit();       // validasi document id type, harus angka
+$code_hash  = $params[0];                                                // validasi document id type, harus angka
 $id         = $params[1] ?? header_exit();
 // 
-$posyandu   = new PosyanduRecord($id_hash);
+$posyandu   = new PosyanduRecord($code_hash);
 $isValided  = $posyandu->IsValided();
 $read       = $posyandu->read( $id );
 
