@@ -136,7 +136,7 @@ class Auth{
      * Sigle line authentication, cek auth dan jika salah akan di redirect ke login
      * @param string $redirect target lokasi redirect
      */
-    public function authing($redirect = '/p/auth/login/'){
+    public function authing($redirect = '/login/'){
         if( !$this->_trushClinet){              
             header("Location: " . $redirect);   
             exit();

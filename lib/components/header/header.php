@@ -1,6 +1,11 @@
 
 <?php
-    $header_login   = isset( $auth ) ? $auth->TrushClient() : false;
+    $header_login   = $portal['auth']['login'] ??  false;
+    $active_menu    = $portal['header']['active_menu'] ?? $active_menu ?? MENU_MEDREC;
+    $list_menu      = $portal['header']['header_menu'] ?? $menu_link ?? "none";
+    $display_name   = $portal['auth']['display_name'] ?? "null";
+    $small_dp       = $portal['auth']['display_picture_small'] ?? "null";
+    
 ?>
 <?php if( $header_login ): ?>
 <div class="header navbar">
@@ -30,7 +35,7 @@
     </div>
     <div class="nav">                
     <?php if( $header_login ): ?>
-        <?php foreach( $menu_link as $ml ) : ?>
+        <?php foreach( $list_menu as $ml ) : ?>
         <a href="<?= $ml[1] ?>" <?= $active_menu == $ml[0] ? 'class="active"' : ''?>><?= $ml[0] ?></a>
         <?php endforeach ; ?>
     <?php endif; ?>
@@ -39,10 +44,10 @@
         <?php if( $header_login ): ?>
         <div class="boxs-account" onclick="open_modal()">
             <div class="box-account left">
-                <img class="pic-box" src="<?= $user->getSmallDisplayPicture() ?>" alt="@<?= $user->getDisplayName() ?>)">
+                <img class="pic-box" src="<?= $small_dp ?>" alt="@<?= $display_name ?>)">
             </div>
             <div class="box-account right">
-                <p><?= $user->getDisplayName()?></p>
+                <p><?= $display_name?></p>
             </div>
         </div>                
         <?php else: ?>

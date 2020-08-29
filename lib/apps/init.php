@@ -11,3 +11,4 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/core/message/init.php';
 
 // router
 require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/core/Router.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/core/Controller.php';

@@ -13,7 +13,7 @@ class Route {
   public static $patterns = Array(
           '(:num)' => '([0-9]*)',
           '(:text)' => '([a-zA-Z]*)',
-          '(:any)' => '([a-zA-Z_-]*)'
+          '(:any)' => '([0-9a-zA-Z_-]*)'
   );
 
   public static function match($method, $uri, $callback){    
