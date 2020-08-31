@@ -1,4 +1,10 @@
 <?php
+    use Simpus\Auth\Auth;
+    use Simpus\Simpus\PosyanduRecords;
+    use Simpus\Database\MyPDO;
+    use Simpus\Helper\HttpHeader;
+    use Simpus\Helper\ConvertCode;
+    
     require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/init.php';
 
     session_start();
@@ -16,7 +22,7 @@
     $db =  new MyPDO();
     $data_posyandu = new PosyanduRecords($db);
     $data_posyandu
-        ->filtterById( CCode::ConvertToCode($code_hash) )
+        ->filtterById( ConvertCode::ConvertToCode($code_hash) )
         ->setStrictSearch( true );
         
     HttpHeader::printJson([

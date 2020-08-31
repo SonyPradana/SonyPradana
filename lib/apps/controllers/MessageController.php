@@ -1,5 +1,7 @@
 <?php
 
+use Simpus\Apps\Controller;
+
 class MessageController extends Controller{
     public function __construct(){        
       call_user_func_array($this->getMiddleware()['before'], []);

@@ -1,4 +1,7 @@
 <?php
+    use Simpus\Helper\StringValidation;
+    use Simpus\Auth\Auth;
+    use Simpus\Auth\ForgotPassword;
     #import modul 
     require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/init.php';
 ?>

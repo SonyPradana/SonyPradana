@@ -1,4 +1,5 @@
-<?php    
+<?php
+    use  Simpus\Auth\User;
     $author = new User("angger");
     $portal = [
         "auth"    => $this->getMiddleware()['auth'],

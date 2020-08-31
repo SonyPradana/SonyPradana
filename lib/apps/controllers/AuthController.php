@@ -1,5 +1,12 @@
 <?php
-use StringValidation as sv;
+
+use Simpus\Auth\User;
+use Simpus\Auth\Login;
+use Simpus\Auth\Logout;
+use Simpus\Database\MyPDO;
+use Simpus\Apps\Controller;
+use Simpus\Helper\UploadFile;
+use Simpus\Helper\StringValidation as sv;
 use \Gumlet\ImageResize;
 
 class AuthController extends Controller

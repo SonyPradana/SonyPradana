@@ -1,5 +1,16 @@
 <?php
 
+use Simpus\Database\MyPDO;
+use Simpus\Apps\Controller;
+use Simpus\Helper\ConvertCode;
+use Simpus\Simpus\Relation;
+use Simpus\Simpus\MedicalRecord;
+use Simpus\Simpus\KIAAnakRecord;
+use Simpus\Simpus\KIAAnakRecords;
+use Simpus\Simpus\GroupsPosyandu;
+use Simpus\Simpus\PosyanduRecord;
+use Simpus\Simpus\PosyanduRecords;
+
 class KiaAnakController extends Controller{
 
     public function __construct()
@@ -158,9 +169,9 @@ class KiaAnakController extends Controller{
                 $dataKIA = new KIAAnakRecord();
                 $dataKIA->convertFromArray( $_POST );
                 // table relation
-                $table_relation = new Relation(CCode::ConvertToCode( $id_hash ), $id_hash);
+                $table_relation = new Relation(ConvertCode::ConvertToCode( $id_hash ), $id_hash);
                 // simpan data biodata kia
-                $success_dataKIA = $dataKIA->creat( CCode::ConvertToCode( $id_hash ) );
+                $success_dataKIA = $dataKIA->creat( ConvertCode::ConvertToCode( $id_hash ) );
 
                 if( $success_dataKIA && $table_relation->creat() ){
                     $success = true;

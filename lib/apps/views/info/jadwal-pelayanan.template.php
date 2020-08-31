@@ -1,4 +1,5 @@
 <?php 
+    use  Simpus\Auth\User;
     require_once BASEURL . '/lib/ajax/json/public/jadwal-imunisasi/controller/jadwalKIA.php';
 
     $author = new User("angger");

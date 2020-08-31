@@ -1,5 +1,7 @@
 <?php
 
+use Simpus\Apps\Controller;
+
 class AdminController extends Controller
 {
     public function index()

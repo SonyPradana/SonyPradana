@@ -1,5 +1,7 @@
 <?php
 
+namespace Simpus\Apps;
+
 class Controller{
     protected $_template = BASEURL . '/lib/apps/views/StandartTempalte.php';
     private static $_middleware = [

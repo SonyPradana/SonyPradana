@@ -1,5 +1,7 @@
 <?php
 # import class
+use Simpus\Auth\Auth;
+use Simpus\Message\ReadMessage;
 require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/init.php';
 
 # default header

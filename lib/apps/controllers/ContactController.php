@@ -1,5 +1,10 @@
 <?php
 
+use Simpus\Database\MyPDO;
+use Simpus\Apps\Controller;
+use Simpus\Helper\MathCaptcha;
+use Simpus\Message\ContactUs;
+
 class ContactController extends Controller{
     public function contactUs(){
         $msg = ["show" => false, "type" => 'info', "content" => 'oke'];

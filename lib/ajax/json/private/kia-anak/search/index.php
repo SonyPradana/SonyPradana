@@ -1,4 +1,7 @@
 <?php
+    use Simpus\Helper\HttpHeader;
+    use Simpus\Auth\Auth;
+    use Simpus\Simpus\KIAAnakRecords;
     // import modul
     require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/init.php';
 

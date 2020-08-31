@@ -1,4 +1,7 @@
 <?php
+
+use Simpus\Database\MyPDO;
+
 /**
  * class ini berfungsi untuk mendapatkan jadwal kia yang daimambil dari data base
  * 

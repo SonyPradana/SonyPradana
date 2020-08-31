@@ -2,13 +2,9 @@
 //config
 require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/config/config.php';
 
-//apps
-require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/core/auth/init.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/core/library/init.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/core/simpus/init.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/core/database/init.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/core/message/init.php';
-
+// Autoloading
+require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/library/autoload.php';
+    
 // router
 require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/core/Router.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/core/Controller.php';

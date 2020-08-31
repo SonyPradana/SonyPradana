@@ -1,5 +1,7 @@
 <?php
-    // import modul
+    // import modul    
+    use Simpus\Auth\Auth;
+    use Simpus\Simpus\MedicalRecords;
     require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/init.php';
 
     // Aunt cek

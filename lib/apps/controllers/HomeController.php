@@ -1,5 +1,9 @@
 <?php
 
+use Simpus\Simpus\MedicalRecords;
+use Simpus\Database\MyPDO;
+use Simpus\Apps\Controller;
+
 class HomeController extends Controller{
     public function index(){
         $data_rm = new MedicalRecords();    

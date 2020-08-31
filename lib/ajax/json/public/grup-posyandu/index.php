@@ -1,4 +1,7 @@
 <?php
+    use Simpus\Helper\HttpHeader;
+    use Simpus\Simpus\GroupsPosyandu;
+    
     require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/init.php';
 
     HttpHeader::standartJsonHeader();

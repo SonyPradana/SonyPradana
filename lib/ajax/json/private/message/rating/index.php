@@ -1,4 +1,5 @@
 <?php
+use Simpus\Message\Rating;
 # import class
 require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/init.php';
 

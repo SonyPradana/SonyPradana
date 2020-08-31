@@ -1,5 +1,10 @@
 <?php
 
+use Simpus\Simpus\MedicalRecord;
+use Simpus\Simpus\MedicalRecords;
+use Simpus\Auth\Log;
+use Simpus\Apps\Controller;
+
 class RekamMedisController extends Controller{
 
     public function __construct(){

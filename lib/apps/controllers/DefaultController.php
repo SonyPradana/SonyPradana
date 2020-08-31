@@ -1,5 +1,7 @@
 <?php
 
+use Simpus\Apps\Controller;
+
 class DefaultController extends Controller{
     public function status($status_code, $args){        
         if( $status_code == 404){            

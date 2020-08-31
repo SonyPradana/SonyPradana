@@ -1,5 +1,6 @@
 <?php 
     #import modul 
+    use Simpus\Auth\Auth;
     require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/init.php';
 ?>
 <?php

@@ -1,5 +1,8 @@
 <?php
     // import modul
+    use Simpus\Auth\Auth;
+    use Simpus\Simpus\MedicalRecords;
+    use Simpus\Database\MyPDO;
     require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/init.php';
 
     // Aunt cek

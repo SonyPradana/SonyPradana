@@ -1,6 +1,13 @@
 <?php
     session_start();
-    use Simpus\Route;
+
+    use Simpus\Apps\Route;
+    use Simpus\Apps\Controller;
+    use Simpus\Auth\Auth;
+    use Simpus\Auth\User;
+    use Simpus\Helper\HttpRequest;
+    use Simpus\Helper\HttpRespone;
+    
     require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/init.php';
 
     $app   = new Route();

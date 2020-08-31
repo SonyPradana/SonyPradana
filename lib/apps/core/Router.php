@@ -1,8 +1,8 @@
 <?php
-namespace Simpus;
+namespace Simpus\Apps;
 
-use HttpRequest;
-use HttpRespone;
+use Simpus\Helper\HttpRequest;
+use Simpus\Helper\HttpRespone;
 
 class Route {
 
