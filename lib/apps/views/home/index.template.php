@@ -67,7 +67,7 @@
 
     <aside class="top">
         <div class="boxs-header">
-            <p>Info Covid (kabupaten semarang) <span><a href="https://corona.semarangkab.go.id/covid/">i</a></span></p>
+            <p>Info Covid (kabupaten semarang) <span><a rel="nofollow href="https://corona.semarangkab.go.id/covid/">i</a></span></p>
         </div>
         <div class="boxs-info" id="c-covid">
             <div class="info one">
@@ -142,7 +142,7 @@
                         <div class="respone hig" v-on:click="newRating(3)"></div>
                     </div>
                     <div class="review comment">
-                        <input type="text" id="input-comment" placeholder="Kritik dan saran">
+                        <input type="text" id="input-comment" v-on:click="gotoContact" placeholder="Kritik dan saran">
                     </div>
                 </div>
             </div>
@@ -173,11 +173,33 @@
     </footer>
     <script src="/lib/js/index.end.js"></script>
     <script>        
-        let togleReviews = new Vue({
+        let reviews = new Vue({
             el: '#w-reviews',
             data:{
                 seenResult: false,
                 seenRespones: true
+            },
+            methods: {
+                togle: function(show){
+                    if( show ){
+                        this.seenResult     = true;
+                        this.seenRespones   = false;
+                    }else{
+                        this.seenResult     = false;
+                        this.seenRespones   = true;
+                    }
+                },
+                newRating: function( rating ){
+                    Rating(rating, 3, 'Rekam Medis')
+                        .then( json => {
+                            if( json['status'] == 'ok' ){
+                                this.togle(true);
+                            }
+                        })
+                },
+                gotoContact: function(){
+                    window.location = '/Contactus';
+                }
             }
         });
 
@@ -188,28 +210,18 @@
                 msgIsol: 'xxx isolasi',
                 msgSemb: 'xxx sembuh',
                 msgMeni: 'xxx meninggal'
-            }
-        })
-
-        // memuat info Covid, source https://corona.semarangkab.go.id/covid/
-        window.addEventListener('load', event => {
-            const render = async() => {
-                const fetchJSON = await fetch('/lib/ajax/json/public/covid-kab-semarang/info/index.php',{
-                    headers:{
-                        'Content-Type': 'application/json'
-                    }
-                })
-                return fetchJSON.json();
-            }
-
-            render()
+            },
+            created(){
+                $json('/lib/ajax/json/public/covid-kab-semarang/info/index.php')
                 .then( json => {
-                    infoCovid.msgPosi = json['kasus_posi'] + ' positif';
-                    infoCovid.msgSemb = json['kasus_semb'] + ' sembuh';
-                    infoCovid.msgMeni = json['kasus_meni'] + ' meninggal';
-                    infoCovid.msgIsol = json['kasus_isol'] + ' isolasi'
+                    this.msgPosi = json['kasus_posi'] + ' positif';
+                    this.msgSemb = json['kasus_semb'] + ' sembuh';
+                    this.msgMeni = json['kasus_meni'] + ' meninggal';
+                    this.msgIsol = json['kasus_isol'] + ' isolasi'
                 })
+            }
         })
+
         // sticky header
         window.addEventListener('scroll', () => {
             stickyHeader('aside')
@@ -226,30 +238,6 @@
                 window.location.href = "/logout?url=<?= $_SERVER['REQUEST_URI'] ?>"
             }
         );
-
-        function togle( show ){
-            if( show ){
-                togleReviews.seenResult = true;
-                togleReviews.seenRespones = false;
-            }else{
-                togleReviews.seenResult = false;
-                togleReviews.seenRespones = true;
-            }
-        }
-
-        function newRating( rating ){
-            Rating(rating, 3, 'Rekam Medis').then(json =>{
-                if( json['status'] == 'ok'){
-                    togle(true)
-                }
-            })
-        }
-
-        const s_msg = document.querySelector('#input-comment');
-        s_msg.addEventListener('click', function(){
-            window.location = '/Contactus';
-        });
-
     </script>
 </body>
 </html>
