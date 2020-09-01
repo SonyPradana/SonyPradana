@@ -1,56 +1,3 @@
-<?php
-#import modul 
-use Simpus\Auth\Auth;
-use Simpus\Auth\User;
-use Simpus\Auth\ResetPassword;
-use Simpus\Helper\StringValidation;
-require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/init.php';
-?>
-<?php
-#Aunt cek
-$token = $_SESSION['token'] ?? '';
-$auth = new Auth($token, 2);
-if( !$auth->TrushClient() ){
-    header("Location: /login");   
-    exit();
-}
-?>
-<?php 
-# property
-$user_name = $auth->getUserName();
-$user = new User($user_name);
-$display_name = $user->getDisplayName();
-
-
-$msg = '';
-if( isset( $_POST['reset']) ){
-    $p1 = $_POST['password'];
-    $p2 = $_POST['password2'];
-    $p3 = $_POST['password3'];
-
-    # validasi user input
-    $verify_pass = StringValidation::GoodPasswordValidation($p2);
-
-
-    if( $p2 === $p3 && $verify_pass) {
-        $new_pass = new ResetPassword($user_name, $p1);
-
-        if( $new_pass->passwordVerify() ){ 
-            $new_pass->newPassword($p2);    
-
-            header("Location: /logout?url=/login");    
-            exit() ;
-        }else{
-            # password salah
-            $msg = 'masukan kembali password Anda';
-        }
-    }else{     
-        # konfirmasi password salah  
-        $msg = $verify_pass ? 'konirmasi password salah' : 'password terlalu lemah';
-    }
-}
-
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -117,7 +64,7 @@ if( isset( $_POST['reset']) ){
                 <img  class="center" src="/data/img/logo/logo-puskesmas.png" alt="logo" width="60px" height="60px">
             </div>
             <p>Reset password</p>
-            <p><?= $display_name ?></p>
+            <p><?= $content->display_name ?></p>
             <form action="" method="post">                
                 <div class="body">
                     <div class="form-groub">
@@ -134,8 +81,8 @@ if( isset( $_POST['reset']) ){
                 </div>
                 <div class="footer">
                     <button type="submit" name="reset">reset password</button>
-                <?php if( isset($msg) ) : ?>
-                    <p style="color:red"><?= $msg ?></p>    
+                <?php if( isset($content->message) ) : ?>
+                    <p style="color:red"><?= $content->message ?></p>    
                 <?php endif ;?>
                 </div>
             </form>

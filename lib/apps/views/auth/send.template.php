@@ -1,41 +1,3 @@
-<?php
-#import modul 
-use Simpus\Auth\Auth;
-use Simpus\Auth\EmailAuth;
-use Simpus\Helper\StringValidation;
-require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/init.php';
-?>
-<?php
-$token = $_SESSION['token'] ?? '';
-$auth = new Auth($token, 3);
-if( $auth->TrushClient() ){
-    #reddirect jika jwt aktif
-    header("Location: /");   
-    exit();
-}
-?>
-<?php 
-#cek email
-
-# validate user input
-# 1 format email benar
-$verify_email = (isset($_POST['email'])) ? StringValidation::EmailValidation($_POST['email']) : false;
-
-if( isset( $_POST['submit'] ) && $verify_email ){
-    $msg = true; #pesan untuk ditampilkan
-
-    #verifikasi keapsahan email
-    $verify =  new EmailAuth($_POST['email']);
-    if( $verify->UserVerify() ){
-        #header ke lokasi
-        $link = $verify->KeyResult();
-        header("Location: /forgot/reset?id=" . $link);   
-        exit();
-    }
-}
-
-
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -101,7 +63,7 @@ if( isset( $_POST['submit'] ) && $verify_email ){
             <img  class="center" src="/data/img/logo/logo-puskesmas.png" alt="logo" width="60px" height="60px">
         </div>
         <p>Verifikasai Email Pemulih</p>
-        <?php if( isset( $msg ) ) :?>
+        <?php if( $content->message == true )  :?>
             <p>Emali Verifikasi sudah dikirim</p>
         <?php else: ?>
         <form action="" method="post">  

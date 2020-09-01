@@ -27,7 +27,8 @@ class HomeController extends Controller{
             $sort_day[$i] = $jadwal[$i];
         }
 
-        $portal = [
+        // result
+        return $this->view('home/index', [
             "auth"    => $this->getMiddleware()['auth'],
             "meta"     => [
                 "title"         => "SIMPUS Lerep",
@@ -43,15 +44,15 @@ class HomeController extends Controller{
                 "jadwal"        => $jadwal,
                 "jadwal_sort"   => $sort_day
             ]
-        ];
-        return $this->view('home/index', $portal);
+        ]);
     }
 
     public function about(){        
         $db = new MyPDO();
         $db->query('SELECT `id`, `date`, `note`, `ver` FROM `version`  ORDER BY `version`.`id` ASC');
 
-        $portal = [
+        // result
+        return $this->view('home/about', [
             "auth"    => $this->getMiddleware()['auth'],
             "meta"     => [
                 "title"         => "Tentang Kami",
@@ -65,8 +66,6 @@ class HomeController extends Controller{
             "contents" => [
                 "time_line"     => $db->resultset()
             ]
-        ];
-        
-        return $this->view('home/about', $portal);
+        ]);
     }
 }

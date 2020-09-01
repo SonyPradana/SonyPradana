@@ -48,7 +48,6 @@ class Logout{
                 $log->save('success logout');
                 
                 $this->_success = true;
-                exit();
             }
 
         }

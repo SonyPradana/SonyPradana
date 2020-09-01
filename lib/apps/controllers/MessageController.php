@@ -8,7 +8,7 @@ class MessageController extends Controller{
     }
     
     public function public(){
-        $portal = [
+        return $this->view('message/public', [
             "auth"    => $this->getMiddleware()['auth'],
             "meta"     => [
                 "title"         => "Pesan Masuk",
@@ -20,8 +20,6 @@ class MessageController extends Controller{
                 "header_menu"   => $_SESSION['active_menu'] ?? MENU_MEDREC
             ],
             "contents" => []            
-        ];
-
-        return $this->view('message/public', $portal);
+        ]);
     }
 }
