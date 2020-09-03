@@ -1,0 +1,87 @@
+footer{
+    left:0px;
+    bottom: 0px;
+    margin-top: 40px;
+    background:#0d2a46;    
+    padding: 40px 0px 0px 0px;
+    -webkit-box-shadow: 0px -19px 55px -22px #00000078;
+    -moz-box-shadow: 0px -19px 55px -22px #00000078;
+    box-shadow: 0px -19px 55px -22px #00000078;
+
+    .line{
+        width: 80%;
+        height: 4px;
+        background-color: red;
+        margin: 0 auto;
+        border-radius: 2px;
+    }
+
+    p.big-footer{    
+        text-align: center;
+        color: #fd6500;
+        font-size: 28px;
+        margin: 20px 0 0 0;
+    }
+
+    .boxs.footer{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 16px;
+
+        .box a{
+            text-decoration: none;
+            margin: 8px 18px;
+            color: #fff;
+            font-size: 1.2rem;
+        }
+    }
+
+    .footnote{
+        width: 100%;
+        background-color: #092037;
+        margin-top: 18px;
+        padding: 4px;
+        box-sizing: border-box;
+
+        p{
+            color: #fff;
+            margin: 0;
+            text-align: right;
+            a{
+                text-decoration: none;
+                color: #fff;
+                margin-right: 12px;
+            }
+            .love{
+                color: red;
+            }
+            &:hover .love{    
+                display: inline-block;
+                transform: scale(.8);
+                animation: heart;
+                animation-duration: 1.5s;
+                animation-iteration-count: infinite;
+            }
+        }
+    }
+}
+
+@keyframes heart{
+    to{
+        transform: scale(1.2);
+    }
+}
+
+// mobile mode
+@media screen and (max-width: 479px){
+    footer .boxs.footer{
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+        .box a{
+            font-size: 1.1rem;
+        }
+    }
+}

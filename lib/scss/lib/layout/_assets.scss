@@ -1,0 +1,177 @@
+// breadcrumb
+.coit{
+    &.breadcrumb{
+        margin: 12px 0;
+    }
+    ul.crumb{
+        padding: 0px;
+        margin: 0px;
+        list-style: none;
+
+        li{
+            display: inline;
+            font-size: 1rem;
+
+            +li:before{
+                padding: 4px;
+                color: black;
+                content: "/\00a0";                
+            }
+
+            a{
+                color: #0275d8;
+                text-decoration: none;
+                &:hover {
+                    color: #01447e;
+                    text-decoration: underline;
+                }
+            } 
+        }
+    }
+}
+
+// breadcrumb author/article
+.article.breadcrumb{
+    .author{
+        display: flex;
+        align-items: center;
+        img{
+            width: 24px; height: 24px;
+            border-radius: 12px;
+        }
+        .author-name{
+            margin-left: 8px;
+        }
+        a{
+            color: #9aa6ad;;
+            text-decoration: none;
+            &:hover{
+                text-decoration: underline;
+                text-decoration-color: #000;
+            }
+        }
+    }
+
+}
+
+// gotop button
+.gotop{
+    display: none;  position: fixed;
+    bottom: 24px; right: 24px;
+    z-index: 20;
+
+    width: 50px; height: 50px;
+    border: none; border-radius: 50%;
+    outline: none;
+    background: #e6de00;
+    background-repeat: no-repeat;
+    background-size: 50px 50px;
+    background-position: 50%;
+    background-color: #0d2a4654;
+
+    cursor: pointer;
+    font-size: 18px;
+    font-family: Arial, Helvetica, sans-serif;
+
+    &::after{
+        content: "";
+        width: 50px; height: 50px;
+        position: absolute;
+        background: url("/lib/css/ui/v1/asset/up-arrow-key.svg");
+        background-repeat: no-repeat;
+        background-size: 25px 25px;
+        background-position: 50%;
+    }
+}
+
+// snackbar
+.snackbar{
+    z-index: 1;
+    visibility: hidden;
+    min-width: 150px;    
+    border-radius: 26px;
+    padding: 12px;
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 130px;
+    display: flex;
+    align-items: end;
+    justify-content: flex-start;
+    box-shadow:
+    3px 5px 5px 1px #937676ab;
+    .message{
+        text-align: center;
+        color: #fff;
+        font-size: 18px;
+    }
+    .icon{
+        height: 18px; width: 18px;
+        margin-right: 8px;
+    }
+
+    // togle
+    &.show{
+        visibility: visible;
+        animation: snackFadein .5s, snackFadeout .5s 2.5s;
+    }
+
+    // style
+    &.success {
+        background-color: #ff3c00;
+        .icon{
+            background-image: url('/lib/css/ui/v1/asset/notif/success.svg')
+        }
+    }
+    &.danger {
+        background-color: #ff0101;
+        .icon{
+            background-image: url('/lib/css/ui/v1/asset/notif/danger.svg')
+        }
+    }
+    &.warning {
+        background-color: #ffe600;
+        .icon{
+            background-image: url('/lib/css/ui/v1/asset/notif/warning.svg')
+        }
+    }
+    &.info {
+        background-color: #ae00ff;
+        .icon{
+            background-image: url('/lib/css/ui/v1/asset/notif/info.svg')
+        }
+    }
+}
+
+// divender / sparator
+.sparator{
+    display: block;
+    width: 100%;
+    margin: 12px 0;
+    &.blue{
+        border-bottom: 3px solid #55b9f3;
+        .sparator-title{
+            background: #55b9f3;
+        }
+    }
+
+    .sparator-title{
+        border-top-right-radius: 8px;
+        color: #fff;
+        padding: 8px;
+        width: 100px;
+        h3{
+            margin: 0; font-weight: normal; font-size: 1rem;
+        }
+    }
+}
+
+// animation
+@keyframes snackFadein{
+    from{top: 80px; opacity: 0;}
+    to{top: 130px; opacity: 1;}
+}
+@keyframes snackFadeout{
+    from{top: 130px; opacity: 1;}
+    to{top: 80px; opacity: 0;}
+}

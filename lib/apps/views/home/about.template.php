@@ -3,8 +3,7 @@
 <head>
     <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/meta/metatag.php') ?>
 
-    <link rel="stylesheet" href="/lib/css/main.css">
-    <link rel="stylesheet" href="/lib/css/ui/v1/control.css">    
+    <link rel="stylesheet" href="/lib/css/ui/v1.1/style.css">   
     <link rel="stylesheet" href="/lib/css/ui/v1/timeline.css">
     <link rel="stylesheet" href="/lib/css/ui/v1/alert.css">
     <script src="/lib/js/index.js"></script>
