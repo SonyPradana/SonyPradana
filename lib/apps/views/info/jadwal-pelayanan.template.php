@@ -37,11 +37,9 @@
 <head>
     <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/meta/metatag.php') ?>
 
-    <link rel="stylesheet" href="/lib/css/main.css">
-    <link rel="stylesheet" href="/lib/css/ui/v1/control.css">
+    <link rel="stylesheet" href="/lib/css/ui/v1.1/style.css">
     <link rel="stylesheet" href="/lib/css/ui/v1/table.css">
-    <link rel="stylesheet" href="/lib/css/ui/v1/card.css">
-    <link rel="stylesheet" href="/lib/css/ui/v1/alert.css">
+    <link rel="stylesheet" href="/lib/css/ui/v1.1/cards.css">
     <script src="/lib/js/index.js"></script>
     <script src="/lib/js/bundles/keepalive.js"></script>
     <style>
@@ -73,6 +71,7 @@
         }
         .header-article .article.breadcrumb > div{ font-size: 1rem; color: #9aa6ad}
 
+        .media-article{margin-right: 20px;}
         .media.note p{color: #a2a2a2; margin: 0}
         .table-boxs{
             display: flex;
@@ -133,7 +132,7 @@
                     <div class="cards-box blue">
                         <div class="box-title">Jadwal Bulan Ini (<?= date('M') ?>)</div>
                         <div class="box-container">
-                            <div class="card event neum-blue neum-tiny neum-concave radius-small" id="jumat-pertama">
+                            <div class="card event neum-blue neum-light neum-concave radius-small" id="jumat-pertama">
                                 <div class="card-time">
                                     <div class="mount"><?= $portal['contents']['jadwal_pertama'][1] ?></div>
                                     <div class="day"><?= $portal['contents']['jadwal_pertama'][0] ?></div>
@@ -146,7 +145,7 @@
                                 </div>
                             </div>
                             <div class="gab"></div>
-                            <div class="card event neum-blue neum-tiny neum-concave radius-small" id="jumat-ketiga">
+                            <div class="card event neum-blue neum-light neum-concave radius-small" id="jumat-ketiga">
                                 <div class="card-time">
                                     <div class="mount"><?= $portal['contents']['jadwal_ketiga'][1] ?></div>
                                     <div class="day"><?= $portal['contents']['jadwal_ketiga'][0] ?></div>

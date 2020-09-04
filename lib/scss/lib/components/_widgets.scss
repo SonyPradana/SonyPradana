@@ -1,0 +1,252 @@
+// aside container (postion top)
+aside {
+    &.top{
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        flex-flow: column;
+        min-height: 100px;
+        overflow-x: auto;
+        // style
+        .boxs-header p{
+            font-size: 1.1rem;
+            margin: 8px 0px 12px;
+        }
+
+        .boxs-info{
+            display: grid;
+            grid-template-columns: repeat(4, 130px);
+            gap: 12px;
+            align-items: center;
+
+            .info{
+                display: flex;
+                justify-content: space-evenly;
+                align-items: center;
+                padding: 0px 4px;
+                // style
+                height: 36px;
+                background: linear-gradient(25deg,#d64c7f,#ee4758 50%);
+                border-radius: 8px;
+                cursor: pointer;
+
+                .item-info{
+                    &.left{
+                        /* background-color: #c1b659; */
+                        background-image: url(/lib/css/ui/v1/asset/coronavirus.svg);
+                        background-repeat: no-repeat;
+                        background-size: cover;
+                        width: 24px; height: 24px;
+                        border-radius: 50%;         
+                        display: flex;
+                        align-items: center;       
+                    }
+                    &.right{
+                        color: #fff;
+                        display: flex;
+                        align-items: center;
+                    }
+                }
+
+            }
+        }
+    }
+}
+
+// review widget
+.boxs-review{
+    /* background-color: red; */
+    width: auto; height: auto;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    margin-bottom: 16px;
+
+    .reviews{                        
+        width: 280px; 
+        padding: 16px;
+        /* style */
+        background-color: #55b9f3;
+        border-radius: 12px;
+        box-shadow: 5px 10px 19px -10px rgba(0,0,0,0.75);
+        
+        .review{
+            &.title h3{
+                margin: 0;
+                /* style */
+                font-family: Arial, Helvetica, sans-serif;
+                font-size: 1.875rem;
+                font-size: 1.875rem;
+                font-weight: 600;
+                color: #666;
+            }
+            &.respones{
+                margin: 16px 0;
+                display: grid;
+                grid-template-columns: repeat(3, 77.3334px);
+                grid-column-gap: 8px;
+                justify-content: center;
+    
+                .respone{
+                    background-color: blue;
+                    /* style */
+                    border-radius: 16px;
+                    background: linear-gradient(145deg, #4da7db, #5bc6ff);
+                    box-shadow:  19px 19px 38px #489dcf, 
+                                -19px -19px 38px #62d5ff;
+                    height: 77.3334px;
+                    
+                    &:hover{
+                        border-radius: 16px;
+                        background: #55b9f3;
+                        box-shadow: inset 19px 19px 38px #489dcf, 
+                                    inset -19px -19px 38px #62d5ff;
+                    }
+    
+                    &.hig::after{
+                        content: "";
+                        width: 77.3334px; height: 77.3334px;
+                        position: absolute;
+                        background: url("/lib/css/ui/v1/asset/smile.svg");
+                        background-repeat: no-repeat;
+                        background-size: 50px 50px;
+                        background-position: 50%;
+                    }
+                    &.med::after{
+                        content: "";
+                        width: 77.3334px; height: 77.3334px;
+                        position: absolute;
+                        background: url("/lib/css/ui/v1/asset/flat.svg");
+                        background-repeat: no-repeat;
+                        background-size: 50px 50px;
+                        background-position: 50%;
+                    }
+                    &.low::after{
+                        content: "";
+                        width: 77.3334px; height: 77.3334px;
+                        position: absolute;
+                        background: url("/lib/css/ui/v1/asset/bad.svg");
+                        background-repeat: no-repeat;
+                        background-size: 50px 50px;
+                        background-position: 50%;
+                    }
+                }
+            }
+            &.comment input{
+                margin-bottom: 12px;
+                width: 100%;
+                box-sizing : border-box;
+                /* style */
+                font-size: .97rem;
+                border: none;
+                background-color: #ffffff30;
+                color: #fff;
+                padding: 8px 8px;
+                border-radius: 12px
+            }
+    
+            // togle class respones &  results
+            &.results{
+                width: 100%;
+                display: flex;
+                justify-content: center;        
+                align-items: center;
+                margin: 14px 0;
+    
+                .result.done{
+                    background-color: blue;
+                    /* style */
+                    border-radius: 16px;
+                    background: linear-gradient(145deg, #4da7db, #5bc6ff);
+                    box-shadow:  19px 19px 38px #489dcf, 
+                                -19px -19px 38px #62d5ff;
+                    width: 100px; height: 100px;
+                    display: flex;
+                    justify-content: center;        
+                    align-items:flex-end;
+                    cursor: pointer;
+                    p {
+                        color: #fff; margin: 12px
+                    }
+    
+                    &:hover{
+                        /* style */
+                        border-radius: 16px;
+                        background: #55b9f3;
+                        box-shadow: inset 19px 19px 38px #489dcf, 
+                                    inset -19px -19px 38px #62d5ff;
+                    }
+                    &::before{
+                        content: "";
+                        width: 100px; height: 100px;
+                        position: absolute;
+                        background: url("/lib/css/ui/v1/asset/smile.svg");
+                        background-repeat: no-repeat;
+                        background-size: 50px 50px;
+                        background-position: 50% 30%;
+                    }
+                }
+    
+            }
+        }
+
+    }
+}
+
+.boxs-timetable{
+    width: auto; height: auto;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+
+    .timetables{                        
+        width: 280px; 
+        padding: 16px;
+        /* style */
+        background-color: #f0c133;
+        border-radius: 12px;
+        box-shadow: 5px 10px 19px -10px rgba(0,0,0,0.75);
+
+        .timetable {
+            &.title h3{
+                margin: 0;
+                /* style */
+                font-family: Arial, Helvetica, sans-serif;
+                font-size: 1.875rem;
+                font-size: 1.875rem;
+                font-weight: 600;
+                color: #666;
+            }
+            &.hours{
+                margin: 16px 0;
+                .box-day{
+                    display: flex;
+                    justify-content: space-between;            
+                    border-radius: 12px;
+                    p{
+                        margin: 0 4px;
+                        font-size: .97rem;
+                        padding: 4px 0;
+                    }
+    
+                    &:hover{
+                        background-color: #ffffff60;
+                    }
+                    &.active{
+                        background-color: #ffffff60;
+                        p{
+                            font-weight: bold
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media screen  and (max-width: 767px) {        
+    aside.top .boxs-info{
+        grid-template-columns: repeat(2, 132px);
+    }
+}
