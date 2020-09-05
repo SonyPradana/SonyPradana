@@ -70,6 +70,7 @@ a.card{
     .box-title{
         font-size: 21px;
         font-weight: 700;
+        margin-bottom: 8px;
     }
     .box-container{
         height: auto;
@@ -294,46 +295,42 @@ a.card{
 // desktop only
 @media screen and (min-width: 1000px){
     // covid card - tools tips
-    .covid-card{
-        &::before,
-        &::after{
-            --scale: 0;
-            --arrow-size: 5px;
-            --tooltips-color: #333333e3; 
-    
-            position: absolute;
-            bottom: -.25rem;
-            left: 50%;
-            transform: translateX(-50%) translateY(var(--translate, 0)) scale(var(--scale));
-            transition: 100ms transform;
-            transform-origin: top center;
-        }
-    
-        &::before{
-            $translate-y: calc(100% + var(--arrow-size));
-    
-            content: attr(data-tooltips);
-            font-size: .8rem;
-            padding: .5rem;
-            width: max-content;
-            max-width: 100%;
-            border-radius: .3rem;
-            background: var(--tooltips-color);
-            color: #fff;
-            text-align: center;
-        }
-    
-        &:hover::before,
-        &:hover::after{
-            --scale: 1;
-        }
-        &::after{
-            --translate-y: var(--arrow-size);
-    
-            content: '';
-            border: var(--arrow-size) solid transparent;
-            border-bottom-color: var(--tooltips-color);;
-            transform-origin: bottom center;
-        }
+    .covid-card::before,
+    .covid-card::after{
+        --scale: 0;
+        --arrow-size: 5px;
+        --tooltips-color: #333333e3; 
+
+        position: absolute;
+        bottom: -.25rem;
+        left: 50%;
+        transform: translateX(-50%) translateY(var(--translate-y, 0)) scale(var(--scale));
+        transition: 100ms transform;
+        transform-origin: top center;
+    }
+    .covid-card::before{
+        --translate-y: calc(100% + var(--arrow-size));
+
+        content: attr(data-tooltips);
+        font-size: .8rem;
+        padding: .5rem;
+        width: max-content;
+        max-width: 100%;
+        border-radius: .3rem;
+        background: var(--tooltips-color);
+        color: #fff;
+        text-align: center;
+    }
+    .covid-card:hover::before,
+    .covid-card:hover::after{
+        --scale: 1;
+    }
+    .covid-card::after{
+        --translate-y: var(--arrow-size);
+
+        content: '';
+        border: var(--arrow-size) solid transparent;
+        border-bottom-color: var(--tooltips-color);;
+        transform-origin: bottom center;
     }
 }

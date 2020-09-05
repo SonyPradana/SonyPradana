@@ -10,7 +10,7 @@
     $portal = [
         "auth"    => $this->getMiddleware()['auth'],
         "meta"     => [
-            "title"         => "Jadwal Pelayanan di Poli KIA",
+            "title"         => "Jadwal Pelayanan di Poli KIA - Simpus Lerep",
             "discription"   => "Jadwal pelayanan imunisasi anak di Poli KIA",
             "keywords"      => "simpus lerep, puskesmas lerep,jadwal imunisasi, imunusasi, kia anak, jadwal, BCG, Campak, Rubella (MR), Hib, HB, DPT, IPV"
         ],
@@ -36,7 +36,8 @@
 <html lang="en">
 <head>
     <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/meta/metatag.php') ?>
-
+    <meta name="robots" content="all,index,follow">
+    
     <link rel="stylesheet" href="/lib/css/ui/v1.1/style.css">
     <link rel="stylesheet" href="/lib/css/ui/v1/table.css">
     <link rel="stylesheet" href="/lib/css/ui/v1.1/cards.css">
@@ -54,7 +55,7 @@
         /* Templatebox container */
         .cards-box .box-container{
             display: grid;
-            grid-template-columns: minmax(270px, 320px) 16px minmax(270px, 320px);
+            grid-template-columns: minmax(300px, 320px) 16px minmax(300px, 320px);
         }
         
         .header-article{margin-bottom: 24px}
@@ -71,7 +72,8 @@
         }
         .header-article .article.breadcrumb > div{ font-size: 1rem; color: #9aa6ad}
 
-        .media-article{margin-right: 20px;}
+        /* .media-article{margin-right: 20px;} */
+        .media-article{ padding: 0 16px;}
         .media.note p{color: #a2a2a2; margin: 0}
         .table-boxs{
             display: flex;
@@ -166,10 +168,11 @@
                 </div>
                 <div class="article body">
                     <div class="form-box">
-                        <label for="input-pilih-bulan">Pilih Bulan</label>
+                        <label for="input-pilih-bulan">Lihat Imunisasi Bulan Lainnya: </label>
                         <select name="pilih-bulan" id="input-pilih-bulan">
+                            <option hidden selected>Pilih Bulan</option>
                             <?php foreach( $portal['contents']['avilable_month'] as $row ): ?>
-                                <option value="<?= $row ?>"><?= date('F', mktime(0, 0, 0, $row, 10)); ?></option>
+                                <option value="<?= $row ?>"><?= date('F', mktime(0, 0, 0, $row, 10)); ?> 2020</option>
                             <?php endforeach; ?>
                         </select>
                     </div>
