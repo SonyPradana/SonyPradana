@@ -315,9 +315,7 @@ class KiaAnakController extends Controller{
             $update = $posyandu->update( $id );
             // message
             if( $update ){
-                $msg = [];
-                $msg['message'] = 'Berhasil disimpan';
-                $msg['type'] = 'success';        
+                $msg = ["show" => true, "type" => 'success', "content" => 'Berhasil di ubah'];       
             }
         }elseif( $isValided == false || $read == false){
             header_exit();

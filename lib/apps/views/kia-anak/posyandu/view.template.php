@@ -70,13 +70,24 @@
                     <table class="data-rm">       
                         <thead>
                             <tr>
-                                <th>No.</th>
+                                <th style="vertical-align: middle;">No.</th>
                                 <th>Nama</a></th>
                                 <th>Alamat</th>
                                 <?php for($i=0; $i < $content->kolom_terbanyak; $i++): ?>
-                                <th>Pemeriksaan ke <?= $i+1 ?></th>
+                                <th colspan="3">Kunjungan <?= $i+1 ?></th>
                                 <?php endfor; ?>
                                 <th>Action</th>                                                     
+                            </tr>                       
+                            <tr>
+                                <th rowspan="2"></th>
+                                <th rowspan="2"></a></th>
+                                <th rowspan="2"></th>
+                                <?php for($i=0; $i < $content->kolom_terbanyak; $i++): ?>
+                                <th>cm</th>
+                                <th>gram</th>
+                                <th>edit</th>
+                                <?php endfor; ?>
+                                <th rowspan="2"></th>                                                     
                             </tr>                       
                         </thead>
                         <tbody>
@@ -87,11 +98,15 @@
                                 <th><?= ucwords( $data['nama'] ) ?></th>
                                 <th><?= ucwords( $data['alamat'] ) ?></th>                                
                                 <?php foreach($data['data'] as $pertemuan): ?>
-                                <th><?= $pertemuan['tinggi_badan'] ?></th>
+                                    <td><?= $pertemuan['tinggi_badan'] ?></td>
+                                    <td><?= $pertemuan['berat_badan'] ?></td>
+                                    <td><a style="text-align: center;" class="btn rounded light blue text number" href="/kia-anak/edit/posyandu?document_id=<?= $data['id_hash'] . '-'. $pertemuan['id']?>"> edit</a></td>
                                 <?php endforeach; ?>
                                 <?php $minus =  $content->kolom_terbanyak - count($data['data']); ?>
                                 <?php for ($i=0; $i < $minus; $i++): ?>
-                                    <th>--</th>
+                                    <td>--</td>
+                                    <td>--</td>
+                                    <td></td>
                                 <?php endfor; ?>
                                 <th><a class="btn rounded light blue fill number" href="/kia-anak/edit/biodata?document_id=<?= $data['id_hash']?>">edit</a></th>
                                 <?php $num++ ?>
