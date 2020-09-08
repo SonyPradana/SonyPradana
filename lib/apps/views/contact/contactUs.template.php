@@ -82,6 +82,7 @@
 
                     <label for="input-regarding">Regarding</label>
                     <select name="regarding" id="input-regarding" class="textbox outline blue rounded small">
+                        <option hidden selected>-- pilih satu</option>
                         <option value="saran">Saran</option>
                         <option value="keluhan">Keluhan pelanggan</option>
                         <option value="sponsor">Tertarik dengan Kami</option>

@@ -6,7 +6,7 @@
         "meta"     => [
             "title"         => "Info Covid 19 Ungaran Barat",
             "discription"   => "Data Pasien Dalam Pengawasan dan Positif di Wilayah Kecamtan Ungaran Barat",
-            "keywords"      => "simpus lerep, info covid, kawal covid, covid ungaran, covid branjang, wilyah ungran, pdp, pasien dalam pengawasan"
+            "keywords"      => "simpus lerep, info covid, kawal covid, covid ungaran, covid branjang, wilyah ungran, Suspek, Discharded, Meninggal, Symptomatik, Asymptomatik, Sembuh, Meninggal, Terkomfirmasi"
         ],
         "header"   => [
             "active_menu"   => 'home',
@@ -30,6 +30,7 @@
     <link rel="stylesheet" href="/lib/css/ui/v1.1/cards.css">
     <script src="/lib/js/index.js"></script>
     <script src="/lib/js/bundles/keepalive.js"></script>
+    <script src="/lib/js/vendor/vue/vue.js"></script>
     <style>
         /* costume main container */
         .container.width-view{
@@ -69,10 +70,13 @@
             display: flex;
             justify-content: center;
             overflow-x: auto;
+            margin-bottom: 32px;
         }
         table.info-covid{max-width: 500px; min-width: 400px;}
         .article.body{margin: 16px 0;}
-        .article.body h2{margin: 8px;}
+        .article.body ul, ol, p{font-size: 20px;}
+        .article.body ul { list-style: disc; }
+        .article.body h2, .article.body h3,.article.body p{margin-bottom: 12px;}
 
         /* tablet vie view */
         @media screen and (max-width: 767px) {
@@ -118,28 +122,28 @@
                     </div>
                 </div>
                 <div class="media-article">
-                    <div class="box cards">
+                    <div id="covid-card" class="box cards">
                         <div class="card covid-card grad-blue" id="card-positif" data-tooltips="Pasien Positif">
                             <div class="card title">Pasien Positif</div>
-                            <div class="card content">XXX</div>
+                            <div class="card content">{{ dirawat }}</div>
                             <div class="card note">Orang</div>
                         </div>
                         <div class="gap-space"></div>
                         <div class="card covid-card  grad-yellowtored" id="card-isolasi" data-tooltips="Pasien Isolasi">
                             <div class="card title">Pasien Isolasi</div>
-                            <div class="card content">XXX</div>
+                            <div class="card content">{{ isolasi }}</div>
                             <div class="card note">Orang</div>
                         </div>
                         <div class="gap-space"></div>
                         <div class="card covid-card grad-pinktoyellow" id="card-sembuh" data-tooltips="Pasien Sembuh">
                             <div class="card title">Pasien Sembuh</div>
-                            <div class="card content">XXX</div>
+                            <div class="card content">{{ sembuh }}</div>
                             <div class="card note">Orang</div>
                         </div>
                         <div class="gap-space"></div>
                         <div class="card covid-card grad-yellowtored"  id="card-meninggal" data-tooltips="Pasien Meninggal">
                             <div class="card title">Pasien Meninggal</div>
-                            <div class="card content">XXX</div>
+                            <div class="card content">{{ meninggal }}</div>
                             <div class="card note">Orang</div>
                         </div>
                     </div>
@@ -151,25 +155,68 @@
                 <div class="article body">
                     <h2>Data Sebaran Di Desa</h2>
                     <div class="table-boxs">
-                        <table>
+                        <table id=covid-table>
                             <thead>
                                 <tr>
-                                    <td>No</td>
-                                    <td>Desa / Kelurahan</td>
-                                    <td>PDP</td>
-                                    <td>PDP Sembuh</td>
-                                    <td>PDP Meninggal</td>
-                                    <td>Positif</td>
-                                    <td>Isolasi</td>
-                                    <td>Positif Sembuh</td>
+                                    <td rowspan="2">No</td>
+                                    <td rowspan="2">Desa/Kelurahan</td>
+                                    <td colspan="3">Kasus Suspek</td>
+                                    <td colspan="4">Terkomfirmasi</td>
+                                </tr>
+                                <tr>
+                                    <td>Suspek</td>
+                                    <td>Discharded</td>
+                                    <td>Meninggal</td>
+                                    <td>Symptomatik </td>
+                                    <td>Asymptomatik</td>
+                                    <td>Sembuh</td>
                                     <td>Meninggal</td>
                                 </tr>
                             </thead>
                             <tbody>
-
+                                <tr v-for="(row, index) in rows">
+                                    <td>{{ index + 1}}</td>
+                                    <td>{{ row.desa }}</td>
+                                    <td>{{ row.pdp.dirawat }}</td>
+                                    <td>{{ row.pdp.sembuh }}</td>
+                                    <td>{{ row.pdp.meninggal }}</td>
+                                    <td>{{ row.positif.dirawat }}</td>
+                                    <td>{{ row.positif.dirawat }}</td>
+                                    <td>{{ row.positif.sembuh }}</td>
+                                    <td>{{ row.positif.meninggal }}</td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
+
+                    <h2>Istilah-istilah</h2>
+                    <ol>
+                        <li>
+                            <h3>Kasus Suspek</h3>
+                            <p>Kasus Suspek Seseorang yang memiliki salah satu dari kriteria berikut:</p>
+                            <ul>
+                                <li>Orang dengan Infeksi Saluran Pernapasan Akut (ISPA) dan pada 14 hari terakhir sebelum timbul gejala memiliki <strong>riwayat perjalanan</strong> atau tinggal di negara/wilayah Indonesia yang melaporkan transmisi local.</li>
+                                <li>Orang dengan salah satu gejala/tanda ISPA, dan pada 14 hari terakhir sebelum timbul gejala memiliki <strong>riwayat kontak</strong> dengan kasus konfirmasi/probable COVID-19.</li>
+                                <li>Orang dengan ISPA berat/pneumonia berat yang <strong>membutuhkan perawatan</strong> di rumah sakit dan tidak ada penyebab lain berdasarkan gambaran klinis yang meyakinkan.</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <h3>Discarded</h3>
+                            <p>Istilah ini merujuk pada pasien sembuh. Adapun kriterianya yakni:</p>
+                            <ul>
+                                <li>Pasien yang hasil pemeriksaan RT-PCR 2 kali negatif selama 2 hari berturut-turut dengan selang waktu 24 jam.</li>
+                                <li>Seseorang yang berstatus Kontak Erat dan sudah menyelesaikan masa karantina selama 14 hari.</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <h3>Kasus Konfirmasi</h3>
+                            <p>Seseorang yang dinyatakan positif terinfeksi virus COVID-19 yang dibuktikan dengan pemeriksaan lab RT-PCR. Kasus konfirmasi dibagi 2 yakni:</p>
+                            <ul>
+                                <li><strong>Simptomatik</strong> atau konfirmasi dengan gejala</li>
+                                <li><strong>Asimptomatik</strong> atau konfirmasi tanpa gejala</li>
+                            </ul>
+                        </li>
+                    </ol>
                 </div>  
 
             </article>
@@ -204,97 +251,66 @@
     );
     
     // menagbil data
-    async function getData(url){
-        const response = await fetch(url);
-        return response.json();
-    }
+    let card = new Vue({
+        el: '#covid-card',
+        data: {
+            dirawat: 0,
+            isolasi: 0,
+            sembuh: 0,
+            meninggal: 0
+        },
+        methods: {
+            grapInfo: async function(data){
+                let posi        = $id('card-positif').getAttribute('data-tooltips');
+                let isol        = $id('card-isolasi').getAttribute('data-tooltips');
+                let semb        = $id('card-sembuh').getAttribute('data-tooltips');
+                let meni        = $id('card-meninggal').getAttribute('data-tooltips');
 
-    // render card
-    function renderCard(postif, isolasi, sembuh, meninggal){
-        let card_postif = document.querySelector('#card-positif .card.content');
-        let card_isolasi = document.querySelector('#card-isolasi .card.content');
-        let card_sembuh = document.querySelector('#card-sembuh .card.content');
-        let card_meninggal = document.querySelector('#card-meninggal .card.content');
-
-        card_postif.innerHTML = postif;
-        card_isolasi.innerHTML = isolasi;
-        card_sembuh.innerHTML = sembuh;
-        card_meninggal.innerHTML = meninggal;
-    }
-    function renderTable(arr){
-        let i = 1;
-        let perrent_table = document.querySelector('tbody');
-        perrent_table.innerHTML = '';
-        arr.forEach(element => {
-            let perrent_row = document.createElement('tr');
-            let th_n = document.createElement("th"); let th_ds= document.createElement("th");
-            let th_op = document.createElement("th");  let th_os = document.createElement("th"); let th_om = document.createElement("th");
-            let th_pp = document.createElement("th");  let th_ps = document.createElement("th"); let th_pm = document.createElement("th");
-            let th_pi = document.createElement("th");
-
-            // mengambil nilai
-            th_n.innerText = i;
-            th_ds.innerText = element['desa'];
-            // odp
-            th_op.innerText = element['pdp']['dirawat'];
-            th_os.innerText = element['pdp']['sembuh'];
-            th_om.innerText = element['pdp']['meninggal'];
-            // positif
-            th_pp.innerText = element['positif']['dirawat'];
-            th_pi.innerText = element['positif']['isolasi'];
-            th_ps.innerText = element['positif']['sembuh'];
-            th_pm.innerText = element['positif']['meninggal'];
-
-            // add classes
-            th_op.classList.add("number"); th_os.classList.add("number"); th_om.classList.add("number");
-            th_pp.classList.add("number"); th_pi.classList.add("number"); th_ps.classList.add("number"); th_pm.classList.add("number");
-            // append child
-            perrent_row.appendChild(th_n); perrent_row.appendChild(th_ds);
-            perrent_row.appendChild(th_op); perrent_row.appendChild(th_os); perrent_row.appendChild(th_om);
-            perrent_row.appendChild(th_pp); perrent_row.appendChild(th_pi); perrent_row.appendChild(th_ps); perrent_row.appendChild(th_pm);
-            
-            // assamble
-            perrent_table.appendChild(perrent_row);
-            i++;
-        })
-    }
-
-    window.onload = () => {
-        getData('/lib/ajax/json/public/covid-kab-semarang/info/?kecamatan=ungaran-barat')
-            .then( data => {
-                renderTable(data['data']);
-            });
-        getData('/lib/ajax/json/public/covid-kab-semarang/info/')
-            .then( data => {
-                renderCard(data['kasus_posi'], data['kasus_isol'], data['kasus_semb'], data['kasus_meni']);
-                grapInfo(data);
+                await data['data'].forEach(event => {
+                    if( event['kasus_posi'] != 0){
+                    posi += `, ${event['kecamatan']}(${event['kasus_posi']})`;
+                    }
+                    if( event['kasus_isol'] != 0){
+                        isol += `, ${event['kecamatan']}(${event['kasus_isol']})`;
+                    }
+                    if( event['kasus_semb'] != 0){
+                        semb += `, ${event['kecamatan']}(${event['kasus_semb']})`;
+                    }
+                    if( event['kasus_meni'] != 0){
+                        meni += `, ${event['kecamatan']}(${event['kasus_meni']})`;
+                    }
+                })
+                
+                $id('card-positif').setAttribute('data-tooltips', posi );
+                $id('card-isolasi').setAttribute('data-tooltips', isol );
+                $id('card-sembuh').setAttribute('data-tooltips', semb );
+                $id('card-meninggal').setAttribute('data-tooltips', meni );
+            }
+        },
+        created(){
+            $json('/lib/ajax/json/public/covid-kab-semarang/info/index.php')
+            .then( json => {
+                this.dirawat    = json['kasus_posi'];
+                this.isolasi    = json['kasus_semb'];
+                this.sembuh     = json['kasus_meni'];
+                this.meninggal  = json['kasus_isol'];
+                
+                this.grapInfo(json);
             })
+        }
+    })
 
-    }
-
-    async function grapInfo(data){
-        await data['data'].forEach(event => {
-            let dom_posi = document.querySelector('#card-positif')
-            let posi = dom_posi.getAttribute('data-tooltips')
-            if( event['kasus_posi'] != 0){
-                dom_posi.setAttribute('data-tooltips', posi + ', ' + event['kecamatan'] + `(${event['kasus_posi']})`)
-            }
-            let dom_isol = document.querySelector('#card-isolasi')
-            let isol = dom_isol.getAttribute('data-tooltips')
-            if( event['kasus_isol'] != 0){
-                dom_isol.setAttribute('data-tooltips', isol + ', ' + event['kecamatan'] + `(${event['kasus_isol']})`)
-            }
-            let dom_semb = document.querySelector('#card-sembuh')
-            let semb = dom_semb.getAttribute('data-tooltips')
-            if( event['kasus_semb'] != 0){
-                dom_semb.setAttribute('data-tooltips', semb + ', ' + event['kecamatan'] + `(${event['kasus_semb']})`)
-            }
-            let dom_meni = document.querySelector('#card-meninggal')
-            let meni = dom_meni.getAttribute('data-tooltips')
-            if( event['kasus_meni'] != 0){
-                dom_meni.setAttribute('data-tooltips', meni + ', ' + event['kecamatan'] + `(${event['kasus_meni']})`)
-            }
-        })
-    }
+    let table = new Vue({
+        el: '#covid-table',
+        data: {
+            rows: []
+        },
+        created(){
+            $json('/lib/ajax/json/public/covid-kab-semarang/info/?kecamatan=ungaran-barat')
+            .then( json => {
+                this.rows = json['data']
+            })
+        }
+    })
 </script>
 </html>

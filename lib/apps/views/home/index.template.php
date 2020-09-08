@@ -65,7 +65,7 @@
 
     <aside class="top">
         <div class="boxs-header">
-            <p>Info Covid (kabupaten semarang) <span><a rel="nofollow href="https://corona.semarangkab.go.id/covid/">i</a></span></p>
+            <p>Info Covid (kabupaten semarang) <span><a rel="nofollow" href="https://corona.semarangkab.go.id/covid/">i</a></span></p>
         </div>
         <div class="boxs-info" id="c-covid">
             <div class="info one">
@@ -129,7 +129,7 @@
                         <h3>Ulasan untuk Kami</h3>
                     </div>
                     <div class="review results" v-if="seenResult">
-                        <div class="result done" v-on:click="togle(false)">
+                        <div class="result done" v-on:click="togle()">
                             <p>Terimakasih</p>
                         </div>
                     </div>
@@ -178,20 +178,15 @@
                 seenRespones: true
             },
             methods: {
-                togle: function(show){
-                    if( show ){
-                        this.seenResult     = true;
-                        this.seenRespones   = false;
-                    }else{
-                        this.seenResult     = false;
-                        this.seenRespones   = true;
-                    }
+                togle: function(){
+                    this.seenResult     = !this.seenResult;
+                    this.seenRespones   = !this.seenRespones;
                 },
                 newRating: function( rating ){
                     Rating(rating, 3, 'Rekam Medis')
                         .then( json => {
                             if( json['status'] == 'ok' ){
-                                this.togle(true);
+                                this.togle();
                             }
                         })
                 },
