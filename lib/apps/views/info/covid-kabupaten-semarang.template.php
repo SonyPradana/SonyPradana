@@ -30,7 +30,7 @@
     <link rel="stylesheet" href="/lib/css/ui/v1.1/cards.css">
     <script src="/lib/js/index.js"></script>
     <script src="/lib/js/bundles/keepalive.js"></script>
-    <script src="/lib/js/vendor/vue/vue.js"></script>
+    <script src="/lib/js/vendor/vue/vue.min.js"></script>
     <style>
         /* costume main container */
         .container.width-view{
