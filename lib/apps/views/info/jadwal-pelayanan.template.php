@@ -5,8 +5,6 @@
     $author = new User("angger");
     $imun   = new jadwalKIA(date('m'), date('Y'));
 
-    $raw_data   = $imun->getData();
-
     $portal = [
         "auth"    => $this->getMiddleware()['auth'],
         "meta"     => [
@@ -23,12 +21,8 @@
                 "display_name"          => $author->getDisplayName(),
                 "display_picture_small" => $author->getSmallDisplayPicture()
             ],
-            "jadwal_pertama"    => explode(' ', $raw_data['jadwal'][0]),
-            "jadwal_ketiga"     => explode(' ', $raw_data['jadwal'][2]),
-            "jumat_pertama"     => implode(", ", $raw_data['jumat pertama']),
-            "avilable_month"    => $imun->getAvilabeMonth(),
-            "jadwal"            => $raw_data['jadwal'],
-            "data_imun"         => $raw_data['data']
+            "raw_data"          => $imun->getData(),
+            "avilable_month"    => $imun->getAvilabeMonth()
         ]
     ];
 ?>
@@ -43,6 +37,7 @@
     <link rel="stylesheet" href="/lib/css/ui/v1.1/cards.css">
     <script src="/lib/js/index.js"></script>
     <script src="/lib/js/bundles/keepalive.js"></script>
+    <script src="/lib/js/vendor/vue/vue.min.js"></script>
     <style>
         /* costume main container */
         .container.width-view{
@@ -119,7 +114,7 @@
                     <li>Jadwal Pelayanan</li>
                 </ul>
             </div>
-            <article>
+            <article id="app">
                 <div class="header-article">
                     <H1>Jadwal Pelayanan Poli KIA Anak (Imunisasi) Setiap Hari Jumat</H1>
                     <div class="article breadcrumb">
@@ -132,31 +127,31 @@
                 </div>
                 <div class="media-article">
                     <div class="cards-box blue">
-                        <div class="box-title">Jadwal Bulan Ini (<?= date('M') ?>)</div>
+                        <div class="box-title">Jadwal Bulan {{ raw.bulan }}</div>
                         <div class="box-container">
                             <div class="card event neum-blue neum-light neum-concave radius-small" id="jumat-pertama">
                                 <div class="card-time">
-                                    <div class="mount"><?= $portal['contents']['jadwal_pertama'][1] ?></div>
-                                    <div class="day"><?= $portal['contents']['jadwal_pertama'][0] ?></div>
+                                    <div class="mount">{{ raw.jadwal[0].split(' ')[1] }}</div>
+                                    <div class="day">{{ raw.jadwal[0].split(' ')[0] }}</div>
                                 </div>
                                 <div class="gab"></div>
                                 <div class="card-content">
                                     <div class="title">Imunisasi
                                     </div>
-                                    <div class="description"><?= $portal['contents']['jumat_pertama'] ?></div>
+                                    <div class="description">{{ raw['jumat pertama'].join(', ') }}</div>
                                 </div>
                             </div>
                             <div class="gab"></div>
                             <div class="card event neum-blue neum-light neum-concave radius-small" id="jumat-ketiga">
                                 <div class="card-time">
-                                    <div class="mount"><?= $portal['contents']['jadwal_ketiga'][1] ?></div>
-                                    <div class="day"><?= $portal['contents']['jadwal_ketiga'][0] ?></div>
+                                    <div class="mount">{{ raw.jadwal[2].split(' ')[1] }}</div>
+                                    <div class="day">{{ raw.jadwal[2].split(' ')[0] }}</div>
                                 </div>
                                 <div class="gab"></div>
                                 <div class="card-content">
                                     <div class="title">Imunisasi
                                     </div>
-                                    <div class="description"><?= $portal['contents']['jumat_pertama'] ?></div>
+                                    <div class="description">{{ raw['jumat ketiga'].join(', ') }}</div>
                                 </div>
                             </div>
                         </div>
@@ -169,11 +164,9 @@
                 <div class="article body">
                     <div class="form-box">
                         <label for="input-pilih-bulan">Lihat Imunisasi Bulan Lainnya: </label>
-                        <select name="pilih-bulan" id="input-pilih-bulan">
+                        <select name="pilih-bulan" id="input-pilih-bulan" v-on:change="onChange($event)">
                             <option hidden selected>Pilih Bulan</option>
-                            <?php foreach( $portal['contents']['avilable_month'] as $row ): ?>
-                                <option value="<?= $row ?>"><?= date('F', mktime(0, 0, 0, $row, 10)); ?> 2020</option>
-                            <?php endforeach; ?>
+                            <option v-for="date in month" v-bind:value="date">{{ months[ Number( date ) ] }}</option>
                         </select>
                     </div>
                     <h2>Jadwal Pelayanan</h2>
@@ -184,26 +177,17 @@
                                     <td>No</td>
                                     <td>Jenis Vaksin</td>
                                     <!-- fleksible header -->
-                                    <?php foreach( $portal['contents']['jadwal'] as $row): ?>
-                                        <td>Jumat - <?= $row ?></td>
-                                    <?php endforeach; ?>
+                                    <td v-for="(jadwal, index) in raw.jadwal" :key="jadwal">Jumat {{ index + 1}} ~ {{ jadwal }}</td>
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php 
-                                    $i = 1;
-                                    foreach( $portal['contents']['data_imun'] as $jenis_vaksin => $list_jadwal_vaksin ) {
-                                        echo '<tr>';
-                                        echo "<td>$i</td>";
-                                        echo "<td>$jenis_vaksin</td>";
-                                        foreach( $portal['contents']['jadwal'] as $element){
-                                            $tb = in_array($element, $list_jadwal_vaksin) ? "Ya" : "Tidak";
-                                            echo "<td>$tb</td>";
-                                        }
-                                        echo '</tr>';
-                                        $i++;
-                                    }
-                                ?>
+                                <tr v-for="(tanggal, namaVaksin, index) in raw.data">
+                                    <td>{{ index + 1}}</td>
+                                    <td>{{ namaVaksin }}</td>
+                                    <td v-for="jadwal in raw.jadwal" :key="jadwal">
+                                        {{ tanggal.includes( jadwal ) ? 'Ya' : 'Tidak' }}
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -239,89 +223,22 @@
             window.location.href = "/logout?url=<?= $_SERVER['REQUEST_URI'] ?>"
         }
     );
-    
-    // menagbil data
-    async function getData(url){
-        const response = await fetch(url);
-        return response.json();
-    }
 
-    // render card
-    function renderCard(data){
-        if( Array.isArray( data['jadwal'])) return false;
-        let first_card_decs = document.querySelector('#jumat-pertama .description');
-        let third_card_decs = document.querySelector('#jumat-ketiga .description');
-        let first_card_mount = document.querySelector('#jumat-pertama .mount');
-        let third_card_mount = document.querySelector('#jumat-ketiga .mount');
-        let first_card_day = document.querySelector('#jumat-pertama .day');
-        let third_card_day = document.querySelector('#jumat-ketiga .day');
-
-        first_card_decs.innerHTML = data['jumat pertama'].join(', ')
-        third_card_decs.innerHTML = data['jumat pertama'].join(', ')
-
-        let first_day = data['jadwal'][0].split(' ');
-        let third_day = data['jadwal'][2].split(' ');
-
-        first_card_mount.innerHTML = first_day[1]
-        first_card_day.innerHTML = first_day[0] 
-        third_card_mount.innerHTML = third_day[1]
-        third_card_day.innerHTML = third_day[0] 
-    }
-    function renderTable(arr){
-        let perrent_table = document.querySelector('tbody');
-        perrent_table.innerHTML = '';
-
-        // membuat header table
-        let dom_perent_header_tb = document.querySelector('.jadwal-imunisasi thead tr')
-        let vdom_header_nomor  = document.createElement('td')
-        let vdom_header_vaksin = document.createElement('td')
-        dom_perent_header_tb.innerHTML = null
-        vdom_header_nomor.innerText  = "No"
-        vdom_header_vaksin.innerText = "Jenis Vaksin"
-        dom_perent_header_tb.appendChild( vdom_header_nomor )
-        dom_perent_header_tb.appendChild( vdom_header_vaksin)
-        
-        let i = 1
-        arr['jadwal'].forEach(element => {
-            let vdom_td = document.createElement('td')
-            vdom_td.innerText = `Jumat ${i} ~ ${element}`
-
-            dom_perent_header_tb.appendChild(vdom_td)
-            i++
-        })
-
-        let dom_perent_body = document.querySelector('.jadwal-imunisasi tbody')
-        dom_perent_body.innerHTML = null
-        let data = arr['data']
-        i= 1
-        for (const row in data) {
-            let vdom_perrent_tr = document.createElement('tr')
-            let vdom_td_nomor  = document.createElement('td')
-            let vdom_td_vaksin = document.createElement('td')
-
-            vdom_td_nomor.innerText = i
-            vdom_td_vaksin.innerText = row
-            
-            vdom_perrent_tr.appendChild( vdom_td_nomor )
-            vdom_perrent_tr.appendChild( vdom_td_vaksin )
-            dom_perent_body.appendChild(vdom_perrent_tr)
-            arr['jadwal'].forEach(element => {
-                let vdom_td_jadwal = document.createElement('td')
-
-                vdom_td_jadwal.innerText =  data[`${row}`].includes(element) ? 'Ya' : 'Tidak';
-                vdom_perrent_tr.appendChild( vdom_td_jadwal )
-            })
-            i++
+    let table = new Vue({
+        el: '#app',
+        data: {
+            first   : true,
+            raw     : <?= json_encode( $portal['contents']['raw_data'] ) ?>,
+            month   : <?= json_encode( $portal['contents']['avilable_month'] ) ?>,
+            months  : [ 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Augustus', 'September', 'Oktober', 'November', 'Desember' ]
+        },
+        methods: {
+            onChange(event) {
+                this.first = false;
+                $json(`/lib/ajax/json/public/jadwal-imunisasi/?month=${event.target.value}`)
+                    .then( json => this.raw = json )
+            }
         }
-    }
-
-    const selectElement = document.querySelector('#input-pilih-bulan');
-    selectElement.addEventListener('change', (event) => {
-        getData(`/lib/ajax/json/public/jadwal-imunisasi/?month=${event.target.value}`)
-            .then( data => {
-                renderCard(data);
-                renderTable(data);
-            })
     });
 </script>
 </html>
