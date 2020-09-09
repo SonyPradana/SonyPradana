@@ -1,9 +1,6 @@
 <?php
 namespace Simpus\Apps;
 
-use Simpus\Helper\HttpRequest;
-use Simpus\Helper\HttpRespone;
-
 class Route {
 
   private static $routes = Array();
@@ -116,25 +113,20 @@ class Route {
       $route['expression'] = $route['expression'].'$';
 
       // Check path match
-      if (preg_match('#'.$route['expression'].'#'.($case_matters ? '' : 'i'), $path, $args)) {
+      if (preg_match('#'.$route['expression'].'#'.($case_matters ? '' : 'i'), $path, $matches)) {
         $path_match_found = true;
 
         // Cast allowed method to array if it's not one already, then run through all methods
         foreach ((array)$route['method'] as $allowedMethod) {
             // Check method match
           if (strtolower($method) == strtolower($allowedMethod)) {
-            array_shift($args); // Always remove first element. This contains the whole string
+            array_shift($matches); // Always remove first element. This contains the whole string
 
             if ($basepath != '' && $basepath != '/') {
-              array_shift($args); // Remove basepath
+              array_shift($matches); // Remove basepath
             }
-
-            // grouping params
-            $req    = new HttpRequest();
-            $res    = new HttpRespone();
-            $params = array($req, $res, $args);
             
-            call_user_func_array($route['function'], $params);
+            call_user_func_array($route['function'], $matches);
 
             $route_match_found = true;
 

@@ -5,8 +5,6 @@
     use Simpus\Apps\Controller;
     use Simpus\Auth\Auth;
     use Simpus\Auth\User;
-    use Simpus\Helper\HttpRequest;
-    use Simpus\Helper\HttpRespone;
     
     require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/init.php';
 
@@ -56,11 +54,11 @@
         require_once BASEURL . '/lib/apps/controllers/AuthController.php';
         (new AuthController())->reset();
     });
-    $app->match(['get', 'post'], '/forgot/(:text)', function(HttpRequest $req, HttpRespone $res, array $args){
+    $app->match(['get', 'post'], '/forgot/(:text)', function(string $action){
         require_once BASEURL . '/lib/apps/controllers/AuthController.php';
-        if( $args[0] == 'reset' ){
+        if( $action == 'reset' ){
             (new AuthController())->hardReset();
-        }elseif( $args[0] = 'send'){
+        }elseif( $action = 'send'){
             (new AuthController())->send();
         }else{            
             require_once BASEURL . '/lib/apps/controllers/DefaultController.php';
@@ -95,10 +93,10 @@
     });
     
     // info    
-    $app->get('/info/(:any)', function(HttpRequest $req, HttpRespone $res, array $args) {
-        if( Controller::view_exists('info/' . $args[0])){
+    $app->get('/info/(:any)', function(string $page) {
+        if( Controller::view_exists('info/' . $page)){
             require_once BASEURL . '/lib/apps/controllers/InfoController.php';
-            (new InfoController())->render('info/' . $args[0]);
+            (new InfoController())->render('info/' . $page);
         }else{
             require_once BASEURL . '/lib/apps/controllers/DefaultController.php';
             (new DefaultController())->status(404, []);
@@ -111,20 +109,20 @@
         require_once BASEURL . '/lib/apps/controllers/RekamMedisController.php';
         (new RekamMedisController())->index();
     });
-    $app->match(['get', 'post'], '/rekam-medis/(:text)', function(HttpRequest $req, HttpRespone $res, array $args){
-        if( Controller::view_exists('rekam-medis/' . $args[0]) ){
+    $app->match(['get', 'post'], '/rekam-medis/(:text)', function(string $page){
+        if( Controller::view_exists('rekam-medis/' . $page) ){
             require_once BASEURL . '/lib/apps/controllers/RekamMedisController.php';
-            (new RekamMedisController())->show( strtolower($args[0]) );
+            (new RekamMedisController())->show( strtolower($page) );
         }else{
             require_once BASEURL . '/lib/apps/controllers/RekamMedisController.php';
             (new RekamMedisController())->index();
         }
     });
     // kia-anak biodata/posyandu
-    $app->match(['get', 'post'], '/kia-anak/(:text)/(:text)', function(HttpRequest $req, HttpRespone $res, array $args){
-        if( Controller::view_exists('kia-anak/'. $args[1] . '/'. $args[0])){
+    $app->match(['get', 'post'], '/kia-anak/(:text)/(:text)', function(string $action, string $unit){
+        if( Controller::view_exists('kia-anak/'. $unit . '/'. $action)){
             require_once BASEURL . '/lib/apps/controllers/KiaAnakController.php';
-            (new KiaAnakController)->show($args[0], $args[1]);            
+            (new KiaAnakController)->show($action, $unit);            
         }else{            
             require_once BASEURL . '/lib/apps/controllers/DefaultController.php';
             (new DefaultController())->status(404, []);
