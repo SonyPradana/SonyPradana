@@ -1,17 +1,18 @@
 <?php
-    session_start();
+session_start();
 
-    use Simpus\Apps\Route;
-    use Simpus\Apps\Controller;
-    use Simpus\Auth\Auth;
-    use Simpus\Auth\User;
-    
-    require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/init.php';
+use Simpus\Apps\Route;
+use Simpus\Apps\Controller;
+use Simpus\Apps\Middleware;
+use Simpus\Auth\Auth;
+use Simpus\Auth\User;
+
+require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/init.php';
 
     $app   = new Route();
     $auth  = new Auth($_SESSION['token'] ?? '', 2);
     $user  = new User( $auth->getUserName() );
-    Controller::setMiddleware([
+    Middleware::setMiddleware([
         "auth" => [
             "login"                 => $auth->TrushClient(),
             "user_name"             => $auth->TrushClient() ? $auth->getUserName() : null,
@@ -127,6 +128,12 @@
             require_once BASEURL . '/lib/apps/controllers/DefaultController.php';
             (new DefaultController())->status(404, []);
         }
+    });
+
+    // API
+    $app->get('/API/(:text)/(:text)/(:text).json', function($access, $unit, $action){
+        require_once BASEURL . '/lib/apps/controllers/ApiController.php';
+        (new ApiController())->index($unit, $action);
     });
 
     // default path 404, 405

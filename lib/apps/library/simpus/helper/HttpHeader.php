@@ -4,7 +4,7 @@ namespace Simpus\Helper;
 
 class HttpHeader{
 
-    public static function printJson($printed_data, $status_code){        
+    public static function printJson($printed_data, $status_code = 200, array $headers = ['headers' => ['HTTP/1.1 404 Page Not Found']]){
         if( $status_code == 200 ){
             header("HTTP/1.1 200 Oke");
             $printed_data['status'] = 'ok';
@@ -12,9 +12,13 @@ class HttpHeader{
             header("HTTP/1.1 401 Unauthorized");
             $printed_data['status'] = 'unauthorized';
         }elseif( $status_code == 403){
-            // reject jika tidak punya token
             header("HTTP/1.1 403 Access Denied");
             $printed_data['status'] = 'access dinied';
+        }else {
+            // costume header
+            foreach( $headers['headers'] as $header){
+                header($header);
+            }
         }
 
         echo json_encode($printed_data, JSON_NUMERIC_CHECK);
