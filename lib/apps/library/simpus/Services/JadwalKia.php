@@ -1,13 +1,11 @@
 <?php
 
+namespace Simpus\Services;
 use Simpus\Database\MyPDO;
+use \DateTime;
 
-/**
- * class ini berfungsi untuk mendapatkan jadwal kia yang daimambil dari data base
- * 
- * @author sonypradana@gmail.com
- */
-class jadwalKIA{
+class JadwalKia
+{    
     /** @var int Bulan dalam angka */
     private $_month;
     /** @var int Tahun */
@@ -18,13 +16,15 @@ class jadwalKIA{
      * @param string $bulan Bulan dalam angka
      * @param string $year Tahun
      */
-    public function __construct(string $bulan, string $tahun = "2020"){
+    public function __construct(string $bulan, string $tahun = "2020")
+    {
         // cek bulan sudah terdaftar atau belum
         $this->_month = $bulan;
         $this->_year = $tahun;
     }
 
-    public function getdata():array{
+    public function getdata() :array
+    {
         $month = $this->_month;
         $year  = $this->_year;
 

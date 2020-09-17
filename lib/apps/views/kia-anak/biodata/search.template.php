@@ -206,7 +206,7 @@
     // get group posyandu
     $id('input-desa').addEventListener('change', function(e){        
         $id('input-posyandu').innerHTML = '<option selected disabled hidden>Pilih Nama Posyandu</option>';
-        $json('/lib/ajax/json/public/grup-posyandu/?desa=' + e.target.value)
+        $json('/api/ver1.0/posyandu/grup-posyandu.json?desa=' + e.target.value)
             .then( function(json){
                 if(json.status == 'ok' && json.data.length > 0){                    
                     // render

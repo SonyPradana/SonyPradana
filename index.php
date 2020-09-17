@@ -131,7 +131,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/init.php';
     });
 
     // API
-    $app->get('/API/(:text)/(:text)/(:text).json', function($access, $unit, $action){
+    $app->match(['get', 'put'], '/API/([0-9a-zA-Z.]*)/(:any)/(:any).json', function($access, $unit, $action){
         require_once BASEURL . '/lib/apps/controllers/ApiController.php';
         (new ApiController())->index($unit, $action);
     });

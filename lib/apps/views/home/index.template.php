@@ -205,7 +205,7 @@
                 msgMeni: 'xxx meninggal'
             },
             created(){
-                $json('/lib/ajax/json/public/covid-kab-semarang/info/index.php')
+                $json('/api/ver1.0/Covid-Kab-Semarang/tracker.json')
                 .then( json => {
                     this.msgPosi = json['kasus_posi'] + ' positif';
                     this.msgSemb = json['kasus_semb'] + ' sembuh';

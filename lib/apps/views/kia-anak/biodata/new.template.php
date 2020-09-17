@@ -283,7 +283,7 @@
 
     // tab: 1 (function)
     function getDataRM(nomor_rm){
-        $json(`/lib/ajax/json/private/med-rec/cari-rm/?nomor_rm=${nomor_rm}`)
+        $json(`/api/ver1.0/RekamMedis/search-rm.json?nomor_rm=${nomor_rm}`)
             .then( json => {
                 dataRm = json['data']
                 // profile card

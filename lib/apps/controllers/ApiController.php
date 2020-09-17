@@ -8,7 +8,13 @@ class ApiController extends Controller
 
     public function index($unit, $action)
     {
-        $result = $this->getService( $unit . 'Service', $action, [$_GET]);
+        $method = $_SERVER['REQUEST_METHOD'];
+        $params = $_GET;
+        if( $method == 'PUT' ){
+            $body   = file_get_contents('php://input');
+            $params = json_decode($body, true);
+        }
+        $result = $this->getService( $unit . 'Service', $action, [$params]);
 
         // get header and them remove header from result
         $headers = $result['headers'] ?? [];
@@ -24,6 +30,9 @@ class ApiController extends Controller
 
     private function getService($service_nama, $method_nama, $args = []) :array
     {
+        $service_nama   = str_replace('-', '', $service_nama);
+        $method_nama    = str_replace('-', '_', $method_nama);
+
         if( file_exists( BASEURL . "/lib/apps/services/" . $service_nama . '.php') ){
             require_once BASEURL . '/lib/apps/services/' . $service_nama . '.php';
             $service = new $service_nama;
@@ -31,6 +40,9 @@ class ApiController extends Controller
                 return call_user_func_array([$service, $method_nama], $args);
             }
         }
-        return [];
+        return [
+            'status'  => 'Bad Request',
+            'headers' => ['HTTP/1.1 400 Bad Request']
+        ];
     }
 }

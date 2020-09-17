@@ -288,7 +288,7 @@
             }
         },
         created(){
-            $json('/lib/ajax/json/public/covid-kab-semarang/info/index.php')
+            $json('/api/ver1.0/Covid-Kab-Semarang/tracker-data.json')
             .then( json => {
                 this.dirawat    = json['kasus_posi'];
                 this.isolasi    = json['kasus_semb'];
@@ -296,6 +296,7 @@
                 this.meninggal  = json['kasus_isol'];
                 
                 this.grapInfo(json);
+                table.rows = json['data'][16]['data'];
             })
         }
     })
@@ -304,12 +305,6 @@
         el: '#covid-table',
         data: {
             rows: []
-        },
-        created(){
-            $json('/lib/ajax/json/public/covid-kab-semarang/info/?kecamatan=ungaran-barat')
-            .then( json => {
-                this.rows = json['data']
-            })
         }
     })
 </script>

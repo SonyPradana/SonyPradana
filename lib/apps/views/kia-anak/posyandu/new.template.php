@@ -222,7 +222,7 @@
             })
     }
     function getHistoryPosyandau(time_stamp, grups_posyandu){
-        const url = `/lib/ajax/json/private/posyandu/search/?idhash=${time_stamp}&idposyandu=${grups_posyandu}`;
+        const url = `/api/ver1.0/Posyandu/search.json?idhash=${time_stamp}&idposyandu=${grups_posyandu}`;
         $json( url )
             .then( json => {
                 $query('.table-posynadu table tbody').innerHTML = '<!-- table data posyandu -->';

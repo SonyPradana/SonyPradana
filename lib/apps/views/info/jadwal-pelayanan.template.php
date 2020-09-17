@@ -1,9 +1,9 @@
 <?php 
-    use  Simpus\Auth\User;
-    require_once BASEURL . '/lib/ajax/json/public/jadwal-imunisasi/controller/jadwalKIA.php';
+use Simpus\Auth\User;
+use Simpus\Services\JadwalKia;
 
     $author = new User("angger");
-    $imun   = new jadwalKIA(date('m'), date('Y'));
+    $imun   = new JadwalKia(date('m'), date('Y'));
 
     $portal = [
         "auth"    => $this->getMiddleware()['auth'],
@@ -235,7 +235,7 @@
         methods: {
             onChange(event) {
                 this.first = false;
-                $json(`/lib/ajax/json/public/jadwal-imunisasi/?month=${event.target.value}`)
+                $json(`/api/ver1.0/Jadwal-Pelayanan/Imunisasi.json?month=${event.target.value}`)
                     .then( json => this.raw = json )
             }
         }

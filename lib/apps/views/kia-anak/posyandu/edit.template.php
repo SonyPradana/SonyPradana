@@ -154,7 +154,7 @@
     $id('input-desa').addEventListener('change', function(event){
         // load nama posyandu
         $id('input-posyandu').innerHTML = '<option selected disabled hidden>Pilih Nama Posyandu</option>';
-        $json('/lib/ajax/json/public/grup-posyandu/?desa=' + event.target.value)
+        $json('/api/ver1.0/posyandu/grup-posyandu.json?desa=' + event.target.value)
             .then( json => {
                 json.data.forEach(element => {
                     let creat_option = document.createElement('option');
