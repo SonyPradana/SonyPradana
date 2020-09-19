@@ -1,5 +1,5 @@
 <?php
-    require_once BASEURL . '/lib/apps/services/CovidkabSemarangService.php';
+    require_once BASEURL . '/lib/apps/services/CovidKabSemarangService.php';
     use Simpus\Auth\User;
 
     $data_covid = new CovidKabSemarangService();
