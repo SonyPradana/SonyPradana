@@ -10,10 +10,12 @@ use Simpus\Auth\User;
 require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/init.php';
 
     $app   = new Route();
-    $auth  = new Auth($_SESSION['token'] ?? '', 2);
+  $token = $_SESSION['token'] ?? '';
+    $auth  = new Auth($token, 2);
     $user  = new User( $auth->getUserName() );
     Middleware::setMiddleware([
         "auth" => [
+            "token"                 => $token,
             "login"                 => $auth->TrushClient(),
             "user_name"             => $auth->TrushClient() ? $auth->getUserName() : null,
             "display_name"          => $auth->TrushClient() ? $user->getDisplayName() : null,
