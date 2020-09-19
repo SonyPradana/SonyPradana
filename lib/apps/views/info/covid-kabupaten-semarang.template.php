@@ -1,5 +1,20 @@
 <?php
-    use  Simpus\Auth\User;
+    require_once BASEURL . '/lib/apps/services/CovidkabSemarangService.php';
+    use Simpus\Auth\User;
+
+    $data_covid = new CovidKabSemarangService();
+
+    $track_record   = $data_covid->track_record(["toString" => true])['data'];
+    $data_record    = $data_covid->tracker(['range_waktu' => $track_record]);
+    sort($data_record);
+    // data: konirmasi covid
+    $date_record    = json_encode( array_values(array_column($data_record, "time")) );
+    $posi_record    = json_encode( array_values(array_column($data_record, "kasus_posi")) );
+    $meni_record    = json_encode( array_values(array_column($data_record, "kasus_meni")) );
+    // data: suspek covid
+    $suspek_record         = json_encode( array_values(array_column($data_record, "suspek")) );
+    $suspek_meni_record    = json_encode( array_values(array_column($data_record, "suspek_meninggal")) );
+
     $author = new User("angger");
     $portal = [
         "auth"    => $this->getMiddleware()['auth'],
@@ -16,7 +31,13 @@
             "article"    => [
                 "display_name"          => $author->getDisplayName(),
                 "display_picture_small" => $author->getSmallDisplayPicture()
-            ]
+            ],
+            "last_index"                => 1,
+            "date_record"               => $date_record,
+            "kasus_posi"                => $posi_record,
+            "kasus_meni"                => $meni_record,
+            "suspek"                    => $suspek_record,
+            "suspek_meni"               => $suspek_meni_record,
         ]
     ];
 ?>
@@ -31,6 +52,7 @@
     <script src="/lib/js/index.js"></script>
     <script src="/lib/js/bundles/keepalive.js"></script>
     <script src="/lib/js/vendor/vue/vue.min.js"></script>
+    <script src="/lib/js/vendor/chart/Chart.min.js"></script>
     <style>
         /* costume main container */
         .container.width-view{
@@ -148,7 +170,7 @@
                         </div>
                     </div>
                     <div class="media note">
-                        <p>Data Pasien Wilayah Kabupaten Semarang (Update Otomatis)</p>
+                        <p>Data Pasien Wilayah Kabupaten Semarang (update pukul <span id="last-index"></span> )</p>
                         <p>Sumber: corona.semarangkab.go.id </p>
                     </div>
                 </div>
@@ -188,6 +210,27 @@
                             </tbody>
                         </table>
                     </div>
+
+                <div class="charts">
+                    <h2>Perkembangan Covid Kabupaten Semarang (komulatif)</h2>
+                    <h3>Terkonfirmasi Covid</h3>
+                    <div class="chart">
+                        <canvas id="chartjs-0" 
+                                width="400" height="200" 
+                                aria-label="Hello ARIA World" 
+                                role="img">
+                            </canvas>
+                    </div>
+
+                    <h3>Suspek Covid</h3>
+                    <div class="chart">
+                        <canvas id="chartjs-1" 
+                                width="400" height="200" 
+                                aria-label="Hello ARIA World" 
+                                role="img">
+                            </canvas>
+                    </div>
+                </div>
 
                     <h2>Istilah-istilah</h2>
                     <ol>
@@ -249,6 +292,18 @@
             window.location.href = "/logout?url=<?= $_SERVER['REQUEST_URI'] ?>"
         }
     );
+
+    $load(function(){
+        $json('/api/ver1.1/Covid-Kab-Semarang/indexing.json')
+            .then(json => {
+                $id('last-index').innerText = json['last_index'];
+                if(json['index_status'] == 'sussessful'){
+                    $id('last-index').innerText = json['next_index'];
+                    // reload
+                    card.render_card();
+                }
+            })
+    })
     
     // menagbil data
     let card = new Vue({
@@ -285,19 +340,22 @@
                 $id('card-isolasi').setAttribute('data-tooltips', isol );
                 $id('card-sembuh').setAttribute('data-tooltips', semb );
                 $id('card-meninggal').setAttribute('data-tooltips', meni );
+            },
+            render_card: function(){
+                $json('/api/ver1.0/Covid-Kab-Semarang/tracker-data.json')
+                    .then( json => {
+                        this.dirawat    = json['kasus_posi'];
+                        this.isolasi    = json['kasus_isol'];
+                        this.sembuh     = json['kasus_semb'];
+                        this.meninggal  = json['kasus_meni'];
+                        
+                        this.grapInfo(json);
+                        table.rows = json['data'][16]['data'];
+                    })
             }
         },
         created(){
-            $json('/api/ver1.0/Covid-Kab-Semarang/tracker-data.json')
-            .then( json => {
-                this.dirawat    = json['kasus_posi'];
-                this.isolasi    = json['kasus_semb'];
-                this.sembuh     = json['kasus_meni'];
-                this.meninggal  = json['kasus_isol'];
-                
-                this.grapInfo(json);
-                table.rows = json['data'][16]['data'];
-            })
+            this.render_card();
         }
     })
 
@@ -306,6 +364,68 @@
         data: {
             rows: []
         }
-    })
+    })    
+
+    let chart_covid_postif = new Chart($id("chartjs-0"), {
+        type:"line",
+        data:{
+            labels: <?= $portal['contents']['date_record'] ?>,
+            datasets:[{
+                    label:"Komulatif Positive",
+                    data: <?= $portal['contents']['kasus_posi'] ?>,
+                    fill:true,
+                    borderColor:"rgb(75, 192, 192)",
+                    lineTension:0.4
+                },
+                {
+                    label:"Komulatif Meninggal",
+                    data: <?= $portal['contents']['kasus_meni'] ?>,
+                    fill:true,
+                    borderColor:"rgb(50, 205, 50)",
+                    lineTension:0.4
+                }]
+            },
+        options:{
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                                suggestedMin: 15,
+                                suggestedMax: 56
+                        }
+                    }]
+                }
+        }
+    });
+
+    let chart_covid_suspek = new Chart($id("chartjs-1"), {
+        type:"line",
+        data:{
+            labels: <?= $portal['contents']['date_record'] ?>,
+            datasets:[{
+                    label:"Suspek Covid",
+                    data: <?= $portal['contents']['suspek'] ?>,
+                    fill:true,
+                    borderColor:"rgb(75, 192, 192)",
+                    lineTension:0.4
+                },
+                {
+                    label:"Suspek Meninggal",
+                    data: <?= $portal['contents']['suspek_meni'] ?>,
+                    fill:true,
+                    borderColor:"rgb(255,69,0)",
+                    lineTension:0.4
+                }]
+            },
+        options:{
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                                suggestedMin: 15,
+                                suggestedMax: 56
+                        }
+                    }]
+                }
+        }
+    });
 </script>
 </html>

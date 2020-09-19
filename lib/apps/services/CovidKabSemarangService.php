@@ -9,6 +9,12 @@ class CovidKabSemarangService extends Middleware
 {
     public function tracker(array $params)
     {
+        // option
+        $date_format    = $params['date_format'] ?? 'm/d h:i';
+        if( $date_format != 'm/d h:i' ){
+            // force format
+            $date_format = 'Y-m-d h:i:sa';
+        }
 
         $covid_tracker  = new CovidKabSemarangTracker();
         $list_kecamatan = (new CovidKabSemarang())->Daftar_Kecamatan;
@@ -38,7 +44,7 @@ class CovidKabSemarangService extends Middleware
             
             $result[] = [
                 "location"          => "kab. semarang",
-                "time"              => date("Y-m-d h:i:sa", $this_date),
+                "time"              => date($date_format, $this_date),
                 "kasus_posi"        => $count['konfirmasi_symptomatik'],
                 "kasus_isol"        => $count['konfirmasi_asymptomatik'],
                 "kasus_semb"        => $count['konfirmasi_sembuh'],
@@ -58,6 +64,12 @@ class CovidKabSemarangService extends Middleware
 
     public function tracker_data(array $params)
     {
+        // option
+        $date_format    = $params['date_format'] ?? 'm/d h:i';
+        if( $date_format != 'm/d h:i' ){
+            // force format
+            $date_format = 'Y-m-d h:i:sa';
+        }
         // TODO:
         // 1. support filter berdasarkan wilayah
         $covid_tracker  = new CovidKabSemarangTracker();
@@ -282,6 +294,19 @@ class CovidKabSemarangService extends Middleware
             'last_index'    => $last_index,
             'next_index'    => $next_index,
             'allow_index'   => $allow_index,
+            'headers'       => ['HTTP/1.1 200 Oke']
+        ];
+    }
+
+    public function track_record(array $params) :array
+    {
+        $covid_tracker  = new CovidKabSemarangTracker();
+        $result         = $covid_tracker->listOfDate();
+        $to_string      = $params['toString'] ?? false;
+        
+        return [
+            'status'        => 'ok',
+            'data'          => $to_string ? implode('-', array_values(array_column($result, 'date'))) : $result,
             'headers'       => ['HTTP/1.1 200 Oke']
         ];
     }
