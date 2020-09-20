@@ -6,6 +6,7 @@
 
     $track_record   = $data_covid->track_record(["toString" => true])['data'];
     $data_record    = $data_covid->tracker(['range_waktu' => $track_record]);
+    krsort($data_record);
     // data: konirmasi covid
     $date_record    = json_encode( array_values(array_column($data_record, "time")) );
     $posi_record    = json_encode( array_values(array_column($data_record, "kasus_posi")) );
@@ -215,7 +216,7 @@
                     <h3>Terkonfirmasi Covid</h3>
                     <div class="chart">
                         <canvas id="chartjs-0" 
-                                width="400" height="250" 
+                                width="400" height="200" 
                                 aria-label="Hello ARIA World" 
                                 role="img">
                             </canvas>
@@ -224,7 +225,7 @@
                     <h3>Suspek Covid</h3>
                     <div class="chart">
                         <canvas id="chartjs-1" 
-                                width="400" height="250" 
+                                width="400" height="200" 
                                 aria-label="Hello ARIA World" 
                                 role="img">
                             </canvas>
@@ -370,14 +371,14 @@
         data:{
             labels: <?= $portal['contents']['date_record'] ?>,
             datasets:[{
-                    label:"Konfirmasi Positive",
+                    label:"Komulatif Positive",
                     data: <?= $portal['contents']['kasus_posi'] ?>,
                     fill:true,
                     borderColor:"rgb(75, 192, 192)",
                     lineTension:0.4
                 },
                 {
-                    label:"Konfirmasi Meninggal",
+                    label:"Komulatif Meninggal",
                     data: <?= $portal['contents']['kasus_meni'] ?>,
                     fill:true,
                     borderColor:"rgb(50, 205, 50)",
@@ -419,8 +420,8 @@
                 scales: {
                     yAxes: [{
                         ticks: {
-                                suggestedMin:25,
-                                suggestedMax: 185
+                                suggestedMin: 15,
+                                suggestedMax: 56
                         }
                     }]
                 }

@@ -104,7 +104,7 @@ class CovidKabSemarangTracker
                             FROM `covid_tracker`
                             GROUP BY `date`
                             ORDER BY `date`
-                            ASC");
+                            DESC");
         return $this->db->resultset();
     }
     
