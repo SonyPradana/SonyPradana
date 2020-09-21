@@ -4,6 +4,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/config/config.php';
 
 // Autoloading
 require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/library/autoload.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/controllers/autoload.php';
     
 // router
 require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/core/Middleware.php';
