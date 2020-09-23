@@ -12,7 +12,7 @@
     $posi_record    = json_encode( array_values(array_column($data_record, "kasus_posi")) );
     $meni_record    = json_encode( array_values(array_column($data_record, "kasus_meni")) );
     // data: suspek covid
-    $suspek_record         = json_encode( array_values(array_column($data_record, "suspek")) );
+    $suspek_record         = json_encode( array_values(array_column($data_record, "suspek_discharded")) );
     $suspek_meni_record    = json_encode( array_values(array_column($data_record, "suspek_meninggal")) );
 
     $author = new User("angger");
@@ -402,7 +402,7 @@
         data:{
             labels: <?= $portal['contents']['date_record'] ?>,
             datasets:[{
-                    label:"Suspek Covid",
+                    label:"Suspek Discharded Covid",
                     data: <?= $portal['contents']['suspek'] ?>,
                     fill:true,
                     borderColor:"rgb(75, 192, 192)",

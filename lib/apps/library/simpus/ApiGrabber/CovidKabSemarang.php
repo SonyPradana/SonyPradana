@@ -92,7 +92,7 @@ class CovidKabSemarang
                 $td = $row->getElementsByTagName('td');
                 
                 $data_pdp = []; # grub array untuk data pdp
-                $data_pdp["dirawat"]    = $this->removeDoubleSpace($td->item(3)->nodeValue);
+                $data_pdp["dirawat"]    = $this->removeDoubleSpace($td->item(2)->nodeValue);
                 $data_pdp["sembuh"]     = $this->removeDoubleSpace($td->item(3)->nodeValue);
                 $data_pdp["meninggal"]  = $this->removeDoubleSpace($td->item(4)->nodeValue);
                 $data_pdp["keterangan"] = $this->removeDoubleSpace($td->item(5)->nodeValue);
