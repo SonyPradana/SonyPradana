@@ -12,6 +12,9 @@ class CovidKabSemarang
     private $_positif_sembuh = 0;
     /** @var integer jumlah positif covid meninggal */
     private $_positif_meninggal = 0;
+    private $_suspek = 0;
+    private $_suspek_discharded = 0;
+    private $_suspek_meninggal = 0;
 
     /** @return integer jumlah positif covid dirawat*/
     public function positifDirawat(){
@@ -28,6 +31,21 @@ class CovidKabSemarang
     /** @return integer jumlah positif covid dirawat*/
     public function positifMeninggal(){
         return (int) $this->_positif_meninggal;
+    }
+    /** @return integer jumlah suspek covid */
+    public function suspek() :int
+    {
+        return $this->_suspek;
+    }
+    /** @return integer jumlah suspek discharded covid */
+    public function suspekDischarded() :int
+    {
+        return $this->_suspek_discharded;
+    }
+    /** @return integer jumlah suspek covid meninggal */
+    public function suspekMeninggal() :int
+    {
+        return $this->_suspek_meninggal;
     }
 
     /** @var array array id kecamatan se kabupaten */
@@ -63,6 +81,9 @@ class CovidKabSemarang
         $positif_isolasi    = 0;
         $positif_sembuh     = 0;
         $positif_meninggal  = 0;
+        $suspek             = 0;
+        $suspek_discharded  = 0;
+        $suspek_meninggal   = 0;
 
         // mengkonvert nama wilayah kedalam id kecamatan
         $id = $this->Daftar_Kecamatan[$nama_kecamatan];
@@ -108,7 +129,10 @@ class CovidKabSemarang
                 $positif_dirawat    += $positif_covid["dirawat"];
                 $positif_isolasi    += $positif_covid["isolasi"];
                 $positif_sembuh     += $positif_covid["sembuh"];
-                $positif_meninggal  +=  $positif_covid["meninggal"];
+                $positif_meninggal  += $positif_covid["meninggal"];
+                $suspek             += $data_pdp['dirawat'];
+                $suspek_discharded  += $data_pdp["sembuh"];
+                $suspek_meninggal   += $data_pdp["meninggal"];
 
                 // memasukan data satu row / desa kedalam arra utama (array kebupaten)
                 $satu_desa = [];
@@ -122,12 +146,15 @@ class CovidKabSemarang
         }
         // mengkelompok kan semua hasil menjadi satu
         $paket = [
-            "kecamatan"  => $nama_kecamatan,
-            "kasus_posi" => $positif_dirawat,
-            "kasus_isol" => $positif_isolasi,
-            "kasus_semb" => $positif_sembuh,
-            "kasus_meni" => $positif_meninggal,
-            "data"       => $desa
+            "kecamatan"         => $nama_kecamatan,
+            "kasus_posi"        => $positif_dirawat,
+            "kasus_isol"        => $positif_isolasi,
+            "kasus_semb"        => $positif_sembuh,
+            "kasus_meni"        => $positif_meninggal,
+            "suspek"            => $suspek,
+            "discharded"        => $suspek_discharded,
+            "suspek_meninggal"  => $suspek_meninggal,
+            "data"              => $desa
         ];
 
         // memberitahu ke clinet hasil komulatif data (internal class)
@@ -135,6 +162,9 @@ class CovidKabSemarang
         $this->_positif_isolasi     = $positif_isolasi;
         $this->_positif_sembuh      = $positif_sembuh;
         $this->_positif_meninggal   = $positif_meninggal;
+        $this->_suspek              = $suspek;
+        $this->_suspek_discharded   = $suspek_discharded;
+        $this->_suspek_meninggal    = $suspek_meninggal;
 
         // hasil akhir data
         return $paket;

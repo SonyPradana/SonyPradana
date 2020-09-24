@@ -1,4 +1,8 @@
 <?php
+/**
+ * TODO:
+ * 1. tracker data - ifo data kecamatan tidak cocok
+ */
 
 use Simpus\Apps\Middleware;
 use Simpus\ApiGrabber\CovidKabSemarang;
@@ -10,8 +14,8 @@ class CovidKabSemarangService extends Middleware
     public function tracker(array $params)
     {
         // option
-        $date_format    = $params['date_format'] ?? 'm/d h:i';
-        if( $date_format != 'm/d h:i' ){
+        $date_format    = $params['date_format'] ?? 'd/m h:i';
+        if( $date_format != 'd/m h:i' ){
             // force format
             $date_format = 'Y-m-d h:i:sa';
         }
@@ -65,8 +69,8 @@ class CovidKabSemarangService extends Middleware
     public function tracker_data(array $params)
     {
         // option
-        $date_format    = $params['date_format'] ?? 'm/d h:i';
-        if( $date_format != 'm/d h:i' ){
+        $date_format    = $params['date_format'] ?? 'd/m h:i';
+        if( $date_format != 'd/m h:i' ){
             // force format
             $date_format = 'Y-m-d h:i:sa';
         }
@@ -209,6 +213,9 @@ class CovidKabSemarangService extends Middleware
             $kasus_isolasi = 0;
             $kasus_sembuh = 0;
             $kasus_meninggal = 0;
+            $suspek             = 0;
+            $suspek_discharded  = 0;
+            $suspek_meninggal   = 0;
             $res = [];
             // me loop semua kecamatan terdaftar
             foreach( $daftar as $key => $value){
@@ -217,6 +224,9 @@ class CovidKabSemarangService extends Middleware
                 $kasus_isolasi   += $data->positifIsolasi();
                 $kasus_sembuh    += $data->positifSembuh();
                 $kasus_meninggal += $data->positifMeninggal();
+                $suspek             += $data->suspek();
+                $suspek_discharded  += $data->suspekDischarded();
+                $suspek_meninggal   += $data->suspekMeninggal();
             }
             // menyun hasil dari data yang telah di konvert
             return [
@@ -225,6 +235,9 @@ class CovidKabSemarangService extends Middleware
                 "kasus_isol" => $kasus_isolasi,
                 "kasus_semb" => $kasus_sembuh,
                 "kasus_meni" => $kasus_meninggal,
+                "suspek"            => $suspek,
+                "suspek_discharded" => $suspek_discharded,
+                "suspek_meninggal"  => $suspek_meninggal,
                 "data"       => $res,
                 'status'     => 'ok',
                 'headers'    => ['HTTP/1.1 200 Oke']

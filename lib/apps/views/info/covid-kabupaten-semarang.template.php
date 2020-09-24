@@ -12,7 +12,8 @@
     $posi_record    = json_encode( array_values(array_column($data_record, "kasus_posi")) );
     $meni_record    = json_encode( array_values(array_column($data_record, "kasus_meni")) );
     // data: suspek covid
-    $suspek_record         = json_encode( array_values(array_column($data_record, "suspek_discharded")) );
+    $suspek                = json_encode( array_values(array_column($data_record, "suspek")) );
+    $suspek_disc_record    = json_encode( array_values(array_column($data_record, "suspek_discharded")) );
     $suspek_meni_record    = json_encode( array_values(array_column($data_record, "suspek_meninggal")) );
 
     $author = new User("angger");
@@ -36,7 +37,8 @@
             "date_record"               => $date_record,
             "kasus_posi"                => $posi_record,
             "kasus_meni"                => $meni_record,
-            "suspek"                    => $suspek_record,
+            "suspek"                    => $suspek,
+            "suspek_disc"               => $suspek_disc_record,
             "suspek_meni"               => $suspek_meni_record,
         ]
     ];
@@ -99,6 +101,11 @@
         .article.body ul, ol, p{font-size: 20px;}
         .article.body ul { list-style: disc; }
         .article.body h2, .article.body h3,.article.body p{margin-bottom: 12px;}
+        article .info {
+            background-color: #ace1ff;
+            padding: 8px 4px;
+            border-left: solid 8px #2aaffb;
+        }
 
         /* tablet vie view */
         @media screen and (max-width: 767px) {
@@ -196,43 +203,56 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="(row, index) in rows">
+                                <tr v-for="(row, index) in rows.data" :key="rows.data.desa">
                                     <td>{{ index + 1}}</td>
                                     <td>{{ row.desa }}</td>
                                     <td>{{ row.pdp.dirawat }}</td>
                                     <td>{{ row.pdp.sembuh }}</td>
                                     <td>{{ row.pdp.meninggal }}</td>
                                     <td>{{ row.positif.dirawat }}</td>
-                                    <td>{{ row.positif.dirawat }}</td>
+                                    <td>{{ row.positif.isolasi }}</td>
                                     <td>{{ row.positif.sembuh }}</td>
                                     <td>{{ row.positif.meninggal }}</td>
                                 </tr>
+                                <!-- <tr>
+                                    <td colspan="2">jumlah</td>
+                                    <td>{{ rows.suspek }}</td>
+                                    <td>{{ rows.suspek_discharded }}</td>
+                                    <td>{{ rows.suspek_meninggal }}</td>
+                                    <td>{{ rows.kasus_posi }}</td>
+                                    <td>{{ rows.kasus_isol }}</td>
+                                    <td>{{ rows.kasus_semb }}</td>
+                                    <td>{{ rows.kasus_meni }}</td>
+                                </tr> -->
                             </tbody>
                         </table>
                     </div>
 
                 <div class="charts">
                     <h2>Perkembangan Covid Kabupaten Semarang (komulatif)</h2>
-                    <h3>Terkonfirmasi Covid</h3>
+                    <h3>Positif dan Supek Covid</h3>
                     <div class="chart">
                         <canvas id="chartjs-0" 
                                 width="400" height="200" 
-                                aria-label="Hello ARIA World" 
+                                aria-label="grafik positif dan suspek covid" 
                                 role="img">
                             </canvas>
                     </div>
-
-                    <h3>Suspek Covid</h3>
+                    <h3>Meninggal</h3>
                     <div class="chart">
                         <canvas id="chartjs-1" 
                                 width="400" height="200" 
-                                aria-label="Hello ARIA World" 
+                                aria-label="grafik meninggal covid dan suspek" 
                                 role="img">
                             </canvas>
                     </div>
+                    
+                    <div class="info">
+                        <p>Kami memohon maaf, atas telah kehilangan data dari 14/09 s/d 23/9 untuk kasus <strong>suspek covid</strong></p>
+                    </div>
                 </div>
 
-                    <h2>Istilah-istilah</h2>
+                    <h2>Istilah-istilah Terkait</h2>
                     <ol>
                         <li>
                             <h3>Kasus Suspek</h3>
@@ -350,7 +370,10 @@
                         this.meninggal  = json['kasus_meni'];
                         
                         this.grapInfo(json);
-                        table.rows = json['data'][16]['data'];
+                        
+                        // data vue table 
+                        table.rows = json.data[16];
+                        // table.rows          = json.data.filter(k => k.kecamatan == 'ungaran-barat')[0];
                     })
             }
         },
@@ -370,19 +393,22 @@
         type:"line",
         data:{
             labels: <?= $portal['contents']['date_record'] ?>,
-            datasets:[{
-                    label:"Komulatif Positive",
-                    data: <?= $portal['contents']['kasus_posi'] ?>,
-                    fill:true,
-                    borderColor:"rgb(75, 192, 192)",
-                    lineTension:0.4
+            datasets:[
+                {
+                    label: "Suspek",
+                    data: <?= $portal['contents']['suspek'] ?>,
+                    fill: true,
+                    borderColor: "rgb(255, 69, 0)",
+                    backgroundColor: "rgba(255, 69, 0, 0.3)",
+                    lineTension: 0.4
                 },
                 {
-                    label:"Komulatif Meninggal",
-                    data: <?= $portal['contents']['kasus_meni'] ?>,
-                    fill:true,
-                    borderColor:"rgb(50, 205, 50)",
-                    lineTension:0.4
+                    label:"Konfirmasi Covid",
+                    data: <?= $portal['contents']['kasus_posi'] ?>,
+                    fill: true,
+                    borderColor: "rgb(75, 192, 192)",
+                    backgroundColor: "rgba(75, 192, 192, 0.3)",
+                    lineTension: 0.4
                 }]
             },
         options:{
@@ -390,7 +416,7 @@
                     yAxes: [{
                         ticks: {
                                 suggestedMin: 15,
-                                suggestedMax: 56
+                                suggestedMax: 40
                         }
                     }]
                 }
@@ -402,17 +428,19 @@
         data:{
             labels: <?= $portal['contents']['date_record'] ?>,
             datasets:[{
-                    label:"Suspek Discharded Covid",
-                    data: <?= $portal['contents']['suspek'] ?>,
-                    fill:true,
-                    borderColor:"rgb(75, 192, 192)",
-                    lineTension:0.4
+                    label: "Kasus Meninggal",
+                    data: <?= $portal['contents']['kasus_meni'] ?>,
+                    fill: true,
+                    borderColor: "rgb(255,69,0)",
+                    backgroundColor: "rgba(255,69,0, 0.3)",
+                    lineTension: 0.4
                 },
                 {
                     label:"Suspek Meninggal",
                     data: <?= $portal['contents']['suspek_meni'] ?>,
                     fill:true,
-                    borderColor:"rgb(255,69,0)",
+                    borderColor:"rgb(255, 127, 0)",
+                    backgroundColor:"rgba(255, 127, 0, 0.3)",
                     lineTension:0.4
                 }]
             },
@@ -420,8 +448,8 @@
                 scales: {
                     yAxes: [{
                         ticks: {
-                                suggestedMin: 15,
-                                suggestedMax: 56
+                                suggestedMin: 40,
+                                suggestedMax: 80
                         }
                     }]
                 }
