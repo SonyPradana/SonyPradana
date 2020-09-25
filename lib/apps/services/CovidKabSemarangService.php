@@ -133,13 +133,6 @@ class CovidKabSemarangService extends Middleware
                 if( $last_kecamatan != $kecamatan ){
                     $group = [
                         'kecamatan'         => $kecamatan,
-                        "kasus_posi"        => $last_kasus_positif,
-                        "kasus_isol"        => $last_kasus_isolasi,
-                        "kasus_semb"        => $last_kasus_sembuh,
-                        "kasus_meni"        => $last_kasus_meninggal,
-                        "suspek"            => $last_suspek,
-                        "suspek_discharded" => $last_suspek_dischraded,
-                        "suspek_meninggal"  => $last_suspek_meninggal,
                         "data"              => []
                     ];
                     $groups[]                = $group;
@@ -163,11 +156,18 @@ class CovidKabSemarangService extends Middleware
                 
                                 
                 $key = array_search($kecamatan, array_column($groups, 'kecamatan', 0));
+                $groups[$key]['kasus_posi']         = $last_kasus_positif;
+                $groups[$key]['kasus_isol']         = $last_kasus_isolasi;
+                $groups[$key]['kasus_semb']         = $last_kasus_sembuh;
+                $groups[$key]['kasus_meni']         = $last_kasus_meninggal;
+                $groups[$key]['suspek']             = $last_suspek;
+                $groups[$key]['suspek_discharded']  = $last_suspek_dischraded;
+                $groups[$key]['suspek_meninggal']   = $last_suspek_meninggal;
                 $groups[$key]['data'][] = [
-                "desa"              => $data_desa['desa'],
+                "desa"              => ucwords($data_desa['desa']),
                 "pdp"               => [
                         "dirawat"       => $data_desa['suspek'],
-                        "sembuh"        => $data_desa['suspek'],
+                        "sembuh"        => $data_desa['suspek_discharded'],
                         "meninggal"     => $data_desa['suspek_meninggal'],
                     ],
                     "positif"           => [

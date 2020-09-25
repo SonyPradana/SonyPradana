@@ -214,8 +214,8 @@
                                     <td>{{ row.positif.sembuh }}</td>
                                     <td>{{ row.positif.meninggal }}</td>
                                 </tr>
-                                <!-- <tr>
-                                    <td colspan="2">jumlah</td>
+                                <tr>
+                                    <td colspan="2">Jumlah</td>
                                     <td>{{ rows.suspek }}</td>
                                     <td>{{ rows.suspek_discharded }}</td>
                                     <td>{{ rows.suspek_meninggal }}</td>
@@ -223,13 +223,13 @@
                                     <td>{{ rows.kasus_isol }}</td>
                                     <td>{{ rows.kasus_semb }}</td>
                                     <td>{{ rows.kasus_meni }}</td>
-                                </tr> -->
+                                </tr>
                             </tbody>
                         </table>
                     </div>
 
                 <div class="charts">
-                    <h2>Perkembangan Covid Kabupaten Semarang (komulatif)</h2>
+                    <h2>Perkembangan Covid Kabupaten Semarang (Kumulatif)</h2>
                     <h3>Positif dan Supek Covid</h3>
                     <div class="chart">
                         <canvas id="chartjs-0" 
