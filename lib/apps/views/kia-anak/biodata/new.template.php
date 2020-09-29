@@ -5,8 +5,8 @@
     <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/meta/metatag.php') ?>
 
     <link rel="stylesheet" href="/lib/css/ui/v1.1/style.css">   
-    <script src="/lib/js/index.js"></script>
-    <script src="/lib/js/bundles/keepalive.js"></script>
+    <script src="/lib/js/index.min.js"></script>
+    <script src="/lib/js/bundles/keepalive.min.js"></script>
     <style>
         .boxs-container{
             /* width: 100%; height: 100%; */
