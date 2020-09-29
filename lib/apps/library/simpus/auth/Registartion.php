@@ -16,7 +16,10 @@ use Simpus\Database\MyPDO;
  * 
  * @author Angger Pradana sonypradana@gmail.com
  */
-class Registartion{
+class Registartion
+{
+    /** @var MyPDO Instant PDO */
+    private $PDO;
     /**
      * property
      * @var string User name, email, password, display name
@@ -33,7 +36,9 @@ class Registartion{
      * @param array $data Data dalam bentuk array assosiatif
      * @return Users new user
      */
-    public function __construct($data = []){
+    public function __construct($data = [])
+    {
+        $this->PDO = new MyPDO();
         $this->_userName = strtolower( $data['userName'] );
         $this->_email = strtolower( $data['email'] );
         $this->_password = $data['password'];
@@ -54,7 +59,8 @@ class Registartion{
      * @param string $email Cek email terdaftar
      * @return int 1-4 code error pengecekan
      */
-    public function Verify($user_name, $email):int{
+    public function Verify($user_name, $email): int
+    {
         # cek user name
         $newUser = new User($user_name);
         $veifyUser = $newUser->userVerify();
@@ -88,9 +94,8 @@ class Registartion{
      * 
      * @return boolean disimpan atau tidak
      */
-    public function AddToArchive():bool{
-        # koneksi data base
-        $db = new MyPDO();
+    public function AddToArchive(): bool
+    {
         # query data base
         $user = $this->_userName;
         $email = $this->_email;
@@ -98,16 +103,16 @@ class Registartion{
         $pwd = password_hash($pwd, PASSWORD_DEFAULT);
         $disp_name = $this->_disName;
         # simpan kedata base
-        $db->query('INSERT INTO `registration` (`id`, `user`, `email`, `pwd`, `disp_name`, `stat`) VALUES (:id, :user, :email, :pwd, :disp_name, :stat)');
-        $db->bind(':id', '');
-        $db->bind(':user', $user);
-        $db->bind(':email', $email);
-        $db->bind(':pwd', $pwd);
-        $db->bind(':disp_name', $disp_name);
-        $db->bind(':stat', 1);
-        $db->execute();
+        $this->PDO->query('INSERT INTO `registration` (`id`, `user`, `email`, `pwd`, `disp_name`, `stat`) VALUES (:id, :user, :email, :pwd, :disp_name, :stat)');
+        $this->PDO->bind(':id', '');
+        $this->PDO->bind(':user', $user);
+        $this->PDO->bind(':email', $email);
+        $this->PDO->bind(':pwd', $pwd);
+        $this->PDO->bind(':disp_name', $disp_name);
+        $this->PDO->bind(':stat', 1);
+        $this->PDO->execute();
         # result
-        $res = $db->rowCount();
+        $res = $this->PDO->rowCount();
         if( $res > 0){
             return true;
         }

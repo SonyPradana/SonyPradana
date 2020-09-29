@@ -14,7 +14,10 @@ use Simpus\Database\MyPDO;
  * dan target adalah file/class/folder/link yang akan diesekusi
  * 
  */
-class Privilege{
+class Privilege
+{
+    /** @var MyPDO Instant PDO */
+    private $PDO;
 
     private $_userName;
 
@@ -23,6 +26,7 @@ class Privilege{
      * @param Auth $user_auth Aunt/user yang akan di lihat
      */
     public function __construct($user_auth){
+        $this->PDO = new MyPDO();
         $this->_userName = $user_auth;
     }
 
@@ -32,13 +36,12 @@ class Privilege{
      * @param string $taget Target page/service
      * @return string previlage dari database
      */
-    public function MasterPrivilage($target):string{
-        # buat koneksi
-        $db = new MyPDO();
-        $db->query('SELECT `target`, `privilege` FROM `privilege_controler` WHERE `target`=:target');
-        $db->bind(':target', $target);
-        if( $db->single() ){
-            $row = $db->single();
+    public function MasterPrivilage($target): string
+    {
+        $this->PDO->query('SELECT `target`, `privilege` FROM `privilege_controler` WHERE `target`=:target');
+        $this->PDO->bind(':target', $target);
+        if( $this->PDO->single() ){
+            $row = $this->PDO->single();
             # mengambil nilai privilege di data base
             return $row['privilege'];
         }
@@ -52,15 +55,14 @@ class Privilege{
      * @param string $target_acces target page yang akan di cek
      * @return string privilege user
      */
-    public function ReadAcces($target_acces = "default"):string{
+    public function ReadAcces($target_acces = "default"): string
+    {
         $user_name = $this->_userName;
-        # buat koneksi
-        $db = new MyPDO();
-        $db->query('SELECT * FROM privilege WHERE `user`=:user AND target=:target');
-        $db->bind(':user', $user_name);
-        $db->bind(':target', $target_acces);
-        if( $db->single() ){
-            $row = $db->single();
+        $this->PDO->query('SELECT * FROM privilege WHERE `user`=:user AND target=:target');
+        $this->PDO->bind(':user', $user_name);
+        $this->PDO->bind(':target', $target_acces);
+        if( $this->PDO->single() ){
+            $row = $this->PDO->single();
             # mengambil nilai privilege di data base
             return $row['privilege'];
         }
@@ -72,19 +74,19 @@ class Privilege{
      * @param string $target_acces target Page yang akan di simpan
      * @param string $privilege Nilai privilege yang akan disimpan
      */
-    public function CreatAcces($target_acces = "default", $privilege):int{
+    public function CreatAcces($target_acces = "default", $privilege): int
+    {
         # koneksi dan simpan privile baru ke data base
-         $db = new MyPDO();
-         $db->query('INSERT INTO `privilege` (`id`, `user`, `target`, `privilege`) VALUES (:id, :user, :target, :privilege)');
-         $db->bind(':id', '');
-         $db->bind(':user', $this->_userName);
-         $db->bind(':target', $target_acces);
-         $db->bind(':privilege', $privilege);
+         $this->PDO->query('INSERT INTO `privilege` (`id`, `user`, `target`, `privilege`) VALUES (:id, :user, :target, :privilege)');
+         $this->PDO->bind(':id', '');
+         $this->PDO->bind(':user', $this->_userName);
+         $this->PDO->bind(':target', $target_acces);
+         $this->PDO->bind(':privilege', $privilege);
 
         #simpan ke databe 'auts'
-        $db->execute();
+        $this->PDO->execute();
         # ambil id terahir bila berhasil disimpan
-        return $db->lastInsertId();
+        return $this->PDO->lastInsertId();
     }
 
     /**

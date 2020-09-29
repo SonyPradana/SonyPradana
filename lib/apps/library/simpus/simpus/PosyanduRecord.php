@@ -4,7 +4,10 @@ namespace Simpus\Simpus;
 use Simpus\Database\MyPDO;
 use \PDO;
 
-class PosyanduRecord{
+class PosyanduRecord
+{    
+    /** @var MyPDO Instant PDO */
+    private $PDO;
     private $_code_hash;
     private $_isValid = false;
 
@@ -77,28 +80,29 @@ class PosyanduRecord{
     }
 
 
-    public function __construct(string $code_hash){
+    public function __construct(string $code_hash)
+    {
+        $this->PDO = new MyPDO();
         $this->_code_hash = $code_hash;
         $this->_isValid = $this->isValid( $this->_code_hash );      //  TODO data pertama selalu bernilai true
     }
 
     // function
-    private function isValid($code_hash):bool{
+    private function isValid($code_hash) :bool
+    {
         if( $code_hash == 0) return false;
-        $db = new MyPDO();
-        $db->query("SELECT `id_hash` FROM `data_kia_anak` WHERE `id_hash` = :id_hash LIMIT 1");
-        $db->bind(":id_hash", $code_hash, PDO::PARAM_STR);
-        if( $db->single() ){    
+        $this->PDO->query("SELECT `id_hash` FROM `data_kia_anak` WHERE `id_hash` = :id_hash LIMIT 1");
+        $this->PDO->bind(":id_hash", $code_hash, PDO::PARAM_STR);
+        if( $this->PDO->single() ){    
             return true;
         }
         return false;
     }
 
     public function isIDExist($id){
-        $db = new MyPDO();
-        $db->query("SELECT `id_hash` FROM `data_posyandu` WHERE `id` = :id LIMIT 1");
-        $db->bind(":id_hash", $id, PDO::PARAM_INT);
-        if( $db->single() ){    
+         $this->PDO->query("SELECT `id_hash` FROM `data_posyandu` WHERE `id` = :id LIMIT 1");
+         $this->PDO->bind(":id_hash", $id, PDO::PARAM_INT);
+        if(  $this->PDO->single() ){    
             return true;
         }
         return false;
@@ -116,10 +120,10 @@ class PosyanduRecord{
     }
 
     // function CRUD
-    public function read($id):bool{
+    public function read($id) :bool
+    {
         if( $this->_isValid ){
-            $db = new MyPDO();
-            $db->query("SELECT
+             $this->PDO->query("SELECT
                             *
                         FROM
                             `data_posyandu`
@@ -128,10 +132,10 @@ class PosyanduRecord{
                             AND
                             `id` = :id
                         ");
-            $db->bind(':code_hash', $this->_code_hash);
-            $db->bind(':id', $id);
-            if( $db-> single() ){
-                $this->convertFromArray($db->single());
+             $this->PDO->bind(':code_hash', $this->_code_hash);
+             $this->PDO->bind(':id', $id);
+            if(  $this->PDO-> single() ){
+                $this->convertFromArray( $this->PDO->single());
                 return true;
             }
         }
@@ -139,10 +143,10 @@ class PosyanduRecord{
     }
 
 
-    public function creat():bool{
-        if( $this->_isValid  ){            
-            $db = new MyPDO();
-            $db->query("INSERT INTO
+    public function creat() :bool
+    {
+        if( $this->_isValid  ){
+             $this->PDO->query("INSERT INTO
                             `data_posyandu`
                         VALUE (
                             :id,
@@ -155,18 +159,18 @@ class PosyanduRecord{
                             :berat_badan,
                             :details
                         )");
-            $db->bind(':id', "");
-            $db->bind(":id_hash", $this->_code_hash);
-            $db->bind(":tanggal_pemeriksaan", $this->_tanggalPemeriksaan);
-            $db->bind(":tenaga_pemeriksaan", $this->_tenagaPemeriksaan);
-            $db->bind(":jenis_pemeriksaan", $this->_jenisPemeriksaan);
-            $db->bind(":tempat_pemeriksaan", $this->_tempatPemeriksaan, PDO::PARAM_INT);
-            $db->bind(":tinggi_badan", $this->_tinggiBadan, PDO::PARAM_INT);
-            $db->bind(":berat_badan", $this->_beratBadan, PDO::PARAM_INT);
-            $db->bind(":details", $this->_details);
+             $this->PDO->bind(':id', "");
+             $this->PDO->bind(":id_hash", $this->_code_hash);
+             $this->PDO->bind(":tanggal_pemeriksaan", $this->_tanggalPemeriksaan);
+             $this->PDO->bind(":tenaga_pemeriksaan", $this->_tenagaPemeriksaan);
+             $this->PDO->bind(":jenis_pemeriksaan", $this->_jenisPemeriksaan);
+             $this->PDO->bind(":tempat_pemeriksaan", $this->_tempatPemeriksaan, PDO::PARAM_INT);
+             $this->PDO->bind(":tinggi_badan", $this->_tinggiBadan, PDO::PARAM_INT);
+             $this->PDO->bind(":berat_badan", $this->_beratBadan, PDO::PARAM_INT);
+             $this->PDO->bind(":details", $this->_details);
             // simpan ke database biodata
-            $db->execute();
-            if( $db->rowCount() > 0){
+             $this->PDO->execute();
+            if(  $this->PDO->rowCount() > 0){
                 return true;
             }
         }
@@ -176,10 +180,10 @@ class PosyanduRecord{
     /**
      * Dont use covertFromArray() to prevent null/empety data
      */
-    public function update($id):bool{
+    public function update($id) :bool
+    {
         if( $this->_isValid ){
-            $db = new MyPDO();
-            $db->query("UPDATE
+             $this->PDO->query("UPDATE
                             `data_posyandu`
                         SET
                             `tanggal_pemeriksaan` = :tanggal_pemeriksaan,
@@ -194,18 +198,18 @@ class PosyanduRecord{
                             AND
                             `id_hash` = :id_hash
                         ");
-            $db->bind(":tanggal_pemeriksaan", $this->_tanggalPemeriksaan);
-            $db->bind(":tenaga_pemeriksaan", $this->_tenagaPemeriksaan);
-            $db->bind(":jenis_pemeriksaan", $this->_jenisPemeriksaan);
-            $db->bind(":tempat_pemeriksaan", $this->_tempatPemeriksaan);
-            $db->bind(":tinggi_badan", $this->_tinggiBadan);
-            $db->bind(":berat_badan", $this->_beratBadan);
-            $db->bind(":details", $this->_details);
-            $db->bind(":id_hash", $this->_code_hash);
-            $db->bind(":id", $id);
+             $this->PDO->bind(":tanggal_pemeriksaan", $this->_tanggalPemeriksaan);
+             $this->PDO->bind(":tenaga_pemeriksaan", $this->_tenagaPemeriksaan);
+             $this->PDO->bind(":jenis_pemeriksaan", $this->_jenisPemeriksaan);
+             $this->PDO->bind(":tempat_pemeriksaan", $this->_tempatPemeriksaan);
+             $this->PDO->bind(":tinggi_badan", $this->_tinggiBadan);
+             $this->PDO->bind(":berat_badan", $this->_beratBadan);
+             $this->PDO->bind(":details", $this->_details);
+             $this->PDO->bind(":id_hash", $this->_code_hash);
+             $this->PDO->bind(":id", $id);
             // update biodata
-            $db->execute();
-            if( $db->rowCount() > 0){
+             $this->PDO->execute();
+            if(  $this->PDO->rowCount() > 0){
                 return true;
             }
         }

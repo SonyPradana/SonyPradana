@@ -4,18 +4,23 @@ namespace Simpus\Simpus;
 
 use Simpus\Database\MyPDO;
 
-class Relation{
+class Relation
+{
+    /** @var MyPDO Instant PDO */
+    private $PDO;
     private $ID_HASH;
     private $TIME_STAMP;
 
-    public function __construct($id_hash, $time_stamp){
+    public function __construct($id_hash, $time_stamp)
+    {
+        $this->PDO = new MyPDO();
         $this->ID_HASH = $id_hash;
         $this->TIME_STAMP = $time_stamp;
     }
 
-    public function creat(){
-        $db = new MyPDO();
-        $db->query("INSERT INTO 
+    public function creat()
+    {
+        $this->PDO->query("INSERT INTO 
                         table_relation (
                             `id_hash`, `time_stamp`
                         ) 
@@ -23,11 +28,11 @@ class Relation{
                             :id_hash, :time_stamp
                         )
                     ");
-        $db->bind(':id_hash', $this->ID_HASH);
-        $db->bind(':time_stamp', $this->TIME_STAMP);
+        $this->PDO->bind(':id_hash', $this->ID_HASH);
+        $this->PDO->bind(':time_stamp', $this->TIME_STAMP);
         // menyimpan ke data base
-        $db->execute();
-        if( $db->rowCount() > 0){
+        $this->PDO->execute();
+        if( $this->PDO->rowCount() > 0){
             return true;
         }
         return false;

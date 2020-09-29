@@ -11,7 +11,10 @@ use Simpus\Database\MyPDO;
  * 
  * @author Angger Pradana sonypradana@gmail.com
  */
-class Login{
+class Login
+{
+    /** @var MyPDO Instant PDO */
+    private $PDO;
     /**
      * @var string user name
     */
@@ -64,7 +67,8 @@ class Login{
      * @param string $password password
      * @return JWT Untuk Verifikasi login berikutnya
      */
-    public function __construct(string $user_name, string $password){
+    public function __construct(string $user_name, string $password)
+    {
         # sanitalizier input
         // $user_name = StringSanitization::removeHtmlTags($user_name);
 
@@ -72,12 +76,12 @@ class Login{
         $this->_userName = strtolower( $user_name );
         $this->_password = $password;
         #koneksi databse
-        $db = new MyPDO();
+        $this->PDO = new MyPDO();
         #query data base
-        $db->query('SELECT `pwd`, `stat` FROM `users` WHERE `user`=:user');
-        $db->bind(':user', $user_name);
-        if( $db->single() )  {
-            $row = $db->single();
+        $this->PDO->query('SELECT `pwd`, `stat` FROM `users` WHERE `user`=:user');
+        $this->PDO->bind(':user', $user_name);
+        if( $this->PDO->single() )  {
+            $row = $this->PDO->single();
             #cek password 
             if( password_verify($this->_password, $row['pwd'])){
                 #berhasil login
@@ -94,17 +98,17 @@ class Login{
                 if( $minusStat === 0 ){
                     #jika salah > 8 x user dabe 8 jam
                     $baneUntil = time() + (3600 * 8);
-                    $db->query('UPDATE `users` SET `stat`=:stat, `bane`=:bane WHERE `user`=:user');
-                    $db->bind(':stat', 0);
-                    $db->bind(':bane', $baneUntil);
-                    $db->bind(':user', $user_name);
+                    $this->PDO->query('UPDATE `users` SET `stat`=:stat, `bane`=:bane WHERE `user`=:user');
+                    $this->PDO->bind(':stat', 0);
+                    $this->PDO->bind(':bane', $baneUntil);
+                    $this->PDO->bind(':user', $user_name);
                 }else{
-                    $db->query('UPDATE `users` SET `stat`=:stat WHERE `user`=:user');
-                    $db->bind(':stat', $minusStat);
-                    $db->bind(':user', $user_name);
+                    $this->PDO->query('UPDATE `users` SET `stat`=:stat WHERE `user`=:user');
+                    $this->PDO->bind(':stat', $minusStat);
+                    $this->PDO->bind(':user', $user_name);
                 }
                 #simpan query
-                $db->execute();
+                $this->PDO->execute();
             }
         }
     }
@@ -144,17 +148,17 @@ class Login{
      * 
      * @param mixed $secrerKey secret kay yg akan digunakn dan disimpan
      */
-    private function SaveJWTInfo($secretKey){
-        $db = new MyPDO();
-        $db->query('INSERT INTO `auths` (`id`, `user`, `stat`, `secret_key`) VALUES (:id, :user, :stat, :secretKey)');
-        $db->bind(':id', '');
-        $db->bind(':user', $this->_userName);
-        $db->bind(':stat', 1);
-        $db->bind(':secretKey', $secretKey);
+    private function SaveJWTInfo($secretKey)
+    {
+        $this->PDO->query('INSERT INTO `auths` (`id`, `user`, `stat`, `secret_key`) VALUES (:id, :user, :stat, :secretKey)');
+        $this->PDO->bind(':id', '');
+        $this->PDO->bind(':user', $this->_userName);
+        $this->PDO->bind(':stat', 1);
+        $this->PDO->bind(':secretKey', $secretKey);
 
         #simpan ke databe 'auts'
-        $db->execute();
-        return $db->lastInsertId();
+        $this->PDO->execute();
+        return $this->PDO->lastInsertId();
     }    
 
     /**
@@ -188,7 +192,8 @@ class Login{
      * 
      * @param string $user_name username
      */
-    public static function RefreshBaneFase($user_name){
+    public static function RefreshBaneFase($user_name)
+    {
         #koneksi data base
         $db = new MyPDO();
         $db->query('SELECT `user`, `stat`, `bane` FROM `users` WHERE `user`=:user');

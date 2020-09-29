@@ -6,7 +6,8 @@ use Simpus\Helper\StringValidation;
 /**
  * Perent Class fungsinya untuk menampung semua filed Rekam Medis
  */
-class MedicalRecord{
+class MedicalRecord
+{
     /** @var MyPDO Instant PDO */
     private $PDO;
 
@@ -135,7 +136,8 @@ class MedicalRecord{
      * @param string $val 6 digit nomor rekam medis
      * 
      */
-    public function setNomorRM($val){        
+    public function setNomorRM($val)
+    {
         $verify = StringValidation::NumberValidation($val,1,6);
         if( $verify){
             $len = strlen($val);
@@ -144,81 +146,96 @@ class MedicalRecord{
                 $val = 0 . $val;
             }
             $this->_nomorRM = (string) $val;
-
         }
+        return $this;
     }
     /**
      * set data dibuat dalam time span
      * @param string $val data dibuat 
      */
-    public function setDataDibuat($val){
+    public function setDataDibuat($val)
+    {
         $this->_dataDibuat = $val;
+        return $this;
     }
     /**
      * set nama pasien
      * @param string $val nama pasien
      */
-    public function setNama($val){
+    public function setNama($val)
+    {
         $verify = StringValidation::NoHtmlTagValidation($val);
         if( $verify ){
             $val = strtolower($val);
             $this->_nama = $val; 
-        }       
+        }
+        return $this;
     }
     /**
      * set tanggal lahir
      * @param string $val tanggal lahir
      */
-    public function setTanggalLahir($val){
+    public function setTanggalLahir($val)
+    {
         $this->_tanggalLahir = $val;
+        return $this;
     }
     /**
      * set alamat tanpa rt rw
      * @param string $val alamat
      */
-    public function setAlamat($val){
+    public function setAlamat($val)
+    {
         $verify = StringValidation::NoHtmlTagValidation($val);
         if( $verify ){
             $val = strtolower($val);
             $this->_alamat = $val;
         }
+        return $this;
     }
     /**
      * set nomor rt
      * @param string $val nomor rt
      */
-    public function setNomorRt($val){
+    public function setNomorRt($val)
+    {
         $verify = StringValidation::NumberValidation($val,1,2);
         if( $verify ){
             $this->_nomorRt = (int) $val;
         }
+        return $this;
     }
     /**
      * set nomor rw
      * @param string $val nomor rw
      */
-    public function setNomorRw($val){
+    public function setNomorRw($val)
+    {
         $verify = StringValidation::NumberValidation($val,1,2);
         if( $verify ){
             $this->_nomorRw = (int) $val;
         }
+        return $this;
     }
     /**
      * set nama kepal keluarga
      * @param string $val noma kepla keluarga
      */
-    public function setNamaKK($val){
+    public function setNamaKK($val)
+    {
         $verify = StringValidation::NoHtmlTagValidation($val);
         if( $verify ){
             $val = strtolower($val);
             $this->_namaKK = $val;
         }
+        return $this;
     }
     /**
      * set nomor rm kepala keluarga
      * @param string $val nomor rt
      */
-    public function setNomorRM_KK($val){
+    public function setNomorRM_KK($val)
+    {
         $verify = StringValidation::NumberValidation($val,0,6);
         if( $verify ){
             $len = strlen($val);
@@ -228,16 +245,19 @@ class MedicalRecord{
             }
             $this->_nomorRM_KK = $val;
         }
+        return $this;
     }
     /**
      * Set status grup kesehatan
      */
-    public function setStatus(string $val){
+    public function setStatus(string $val)
+    {
         $verify = StringValidation::NoHtmlTagValidation( $val );
         if( $verify ){
             $val = strtolower( $val );
             $this->_status = $val;
         }
+        return $this;
     }
 
     /**
@@ -246,16 +266,14 @@ class MedicalRecord{
      */
     public function convertFromArray(array $data){
         $this->convertFromData( $data );
+        return $this;
     }
 #endregion
 
     /** buat class baru */
-    public function __construct($pdo = null){
-        if($pdo == null){
-            $this->PDO = new MyPDO();
-        }else{
-            $this->PDO = $pdo;
-        }
+    public function __construct()
+    {
+        $this->PDO = new MyPDO();
     }    
     
     /**
@@ -343,11 +361,10 @@ class MedicalRecord{
      */
     public function refresh(){
         # memuat ulang data dari data base menggunakn id
-        $db = new MyPDO();
-        $db->query("SELECT * FROM `data_rm` WHERE `id` = :id");
-        $db->bind(':id', $this->_id);
-        if( $db->single() ){
-            $this->convertFromData( $db->single() );
+        $this->PDO->query("SELECT * FROM `data_rm` WHERE `id` = :id");
+        $this->PDO->bind(':id', $this->_id);
+        if( $this->PDO->single() ){
+            $this->convertFromData( $this->PDO->single() );
             return true;
         }
         return false;

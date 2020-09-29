@@ -9,7 +9,10 @@ use Simpus\Database\MyPDO;
  * 
  * @author sonypradana@gmail.com
  */
-class Logout{
+class Logout
+{
+    /** @var MyPDO Instant PDO */
+    private $PDO;
     /** @var bool User logout status */
     private $_success = false;
     /**
@@ -26,21 +29,21 @@ class Logout{
      * @param sting $token valid token
      * token yang di kirim harus token aktif dan memliliki token tersebut
      */
-    public function __construct(string $token){
+    public function __construct(string $token)
+    {
+        $this->PDO = new MyPDO();
         #veifikasi token
         $verify = new Auth($token, 2);
         if( $verify->TrushClient() ){
             #decode token
             $tokenId = $verify->getId();
-            # koneksi data base
-            $db = new MyPDO();
             # query data base
-            $db->query('UPDATE `auths` SET `stat`=:stat WHERE `id`=:id');
-            $db->bind(':stat', 0);
-            $db->bind(':id', $tokenId);
-            $db->execute();
+            $this->PDO->query('UPDATE `auths` SET `stat`=:stat WHERE `id`=:id');
+            $this->PDO->bind(':stat', 0);
+            $this->PDO->bind(':id', $tokenId);
+            $this->PDO->execute();
             # bila berhasil return true
-            $res = $db->rowCount();
+            $res = $this->PDO->rowCount();
             if( $res > 0){
                 // user log
                 $log = new Log( $verify->getUserName() );

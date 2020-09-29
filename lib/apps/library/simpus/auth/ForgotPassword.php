@@ -12,7 +12,10 @@ use Simpus\Database\MyPDO;
  * 
  * @author sonypradana@gmail.com 
  */
-class ForgotPassword{
+class ForgotPassword
+{
+    /** @var MyPDO Instant PDO */
+    private $PDO;
     /**
      * @var string user name
      */
@@ -40,22 +43,23 @@ class ForgotPassword{
      * @param string $code code 
      * 6 digit angka
      */
-    public function __construct(string $key, int $code){
+    public function __construct(string $key, int $code)
+    {
+        $this->PDO = new MyPDO();
         #decode from 64 base url
         $decodeKey = base64_decode($key);
         $decodeKey = json_decode($decodeKey, true);
         # cek expt terdaftar atau tidak dan expt timenya (kurang dari 30 menit)
-        if( isset( $decodeKey['exp']) ){
+        if( isset( $decodeKey['exp']) ) {
             if( $decodeKey['exp'] > time()){
                 # key tidak boleh kadaluarsa
 
                 # koneksi data base
-                $db = new MyPDO();
-                $db->query('SELECT * FROM reset_pwd WHERE link=:link');
-                $db->bind(':link', $key);
+                $this->PDO->query('SELECT * FROM reset_pwd WHERE link=:link');
+                $this->PDO->bind(':link', $key);
 
-                if( $db->single() ){
-                    $row = $db->single();
+                if( $this->PDO->single() ){
+                    $row = $this->PDO->single();
                     # mencocokan code ke data base
                     if( $code == $row['code']){
                         $this->_verifyKey = true;
@@ -76,28 +80,28 @@ class ForgotPassword{
      * @param string $new_password new password
      * @return boolean password baru tersimpan atau tidak
      */
-    public function NewPassword($new_password):bool{
-        if( $this->_verifyKey ){
+    public function NewPassword($new_password): bool
+    {
+        if( $this->_verifyKey ) {
             #koneksi data base
-            $db = new MyPDO();
             #set property
             $user_name = $this->userName;
             $time = time() - 1;
             $newPasssword = password_hash($new_password, PASSWORD_DEFAULT);
 
             #password baru dibuat
-            $db->query('UPDATE `users` SET `pwd`=:pwd, `stat`=:stat, `bane`=:bane WHERE `user`=:user');
-            $db->bind(':pwd', $newPasssword);
-            $db->bind(':stat', 50);
-            $db->bind(':bane', "$time");
-            $db->bind(':user', $user_name);
-            $db->execute();
+            $this->PDO->query('UPDATE `users` SET `pwd`=:pwd, `stat`=:stat, `bane`=:bane WHERE `user`=:user');
+            $this->PDO->bind(':pwd', $newPasssword);
+            $this->PDO->bind(':stat', 50);
+            $this->PDO->bind(':bane', "$time");
+            $this->PDO->bind(':user', $user_name);
+            $this->PDO->execute();
 
             #logout all user 
-            $db->query('UPDATE `auths` SET `stat`=:stat WHERE `user`=:user');
-            $db->bind(':stat', 0);            
-            $db->bind(':user', $user_name);
-            $db->execute();
+            $this->PDO->query('UPDATE `auths` SET `stat`=:stat WHERE `user`=:user');
+            $this->PDO->bind(':stat', 0);            
+            $this->PDO->bind(':user', $user_name);
+            $this->PDO->execute();
 
             // user log
             $log = new Log($user_name);
@@ -110,19 +114,19 @@ class ForgotPassword{
     }
 
     /**
-     * mengahaous link dan code dari data base
+     * mengahapus link dan code dari data base
      * setelah dihapus link dan kode verifikasi sudah tidak berlaku
      * 
      * pastikan mengahpus setelah mengganti password baru
      */
-    public function deleteSection(){
+    public function deleteSection()
+    {
         if( $this->_verifyKey){
             $id = $this->_idKey;
             # koneksi data base
-            $db = new MyPDO();
-            $db->query('DELETE FROM `reset_pwd` WHERE `id`=:id');
-            $db->bind(':id', $id);
-            $db->execute();
+            $this->PDO->query('DELETE FROM `reset_pwd` WHERE `id`=:id');
+            $this->PDO->bind(':id', $id);
+            $this->PDO->execute();
         }
     }
 

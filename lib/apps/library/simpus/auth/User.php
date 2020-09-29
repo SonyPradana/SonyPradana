@@ -8,7 +8,10 @@ use Simpus\Database\MyPDO;
  * 
  * @author sonypradana@gmail.com
  */
-class User{
+class User
+{
+    /** @var MyPDO Instant PDO */
+    private $PDO;
     /** @var string user name (tidak bisa dirubah)*/
     private $_user;
     /** @var boolean cek user ada atau tidak */
@@ -90,11 +93,11 @@ class User{
         $this->_user = $user_name;
 
         # koneksi data base
-        $db = new MyPDO();
-        $db->query('SELECT * FROM `profiles` WHERE `user`=:user');
-        $db->bind(':user', $user_name);
-        if( $db->single() ){
-            $row = $db->single();
+        $this->PDO = new MyPDO();
+        $this->PDO->query('SELECT * FROM `profiles` WHERE `user`=:user');
+        $this->PDO->bind(':user', $user_name);
+        if( $this->PDO->single() ){
+            $row = $this->PDO->single();
             $this->_exisUser = true;
             $this->_email = $row['email'];
             $this->_displayName = $row['display_name'];
@@ -113,13 +116,12 @@ class User{
         $section = $this->_section;
         $dp = $this->_displayPicture;
 
-        $db = new MyPDO();
-        $db->query('UPDATE `profiles` SET `display_name`=:dname, `section`=:section, `display_picture`=:dp WHERE `user`=:user');
-        $db->bind(':dname', $display_name);
-        $db->bind(':section', $section);
-        $db->bind(':user', $user_name);
-        $db->bind(':dp', $dp);
-        $db->execute();
+        $this->PDO->query('UPDATE `profiles` SET `display_name`=:dname, `section`=:section, `display_picture`=:dp WHERE `user`=:user');
+        $this->PDO->bind(':dname', $display_name);
+        $this->PDO->bind(':section', $section);
+        $this->PDO->bind(':user', $user_name);
+        $this->PDO->bind(':dp', $dp);
+        $this->PDO->execute();
         // user log
         $log = new Log( $user_name );
         $log->set_event_type('auth');

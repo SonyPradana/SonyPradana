@@ -210,15 +210,15 @@ class RekamMedisController extends Controller{
 
             # kita anggap semua field form sudah benar
             $new_rm = new MedicalRecord();
-            $new_rm->setNomorRM( $nomor_rm );
-            $new_rm->setDataDibuat( time() );
-            $new_rm->setNama( $nama );
-            $new_rm->setTanggalLahir( $tgl_lahir );
-            $new_rm->setAlamat( $alamat );
-            $new_rm->setNomorRt( $nomor_rt );
-            $new_rm->setNomorRw( $nomor_rw );
-            $new_rm->setNamaKK( $nama_kk );
-            $new_rm->setNomorRM_KK( $nomor_rm_kk );
+            $new_rm ->setNomorRM( $nomor_rm )
+                ->setDataDibuat( time() )
+                ->setNama( $nama )
+                ->setTanggalLahir( $tgl_lahir )
+                ->setAlamat( $alamat )
+                ->setNomorRt( $nomor_rt )
+                ->setNomorRw( $nomor_rw )
+                ->setNamaKK( $nama_kk )
+                ->setNomorRM_KK( $nomor_rm_kk );
 
             #simpan data
             $simpan = $new_rm->insertNewOne();

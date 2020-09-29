@@ -8,7 +8,10 @@ use Simpus\Database\MyPDO;
  * via email, bila terdafat code ferifikasi akan dikir ke email atau 
  * di kirim ke Admin
  */
-class EmailAuth{
+class EmailAuth
+{
+    /** @var MyPDO Instant PDO */
+    private $PDO;
     /** @var string user name */
     private $_userName;
     /** @var string hasil key / link */
@@ -33,12 +36,11 @@ class EmailAuth{
      * @param string $email email pemulih
      */
     public function __construct($email){
-        # koneksi data base
-        $db = new MyPDO();
-        $db->query('SELECT `user` FROM `profiles` WHERE email=:email');
-        $db->bind(':email', $email);
-        if( $db->single() ) {
-            $row = $db->single();
+        $this->PDO = new MyPDO();
+        $this->PDO->query('SELECT `user` FROM `profiles` WHERE email=:email');
+        $this->PDO->bind(':email', $email);
+        if( $this->PDO->single() ) {
+            $row = $this->PDO->single();
             #simpan parameter
             $this-> _userVerify = true;
             $this->_userName = $row['user'];

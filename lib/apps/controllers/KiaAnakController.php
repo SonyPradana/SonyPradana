@@ -146,14 +146,14 @@ class KiaAnakController extends Controller{
             if( $_POST['target']  == 'staging' ){
                 // request data rm baru
                 $stagingRM = new MedicalRecord();
-                $stagingRM->setNama( $_POST['nama_rm'] ?? 'bayi nyonya Y' );
-                $stagingRM->setTanggalLahir( $_POST['tanggal_lahir'] ?? date("M/d/Y", time()) );
-                $stagingRM->setAlamat( $_POST['alamat'] ?? '');
-                $stagingRM->setNomorRt( $_POST['nomor_rt'] ?? 0 );
-                $stagingRM->setNomorRw( $_POST['nomor_rw'] ?? 0 );
-                $stagingRM->setNamaKK( $_POST['nama_kk'] ?? 'tuan x');
-                $stagingRM->setStatus('{"grub":["posyandu", "kia-anak"]}');
-                $stagingRM->setDataDibuat( $id_hash );
+                $stagingRM->setNama( $_POST['nama_rm'] ?? 'bayi nyonya Y' )
+                    ->setTanggalLahir( $_POST['tanggal_lahir'] ?? date("M/d/Y", time()) )
+                    ->setAlamat( $_POST['alamat'] ?? '')
+                    ->setNomorRt( $_POST['nomor_rt'] ?? 0 )
+                    ->setNomorRw( $_POST['nomor_rw'] ?? 0 )
+                    ->setNamaKK( $_POST['nama_kk'] ?? 'tuan x')
+                    ->setStatus('{"grub":["posyandu", "kia-anak"]}')
+                    ->setDataDibuat( $id_hash );
                 // simpan data ke staging data rm
                 $success_stagingRM = $stagingRM->insertNewOne('', 'staging_rm');
 
@@ -473,7 +473,7 @@ class KiaAnakController extends Controller{
 
 
         // cari data rm dan alamat
-        $medrec = new MedicalRecord($pdo);    
+        $medrec = new MedicalRecord();    
         
         for ($i=0; $i < count($count); $i++) {      
             $filrer_by = $count[$i]['id_hash'];

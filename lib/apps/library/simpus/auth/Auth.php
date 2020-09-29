@@ -10,7 +10,10 @@ use Simpus\Database\MyPDO;
  * 
  * @author sonypradana@gmail.com
  */
-class Auth{
+class Auth
+{    
+    /** @var MyPDO Instant PDO */
+    private $PDO;
     /** @var boolean  */
     private $_trushClinet = false;
     /** @var JsonWebToken this Json Web Token */
@@ -50,19 +53,20 @@ class Auth{
      * @param string $token jwt token 
      * @param int $securityLevel
      */
-    public function __construct(string $token, int $securityLevel = 0){
+    public function __construct(string $token, int $securityLevel = 0)
+    {
         if( $token == "" ) return;
         # koneksi database
-        $db = new MyPDO();
+        $this->PDO = new MyPDO();
         $new_jwt = new DecodeJWT($token);
         $JWT = $new_jwt->JWT();
         $this->_jwt = $JWT;
         # cek database
-        $db->query('SELECT * FROM auths WHERE id=:id');
-        $db->bind(':id', $JWT->User_ID);
-        if( $db->single() )  {            
+        $this->PDO->query('SELECT * FROM auths WHERE id=:id');
+        $this->PDO->bind(':id', $JWT->User_ID);
+        if( $this->PDO->single() )  {            
             # jika id terdafatar 
-            $row = $db->single();  
+            $row = $this->PDO->single();  
             
             # Cek jika secretKey benar 
             # CeK Token aktif enggak

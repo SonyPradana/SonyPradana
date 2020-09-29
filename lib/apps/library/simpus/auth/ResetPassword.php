@@ -10,7 +10,10 @@ use Simpus\Database\MyPDO;
  * 
  * @author sonypradana@gamail.com
  */
-class ResetPassword{
+class ResetPassword
+{
+    /** @var MyPDO Instant PDO */
+    private $PDO;
     /** @var boolean password beanr atau salah */
     private $password_veryfy = false;
     /** @var string user name */
@@ -29,7 +32,9 @@ class ResetPassword{
      * 
      * @return boolean password baru
     */
-    public function __construct($user_name, $password){
+    public function __construct($user_name, $password)
+    {
+        $this->PDO = new MyPDO();
         $this->password_veryfy = Login::PasswordVerify($user_name, $password);        
         $this->userName = $user_name;
     }
@@ -40,25 +45,25 @@ class ResetPassword{
      * @param string password baru
      * @return boolean berhasil atau tidak
      */
-    public function newPassword($new_Passsword):bool{
+    public function newPassword($new_Passsword): bool
+    {
         if( $this->password_veryfy){
-            $db = new MyPDO();
             #query data base
             $user_name = $this->userName;
             $time = time() - 1;
             $new_Passsword = password_hash($new_Passsword, PASSWORD_DEFAULT);
-            $db->query('UPDATE `users` SET pwd=:pwd , stat=:stat, bane=:bane WHERE user=:user');
-            $db->bind(':pwd', $new_Passsword);
-            $db->bind(':stat', 25);
-            $db->bind(':bane', "$time()");
-            $db->bind(':user', $user_name);
-            $db->execute();
+            $this->PDO->query('UPDATE `users` SET pwd=:pwd , stat=:stat, bane=:bane WHERE user=:user');
+            $this->PDO->bind(':pwd', $new_Passsword);
+            $this->PDO->bind(':stat', 25);
+            $this->PDO->bind(':bane', "$time()");
+            $this->PDO->bind(':user', $user_name);
+            $this->PDO->execute();
             // user log
             $log = new Log($user_name);
             $log->set_event_type('auth');
             $log->save('reset password');
 
-            if( $db->rowCount() > 0 ) return true;
+            if( $this->PDO->rowCount() > 0 ) return true;
         }
         return false;
     }
