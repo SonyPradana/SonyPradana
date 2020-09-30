@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="/lib/css/ui/v1/table.css">
     <script src="/lib/js/index.min.js"></script>
     <script src="/lib/js/bundles/keepalive.min.js"></script>
-    <script src="/lib/js/controller/table-rm/index.min.js"></script>
+    <script src="/lib/js/controller/table-rm/index.js"></script>
     <style>
         body{
             transition: margin-left .3s;

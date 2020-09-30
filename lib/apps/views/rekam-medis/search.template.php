@@ -8,7 +8,7 @@
 
     <script src="/lib/js/index.min.js"></script>         
     <script src="/lib/js/bundles/keepalive.min.js"></script>
-    <script src="/lib/js/controller/table-rm/index.min.js"></script>
+    <script src="/lib/js/controller/table-rm/index.js"></script>
     <style>
         .boxs{
             display: grid;
