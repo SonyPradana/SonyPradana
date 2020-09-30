@@ -184,18 +184,18 @@
             input_nama   : $id('input-modal-nama'),
             input_alamat : $id('input-modal-alamat'),
             table_result : $id('modal-table-body')
+        },
+        result : function(e) {
+            $id('res-details').innerText  = `Nama: ${e.nama}, ${e.tanggal_lahir}`;
+            $id('input-hash').value       = e.code_hash;
+            if(e.desa != 'null'){
+                $id('input-desa').value   = e.desa;
+                getGrupPosyandu(e.desa, e.id_posyandu);             // TODO    defaultnya bukan desa tp alamat admin
+            }
+            
+            getHistoryPosyandau(e.tanggal_dibuat, e.id_posyandu);
+
         }
-    }
-    // callback 
-    pref.result = function(e){
-        $id('res-details').innerText  = `Nama: ${e.nama}, ${e.tanggal_lahir}`;
-        $id('input-hash').value       = e.code_hash;
-        if(e.desa != 'null'){
-            $id('input-desa').value   = e.desa;
-            getGrupPosyandu(e.desa, e.id_posyandu);             // TODO    defaultnya bukan desa tp alamat admin
-        }
-        
-        getHistoryPosyandau(e.tanggal_dibuat, e.id_posyandu);
     }
     modal_dialog( pref );
 
