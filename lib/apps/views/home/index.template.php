@@ -244,7 +244,7 @@
                 feeders: []
             },
             created(){
-                $json('http://localhost/api/v1/NewsFeeder/ResendNews.json')
+                $json('/api/v1/NewsFeeder/ResendNews.json')
                     .then( json => {
                         this.feeders = json.data;
                     })
