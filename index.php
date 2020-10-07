@@ -91,6 +91,12 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/init.php';
         }
     });
 
+    // aricle
+    $app->get('/read/(:any)', function(string $title){
+        // TODO: article exist cheacker before call index 
+        (new ArticleController())->index($title);
+    });
+
     // unit kerja
     // rekam-medis
     $app->get('/rekam-medis', function(){

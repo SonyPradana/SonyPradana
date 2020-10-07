@@ -1,0 +1,39 @@
+article.news-card {
+    padding: 8px 0;
+    display: flex;
+    flex-direction: row;
+    
+    img {
+        width: clamp(100px, 200px, 250px);
+    }
+
+    .gab {
+        min-width: 16px;
+        max-width: 16px;
+    }
+
+    .details a {
+        text-decoration: none;
+        color: #333;
+
+        header h2 {
+            margin: 0;
+            font-weight: 600;
+        }
+
+        section p {
+            color: #222;
+        }
+    }
+
+}
+
+@media screen and (max-width: 479px) {
+    article.news-card {
+        flex-direction: column;
+        img {
+            width: 100%;
+            height: auto;
+        }
+    }
+}

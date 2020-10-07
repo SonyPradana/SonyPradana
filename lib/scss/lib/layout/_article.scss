@@ -1,0 +1,25 @@
+article {
+    max-width: 767px;
+    .article-header {
+        margin-bottom: 24px;
+        h1 {
+            font-size: 2.6rem;
+            font-weight: 700;
+        }
+    }
+
+    .article-media {
+        padding: 0 12px;
+        .media.note p {
+            color: #a2a2a2;
+            margin: 0
+        }
+    }
+    .article-body {
+        padding: 0 12px;
+        font-size: 1.3rem;
+        line-height: 1.6;
+        font-style: normal;
+        text-align: justify;;
+    }
+}

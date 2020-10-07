@@ -118,8 +118,31 @@
             <div class="sparator blue">
                 <div class="sparator-title">Berita terbaru</div>
                 </div>
-            <div class="boxs-news">
-
+            <div class="boxs-news" id="news-feeder">
+                <article class="news-card" v-for="news in feeders" :key="news.id">
+                    <a v-bind:href="news.url" class="image">
+                        <img 
+                            width="250px" height="150px" 
+                            v-bind:src="news.image" 
+                            v-bind:alt="news.alt">
+                    </a>
+                    <div class="gab"></div>
+                    <div class="details">
+                        <a v-bind:href="news.url">
+                            <header class="news-header">
+                                <h2>{{ news.title }}</h2>
+                            </header>
+                            <section class="nesw-detail">
+                                <p>{{ news.details }}</p>
+                            </section>
+                        </a>                    
+                        <div class="footer">
+                            <div class="info">
+                                {{ news.date }}
+                            </div>
+                        </div class="footer">
+                    </div>
+                </article>
             </div>
         </main>
         <aside class="side">
@@ -212,6 +235,19 @@
                     this.msgMeni = json['kasus_meni'] + ' meninggal';
                     this.msgIsol = json['kasus_isol'] + ' isolasi'
                 })
+            }
+        })
+
+        const newsFeed = new Vue({
+            el: '#news-feeder',
+            data: {
+                feeders: []
+            },
+            created(){
+                $json('http://localhost/api/v1/NewsFeeder/ResendNews.json')
+                    .then( json => {
+                        this.feeders = json.data;
+                    })
             }
         })
 

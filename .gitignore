@@ -1,6 +1,8 @@
 #folder
 data/img/display-picture/user
 test/
+data/img/
+test/thumbnail
 vendor/
 /lib/apps/config/database_local.config.php
 

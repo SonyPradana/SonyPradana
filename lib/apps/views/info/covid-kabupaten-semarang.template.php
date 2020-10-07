@@ -71,14 +71,6 @@
             font-size: 2.3rem;
             font-weight: 700;
         }
-        .header-article .article.breadcrumb{
-            display: flex;
-            flex-direction: row;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            gap: 8px; grid-gap: 8px;
-        }
-        .header-article .article.breadcrumb > div{ font-size: 1rem; color: #9aa6ad}
         .box.cards{
             overflow-x: visible;
             display: flex;
@@ -281,7 +273,6 @@
                         </li>
                     </ol>
                 </div>  
-
             </article>
         </main>
         <aside class="right-side">
@@ -416,7 +407,7 @@
                     yAxes: [{
                         ticks: {
                                 suggestedMin: 15,
-                                suggestedMax: 40
+                                suggestedMax: 45
                         }
                     }]
                 }

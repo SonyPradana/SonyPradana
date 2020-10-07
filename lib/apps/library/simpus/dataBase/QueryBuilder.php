@@ -2,7 +2,8 @@
 
 namespace Simpus\Database;
 
-class QueryBuilder{
+abstract class QueryBuilder
+{
     /** kumpulan array filter */
     protected $_GROUP_FILTER = [];
     /** primery filter */
@@ -10,7 +11,7 @@ class QueryBuilder{
     /** table yang dugunakan */
     protected $_TABELS  = [];
     /** column yang dugunaka */
-    protected $_COLUMNS = [];
+    protected $_COLUMNS = ['*'];
     /** logica where stactment [AND / OR] */
     protected $_STRICT_SEARCH = true;
 
@@ -18,18 +19,22 @@ class QueryBuilder{
     protected $PDO;
 
     // setter
-    public function setStrictSearch(bool $strict_mode){
+    public function setStrictSearch(bool $strict_mode)
+    {
         $this->_STRICT_SEARCH = $strict_mode;
         return $this;
     }
     // getter
-    public function getQuery():string{
+    public function getQuery(): string
+    {
         return $this->query();
     }
-    public function getWhere():string{
+    public function getWhere(): string
+    {
         return $this->grupQueryFilters( $this->mergeFilters() );
     }
-     public function getMegerFilters(){
+     public function getMegerFilters()
+     {
          return $this->mergeFilters();
      }
 
@@ -40,10 +45,11 @@ class QueryBuilder{
      * karean query di-runing dalam bentuk group filter
      * @return array New Groups array
      */
-    protected function mergeFilters():array{
+    protected function mergeFilters(): array
+    {
         $new_grups_filters      = $this->_GROUP_FILTER;
         // menambahkan filter group yg sudah ada, dengan filter
-        if( empty($this->_FILTERS) == false){
+        if( empty($this->_FILTERS) == false) {
             $new_grups_filters[]    = [
                 "filters" => $this->_FILTERS,
                 "strict"  => $this->_STRICT_SEARCH
@@ -57,11 +63,13 @@ class QueryBuilder{
      * mengenered grups filter ke-dalam format sql query (preapre statment)
      * @return string query yg siap di esekusi
      */
-    protected function query():string{
-        $table = $this->_TABELS[0];        
+    protected function query(): string
+    {
+        $table  = $this->_TABELS[0];
+        $column = implode(', ', $this->_COLUMNS);
         $where_statment = $this->getWhere();
 
-        $my_query = "SELECT * FROM `$table` WHERE  $where_statment";
+        $my_query = "SELECT $column FROM `$table` WHERE  $where_statment";
 
         return $my_query;
     }
@@ -69,29 +77,33 @@ class QueryBuilder{
     /**
      * sql query tanpa menggunkan where statment
      */
-    protected function originQuery():string{
-        $table = $this->_TABELS[0];
+    protected function originQuery(): string
+    {
+        $table  = $this->_TABELS[0];
+        $column = implode(', ', $this->_COLUMNS);
         
-        $my_query = "SELECT * FROM `$table`";
+        $my_query = "SELECT $column FROM `$table`";
 
         return $my_query;
         
     }
 
     // main function 
-    protected function grupQueryFilters(array $grup_fillters){
+    protected function grupQueryFilters(array $grup_fillters)
+    {
         $where_statment = [];
-        foreach( $grup_fillters as $filter ){
+        foreach( $grup_fillters as $filter ) {
             $query = $this->queryfilters($filter['filters'], $filter['strict']);
             $where_statment[] = '(' . $query . ')';
         }
         return implode(" AND ", $where_statment);
     }
-    protected function queryfilters(array $filters, bool $strict = true){
+    protected function queryfilters(array $filters, bool $strict = true)
+    {
         $querys   = [];
         // identitas
-        foreach( $filters as $key => $val){
-            if( isset( $val['value']) && $val['value'] != ''){
+        foreach( $filters as $key => $val) {
+            if( isset( $val['value']) && $val['value'] != '') {
                 $option   = $val['option'] ?? ["imperssion" => [":", ""], "operator"   => "="];
                 $querys[] = $this->queryBuilder($key, $key, $option);
             }
@@ -100,11 +112,12 @@ class QueryBuilder{
         $arr_query = array_filter($querys);
         return $strict ? implode(' AND ', $arr_query) : implode(' OR ', $arr_query);
     }
-    protected function queryBuilder($key, $val, array $option = ["imperssion" => ["'%", "%'"], "operator" => "LIKE"]){
+    protected function queryBuilder($key, $val, array $option = ["imperssion" => ["'%", "%'"], "operator" => "LIKE"])
+    {
         $operator = $option["operator"];
         $sur = $option["imperssion"][0];
         $pre = $option["imperssion"][1];
-        if( isset( $val ) && $val != ''){
+        if( isset( $val ) && $val != '') {
             return "($key $operator $sur$val$pre)";
         }
         return "";
@@ -113,13 +126,14 @@ class QueryBuilder{
     /** 
      * menampilkan data dari hasil query yang ditentukan sebelumnya
      */
-    public function result():array{
+    public function result(): array
+    {
         if( $this->PDO == null) return [];                              // return null jika db belum siap
         $this->PDO->query( $this->query() );
         
-        foreach( $this->mergeFilters() as $filters){
-            foreach( $filters['filters'] as $key => $val){
-                if( isset( $val['value']) && $val['value'] != ''){
+        foreach( $this->mergeFilters() as $filters) {
+            foreach( $filters['filters'] as $key => $val) {
+                if( isset( $val['value']) && $val['value'] != '') {
                     $type = $val['type'] ?? null;
                     $this->PDO->bind(":" . $key, $val['value'], $type);
                 }
@@ -131,13 +145,14 @@ class QueryBuilder{
     /** 
      * menmpilkan semua data yang tersedia
      */
-    public function resultAll():array{
+    public function resultAll(): array
+    {
         if( $this->PDO == null) return [];                          // return null jika db belum siap
         $this->PDO->query( $this->originQuery() );
         
-        foreach( $this->mergeFilters() as $filters){
-            foreach( $filters['filters'] as $key => $val){
-                if( isset( $val['value']) && $val['value'] != ''){
+        foreach( $this->mergeFilters() as $filters) {
+            foreach( $filters['filters'] as $key => $val) {
+                if( isset( $val['value']) && $val['value'] != '') {
                     $type = $val['type'] ?? null;
                     $this->PDO->bind(":" . $key, $val['value'], $type);
                 }
