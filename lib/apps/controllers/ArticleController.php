@@ -40,8 +40,7 @@ class ArticleController extends Controller
                     'article_create'        => date('Y-m-d h:i:sa', $result['create_time']),
                     'media_type'            => $result['update_time'],
                     'image_url'             => $result['image_url'],
-                    // 'media_note'            => $result['media_note'],
-                    'media_note'            => $read_article->rowCount(),
+                    'media_note'            => $result['media_note'],
                     'raw_content'           => $result['raw_content']
                 ]
 

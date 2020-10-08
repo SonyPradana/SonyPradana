@@ -59,9 +59,6 @@
     <header>
         <?php include(BASEURL . '/lib/components/header/header.php'); ?>
     </header>
-    <div id="modal">
-        <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/control/modal.html') ?>
-    </div>
 
     <aside class="top">
         <div class="boxs-header">
@@ -192,6 +189,11 @@
     <footer>
         <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/footer/footer.html') ?>
     </footer>
+
+    <!-- hidden -->
+    <div id="modal">
+        <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/control/modal.html') ?>
+    </div>
     <script src="/lib/js/index.end.js"></script>
     <script>        
         let reviews = new Vue({

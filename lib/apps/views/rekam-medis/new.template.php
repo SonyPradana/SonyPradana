@@ -46,9 +46,6 @@
     <header>
         <?php include(BASEURL . '/lib/components/header/header.php'); ?>
     </header>
-    <div id="modal">
-        <?php include(BASEURL . '/lib/components/control/modal.html') ?>
-    </div>
 
     <div class="container">
         <main>
@@ -93,7 +90,16 @@
             </div>
         </main>
     </div>
+  
+    <div class="gotop" onclick="gTop()"></div>
+    <footer>
+        <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/footer/footer.html') ?>
+    </footer>
 
+    <!-- hidden -->
+    <div id="modal">
+        <?php include(BASEURL . '/lib/components/control/modal.html') ?>
+    </div>
     <?php if( $portal['message']['show'] ) :?>
         <div class="snackbar <?= $portal['message']['type'] ?>">
             <div class="icon">
@@ -103,11 +109,7 @@
                 <?= $portal['message']['content'] ?>
             </div>
         </div>
-    <?php endif; ?>    
-    <div class="gotop" onclick="gTop()"></div>
-    <footer>
-        <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/footer/footer.html') ?>
-    </footer>
+    <?php endif; ?>  
 </body>
 <script src="/lib/js/controller/form-rm/index.js"></script>
 <script src="/lib/js/index.end.js"></script>

@@ -118,9 +118,6 @@
     <header>
         <?php include(BASEURL . '/lib/components/header/header.php'); ?>
     </header>
-    <div id="modal">
-        <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/control/modal.html') ?>
-    </div>
     
     <div class="container width-view">
         <main>
@@ -284,6 +281,11 @@
     <footer>
         <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/footer/footer.html') ?>
     </footer>
+
+    <!-- hidden -->
+    <div id="modal">
+        <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/control/modal.html') ?>
+    </div>
 </body>
 <script src="/lib/js/index.end.js"></script>
 <script>    

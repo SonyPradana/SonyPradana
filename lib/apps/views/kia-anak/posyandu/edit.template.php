@@ -48,12 +48,7 @@
     <header>
         <?php include(BASEURL . '/lib/components/header/header.php'); ?>
     </header>
-    <div id="modal">
-        <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/control/modal.html') ?>
-    </div>
 
-    </header>
-    <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/control/modal.html') ?>
     <div class="container">
         <main>
             <div class="coit breadcrumb">
@@ -116,6 +111,15 @@
         </main>
     </div>
 
+    <div class="gotop" onclick="gTop()"></div>
+    <footer>
+        <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/footer/footer.html') ?>
+    </footer>
+
+    <!-- hidden -->
+    <div id="modal">
+        <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/control/modal.html') ?>
+    </div>
     <?php if( $portal['message']['show'] ) :?>
         <div class="snackbar <?= $portal['message']['type'] ?>">
             <div class="icon">
@@ -126,10 +130,6 @@
             </div>
         </div>
     <?php endif; ?> 
-    <div class="gotop" onclick="gTop()"></div>
-    <footer>
-        <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/footer/footer.html') ?>
-    </footer>
 </body>
 <script src="/lib/js/index.end.js"></script>
 <script>
