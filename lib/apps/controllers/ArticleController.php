@@ -19,14 +19,20 @@ class ArticleController extends Controller
         $read_article->filterURLID($articleID);
         $result = $read_article->result()[0] ?? null;
         if( $result == null ) $this->articleNotFound();
+
         $author = new User($result['author']);
+        $selisih_waktu = time() - $result['create_time'];
+        $format_tanggal = $selisih_waktu < 86400 ? date('h:i:sa',  $result['create_time'])
+            : date('d M Y',  $result['create_time']); 
 
         return $this->view('article/index', [
             "auth"    => $this->getMiddleware()['auth'],
             "meta"     => [
                 "title"         => $result['title'],
                 "discription"   => $result['discription'],
-                "keywords"      => $result['keywords']
+                "keywords"      => $result['keywords'],
+                "css"           => $result['css'],
+                "js"            => $result['js']
             ],
             "header"   => [
                 "active_menu"   => 'home',
@@ -37,9 +43,10 @@ class ArticleController extends Controller
                     "display_name"          => $author->getDisplayName(),
                     "display_picture_small" => $author->getSmallDisplayPicture(),
                     'title'                 => $result['title'],
-                    'article_create'        => date('Y-m-d h:i:sa', $result['create_time']),
+                    'article_create'        => $format_tanggal,
                     'media_type'            => $result['update_time'],
                     'image_url'             => $result['image_url'],
+                    'image_alt'             => $result['image_alt'],
                     'media_note'            => $result['media_note'],
                     'raw_content'           => $result['raw_content']
                 ]

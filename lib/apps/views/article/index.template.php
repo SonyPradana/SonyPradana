@@ -9,6 +9,9 @@
         display: grid;
         grid-template-columns: 1fr 300px;
     }
+    main {
+        overflow-x: auto;
+    }
 
     @media screen and (max-width: 767px) {
         .container.width-view {
@@ -17,6 +20,7 @@
     }
 </style>
 <link rel="stylesheet" href="/lib/css/ui/v1.1/style.css">
+<?= $portal['meta']['css'] ?>
 <script src="/lib/js/index.min.js"></script>
 <script src="/lib/js/bundles/keepalive.min.js"></script>
 <body>
@@ -45,9 +49,9 @@
                     </div>
                 </div>
                 <div class="article-media">
-                    <img src="<?= $content->article['image_url'] ?>"
-                    alt="image"
-                    width="100%" height="auto">
+                    <img data-src="<?= $content->article['image_url'] ?>" src="/data/img/thumbnail/thumbnail.png"
+                        alt="<?= $content->article['image_alt'] ?>"
+                        width="100%" height="auto">
                     <div class="media note">
                         <p><?= $content->article['media_note'] ?></p>
                     </div>
@@ -64,5 +68,34 @@
     <footer>
         <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/footer/footer.html') ?>
     </footer>
+    
+    <!-- hidden -->
+    <div id="modal">
+        <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/control/modal.html') ?>
+    </div>
+    <script src="/lib/js/index.end.js"></script>
+    <script>
+        // onload
+        $load(function(){
+            lazyImageLoader();
+        });
+
+        // sticky header
+        window.onscroll = function(){
+            stickyHeader('.container', '82px', '32px')
+        }
+
+        // keep alive
+        keepalive(
+            () => {
+                // ok function : redirect logout and then redirect to login page to accses this page
+                window.location.href = "/login?url=<?= $_SERVER['REQUEST_URI'] ?>&logout=true"
+            },
+            () => {          
+                // close fuction : just logout
+                window.location.href = "/logout?url=<?= $_SERVER['REQUEST_URI'] ?>"
+            }
+        );
+    </script>
 </body>
 </html>
