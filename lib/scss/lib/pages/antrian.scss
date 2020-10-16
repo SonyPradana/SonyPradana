@@ -1,0 +1,80 @@
+// cmd: sass --no-source-map --style=compressed lib/scss/lib/pages/antrian.scss lib/css/pages/v1.1/antrian.css
+
+@import '../../style.scss';
+@import '../../cards.scss';
+
+.gab-12pt {
+  min-height: 12px;
+  min-width: 12px;
+  max-height: 12px;
+  max-width: 12px;
+}
+.antrian-container {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.antrian-box.left{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px;
+}
+.big-antrian-card {
+  min-height: 240px;
+  min-width: 240px;
+  display: flex;
+  justify-content: center;
+  align-items: center
+}
+.big-antrian-card .details {
+  text-align: center;
+  font-size: 16px;
+  font-weight: 600;
+}
+.big-antrian-card .title {
+  font-size: 88px;
+  font-weight: 800;
+}
+
+.antraian-container-small { 
+  display: flex;
+  flex-direction: row;
+  /* max-height: 266px;
+  overflow: auto */
+}
+
+.small-antrian-card {
+  padding: 12px;
+  max-height: 100px;
+  max-width: 100px;
+  min-height: 100px;
+  min-width: 100px;
+}
+
+.antrian-small-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 8px 0;
+  color: #555;
+}
+.small-antrian-card {            
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+.small-antrian-card .title {
+  text-align: center;
+  font-size: 32px;
+  font-weight: 700;
+}
+.small-antrian-card .details {
+  text-align: center;
+  font-size: 16px;
+  font-weight: 600;
+}
+@media screen and (max-width: 767px) {
+  .antrian-container {
+      grid-template-columns: 1fr;
+  }
+}

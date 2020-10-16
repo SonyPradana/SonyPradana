@@ -97,6 +97,14 @@
                 </div>
                 <div class="card respone-card grad-pinktoyellow shadow-bottom-left-medium" data-tooltips="click untuk melihat" id="jadwal-imunisasi">
                     <div class="card title">
+                        Antrian Online
+                    </div>
+                    <div class="card action">
+                        <a href="/info/antrian-online/" class="btn fill blue small rounded">Lihat &raquo</a>
+                    </div>
+                </div>
+                <div class="card respone-card grad-pinktoyellow shadow-bottom-left-medium" data-tooltips="click untuk melihat" id="jadwal-imunisasi">
+                    <div class="card title">
                         Jadwal Imunisai
                     </div>
                     <div class="card action">
