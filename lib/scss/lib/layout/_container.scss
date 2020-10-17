@@ -1,5 +1,8 @@
+$margin-side : 56px;
+$margin-side-mobile : 20px;
+
 .container{
-    margin: 32px 56px;
+    margin: 32px $margin-side;
     padding: 20px;
     min-height: 300px;
     background-color: #ffffff;
@@ -17,7 +20,7 @@
 
 @media screen and (max-width: 600px){
     .container{
-        margin: 12px 20px;
+        margin: 12px $margin-side-mobile;
         padding: 20px;
         min-height: 300px;
     }

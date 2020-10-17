@@ -75,7 +75,6 @@ a.card{
     .box-container{
         height: auto;
         padding: 12px 4px;
-        overflow-x: auto;
     }
 }
 
@@ -138,10 +137,9 @@ a.card{
 
 // Rm card
 .rm-card {
-    min-width: 200px;
     max-height: 80px;
     padding: 12px;
-    margin-right: 12px; margin-bottom: 12px;
+    margin-right: 12px; 
     cursor: pointer;
     display: flex;
     flex-direction: column;
@@ -149,13 +147,6 @@ a.card{
     justify-content: center;
     // style
     border-radius: 12px;
-    background: #fa2500;
-    background: -moz-linear-gradient(-45deg, #fa2500 0%, #e6de00 85%, #e6de00 100%);
-    background: -webkit-gradient(left top, right bottom, color-stop(0%, #fa2500), color-stop(85%, #e6de00), color-stop(100%, #e6de00));
-    background: -webkit-linear-gradient(-45deg, #fa2500 0%, #e6de00 85%, #e6de00 100%);
-    background: -o-linear-gradient(-45deg, #fa2500 0%, #e6de00 85%, #e6de00 100%);
-    background: -ms-linear-gradient(-45deg, #fa2500 0%, #e6de00 85%, #e6de00 100%);
-    background: linear-gradient(135deg, #fa2500 0%, #e6de00 85%, #e6de00 100%);
 
     // component
     p {

@@ -14,9 +14,11 @@
         /* costume main container */
         .container.width-view{
             margin-top: 12px !important;
+        }
+        .main-container {            
             display: grid;
             grid-template-columns: 1fr minmax(250px, 280px);
-            grid-column-gap: 24px; grid-row-gap: 24px;
+            grid-column-gap: 32px; grid-row-gap: 32px;
         }
         main.news{            
             overflow-x: hidden;
@@ -26,9 +28,11 @@
         }
         
         .boxs-card{
-            overflow-x: visible;
+            padding: 8px;
+            overflow-x: auto;
             display: flex;
             min-height: 115px;
+            margin-bottom: 12px;
         }
 
         .respone-card .card.action .btn{            
@@ -42,16 +46,11 @@
         /* tablet vie view */
         @media screen  and (max-width: 767px) {
             /* costume main container */
-            .container.width-view{
+            .main-container {
                 display: grid;
                 grid-template-columns: 1fr;
             }
             .boxs-card{min-height: 80px}
-        }
-        @media screen and (max-width: 1000px) {
-            .boxs-card{
-                overflow: auto;
-            }
         }
     </style>
 </head>
@@ -84,114 +83,116 @@
         </div>
     </aside>
     <div class="container width-view">
-        <main class="news">
-            <div class="boxs-card">
-                <div class="card rm-card grad-yellowtored shadow-bottom-left-medium">
-                    <div class="card title">
-                        <p><?= $content->jumlah_rm ?></p>
-                        <span class="detail">&nbsp;~<?= round( ($content->jumlah_rm / 15000) * 100, 1) ?>%</span>
-                    </div>
-                    <div class="card content">
-                        <p>Data RM Terdata</p>
-                    </div>
+        <div class="boxs-card">
+            <div class="card rm-card grad-yellowtored shadow-bottom-left-medium">
+                <div class="card title">
+                    <p><?= $content->jumlah_rm ?></p>
+                    <span class="detail">&nbsp;~<?= round( ($content->jumlah_rm / 15000) * 100, 1) ?>%</span>
                 </div>
-                <div class="card respone-card grad-pinktoyellow shadow-bottom-left-medium" data-tooltips="click untuk melihat" id="jadwal-imunisasi">
-                    <div class="card title">
-                        Antrian Online
-                    </div>
-                    <div class="card action">
-                        <a href="/info/antrian-online/" class="btn fill blue small rounded">Lihat &raquo</a>
-                    </div>
-                </div>
-                <div class="card respone-card grad-pinktoyellow shadow-bottom-left-medium" data-tooltips="click untuk melihat" id="jadwal-imunisasi">
-                    <div class="card title">
-                        Jadwal Imunisai
-                    </div>
-                    <div class="card action">
-                        <a href="/info/jadwal-pelayanan/" class="btn fill blue small rounded">Lihat &raquo</a>
-                    </div>
-                </div>
-                <div class="card respone-card grad-blue shadow-bottom-left-medium" data-tooltips="click untuk melihat">
-                    <div class="card title">
-                        Info Covid Ungaran
-                    </div>
-                    <div class="card action">
-                        <a href="/info/covid-kabupaten-semarang" class="btn fill blue small rounded">Lihat &raquo</a>
-                    </div>
+                <div class="card content">
+                    <p>Data RM Terdata</p>
                 </div>
             </div>
-            <div class="sparator blue">
-                <div class="sparator-title">Berita terbaru</div>
+            <div class="card respone-card grad-pinktoyellow shadow-bottom-left-medium" data-tooltips="click untuk melihat" id="jadwal-imunisasi">
+                <div class="card title">
+                    Antrian Online
                 </div>
-            <div class="boxs-news" id="news-feeder">
-                <article class="news-card" v-for="news in feeders" :key="news.id">
-                    <a v-bind:href="news.url" class="image">
-                        <img 
-                            width="250px" height="150px" 
-                            v-bind:src="news.image" 
-                            v-bind:alt="news.alt">
-                    </a>
-                    <div class="gab"></div>
-                    <div class="details">
-                        <a v-bind:href="news.url">
-                            <header class="news-header">
-                                <h2>{{ news.title }}</h2>
-                            </header>
-                            <section class="nesw-detail">
-                                <p>{{ news.details }}</p>
-                            </section>
-                        </a>                    
-                        <div class="footer">
-                            <div class="info">
-                                {{ news.date }}
+                <div class="card action">
+                    <a href="/info/antrian-online/" class="btn fill blue small rounded">Lihat &raquo</a>
+                </div>
+            </div>
+            <div class="card respone-card grad-pinktoyellow shadow-bottom-left-medium" data-tooltips="click untuk melihat" id="jadwal-imunisasi">
+                <div class="card title">
+                    Jadwal Imunisai
+                </div>
+                <div class="card action">
+                    <a href="/info/jadwal-pelayanan/" class="btn fill blue small rounded">Lihat &raquo</a>
+                </div>
+            </div>
+            <div class="card respone-card grad-blue shadow-bottom-left-medium" data-tooltips="click untuk melihat">
+                <div class="card title">
+                    Info Covid Ungaran
+                </div>
+                <div class="card action">
+                    <a href="/info/covid-kabupaten-semarang" class="btn fill blue small rounded">Lihat &raquo</a>
+                </div>
+            </div>
+        </div>
+        <div class="main-container">
+            <main class="news">
+                <div class="sparator blue">
+                    <div class="sparator-title">Berita terbaru</div>
+                    </div>
+                <div class="boxs-news" id="news-feeder">
+                    <article class="news-card" v-for="news in feeders" :key="news.id">
+                        <a v-bind:href="news.url" class="image">
+                            <img 
+                                width="250px" height="150px" 
+                                v-bind:src="news.image" 
+                                v-bind:alt="news.alt">
+                        </a>
+                        <div class="gab"></div>
+                        <div class="details">
+                            <a v-bind:href="news.url">
+                                <header class="news-header">
+                                    <h2>{{ news.title }}</h2>
+                                </header>
+                                <section class="nesw-detail">
+                                    <p>{{ news.details }}</p>
+                                </section>
+                            </a>                    
+                            <div class="footer">
+                                <div class="info">
+                                    {{ news.date }}
+                                </div>
+                            </div class="footer">
+                        </div>
+                    </article>
+                </div>
+            </main>
+            <aside class="side">
+                <div class="boxs-review">
+                    <div class="reviews" id="w-reviews">
+                        <div class="review title">
+                            <h3>Ulasan untuk Kami</h3>
+                        </div>
+                        <div class="review results" v-if="seenResult">
+                            <div class="result done" v-on:click="togle()">
+                                <p>Terimakasih</p>
                             </div>
-                        </div class="footer">
-                    </div>
-                </article>
-            </div>
-        </main>
-        <aside class="side">
-            <div class="boxs-review">
-                <div class="reviews" id="w-reviews">
-                    <div class="review title">
-                        <h3>Ulasan untuk Kami</h3>
-                    </div>
-                    <div class="review results" v-if="seenResult">
-                        <div class="result done" v-on:click="togle()">
-                            <p>Terimakasih</p>
                         </div>
-                    </div>
-                    <div class="review respones" v-if="seenRespones">
-                        <div class="respone low" v-on:click="newRating(1)">
+                        <div class="review respones" v-if="seenRespones">
+                            <div class="respone low" v-on:click="newRating(1)">
+                            </div>
+                            <div class="respone med" v-on:click="newRating(2)"></div>
+                            <div class="respone hig" v-on:click="newRating(3)"></div>
                         </div>
-                        <div class="respone med" v-on:click="newRating(2)"></div>
-                        <div class="respone hig" v-on:click="newRating(3)"></div>
-                    </div>
-                    <div class="review comment">
-                        <input type="text" id="input-comment" v-on:click="gotoContact" placeholder="Kritik dan saran">
+                        <div class="review comment">
+                            <input type="text" id="input-comment" v-on:click="gotoContact" placeholder="Kritik dan saran">
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="boxs-timetable">
-                <div class="timetables">
-                    <div class="timetable title">
-                        <h3>Jadwal Pelayanan</h3>
-                    </div>
-                    <div class="timetable hours">
-                    <?php foreach ($portal['contents']['jadwal_sort'] as $key => $value) :?>
-                        <div class="box-day <?= date('N') == $key ? 'active' : ''?>">
-                            <div class="day"><p><?= $value['day'] ?></p></div>
-                            <div class="hour"><p><?= $value['time'] ?></p></div>
+                <div class="boxs-timetable">
+                    <div class="timetables">
+                        <div class="timetable title">
+                            <h3>Jadwal Pelayanan</h3>
                         </div>
-                    <?php endforeach; ?>
-                    </div>
-                    <div class="timtable note">
-                        <p>Note: Tanggal merah dan libur tutup</p>
-                        <p style="color: blue">Selama wabah covid berlaku pembatasan, untuk keamaan bersama</p>
+                        <div class="timetable hours">
+                        <?php foreach ($portal['contents']['jadwal_sort'] as $key => $value) :?>
+                            <div class="box-day <?= date('N') == $key ? 'active' : ''?>">
+                                <div class="day"><p><?= $value['day'] ?></p></div>
+                                <div class="hour"><p><?= $value['time'] ?></p></div>
+                            </div>
+                        <?php endforeach; ?>
+                        </div>
+                        <div class="timtable note">
+                            <p>Note: Tanggal merah dan libur tutup</p>
+                            <p style="color: blue">Selalu lakukan 3M, Memakai masker, Menjaga jarak dan Mencuci tangan</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </aside>
+            </aside>
+        </div>
     </div>
     <div class="gotop" onclick="gTop()"></div>
     <footer>

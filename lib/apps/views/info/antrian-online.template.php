@@ -48,7 +48,7 @@ $content = (object) $portal['contents'];
     <link rel="stylesheet" href="/lib/css/pages/v1.1/antrian.css">
     <script src="/lib/js/index.min.js"></script>
     <script src="/lib/js/bundles/keepalive.min.js"></script>
-    <script src="/lib/js/vendor/vue/vue.js"></script>
+    <script src="/lib/js/vendor/vue/vue.min.js"></script>
     <script src="/lib/js/vendor/pusher/pusher.min.js"></script>
 </head>
 
@@ -80,7 +80,7 @@ $content = (object) $portal['contents'];
                 </div>
                 <div id="app" class="article-media">                    
                     <div class="cards-box blue">
-                        <div class="box-title">Antrian Pendaftaran Tanggal {{ tanggal }}</div>
+                        <div class="box-title">Antrian Pendaftaran {{ tanggal }}</div>
                         <div class="box-container">
                             <div class="antrian-container">
                                 <div class="antrian-box left">
@@ -92,10 +92,10 @@ $content = (object) $portal['contents'];
                                     </div>
                                 </div>
                                 <div class="gab-12pt"></div>
+                                <div class="antrian-small-title">
+                                    Dalam Antrian
+                                </div>
                                 <div class="antrian-box right">
-                                    <div class="antrian-small-title">
-                                        Dalam Antrian
-                                    </div>
                                     <div class="antraian-container-small">                                        
                                         <div class="small-antrian-card card neum-blue neum-light neum-concave radius-small">
                                             <div class="title">A </br> {{ poli['A'].current }} / {{ poli['A'].queueing }}</div>
@@ -121,6 +121,15 @@ $content = (object) $portal['contents'];
                             </div>
                         </div>
                     </div>
+                    <div class="media note">
+                        <ul>
+                            <p>Keterangan</p>
+                            <li>A: Poli KIA (Kesehatan Ibu dan Anak), Imunisasi</li>
+                            <li>B: Poli Gigi dan Mulut</li>
+                            <li>C: Poli Umum, Pemreriksan Kesehatan</li>
+                            <li>D: Poli Lansia, Untuk Usia diatas 60 Tahun</li>
+                        </ul>
+                    </div>
                 </div>
     
                 <div class="article-body">
@@ -129,41 +138,41 @@ $content = (object) $portal['contents'];
                         <div class="antrian-contoller">
                             <div class="controller-group">
                                 <span>Poli KIA</span>
-                                <span class="buton-group">
-                                    <button type="button" id="kia-plus">+</button>
-                                    <button type="button" id="kia-minus">-</button>
-                                    <button type="button" id="kia-reset">reset</button>
-                                </span>
+                                <div class="buton-group">
+                                    <button type="button" id="kia-plus" class="btn fill blue small rounded">+</button>
+                                    <button type="button" id="kia-minus" class="btn fill blue small rounded">-</button>
+                                    <button type="button" id="kia-reset" class="btn fill red small rounded">reset</button>
+                                </div>
                             </div>
                             <div class="controller-group">
                                 <span>Poli Gigi</span>
-                                <span class="buton-group">
-                                    <button type="button" id="gigi-plus">+</button>
-                                    <button type="button" id="gigi-minus">-</button>
-                                    <button type="button" id="gigi-reset">reset</button>
-                                </span>
+                                <div class="buton-group">
+                                    <button type="button" id="gigi-plus" class="btn fill blue small rounded">+</button>
+                                    <button type="button" id="gigi-minus" class="btn fill blue small rounded">-</button>
+                                    <button type="button" id="gigi-reset" class="btn fill red small rounded">reset</button>
+                                </div>
                             </div>
                             <div class="controller-group">
                                 <span>Poli Umum</span>
-                                <span class="buton-group">
-                                    <button type="button" id="umum-plus">+</button>
-                                    <button type="button" id="umum-minus">-</button>
-                                    <button type="button" id="umum-reset">reset</button>
-                                </span>
+                                <div class="buton-group">
+                                    <button type="button" id="umum-plus" class="btn fill blue small rounded">+</button>
+                                    <button type="button" id="umum-minus" class="btn fill blue small rounded">-</button>
+                                    <button type="button" id="umum-reset" class="btn fill red small rounded">reset</button>
+                                </div>
                             </div>
                             <div class="controller-group">
                                 <span>Poli Lansia</span>
-                                <span class="buton-group">
-                                    <button type="button" id="lansia-plus">+</button>
-                                    <button type="button" id="lansia-minus">-</button>
-                                    <button type="button" id="lansia-reset">reset</button>
-                                </span>
+                                <div class="buton-group">
+                                    <button type="button" id="lansia-plus" class="btn fill blue small rounded">+</button>
+                                    <button type="button" id="lansia-minus" class="btn fill blue small rounded">-</button>
+                                    <button type="button" id="lansia-reset" class="btn fill red small rounded">reset</button>
+                                </div>
                             </div>
                             <div class="controller-group">
                                 <span>Reset Semua</span>
-                                <span class="button-group">
-                                    <button type="button" id="reset-all">reset</button>
-                                </span>
+                                <div class="button-group">
+                                    <button type="button" id="reset-all" class="btn fill red small rounded">reset</button>
+                                </div>
                             </div>
                         </div>
                         <script>
@@ -171,7 +180,7 @@ $content = (object) $portal['contents'];
                             {
                                 $id(id_poli).addEventListener('click', function() {
                                     const plus = parseInt(app.poli[code_poli].current) + 1
-                                    $json(`/api/v1.0/antrian-poli/dipanggil.json?poli=${code_poli}&antrian=${plus}`)
+                                    $json(`/api/v1.0/Antrian-Poli/dipanggil.json?poli=${code_poli}&antrian=${plus}`)
                                         .then( json => {
                                             $work("berhasil ditambahkan")
                                         })
@@ -181,7 +190,7 @@ $content = (object) $portal['contents'];
                             {
                                 $id(id_poli).addEventListener('click', function() {
                                     const plus = parseInt(app.poli[code_poli].current) - 1
-                                    $json(`/api/v1.0/antrian-poli/dipanggil.json?poli=${code_poli}&antrian=${plus}`)
+                                    $json(`/api/v1.0/Antrian-Poli/dipanggil.json?poli=${code_poli}&antrian=${plus}`)
                                         .then( json => {
                                             $work("berhasil dikurangi");
                                         })
@@ -190,7 +199,7 @@ $content = (object) $portal['contents'];
                             function clicker_reset(id_poli, code_poli)
                             {
                                 $id(id_poli).addEventListener('click', function(){
-                                    $json(`/api/v1.0/antrian-poli/reset.json?poli=${code_poli}`)
+                                    $json(`/api/v1.0/Antrian-Poli/reset.json?poli=${code_poli}`)
                                         .then( json => {
                                             $work("berhasil reset");
                                         })
@@ -307,7 +316,7 @@ $content = (object) $portal['contents'];
                 },
             },
             mounted (){
-                $json('/api/v1.0/antrian-poli/antrian.json')
+                $json('/api/v1.0/Antrian-Poli/antrian.json')
                     .then( json => {
                         let data = json.data;
                         let biggest = 0;
@@ -327,7 +336,7 @@ $content = (object) $portal['contents'];
             },
             methods: {
                 reset_app: function() {
-                    $json('/api/v1.0/antrian-poli/reset.json?poli=full_reset')
+                    $json('/api/v1.0/Antrian-Poli/reset.json?poli=full_reset')
                         .then( json => {
                             let data = json.data;
                             let biggest = 0;

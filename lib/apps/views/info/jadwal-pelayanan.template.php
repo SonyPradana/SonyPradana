@@ -49,6 +49,7 @@ use Simpus\Services\JadwalKia;
         }
         /* Templatebox container */
         .cards-box .box-container{
+            overflow-x: auto;
             display: grid;
             grid-template-columns: minmax(300px, 320px) 16px minmax(300px, 320px);
         }
