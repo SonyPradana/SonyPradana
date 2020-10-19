@@ -1,30 +1,3 @@
-<?php 
-use Simpus\Auth\User;
-
-$author = new User("angger");
-$portal = [
-    "auth" => $this->getMiddleware()['auth'],
-    "meta"  => [
-        "title"   => "Simulasi Antrian Online",
-        "discription"   => "Display Antrian Digital Puskesmas Lerep (Tahap Uji Coba)",
-        "keywords"   => "simpus lerep, puskesmas lerep, Antrian Online, BPJS, Display antrian, Nomor Urut, Poli Umum, Poli Lansia, Poli KIA Ibu dan Anak"
-    ],
-    "header"   => [
-        "active_menu"   => 'home',
-        "header_menu"   => $_SESSION['active_menu'] ?? MENU_MEDREC
-    ],
-    "contents" => [
-        "article" => [
-            "display_name"    => $author->getDisplayName(),
-            "display_picture_small" => $author->getSmallDisplayPicture(),
-            'article_create' => '15 Oktober 2020',
-            'title' => 'Simulasi Antrian online'
-        ],
-    ]
-];
-
-$content = (object) $portal['contents'];
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

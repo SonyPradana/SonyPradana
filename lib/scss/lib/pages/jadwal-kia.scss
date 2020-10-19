@@ -1,0 +1,53 @@
+// cmd: sass --no-source-map --style=compressed lib/scss/lib/pages/jadwal-kia.scss lib/css/pages/v1.1/jadwal-kia.css
+
+@import '../../style.scss';
+@import '../../cards.scss';
+
+.cards-box .box-container{
+  overflow-x: auto;
+  display: grid;
+  grid-template-columns: minmax(300px, 320px) 16px minmax(300px, 320px);
+}
+
+.header-article{margin-bottom: 24px}
+.header-article h1{
+  font-size: 2.3rem;
+  font-weight: 700;
+}
+.header-article .article.breadcrumb{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px; grid-gap: 8px;
+}
+.header-article .article.breadcrumb > div{ font-size: 1rem; color: #9aa6ad}
+
+/* .media-article{margin-right: 20px;} */
+.media-article{ padding: 0 16px;}
+.media.note p{color: #a2a2a2; margin: 0}
+.table-boxs{
+  display: flex;
+  justify-content: center;
+  overflow-x: auto;
+}
+table.info-covid{max-width: 500px; min-width: 400px;}
+.article.body{margin: 16px 0;}
+.article.body h2{
+  margin: 8px;
+  text-align: center;
+}
+
+.gap{
+  width: 16px; height: 16px;
+  min-height: 16px; min-width: 16px;
+}
+@media screen and (max-width: 767px) {
+  .container.width-view{grid-template-columns: 1fr}
+  .table-boxs{justify-content: unset}
+              
+  .cards-box .box-container{
+      grid-template-columns: 1fr;
+      grid-template-rows: auto 16px auto;
+  }
+}

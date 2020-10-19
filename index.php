@@ -1,11 +1,8 @@
 <?php
 session_start();
 
-use Simpus\Apps\Route;
-use Simpus\Apps\Controller;
-use Simpus\Apps\Middleware;
-use Simpus\Auth\Auth;
-use Simpus\Auth\User;
+use Simpus\Apps\{Route, Controller, Middleware};
+use Simpus\Auth\{Auth, User};
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/init.php';
 
@@ -85,7 +82,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/init.php';
     // info    
     $app->get('/info/(:any)', function(string $page) {
         if( Controller::view_exists('info/' . $page)){
-            (new InfoController())->render('info/' . $page);
+          (new InfoController())->show( $page );
         }else{
             (new DefaultController())->status(404, []);
         }

@@ -1,99 +1,26 @@
-<?php 
-use Simpus\Auth\User;
-use Simpus\Services\JadwalKia;
-
-    $author = new User("angger");
-    $imun   = new JadwalKia(date('m'), date('Y'));
-
-    $portal = [
-        "auth"    => $this->getMiddleware()['auth'],
-        "meta"     => [
-            "title"         => "Jadwal Pelayanan di Poli KIA - Simpus Lerep",
-            "discription"   => "Jadwal pelayanan imunisasi anak di Poli KIA",
-            "keywords"      => "simpus lerep, puskesmas lerep,jadwal imunisasi, imunusasi, kia anak, jadwal, BCG, Campak, Rubella (MR), Hib, HB, DPT, IPV"
-        ],
-        "header"   => [
-            "active_menu"   => 'home',
-            "header_menu"   => $_SESSION['active_menu'] ?? MENU_MEDREC
-        ],
-        "contents" => [
-            "article"    => [
-                "display_name"          => $author->getDisplayName(),
-                "display_picture_small" => $author->getSmallDisplayPicture()
-            ],
-            "raw_data"          => $imun->getData(),
-            "avilable_month"    => $imun->getAvilabeMonth()
-        ]
-    ];
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/meta/metatag.php') ?>
     <meta name="robots" content="all,index,follow">
     
-    <link rel="stylesheet" href="/lib/css/ui/v1.1/style.css">
     <link rel="stylesheet" href="/lib/css/ui/v1/table.css">
-    <link rel="stylesheet" href="/lib/css/ui/v1.1/cards.css">
+    <link rel="stylesheet" href="/lib/css/pages/v1.1/jadwal-kia.css">
     <script src="/lib/js/index.min.js"></script>
     <script src="/lib/js/bundles/keepalive.min.js"></script>
     <script src="/lib/js/vendor/vue/vue.min.js"></script>
     <style>
-        /* costume main container */
-        .container.width-view{
+        .container.width-view {
             display: grid;
             grid-template-columns: 1fr 300px;
         }
-        main{
-            overflow-x: hidden;
-        }
-        /* Templatebox container */
-        .cards-box .box-container{
-            overflow-x: auto;
-            display: grid;
-            grid-template-columns: minmax(300px, 320px) 16px minmax(300px, 320px);
-        }
-        
-        .header-article{margin-bottom: 24px}
-        .header-article h1{
-            font-size: 2.3rem;
-            font-weight: 700;
-        }
-        .header-article .article.breadcrumb{
-            display: flex;
-            flex-direction: row;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            gap: 8px; grid-gap: 8px;
-        }
-        .header-article .article.breadcrumb > div{ font-size: 1rem; color: #9aa6ad}
-
-        /* .media-article{margin-right: 20px;} */
-        .media-article{ padding: 0 16px;}
-        .media.note p{color: #a2a2a2; margin: 0}
-        .table-boxs{
-            display: flex;
-            justify-content: center;
+        main {
             overflow-x: auto;
         }
-        table.info-covid{max-width: 500px; min-width: 400px;}
-        .article.body{margin: 16px 0;}
-        .article.body h2{
-            margin: 8px;
-            text-align: center;
-        }
 
-        .gap{
-            width: 16px; height: 16px;
-            min-height: 16px; min-width: 16px;
-        }
         @media screen and (max-width: 767px) {
-            .container.width-view{grid-template-columns: 1fr}
-            .table-boxs{justify-content: unset}
-                        
-            .cards-box .box-container{
-                grid-template-columns: 1fr;
-                grid-template-rows: auto 16px auto;
+            .container.width-view {
+                grid-template-columns: 1fr
             }
         }
     </style>
@@ -117,8 +44,8 @@ use Simpus\Services\JadwalKia;
                     <H1>Jadwal Pelayanan Poli KIA Anak (Imunisasi) Setiap Hari Jumat</H1>
                     <div class="article breadcrumb">
                         <div class="author">
-                            <img src="<?= $author->getSmallDisplayPicture() ?>" alt="@<?= $author->getDisplayName() ?>" srcset="">    
-                            <div class="author-name"><a href="/Ourteam"><?= $author->getDisplayName() ?></a></div>
+                            <img src="<?= $content->article['display_picture_small'] ?>" alt="@<?= $content->article['display_name'] ?>" srcset="">    
+                            <div class="author-name"><a href="/Ourteam"><?= $content->article['display_name'] ?></a></div>
                         </div>
                         <div class="time">18 Juni 2020</div>
                     </div>
@@ -231,8 +158,8 @@ use Simpus\Services\JadwalKia;
         el: '#app',
         data: {
             first   : true,
-            raw     : <?= json_encode( $portal['contents']['raw_data'] ) ?>,
-            month   : <?= json_encode( $portal['contents']['avilable_month'] ) ?>,
+            raw     : <?= json_encode( $content->raw_data ) ?>,
+            month   : <?= json_encode( $content->avilable_month ) ?>,
             months  : [ 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Augustus', 'September', 'Oktober', 'November', 'Desember' ]
         },
         methods: {

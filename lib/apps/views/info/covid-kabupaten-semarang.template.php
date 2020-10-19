@@ -1,117 +1,28 @@
-<?php
-    require_once BASEURL . '/lib/apps/services/CovidKabSemarangService.php';
-    use Simpus\Auth\User;
-
-    $data_covid = new CovidKabSemarangService();
-
-    $track_record   = $data_covid->track_record(["toString" => true])['data'];
-    $data_record    = $data_covid->tracker(['range_waktu' => $track_record]);
-    krsort($data_record);
-    // data: konirmasi covid
-    $date_record    = json_encode( array_values(array_column($data_record, "time")) );
-    $posi_record    = json_encode( array_values(array_column($data_record, "kasus_posi")) );
-    $meni_record    = json_encode( array_values(array_column($data_record, "kasus_meni")) );
-    // data: suspek covid
-    $suspek                = json_encode( array_values(array_column($data_record, "suspek")) );
-    $suspek_disc_record    = json_encode( array_values(array_column($data_record, "suspek_discharded")) );
-    $suspek_meni_record    = json_encode( array_values(array_column($data_record, "suspek_meninggal")) );
-
-    $author = new User("angger");
-    $portal = [
-        "auth"    => $this->getMiddleware()['auth'],
-        "meta"     => [
-            "title"         => "Info Covid 19 Ungaran Barat",
-            "discription"   => "Data Pasien Dalam Pengawasan dan Positif di Wilayah Kecamtan Ungaran Barat",
-            "keywords"      => "simpus lerep, info covid, kawal covid, covid ungaran, covid branjang, wilyah ungran, Suspek, Discharded, Meninggal, Symptomatik, Asymptomatik, Sembuh, Meninggal, Terkomfirmasi"
-        ],
-        "header"   => [
-            "active_menu"   => 'home',
-            "header_menu"   => $_SESSION['active_menu'] ?? MENU_MEDREC
-        ],
-        "contents" => [
-            "article"    => [
-                "display_name"          => $author->getDisplayName(),
-                "display_picture_small" => $author->getSmallDisplayPicture()
-            ],
-            "last_index"                => 1,
-            "date_record"               => $date_record,
-            "kasus_posi"                => $posi_record,
-            "kasus_meni"                => $meni_record,
-            "suspek"                    => $suspek,
-            "suspek_disc"               => $suspek_disc_record,
-            "suspek_meni"               => $suspek_meni_record,
-        ]
-    ];
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/meta/metatag.php') ?>
 
-    <link rel="stylesheet" href="/lib/css/ui/v1.1/style.css">
     <link rel="stylesheet" href="/lib/css/ui/v1/table.css">
-    <link rel="stylesheet" href="/lib/css/ui/v1.1/cards.css">
+    <link rel="stylesheet" href="/lib/css/pages/v1.1/covid.css">
     <script src="/lib/js/index.min.js"></script>
     <script src="/lib/js/bundles/keepalive.min.js"></script>
     <script src="/lib/js/vendor/vue/vue.min.js"></script>
     <script src="/lib/js/vendor/chart/Chart.min.js"></script>
     <style>
-        /* costume main container */
-        .container.width-view{
+        .container.width-view {
             display: grid;
             grid-template-columns: 1fr 300px;
         }
-        main{
-            overflow-x: hidden;
-        }
-
-        /* prototipe article - tamplate */
-        .header-article{margin-bottom: 24px}
-        .header-article h1{
-            font-size: 2.3rem;
-            font-weight: 700;
-        }
-        .box.cards{
-            overflow-x: visible;
-            display: flex;
-            flex-direction: row;
-            justify-content: center;
-            margin-bottom: 12px;
-        }
-        .box.cards .gap-space{
-            min-width: 16px;
-        }
-        .media.note p{color: #a2a2a2; margin: 0}
-        .table-boxs{
-            display: flex;
-            justify-content: center;
+        main {
             overflow-x: auto;
-            margin-bottom: 32px;
-        }
-        table.info-covid{max-width: 500px; min-width: 400px;}
-        .article.body{margin: 16px 0;}
-        .article.body ul, ol, p{font-size: 20px;}
-        .article.body ul { list-style: disc; }
-        .article.body h2, .article.body h3,.article.body p{margin-bottom: 12px;}
-        article .info {
-            background-color: #ace1ff;
-            padding: 8px 4px;
-            border-left: solid 8px #2aaffb;
         }
 
-        /* tablet vie view */
         @media screen and (max-width: 767px) {
-            .container.width-view{grid-template-columns: 1fr}
-            .box.cards{justify-content: unset}
-            .table-boxs{justify-content: unset}
-        }
-        @media screen and (max-width: 1000px) {
-            .box.cards{
-                overflow: auto;
+            .container.width-view {
+                grid-template-columns: 1fr
             }
         }
-        
-        /* hai youtube */
     </style>
 </head>
 <body>
@@ -133,8 +44,8 @@
                     <H1>Info Covid Kabupaten Semarang (Kec Ungaran Barat)</H1>
                     <div class="article breadcrumb">
                         <div class="author">
-                            <img src="<?= $portal['contents']['article']['display_picture_small'] ?>" alt="@<?= $portal['contents']['article']['display_name'] ?>" srcset="">    
-                            <div class="author-name"><a href="/Ourteam"><?= $portal['contents']['article']['display_name'] ?></a></div>
+                            <img src="<?= $content->article['display_picture_small'] ?>" alt="@<?= $content->article['display_name'] ?>" srcset="">    
+                            <div class="author-name"><a href="/Ourteam"><?= $content->article['display_name'] ?></a></div>
                         </div>
                         <div class="time">11 April 2020</div>
                     </div>
@@ -385,11 +296,11 @@
     let chart_covid_postif = new Chart($id("chartjs-0"), {
         type:"line",
         data:{
-            labels: <?= $portal['contents']['date_record'] ?>,
+            labels: <?= $content->date_record ?>,
             datasets:[
                 {
                     label: "Suspek",
-                    data: <?= $portal['contents']['suspek'] ?>,
+                    data: <?= $content->suspek ?>,
                     fill: true,
                     borderColor: "rgb(255, 69, 0)",
                     backgroundColor: "rgba(255, 69, 0, 0.3)",
@@ -397,7 +308,7 @@
                 },
                 {
                     label:"Konfirmasi Covid",
-                    data: <?= $portal['contents']['kasus_posi'] ?>,
+                    data: <?= $content->kasus_posi ?>,
                     fill: true,
                     borderColor: "rgb(75, 192, 192)",
                     backgroundColor: "rgba(75, 192, 192, 0.3)",
@@ -419,10 +330,10 @@
     let chart_covid_suspek = new Chart($id("chartjs-1"), {
         type:"line",
         data:{
-            labels: <?= $portal['contents']['date_record'] ?>,
+            labels: <?= $content->date_record ?>,
             datasets:[{
                     label: "Kasus Meninggal",
-                    data: <?= $portal['contents']['kasus_meni'] ?>,
+                    data: <?= $content->kasus_meni ?>,
                     fill: true,
                     borderColor: "rgb(255,69,0)",
                     backgroundColor: "rgba(255,69,0, 0.3)",
@@ -430,7 +341,7 @@
                 },
                 {
                     label:"Suspek Meninggal",
-                    data: <?= $portal['contents']['suspek_meni'] ?>,
+                    data: <?= $content->suspek_meni ?>,
                     fill:true,
                     borderColor:"rgb(255, 127, 0)",
                     backgroundColor:"rgba(255, 127, 0, 0.3)",
