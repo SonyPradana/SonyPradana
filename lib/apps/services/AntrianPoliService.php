@@ -53,8 +53,6 @@ class AntrianPoliService extends Middleware
 
   public function antrian(array $params): array
   {
-    $params['angger'] = time();
-
     $antrian = new antrianModel();
     $get_antrian = $antrian->resultAll();
     
@@ -78,8 +76,8 @@ class AntrianPoliService extends Middleware
   {
     $this->useAuth();
 
-    $update_poli = $params['poli'] ?? $this->errorhandler();
-    $update_antrian = $params['antrian'] ?? $this->errorhandler();
+    $update_poli = $this->validPoli($params);
+    $update_antrian = $this->validInput($params);
 
     $antrian_poli =  new antrianCRUD();
     $antrian_poli->setID(strtoupper($update_poli));
@@ -102,9 +100,9 @@ class AntrianPoliService extends Middleware
   public function baru($params): array
   {
     $this->useAuth();
-
-    $update_poli = $params['poli'] ?? $this->errorhandler();
-    $update_antrian = $params['antrian'] ?? $this->errorhandler();
+    
+    $update_poli = $this->validPoli($params);
+    $update_antrian = $this->validInput($params);
 
     $antrian_poli =  new antrianCRUD();
     $antrian_poli->setID(strtoupper($update_poli));
@@ -178,6 +176,20 @@ class AntrianPoliService extends Middleware
       'headers' => array('HTTP/1.1 200 Oke')
     );
 
+  }
+
+  // helper function
+  private function validInput(array $params)
+  {
+    $number = $params['antrian'] ?? $this->errorhandler();
+    return $number < 0 ? 0 : $number;
+  }
+
+  private function validPoli(array $params): string
+  {
+    $poli = $params['poli'] ?? $this->errorhandler();
+    $poli = strtoupper($poli);
+    return in_array($poli, ['A', 'B', 'C', 'D']) ? $poli : $this->errorhandler();
   }
 }
 

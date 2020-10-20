@@ -12,47 +12,46 @@
 .antrian-container {
   display: grid;
   grid-template-columns: 1fr;
+  cursor: default;
 }
 
-.antrian-box.left{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 8px;
+.antrian-box {
+  &.left {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 8px;
+  }
+ 
+  &.right {
+    overflow-x: auto;
 }
+}
+
 .big-antrian-card {
   min-height: 240px;
   min-width: 240px;
   display: flex;
   justify-content: center;
-  align-items: center
-}
-.big-antrian-card .details {
-  text-align: center;
-  font-size: 16px;
-  font-weight: 600;
-}
-.big-antrian-card .title {
-  font-size: 88px;
-  font-weight: 800;
+  align-items: center;
+  
+  .details {
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  .title {
+    font-size: 88px;
+    font-weight: 800;
+  }
 }
 
-.antrian-box.right {
-  overflow-x: auto;
-}
 .antraian-container-small { 
   display: flex;
   flex-direction: row;
   /* max-height: 266px;
   overflow: auto */
-}
-
-.small-antrian-card {
-  padding: 12px;
-  max-height: 100px;
-  max-width: 100px;
-  min-height: 100px;
-  min-width: 100px;
 }
 
 .antrian-small-title {
@@ -61,23 +60,36 @@
   margin: 8px 0;
   color: #555;
 }
-.small-antrian-card {            
+.small-antrian-card {
+  padding: 12px;
+  max-height: 100px;
+  max-width: 100px;
+  min-height: 100px;
+  min-width: 100px;          
   display: flex;
   justify-content: center;
   flex-direction: column;
-}
-.small-antrian-card .title {
-  text-align: center;
-  font-size: 32px;
-  font-weight: 700;
-}
-.small-antrian-card .details {
-  text-align: center;
-  font-size: 16px;
-  font-weight: 600;
+
+  .title {
+    text-align: center;
+    font-size: 32px;
+    font-weight: 700;
+  }
+
+  .details {
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+  }
 }
 @media screen and (max-width: 767px) {
   .antrian-container {
       grid-template-columns: 1fr;
+  }
+}
+@media screen and (max-width: 479px) {
+  .big-antrian-card {
+    min-height: 200px;
+    min-width: 200px;
   }
 }

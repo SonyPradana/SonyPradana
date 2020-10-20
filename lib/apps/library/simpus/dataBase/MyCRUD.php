@@ -73,7 +73,7 @@ class MyCRUD implements crudInterface
 
     // binding
     foreach( $this->COLUMNS as $key => $val) {
-      if(isset($val) && $val != '') {
+      if(isset($val) && $val !== '') {
         $this->PDO->bind(':' . $key, $val);
       }
     }
@@ -119,7 +119,7 @@ class MyCRUD implements crudInterface
   {
     $query = [];
     foreach($filters as $key => $val) {
-      if(isset($val) && $val != '') {
+      if(isset($val) && $val !== '') {
         $query[] = $this->queryBuilder($key, $key, [
           'imperssion' => [':', ''],
           'operator' => '='
@@ -136,7 +136,7 @@ class MyCRUD implements crudInterface
     $operator = $option["operator"];
     $sur = $option["imperssion"][0];
     $pre = $option["imperssion"][1];
-    if( isset( $val ) && $val != '') {
+    if( isset( $val ) && $val !== '') {
         return "$key $operator $sur$val$pre";
     }
     return "";

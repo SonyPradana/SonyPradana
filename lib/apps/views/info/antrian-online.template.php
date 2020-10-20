@@ -11,6 +11,11 @@
         main {
             overflow-x: auto;
         }
+        
+        .button-group button {
+            margin: 8px 4px;
+            min-width: 70px;
+        }
 
         @media screen and (max-width: 767px) {
             .container.width-view {
@@ -111,7 +116,7 @@
                         <div class="antrian-contoller">
                             <div class="controller-group">
                                 <span>Poli KIA</span>
-                                <div class="buton-group">
+                                <div class="button-group">
                                     <button type="button" id="kia-plus" class="btn fill blue small rounded">+</button>
                                     <button type="button" id="kia-minus" class="btn fill blue small rounded">-</button>
                                     <button type="button" id="kia-reset" class="btn fill red small rounded">reset</button>
@@ -119,7 +124,7 @@
                             </div>
                             <div class="controller-group">
                                 <span>Poli Gigi</span>
-                                <div class="buton-group">
+                                <div class="button-group">
                                     <button type="button" id="gigi-plus" class="btn fill blue small rounded">+</button>
                                     <button type="button" id="gigi-minus" class="btn fill blue small rounded">-</button>
                                     <button type="button" id="gigi-reset" class="btn fill red small rounded">reset</button>
@@ -127,7 +132,7 @@
                             </div>
                             <div class="controller-group">
                                 <span>Poli Umum</span>
-                                <div class="buton-group">
+                                <div class="button-group">
                                     <button type="button" id="umum-plus" class="btn fill blue small rounded">+</button>
                                     <button type="button" id="umum-minus" class="btn fill blue small rounded">-</button>
                                     <button type="button" id="umum-reset" class="btn fill red small rounded">reset</button>
@@ -135,7 +140,7 @@
                             </div>
                             <div class="controller-group">
                                 <span>Poli Lansia</span>
-                                <div class="buton-group">
+                                <div class="button-group">
                                     <button type="button" id="lansia-plus" class="btn fill blue small rounded">+</button>
                                     <button type="button" id="lansia-minus" class="btn fill blue small rounded">-</button>
                                     <button type="button" id="lansia-reset" class="btn fill red small rounded">reset</button>
@@ -152,30 +157,50 @@
                             function clicker_plus(id_poli, code_poli)
                             {
                                 $id(id_poli).addEventListener('click', function() {
+                                    this.disabled = true;
                                     const plus = parseInt(app.poli[code_poli].current) + 1
                                     $json(`/api/v1.0/Antrian-Poli/dipanggil.json?poli=${code_poli}&antrian=${plus}`)
                                         .then( json => {
-                                            $work("berhasil ditambahkan")
-                                        })
+                                            if (json.status == 'ok' ) {
+                                                creat_snackbar('berhasil ditambah');
+                                                show_snackbar();
+                                            }
+
+                                            this.disabled = false;
+                                        });
                                 });
                             }
                             function clicker_minus(id_poli, code_poli)
                             {
                                 $id(id_poli).addEventListener('click', function() {
-                                    const plus = parseInt(app.poli[code_poli].current) - 1
-                                    $json(`/api/v1.0/Antrian-Poli/dipanggil.json?poli=${code_poli}&antrian=${plus}`)
-                                        .then( json => {
-                                            $work("berhasil dikurangi");
-                                        })
+                                    this.disabled = true;
+                                    const plus = parseInt(app.poli[code_poli].current) - 1;
+                                    if( plus >= 0) {
+                                        $json(`/api/v1.0/Antrian-Poli/dipanggil.json?poli=${code_poli}&antrian=${plus}`)
+                                            .then( json => {
+                                                if (json.status == 'ok') {
+                                                    creat_snackbar('berhasil dikurang');
+                                                    show_snackbar();
+                                                }
+
+                                                this.disabled = false;
+                                            });
+                                    }
                                 });
                             }
                             function clicker_reset(id_poli, code_poli)
                             {
                                 $id(id_poli).addEventListener('click', function(){
+                                    this.disabled = true;
                                     $json(`/api/v1.0/Antrian-Poli/reset.json?poli=${code_poli}`)
                                         .then( json => {
-                                            $work("berhasil reset");
-                                        })
+                                            if (json == 'ok') {
+                                                $work("berhasil reset");
+                                                    creat_snackbar('berhasil direset');
+                                                    show_snackbar();
+                                            }
+                                            this.disabled = false;
+                                        });
                                 });
                             }
                             
@@ -210,6 +235,17 @@
     <div id="modal">
         <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/control/modal.html') ?>
     </div>
+    
+    <?php if( $portal['message']['show'] ) :?>
+        <div class="snackbar <?= $portal['message']['type'] ?>">
+            <div class="icon">
+                <!-- css image -->
+            </div>
+            <div class="message">
+                <?= $portal['message']['content'] ?>
+            </div>
+        </div>
+    <?php endif; ?> 
 
     <script src="/lib/js/index.end.js"></script>
     <script>

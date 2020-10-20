@@ -14,7 +14,7 @@ class InfoController extends Controller
 
   public function Antrian_Online()
   {
-    $msg = ['show' => true, 'type' => 'info', 'content' => 'oke'];
+    $msg = ['show' => false, 'type' => 'info', 'content' => 'oke'];
     // your code
     
     $author = new User("angger");
