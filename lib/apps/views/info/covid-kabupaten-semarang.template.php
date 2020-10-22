@@ -281,7 +281,7 @@
                     })
             }
         },
-        created(){
+        mounted(){
             this.render_card();
         }
     })

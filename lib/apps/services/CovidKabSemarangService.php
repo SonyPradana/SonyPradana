@@ -43,19 +43,18 @@ class CovidKabSemarangService extends Middleware
         $covid_tracker->setFiltersDate( $date )->setFiltersLocation( $lokasi );
 
         $result = [];
-        foreach( $date as $this_date ){    
-            $count              = $covid_tracker->result_count()[ $this_date ][0];
-            
+        foreach( $covid_tracker->result_count() as $key => $raw_data) {
+            $covid_data = $raw_data[0];
             $result[] = [
                 "location"          => "kab. semarang",
-                "time"              => date($date_format, $this_date),
-                "kasus_posi"        => $count['konfirmasi_symptomatik'],
-                "kasus_isol"        => $count['konfirmasi_asymptomatik'],
-                "kasus_semb"        => $count['konfirmasi_sembuh'],
-                "kasus_meni"        => $count['konfirmasi_meninggal'],
-                "suspek"            => $count['suspek'],
-                "suspek_discharded" => $count['suspek_discharded'],
-                "suspek_meninggal"  => $count['suspek_meninggal']
+                "time"              => date($date_format, $key),
+                "kasus_posi"        => $covid_data['konfirmasi_symptomatik'],
+                "kasus_isol"        => $covid_data['konfirmasi_asymptomatik'],
+                "kasus_semb"        => $covid_data['konfirmasi_sembuh'],
+                "kasus_meni"        => $covid_data['konfirmasi_meninggal'],
+                "suspek"            => $covid_data['suspek'],
+                "suspek_discharded" => $covid_data['suspek_discharded'],
+                "suspek_meninggal"  => $covid_data['suspek_meninggal']
             ];
         }
 

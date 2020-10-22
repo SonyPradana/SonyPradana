@@ -238,7 +238,7 @@
                 msgSemb: 'xxx sembuh',
                 msgMeni: 'xxx meninggal'
             },
-            created(){
+            mounted(){
                 $json('/api/ver1.0/Covid-Kab-Semarang/tracker.json')
                 .then( json => {
                     this.msgPosi = json['kasus_posi'] + ' positif';
@@ -254,7 +254,7 @@
             data: {
                 feeders: []
             },
-            created(){
+            mounted(){
                 $json('/api/v1/NewsFeeder/ResendNews.json')
                     .then( json => {
                         this.feeders = json.data;
