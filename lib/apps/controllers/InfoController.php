@@ -47,20 +47,6 @@ class InfoController extends Controller
 
   public function Covid_Kabupaten_Semarang()
   {
-    $data_covid = new CovidKabSemarangService();
-
-    $track_record   = $data_covid->track_record(["toString" => true])['data'];
-    $data_record    = $data_covid->tracker(['range_waktu' => $track_record]);
-    krsort($data_record);
-    // data: konirmasi covid
-    $date_record    = json_encode( array_values(array_column($data_record, "time")) );
-    $posi_record    = json_encode( array_values(array_column($data_record, "kasus_posi")) );
-    $meni_record    = json_encode( array_values(array_column($data_record, "kasus_meni")) );
-    // data: suspek covid
-    $suspek                = json_encode( array_values(array_column($data_record, "suspek")) );
-    $suspek_disc_record    = json_encode( array_values(array_column($data_record, "suspek_discharded")) );
-    $suspek_meni_record    = json_encode( array_values(array_column($data_record, "suspek_meninggal")) );
-
     $author = new User("angger");
     return $this->view('/info/covid-kabupaten-semarang', [
       "auth"    => $this->getMiddleware()['auth'],
@@ -78,14 +64,7 @@ class InfoController extends Controller
           "display_name"          => $author->getDisplayName(),
           "display_picture_small" => $author->getSmallDisplayPicture()
         ],
-        "last_index"                => 1,
-        "date_record"               => $date_record ?? [],
-        "kasus_posi"                => $posi_record ?? [],
-        "kasus_meni"                => $meni_record ?? [],
-        "suspek"                    => $suspek ?? [],
-        "suspek_disc"               => $suspek_disc_record ?? [],
-        "suspek_meni"               => $suspek_meni_record ?? [],
-        ]
+      ],
     ]);
   }
 

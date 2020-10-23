@@ -241,10 +241,10 @@
             mounted(){
                 $json('/api/ver1.0/Covid-Kab-Semarang/tracker.json')
                 .then( json => {
-                    this.msgPosi = json['kasus_posi'] + ' positif';
-                    this.msgSemb = json['kasus_semb'] + ' sembuh';
-                    this.msgMeni = json['kasus_meni'] + ' meninggal';
-                    this.msgIsol = json['kasus_isol'] + ' isolasi'
+                    this.msgPosi = json.data['kasus_posi'] + ' positif';
+                    this.msgSemb = json.data['kasus_semb'] + ' sembuh';
+                    this.msgMeni = json.data['kasus_meni'] + ' meninggal';
+                    this.msgIsol = json.data['kasus_isol'] + ' isolasi'
                 })
             }
         })

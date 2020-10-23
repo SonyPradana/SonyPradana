@@ -1,15 +1,4 @@
 <?php
-/**
- * TODO:
- * 1. membuat cash data kedalam internal database
- * 2. buat schedule untuk otomatis menyimpan data kedata base apabila belum terindex pad hari trsebut
- * 3. buat method untuk mengambil langung dan mengambil dari databse
- * 
- * NOTE:
- * 1. client/user dapat memilih mengambil dari database (cash) atau langsung
- * 2. shadule dijalankan di ServiceController otomatis
- */
-
 namespace Simpus\ApiGrabber;
 use Simpus\ApiGrabber\CovidKabSemarang;
 use Simpus\Database\MyPDO;
@@ -86,16 +75,19 @@ class CovidKabSemarangTracker
         }
         return $grupByDate;
     }
+
+    public function result_countAll()
+    {        
+        $this->db->query($this->queryBuilder_count(null));
+        return $this->db->resultset();
+    }
     
     public function result_count()
     {
-        $grupByDate = [];
-        foreach($this->_filters_waktu as $date){
-            $this->db->query($this->queryBuilder_count($date));        
-            $this->db->bind(':date', $date);
-            $grupByDate[$date] = $this->db->resultset();
-        }
-        return $grupByDate;
+        if ($this->_filters_waktu == null ) return [];
+        $date = implode(', ', $this->_filters_waktu);
+        $this->db->query($this->queryBuilder_count($date));
+        return $this->db->resultset();
     }
 
     public function listOfDate() :array
@@ -110,8 +102,10 @@ class CovidKabSemarangTracker
     
     private function queryBuilder_count($date)
     {
+        $where_statment = $date == null ? '' : "WHERE `date` IN ($date)";
         $query          = " SELECT 
-                                covid_tracker.location,               
+                                covid_tracker.location,
+                                covid_tracker.date                          AS date_create,               
                                 SUM(covid_tracker.suspek)                   AS suspek,
                                 SUM(covid_tracker.suspek_discharded)        AS suspek_discharded,
                                 SUM(covid_tracker.suspek_meninggal)         AS suspek_meninggal,      
@@ -122,8 +116,7 @@ class CovidKabSemarangTracker
                             FROM `covid_tracker`
                             INNER JOIN  `desa_kecamatan`
                                     ON desa_kecamatan.id = covid_tracker.location
-                            WHERE
-                                `date` = :date 
+                            $where_statment
                             GROUP BY `date`
                             ";
         return $query;

@@ -21,7 +21,6 @@ class CovidKabSemarangService extends Middleware
         }
 
         $covid_tracker  = new CovidKabSemarangTracker();
-        $list_kecamatan = (new CovidKabSemarang())->Daftar_Kecamatan;
 
         // configurasi
         $list_date      = $covid_tracker->listOfDate();
@@ -41,13 +40,13 @@ class CovidKabSemarangService extends Middleware
         $lokasi         = $params['lokasi'] ?? [''];
         
         $covid_tracker->setFiltersDate( $date )->setFiltersLocation( $lokasi );
+        // var_dump($date);exit;
 
         $result = [];
-        foreach( $covid_tracker->result_count() as $key => $raw_data) {
-            $covid_data = $raw_data[0];
+        foreach( $covid_tracker->result_count() as $covid_data) {
             $result[] = [
                 "location"          => "kab. semarang",
-                "time"              => date($date_format, $key),
+                "time"              => date($date_format, $covid_data['date_create']),
                 "kasus_posi"        => $covid_data['konfirmasi_symptomatik'],
                 "kasus_isol"        => $covid_data['konfirmasi_asymptomatik'],
                 "kasus_semb"        => $covid_data['konfirmasi_sembuh'],
@@ -58,7 +57,39 @@ class CovidKabSemarangService extends Middleware
             ];
         }
 
-        $end_point              = count($result) == 1 ? $result[0] : $result;
+        $end_point['data'] = count($result) == 1 ? $result[0] : $result;
+        $end_point['status']    = 'ok';
+        $end_point['headers']   = ['HTTP/1.1 200 Oke'];
+
+        return $end_point;
+    }
+    public function tracker_all(array $params)
+    {
+        // option
+        $date_format    = $params['date_format'] ?? 'd/m h:i';
+        if( $date_format != 'd/m h:i' ){
+            // force format
+            $date_format = 'Y-m-d h:i:sa';
+        }
+
+        $covid_tracker  = new CovidKabSemarangTracker();
+       
+        $result = [];
+        foreach( $covid_tracker->result_countAll() as $covid_data) {
+            $result[] = [
+                "location"          => "kab. semarang",
+                "time"              => date($date_format, $covid_data['date_create']),
+                "kasus_posi"        => $covid_data['konfirmasi_symptomatik'],
+                "kasus_isol"        => $covid_data['konfirmasi_asymptomatik'],
+                "kasus_semb"        => $covid_data['konfirmasi_sembuh'],
+                "kasus_meni"        => $covid_data['konfirmasi_meninggal'],
+                "suspek"            => $covid_data['suspek'],
+                "suspek_discharded" => $covid_data['suspek_discharded'],
+                "suspek_meninggal"  => $covid_data['suspek_meninggal']
+            ];
+        }
+
+        $end_point['data'] = count($result) == 1 ? $result[0] : $result;
         $end_point['status']    = 'ok';
         $end_point['headers']   = ['HTTP/1.1 200 Oke'];
 

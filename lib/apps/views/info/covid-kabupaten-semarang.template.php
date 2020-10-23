@@ -217,7 +217,9 @@
         }
     );
 
-    $load(function(){
+    $load(function() {
+        update_chart();
+        
         $json('/api/ver1.1/Covid-Kab-Semarang/indexing.json')
             .then(json => {
                 $id('last-index').innerText = json['last_index'];
@@ -225,9 +227,29 @@
                     $id('last-index').innerText = json['next_index'];
                     // reload
                     card.render_card();
+                    update_chart();
                 }
             })
     })
+
+    let update_chart = function() {
+        $json('/api/ver1.1/Covid-Kab-Semarang/tracker-all.json')
+            .then(json => {
+                let date_record = Array();
+                json.data.forEach(el => {
+                    date_record.push(el.time);
+                    chart_covid_postif.data.datasets[0].data.push(el.suspek);
+                    chart_covid_postif.data.datasets[1].data.push(el.kasus_posi);
+                    chart_covid_suspek.data.datasets[0].data.push(el.kasus_meni);
+                    chart_covid_suspek.data.datasets[1].data.push(el.suspek_meninggal);
+                });
+                
+                chart_covid_postif.data.labels = date_record;
+                chart_covid_suspek.data.labels = date_record;
+                chart_covid_postif.update();
+                chart_covid_suspek.update();
+            })
+    }
     
     // menagbil data
     let card = new Vue({
@@ -296,11 +318,11 @@
     let chart_covid_postif = new Chart($id("chartjs-0"), {
         type:"line",
         data:{
-            labels: <?= $content->date_record ?>,
+            labels: null,
             datasets:[
                 {
                     label: "Suspek",
-                    data: <?= $content->suspek ?>,
+                    data: null,
                     fill: true,
                     borderColor: "rgb(255, 69, 0)",
                     backgroundColor: "rgba(255, 69, 0, 0.3)",
@@ -308,7 +330,7 @@
                 },
                 {
                     label:"Konfirmasi Covid",
-                    data: <?= $content->kasus_posi ?>,
+                    data: null,
                     fill: true,
                     borderColor: "rgb(75, 192, 192)",
                     backgroundColor: "rgba(75, 192, 192, 0.3)",
@@ -319,8 +341,8 @@
                 scales: {
                     yAxes: [{
                         ticks: {
-                                suggestedMin: 15,
-                                suggestedMax: 45
+                            suggestedMin: 15,
+                            suggestedMax: 50
                         }
                     }]
                 }
@@ -330,10 +352,10 @@
     let chart_covid_suspek = new Chart($id("chartjs-1"), {
         type:"line",
         data:{
-            labels: <?= $content->date_record ?>,
+            labels: null,
             datasets:[{
                     label: "Kasus Meninggal",
-                    data: <?= $content->kasus_meni ?>,
+                    data: null,
                     fill: true,
                     borderColor: "rgb(255,69,0)",
                     backgroundColor: "rgba(255,69,0, 0.3)",
@@ -341,7 +363,7 @@
                 },
                 {
                     label:"Suspek Meninggal",
-                    data: <?= $content->suspek_meni ?>,
+                    data: null,
                     fill:true,
                     borderColor:"rgb(255, 127, 0)",
                     backgroundColor:"rgba(255, 127, 0, 0.3)",
@@ -353,7 +375,7 @@
                     yAxes: [{
                         ticks: {
                                 suggestedMin: 40,
-                                suggestedMax: 80
+                                suggestedMax: 90
                         }
                     }]
                 }
