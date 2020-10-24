@@ -228,9 +228,6 @@ class CovidKabSemarangService extends Middleware
 
         return $end_point;
     }
-
-    // private 
-
     public function fetch(array $params)
     {
         $id     = $params['kecamatan'] ?? null;
@@ -320,6 +317,51 @@ class CovidKabSemarangService extends Middleware
             'last_index'    => date("Y/m/d h:i:sa", $schadule->getLastModife()),
             'next_index'    => date("Y/m/d h:i:sa", $schadule->getLastModife() + $schadule->getInterval()),
             'index_status'  => $index_status,
+            'headers'       => ['HTTP/1.1 200 Oke']
+        ];
+    }
+
+    public function indexing_compiere(array $param)
+    {
+        $old_raw = $this->tracker_data(array());
+        $old_data = [
+            $old_raw['kasus_posi'],
+            $old_raw['kasus_isol'],
+            $old_raw['kasus_semb'],
+            $old_raw['kasus_meni'],
+            $old_raw['suspek'],
+            $old_raw['suspek_discharded'],
+            $old_raw['suspek_meninggal'],
+        ];
+
+        $new_raw = $this->fetch(array());
+        $new_data = [
+            $new_raw['kasus_posi'],
+            $new_raw['kasus_isol'],
+            $new_raw['kasus_semb'],
+            $new_raw['kasus_meni'],
+            $new_raw['suspek'],
+            $new_raw['suspek_discharded'],
+            $new_raw['suspek_meninggal'],
+        ];
+        
+        $schadule   = new Scheduler(1);
+        $schadule->read();
+        if ($old_data != $new_data && $new_raw['status'] == 'ok') {
+            $new_reqeust = new CovidKabSemarangTracker();
+            if ($new_reqeust->createIndex()) {
+                $schadule->setLastModife(time());
+                $schadule->update();
+                // done
+                $index_status = 'sussessful';
+            }
+        }
+
+        return [
+            'status'        => $new_raw['status'],
+            'last_index'    => date("Y/m/d h:i:sa", $schadule->getLastModife()),
+            'next_index'    => date("Y/m/d h:i:sa", $schadule->getLastModife() + $schadule->getInterval()),
+            'index_status'  => $index_status ?? 'no index',
             'headers'       => ['HTTP/1.1 200 Oke']
         ];
     }
