@@ -9,6 +9,7 @@
     <script src="/lib/js/bundles/keepalive.min.js"></script>
     <script src="/lib/js/vendor/vue/vue.min.js"></script>
     <script src="/lib/js/vendor/chart/Chart.min.js"></script>
+    <script src="/lib/js/vendor/enquire/enquire.min.js"></script>
     <style>
         .container.width-view {
             display: grid;
@@ -133,7 +134,7 @@
                     <h3>Positif dan Supek Covid</h3>
                     <div class="chart">
                         <canvas id="chartjs-0" 
-                                width="400" height="200" 
+                                width="400" height="220" 
                                 aria-label="grafik positif dan suspek covid" 
                                 role="img">
                             </canvas>
@@ -141,7 +142,7 @@
                     <h3>Meninggal</h3>
                     <div class="chart">
                         <canvas id="chartjs-1" 
-                                width="400" height="200" 
+                                width="400" height="220" 
                                 aria-label="grafik meninggal covid dan suspek" 
                                 role="img">
                             </canvas>
@@ -202,7 +203,7 @@
 <script>    
     // sticky header
     window.onscroll = function(){
-            stickyHeader('.container', '82px', '32px')
+        stickyHeader('.container', '82px', '32px')
     }
     
     // keep alive
@@ -224,7 +225,6 @@
             .then(json => {
                 $id('last-index').innerText = json['last_index'];
                 if(json['index_status'] == 'sussessful'){
-                    $id('last-index').innerText = json['next_index'];
                     // reload
                     card.render_card();
                     update_chart();
@@ -232,27 +232,35 @@
             })
     })
 
-    let update_chart = function() {
+    const update_chart = function() {
         $json('/api/ver1.1/Covid-Kab-Semarang/tracker-all.json')
             .then(json => {
-                let date_record = Array();
-                json.data.forEach(el => {
-                    date_record.push(el.time);
-                    chart_covid_postif.data.datasets[0].data.push(el.suspek);
-                    chart_covid_postif.data.datasets[1].data.push(el.kasus_posi);
-                    chart_covid_suspek.data.datasets[0].data.push(el.kasus_meni);
-                    chart_covid_suspek.data.datasets[1].data.push(el.suspek_meninggal);
-                });
-                
-                chart_covid_postif.data.labels = date_record;
-                chart_covid_suspek.data.labels = date_record;
-                chart_covid_postif.update();
-                chart_covid_suspek.update();
+                if (json.status == 'ok') {
+                    // reset
+                    chart_covid_postif.data.datasets[0].data = [];
+                    chart_covid_postif.data.datasets[1].data = [];
+                    chart_covid_meninggal.data.datasets[0].data = [];
+                    chart_covid_meninggal.data.datasets[1].data = [];
+    
+                    let date_record = Array();
+                    json.data.forEach(el => {
+                        date_record.push(el.time);
+                        chart_covid_postif.data.datasets[0].data.push(el.suspek);
+                        chart_covid_postif.data.datasets[1].data.push(el.kasus_posi);
+                        chart_covid_meninggal.data.datasets[0].data.push(el.kasus_meni);
+                        chart_covid_meninggal.data.datasets[1].data.push(el.suspek_meninggal);
+                    });
+                    
+                    chart_covid_postif.data.labels = date_record;
+                    chart_covid_meninggal.data.labels = date_record;
+                    chart_covid_postif.update();
+                    chart_covid_meninggal.update();
+                }
             })
     }
     
-    // menagbil data
-    let card = new Vue({
+    // apps
+    const card = new Vue({
         el: '#covid-card',
         data: {
             dirawat: 0,
@@ -290,32 +298,34 @@
             render_card: function(){
                 $json('/api/ver1.0/Covid-Kab-Semarang/tracker-data.json')
                     .then( json => {
-                        this.dirawat    = json['kasus_posi'];
-                        this.isolasi    = json['kasus_isol'];
-                        this.sembuh     = json['kasus_semb'];
-                        this.meninggal  = json['kasus_meni'];
-                        
-                        this.grapInfo(json);
-                        
-                        // data vue table 
-                        table.rows = json.data[16];
-                        // table.rows          = json.data.filter(k => k.kecamatan == 'ungaran-barat')[0];
+                        if (json.status == 'ok') {
+                            this.dirawat    = json['kasus_posi'];
+                            this.isolasi    = json['kasus_isol'];
+                            this.sembuh     = json['kasus_semb'];
+                            this.meninggal  = json['kasus_meni'];
+                            
+                            this.grapInfo(json);
+                            
+                            // data vue table 
+                            table.rows = json.data[16];
+                            // table.rows          = json.data.filter(k => k.kecamatan == 'ungaran-barat')[0];
+                        }
                     })
             }
         },
         mounted(){
             this.render_card();
         }
-    })
+    });
 
-    let table = new Vue({
+    const table = new Vue({
         el: '#covid-table',
         data: {
             rows: []
         }
-    })    
+    });
 
-    let chart_covid_postif = new Chart($id("chartjs-0"), {
+    const chart_covid_postif = new Chart($id("chartjs-0"), {
         type:"line",
         data:{
             labels: null,
@@ -334,22 +344,22 @@
                     fill: true,
                     borderColor: "rgb(75, 192, 192)",
                     backgroundColor: "rgba(75, 192, 192, 0.3)",
-                    lineTension: 0.4
+                    lineTension: 0.4,
                 }]
             },
         options:{
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            suggestedMin: 15,
-                            suggestedMax: 50
-                        }
-                    }]
-                }
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        suggestedMin: 15,
+                        suggestedMax: 50
+                    }
+                }]
+            }
         }
     });
 
-    let chart_covid_suspek = new Chart($id("chartjs-1"), {
+    const chart_covid_meninggal = new Chart($id("chartjs-1"), {
         type:"line",
         data:{
             labels: null,
@@ -365,20 +375,63 @@
                     label:"Suspek Meninggal",
                     data: null,
                     fill:true,
-                    borderColor:"rgb(255, 127, 0)",
-                    backgroundColor:"rgba(255, 127, 0, 0.3)",
+                    borderColor:"rgb(254, 203, 0)",
+                    backgroundColor:"rgba(254, 203, 0, 0.3)",
                     lineTension:0.4
                 }]
             },
         options:{
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                                suggestedMin: 40,
-                                suggestedMax: 90
-                        }
-                    }]
-                }
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        suggestedMin: 40,
+                        suggestedMax: 90
+                    }
+                }]
+            }
+        }
+    });
+
+    
+    // media query
+    enquire.register("screen and (max-width:479px)", {
+        match : function() {
+            chart_covid_postif.data.datasets[0].pointRadius = 1;
+            chart_covid_postif.data.datasets[1].pointRadius = 1;
+            chart_covid_meninggal.data.datasets[0].pointRadius = 1;
+            chart_covid_meninggal.data.datasets[1].pointRadius = 1;
+
+            chart_covid_postif.data.datasets[0].pointHoverRadius = 3;
+            chart_covid_postif.data.datasets[1].pointHoverRadius = 3;
+            chart_covid_meninggal.data.datasets[0].pointHoverRadius = 3;
+            chart_covid_meninggal.data.datasets[1].pointHoverRadius = 3;
+            
+            chart_covid_postif.data.datasets[0].borderWidth = 2;
+            chart_covid_postif.data.datasets[1].borderWidth = 2;
+            chart_covid_meninggal.data.datasets[0].borderWidth = 2;
+            chart_covid_meninggal.data.datasets[1].borderWidth = 2;
+            
+            chart_covid_postif.options.maintainAspectRatio = false;
+            chart_covid_meninggal.options.maintainAspectRatio = false;
+        },
+        unmatch : function() {
+            chart_covid_postif.data.datasets[0].pointRadius = 2;
+            chart_covid_postif.data.datasets[1].pointRadius = 2;
+            chart_covid_meninggal.data.datasets[0].pointRadius = 2;
+            chart_covid_meninggal.data.datasets[1].pointRadius = 2;
+
+            chart_covid_postif.data.datasets[0].pointHoverRadius = 4;
+            chart_covid_postif.data.datasets[1].pointHoverRadius = 4;
+            chart_covid_meninggal.data.datasets[0].pointHoverRadius = 4;
+            chart_covid_meninggal.data.datasets[1].pointHoverRadius = 4;
+            
+            chart_covid_postif.data.datasets[0].borderWidth = 3;   
+            chart_covid_postif.data.datasets[1].borderWidth = 3;
+            chart_covid_meninggal.data.datasets[0].borderWidth = 3;
+            chart_covid_meninggal.data.datasets[1].borderWidth = 3;
+            
+            chart_covid_postif.options.maintainAspectRatio = true;
+            chart_covid_meninggal.options.maintainAspectRatio = true;
         }
     });
 </script>
