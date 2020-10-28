@@ -36,7 +36,9 @@ article .info {
 @media screen and (max-width: 767px) {
     .container.width-view{grid-template-columns: 1fr}
     .box.cards{justify-content: unset}
-    .table-boxs{justify-content: unset}
+    .table-boxs {  
+        overflow-x: auto;
+    }
 }
 @media screen and (max-width: 1000px) {
     .box.cards{

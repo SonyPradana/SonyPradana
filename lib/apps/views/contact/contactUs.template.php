@@ -4,58 +4,9 @@
     <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/meta/metatag.php') ?>
 
     <link rel="stylesheet" href="/lib/css/ui/v1.1/style.css">
+    <link rel="stylesheet" href="/lib/css/pages/v1.1/contactus.css">
     <script src="/lib/js/index.min.js"></script>
     <script src="/lib/js/bundles/keepalive.min.js"></script>
-    <style>
-        h1, h2{
-            margin: 4px !important;
-        }
-        boxs h2{font-family: 18px !important}
-
-        .container{                
-            margin: 32px 56px;
-            padding: 20px;
-            min-height: 300px;
-            background-color: white;
-            display: grid;
-            grid-template-columns: 1fr 400px;
-        }
-        form{
-            min-width: 200px;
-            max-width: 400px;
-
-            display: flex;
-            flex-direction: column;
-        }
-        form label,
-        form button{
-            margin-top: 8px; margin-bottom: 4px;
-            min-width: 80px;
-            max-width: 150px;
-        }
-        form .grub-control{
-            margin-top: 8px;
-        }
-
-        input, label, select, textarea{font-size: 1rem}
-        #input-ampcaptcha{ width: 100px }
-
-        #input-submit{ margin-top: 12px }
-
-        /* mobile */
-        @media screen and (max-width: 479px) {
-            .container{
-                grid-template-columns: 1fr
-            }
-            main{
-                max-width: 478px;
-                min-width: 200px;
-            }
-            form{
-                overflow-x: auto;
-            }
-        }
-    </style>
 </head>
 <body>    
     <header>
@@ -89,6 +40,7 @@
                     
                     <label for="input-message">Pesan</label>
                     <textarea name="message" id="input-message" cols="30" rows="10" class="textbox outline blue rounded small" placeholder="saran dari Anda"></textarea>
+                    <p class="info">(Kerahasian Anda adalah yang utama)</p>
                     
                     <div class="grub-control horizontal">
                         <label for="input-ampcaptcha"><?= $content->captcha_quest ?></label>
