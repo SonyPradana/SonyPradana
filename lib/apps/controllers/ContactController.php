@@ -1,5 +1,7 @@
 <?php
 
+require BASEURL . '/vendor/autoload.php';
+
 use Simpus\Database\MyPDO;
 use Simpus\Apps\Controller;
 use Simpus\Helper\MathCaptcha;
@@ -16,18 +18,43 @@ class ContactController extends Controller{
         $regarding   = $_POST['regarding'] ?? null;
         $captcha     = $_POST['ampcaptcha'] ?? null;
 
-        if( $sender != null &&
-        $message != null &&
-        $regarding != null &&
-        $captcha == $cek_captcha){
+        // validation
+        $is_valid = GUMP::is_valid($_POST, [
+            'mail' => 'required|valid_email',
+            'message' => 'required|between_len,3;200',
+            'regarding' => 'required',
+            'ampcaptcha' => 'required|numeric'
+        ], [
+            'mail' => [
+                'required' => 'Email tidak boleh kosong',
+                'valid_email' => 'Format email tidak tepat'
+            ],
+            'message' => [
+                'required' => 'Isi pesan tidak boleh kosong',
+                'between_len' => 'Pesan tidak boleh lebih dari 200 karakter'
+            ],
+            'ampcaptcha' => ['required' => 'Captcha wajib diisi']
+        ]);
+
+        // logic dan send message
+        if ($is_valid === true && $captcha == $cek_captcha) {
             // send message
             $send_message = new ContactUs($sender, $message, $regarding);
             if( $send_message->kirimPesan() ){
                 $msg = ["show" => true, "type" => 'success', "content" => 'Trimakasih atas dukungan Anda :)'];
             }
-        }elseif( $captcha != $cek_captcha && $captcha != null ){
+            $is_valid = Array();
+        } elseif ($captcha != $cek_captcha && $captcha != null) {
             $msg = ["show" => true, "type" => 'danger', "content" => 'Captcha salah, silahkan ulangai kembali'];
+            $is_valid = ['Chaptcha salah'];
+        } else {
+            if (isset( $_POST['done'] )) {
+                $msg = ["show" => true, "type" => 'danger', "content" => 'Silahkan ulangai kembali'];
+            } else {
+                $is_valid = Array();
+            }
         }
+
         // new captcha dibuat
         $new_captcha = new MathCaptcha();
         $_SESSION['MathCaptcha_ContactUs'] = $new_captcha->ChaptaResult();
@@ -45,8 +72,12 @@ class ContactController extends Controller{
                 "header_menu"   => $_SESSION['active_menu'] ?? MENU_MEDREC
             ],
             "contents" => [
-                "captcha_quest" => $new_captcha->ChaptaQuest()
+                'captcha_quest' => $new_captcha->ChaptaQuest(),
+                'email' => $sender,
+                'regarding' => $regarding,
+                'message' => $message
             ],
+            'error' => $is_valid,
             "message" => [
                 "show"      => $msg['show'],
                 "type"      => $msg['type'],

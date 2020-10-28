@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9e9f97b16342d961f2ff3828982b094c",
+    "content-hash": "9b38467531bc3d5425fd83990191999e",
     "packages": [
         {
             "name": "gumlet/php-image-resize",
@@ -288,6 +288,67 @@
                 "trigger"
             ],
             "time": "2020-04-14T15:20:04+00:00"
+        },
+        {
+            "name": "wixel/gump",
+            "version": "1.12.0",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:Wixel/GUMP.git",
+                "reference": "3c94b7c87922b1f9f5e48613eae94f2770bb836b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Wixel/GUMP/zipball/3c94b7c87922b1f9f5e48613eae94f2770bb836b",
+                "reference": "3c94b7c87922b1f9f5e48613eae94f2770bb836b",
+                "shasum": ""
+            },
+            "require": {
+                "ext-bcmath": "*",
+                "ext-iconv": "*",
+                "ext-intl": "*",
+                "ext-json": "*",
+                "ext-mbstring": "*",
+                "php": ">=7.0"
+            },
+            "require-dev": {
+                "kamermans/docblock-reflection": "^1.0",
+                "maddhatter/markdown-table": "^1.0",
+                "mockery/mockery": "^1.3",
+                "php-coveralls/php-coveralls": "^2.2",
+                "phpunit/phpunit": "^6"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "gump.class.php"
+                ],
+                "psr-4": {
+                    "GUMP\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Sean Nieuwoudt",
+                    "homepage": "https://wixelhq.com"
+                },
+                {
+                    "name": "Filis Futsarov",
+                    "homepage": "https://filis.me"
+                }
+            ],
+            "description": "A fast, extensible & stand-alone PHP input validation class that allows you to validate any data.",
+            "homepage": "https://wixelhq.com/",
+            "keywords": [
+                "validate",
+                "validation",
+                "validator"
+            ],
+            "time": "2020-09-26T12:14:29+00:00"
         }
     ],
     "packages-dev": [],
@@ -298,5 +359,5 @@
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": [],
-    "plugin-api-version": "1.1.0"
+    "plugin-api-version": "2.0.0"
 }
