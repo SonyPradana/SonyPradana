@@ -1,8 +1,6 @@
-<?php
-namespace Simpus\Simpus;
+<?php namespace Simpus\Simpus;
 
 use Simpus\Database\MyPDO;
-use Simpus\Helper\StringValidation;
 /**
  * Perent Class fungsinya untuk menampung semua filed Rekam Medis
  */
@@ -138,15 +136,12 @@ class MedicalRecord
      */
     public function setNomorRM($val)
     {
-        $verify = StringValidation::NumberValidation($val,1,6);
-        if( $verify){
-            $len = strlen($val);
-            $max = 6 - $len;
-            for ($i=0; $i < $max ; $i++) { 
-                $val = 0 . $val;
-            }
-            $this->_nomorRM = (string) $val;
+        $len = strlen($val);
+        $max = 6 - $len;
+        for ($i=0; $i < $max ; $i++) { 
+            $val = 0 . $val;
         }
+        $this->_nomorRM = (string) $val;
         return $this;
     }
     /**
@@ -164,11 +159,8 @@ class MedicalRecord
      */
     public function setNama($val)
     {
-        $verify = StringValidation::NoHtmlTagValidation($val);
-        if( $verify ){
-            $val = strtolower($val);
-            $this->_nama = $val; 
-        }
+        $val = strtolower($val);
+        $this->_nama = $val; 
         return $this;
     }
     /**
@@ -186,11 +178,8 @@ class MedicalRecord
      */
     public function setAlamat($val)
     {
-        $verify = StringValidation::NoHtmlTagValidation($val);
-        if( $verify ){
-            $val = strtolower($val);
-            $this->_alamat = $val;
-        }
+        $val = strtolower($val);
+        $this->_alamat = $val;
         return $this;
     }
     /**
@@ -199,10 +188,7 @@ class MedicalRecord
      */
     public function setNomorRt($val)
     {
-        $verify = StringValidation::NumberValidation($val,1,2);
-        if( $verify ){
-            $this->_nomorRt = (int) $val;
-        }
+        $this->_nomorRt = (int) $val;
         return $this;
     }
     /**
@@ -211,10 +197,7 @@ class MedicalRecord
      */
     public function setNomorRw($val)
     {
-        $verify = StringValidation::NumberValidation($val,1,2);
-        if( $verify ){
-            $this->_nomorRw = (int) $val;
-        }
+        $this->_nomorRw = (int) $val;
         return $this;
     }
     /**
@@ -223,11 +206,8 @@ class MedicalRecord
      */
     public function setNamaKK($val)
     {
-        $verify = StringValidation::NoHtmlTagValidation($val);
-        if( $verify ){
-            $val = strtolower($val);
-            $this->_namaKK = $val;
-        }
+        $val = strtolower($val);
+        $this->_namaKK = $val;
         return $this;
     }
     /**
@@ -236,15 +216,12 @@ class MedicalRecord
      */
     public function setNomorRM_KK($val)
     {
-        $verify = StringValidation::NumberValidation($val,0,6);
-        if( $verify ){
-            $len = strlen($val);
-            $max = 6 - $len;
-            for ($i=0; $i < $max ; $i++) { 
-                $val = 0 . $val;
-            }
-            $this->_nomorRM_KK = $val;
+        $len = strlen($val);
+        $max = 6 - $len;
+        for ($i=0; $i < $max ; $i++) { 
+            $val = 0 . $val;
         }
+        $this->_nomorRM_KK = $val;
         return $this;
     }
     /**
@@ -252,11 +229,8 @@ class MedicalRecord
      */
     public function setStatus(string $val)
     {
-        $verify = StringValidation::NoHtmlTagValidation( $val );
-        if( $verify ){
-            $val = strtolower( $val );
-            $this->_status = $val;
-        }
+        $val = strtolower( $val );
+        $this->_status = $val;
         return $this;
     }
 

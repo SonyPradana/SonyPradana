@@ -1,7 +1,6 @@
 <?php
 
-use Simpus\Simpus\MedicalRecord;
-use Simpus\Simpus\MedicalRecords;
+use Simpus\Simpus\{MedicalRecord, MedicalRecords};
 use Simpus\Auth\Log;
 use Simpus\Apps\Controller;
 
@@ -74,23 +73,43 @@ class RekamMedisController extends Controller{
     /* view page di panggil secara manual, keculai index.php */
     
 
-    public function edit(){
+    public function edit()
+    {
         $msg = ["show" => false, "type" => 'info', "content" => 'oke'];
-
+        $error = array();
         
-        # ambil id dari url jika tidak ada akes ditolak
-        if( isset( $_GET['document_id'])){
-            # ambil data rm menggunakn  id
+        // ambil id dari url jika tidak ada akes ditolak
+        if (isset($_GET['document_id'])) {
+            // ambil data rm menggunakn  id
             $id = $_GET['document_id'];
-            # default property
-            $status_kk = false;
-            $status_double = false;    
-            # validasi tombol submit di click
-            if( isset( $_POST['submit']) ){ # untuk menggirim data
-                # validasi form jika ada yg kurang atau salah permintaaan ditolak
-                $last_data = isset( $_SESSION['last_data']) ? $_SESSION['last_data'] : [];
+            // default property
+            $status_kk = $status_double = false;    
+
+            // validasi data
+            $validation = new GUMP('id');
+            $validation->validation_rules(array (
+                'nomor_rm' => 'required|numeric|max_len,6',
+                'nama' => 'required|alpha_space|min_len,4|max_len,32',
+                'tgl_lahir' => 'date,Y-m-d',
+                'alamat' => 'alpha_space|max_len,20',
+                'nomor_rt' => 'numeric|max_len,2',
+                'nomor_rw' => 'numeric|max_len,2',
+                'nama_kk' => 'alpha_space|min_len,4|max_len,32',
+                'nomor_rm_kk' => 'numeric|max_len,6',
+            ));
+            $validation->filter_rules(array (
+                'nama' => 'trim|htmlencode',
+                'alamat' => 'trim|htmlencode',
+                'nama_kk' => 'trim|htmlencode'
+            ));
+            $validation->run($_POST);
+            $error = $validation->get_errors_array();
+
+            if (! $validation->errors()) { 
+                //  menjegah duplikasi data saaat merefresh page
+                $last_data = $_SESSION['last_data'] ?? [];
         
-                # kita anggap semua field form sudah benar
+                // kita anggap semua field form sudah benar
                 $new_rm = MedicalRecord::withId($id);
                 $new_rm->setNomorRM( $_POST['nomor_rm'] );
                 $new_rm->setDataDibuat( time() );
@@ -99,14 +118,15 @@ class RekamMedisController extends Controller{
                 $new_rm->setAlamat( $_POST['alamat'] );
                 $new_rm->setNomorRt( $_POST['nomor_rt'] );
                 $new_rm->setNomorRw( $_POST['nomor_rw'] );
-                # opsonal
+                // opsonal
                 $new_rm->setNamaKK( $_POST['nama_kk'] );
                 $new_rm->setNomorRM_KK( $_POST['nomor_rm_kk'] );
         
-                #simpan data
+                //simpan data
                 $simpan = $new_rm->save();
                 if( $simpan && $last_data != $_POST){                
                     $msg = ["show" => true, "type" => 'success', "content" => 'berhasil diupdate'];
+                    $_SESSION['last_data'] = $_POST;
                 } else{                
                     $msg = ["show" => true, "type" => 'danger', "content" => 'gagal disimpan'];
                 }    
@@ -115,8 +135,10 @@ class RekamMedisController extends Controller{
                 $log = new Log( $this->getMiddleware()['auth']['user_name'] );
                 $log->set_event_type('med-rec');
                 $log->save( $new_rm->getLastQuery() );
-
-            }
+            
+            } elseif (empty($_POST)) {
+                $error = array();
+            } 
 
             // memuat data dari data base
             $load_rm = MedicalRecord::withId($id);
@@ -129,25 +151,24 @@ class RekamMedisController extends Controller{
             $nomorRw = $load_rm->getNomorRw();
             $namaKK = $load_rm->getNamaKK();
             $nomorRM_KK = $load_rm->getNomorRM_KK();
-            # cek status kk
+            // cek status kk
             if( $nama === $namaKK){
                 $status_kk = true;
             }
-            # cari rm yang sama
+            // cari rm yang sama
             $cari_rm = new MedicalRecords();
             $cari_rm->filterByNomorRm($nomorRM);
             $cari_rm->forceLimitView(2);
             if( $cari_rm->maxData() > 1){
                 $status_double = true;
             }
-            # cek data rm terdaftar atau tidak
+            // cek data rm terdaftar atau tidak
             if( $load_rm->cekAxis() == false){                        
                 echo 'acces deny!!!';
                 header('HTTP/1.1 403 Forbidden');
                 exit;
             }
-            
-        }else{
+        } else {
             echo 'acces deny!!!';
             exit;
         }
@@ -177,6 +198,7 @@ class RekamMedisController extends Controller{
                 "nama_kk"           => $namaKK,
                 "nomor_rm_kk"       => $nomorRM_KK
             ],
+            'error' => $error,
             "message" => [
                 "show"      => $msg['show'],
                 "type"      => $msg['type'],
@@ -185,9 +207,10 @@ class RekamMedisController extends Controller{
         ]);
     }
 
-    public function new(){
+    public function new()
+    {
         $msg = ["show" => false, "type" => 'info', "content" => 'oke'];
-        # property
+        // property
         $nomor_rm    = $_POST['nomor_rm'] ?? '';
         $nama        = $_POST['nama'] ?? '';
         $tgl_lahir   = $_POST['tgl_lahir'] ?? '';
@@ -197,18 +220,39 @@ class RekamMedisController extends Controller{
         $nama_kk     = $_POST['nama_kk'] ?? '';
         $nomor_rm_kk = $_POST['nomor_rm_kk'] ?? '';
 
-        # ambil nomor rm terakhir
+        // validasi data
+        $validation = new GUMP('id');
+        $validation->validation_rules(array (
+            'nomor_rm' => 'required|numeric',
+            'nama' => 'required|alpha_space|min_len,4|max_len,32',
+            'tgl_lahir' => 'date,Y-m-d',
+            'alamat' => 'alpha_space|max_len,20',
+            'nomor_rt' => 'numeric|max_len,2',
+            'nomor_rw' => 'numeric|max_len,2',
+            'nama_kk' => 'alpha_space|min_len,4|max_len,32',
+            'nomor_rm_kk' => 'numeric',
+        ));
+        $validation->filter_rules(array (
+            'nama' => 'trim|htmlencode',
+            'alamat' => 'trim|htmlencode',
+            'nama_kk' => 'trim|htmlencode'
+        ));
+        $validation->run($_POST);
+        $error = $validation->get_errors_array();
+
+
+        // ambil nomor rm terakhir
         $data = new MedicalRecords();
         $data->limitView(1);
         $data->sortUsing('nomor_rm');
         $data->orderUsing("DESC");
         $last_nomor_rm = $data->resultAll()[0]['nomor_rm'];
 
-        if( isset( $_POST['submit']) ){
-            # validasi form jika ada yg kurang atau salah permintaaan ditolak
+        if (! $validation->errors()) {
+            // menjegah duplikasi data saat form direfresh
             $last_data = $_SESSION['last_data'] ?? [];
 
-            # kita anggap semua field form sudah benar
+            // kita anggap semua field form sudah benar
             $new_rm = new MedicalRecord();
             $new_rm ->setNomorRM( $nomor_rm )
                 ->setDataDibuat( time() )
@@ -220,24 +264,26 @@ class RekamMedisController extends Controller{
                 ->setNamaKK( $nama_kk )
                 ->setNomorRM_KK( $nomor_rm_kk );
 
-            #simpan data
+            //simpan data
             $simpan = $new_rm->insertNewOne();
-            if( $simpan && $last_data != $_POST){
+            if ($simpan && $last_data != $_POST) {
                 $msg = ["show" => true, "type" => 'success', "content" => 'berhasil disimpan'];
                 $_SESSION['last_data'] = $_POST;
                 $_POST = [];
                 $nomor_rm = $_POST['nomor_rm'] ?? '';
                 $nama = $tgl_lahir = $alamat = $nomor_rt = $nomor_rw = $nama_kk = $nomor_rm_kk = null;
-            } else{
+            } else {
                 $msg = ["show" => true, "type" => 'danger', "content" => 'Gagal disimpan'];
             }
 
-            # merefrresh nomor rm terakhir saad form dikirim
+            // merefrresh nomor rm terakhir saad form dikirim
             $data = new MedicalRecords( );
             $data->forceLimitView(1);
             $data->sortUsing('nomor_rm');
             $data->orderUsing("DESC");
             $last_nomor_rm = $data->resultAll()[0]['nomor_rm'];
+        } elseif (empty($_POST)) {
+            $error = array();
         }
         
         // result
@@ -265,6 +311,7 @@ class RekamMedisController extends Controller{
 
                 "last_nomor_rm" => $last_nomor_rm
             ],
+            'error' => $error,
             "message" => [
                 "show"      => $msg['show'],
                 "type"      => $msg['type'],
@@ -275,7 +322,7 @@ class RekamMedisController extends Controller{
 
     public function search(){
         $msg = ["show" => false, "type" => 'info', "content" => 'oke'];   
-        # ambil parameter dari url
+        // ambil parameter dari url
         $main_search     = $_GET['main-search'] ?? '';
         $nomor_rm_search = $_GET['nomor-rm-search'] ?? '';
         $alamat_search   = $_GET['alamat-search'] ?? '';
@@ -284,7 +331,7 @@ class RekamMedisController extends Controller{
         $nama_kk_search  = $_GET['nama-kk-search'] ?? '';
         $no_rm_kk_search = $_GET['no-rm-kk-search'] ?? '';
         $strict_search   = isset( $_GET['strict-search'] ) ? true : false;   
-        
+
         return $this->view('rekam-medis/search', [
             "auth"     => $this->getMiddleware()['auth'],
             "DNT"      => $this->getMiddleware()['DNT'],
@@ -319,13 +366,13 @@ class RekamMedisController extends Controller{
     public function view_(){
         $msg = ["show" => false, "type" => 'info', "content" => 'oke'];
         
-        #config
+        // config
         $sort = 'nomor_rm';
         $order = 'ASC';
         $page = $_GET['page'] ?? 1;
         $page = is_numeric($page) ? $page : 1;
 
-        # ambil data
+        // ambil data
         $show_data = new MedicalRecords();
         $show_data->sortUsing($sort);
         $show_data->orderUsing($order);

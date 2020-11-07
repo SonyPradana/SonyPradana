@@ -1,23 +1,15 @@
 <?php
-
-use Simpus\Auth\User;
-use Simpus\Auth\Login;
-use Simpus\Auth\Logout;
-use Simpus\Auth\EmailAuth;
-use Simpus\Auth\Registartion;
-use Simpus\Auth\ResetPassword;
-use Simpus\Auth\ForgotPassword;
+use Simpus\Auth\{User, Login, Logout, EmailAuth, Registartion, ResetPassword, ForgotPassword};
 use Simpus\Database\MyPDO;
 use Simpus\Apps\Controller;
-use Simpus\Helper\UploadFile;
-use Simpus\Helper\StringValidation as sv;
+use Simpus\Helper\{UploadFile, StringValidation as sv};
 use \Gumlet\ImageResize;
 
 class AuthController extends Controller
 {
     private function useAuth()
     {
-        if( $this->getMiddleware()['auth']['login'] == false ){            
+        if ($this->getMiddleware()['auth']['login'] == false) {
             header('HTTP/1.0 401 Unauthorized');   
             header("Location: /login?url=" . $_SERVER['REQUEST_URI']);  
             exit();
@@ -26,7 +18,7 @@ class AuthController extends Controller
 
     private function useGuest()
     {
-        if( $this->getMiddleware()['auth']['login'] ){
+        if ($this->getMiddleware()['auth']['login']) {
             header("Location: /");  
             exit();
         }
@@ -151,17 +143,36 @@ class AuthController extends Controller
         // cek login is require
         $this->useAuth();
 
-        // image resizer
-        require_once BASEURL. '/vendor/gumlet/php-image-resize/lib/ImageResize.php';
-
         // logic:
         
         // mengambil data untuk input value(form)
         $user_name  = $this->getMiddleware()['auth']["user_name"];
         $user       = new User( $user_name );
-
+        
+        // valdiaation
+        $validation = new GUMP('id');
+        $validation->validation_rules(array (
+            'disp-name' => 'required|alpha_space|min_len,4|max_len,32',
+            'section' => 'required|alpha_space|between_len,2;32',
+        ));
+        $validation->set_error_messages(array (
+            'disp-name' => array (
+                'required' => 'Display Name harus diisi',
+                'alpha_space' => 'Tidak boleh menggunakan karakter',
+                'min_len' => 'Dislpay Name terlalu pendek',
+                'max_len' => 'Dislpay Name terlalu panjang',
+            ),
+            'section' => array (
+                'require' => 'Unit kerja harus diisi',
+                'alpha_space' => 'Tidak boleh menngunakn karakter',
+                'between_len' => 'Unit kerja tidak tersedia'
+            )
+        ));
+        $validation->run($_POST);
+        $error = $validation->get_errors_array();
+        
         # cek form
-        if( isset($_POST['submit'])){
+        if (! $validation->errors()) {
             $url_picture    = $_POST['url-display-picture'] ?? '/data/img/display-picture/no-image.png';
             $request_upload = isset( $_FILES['display-picture']) ? true :false;
 
@@ -183,7 +194,7 @@ class AuthController extends Controller
             $user->saveProfile();
 
             // delate old image
-            if($upload->Success()){
+            if ($upload->Success()) {
                 if( $upload_url != $url_picture){
                     $upload->delete($url_picture);
                 }
@@ -193,6 +204,8 @@ class AuthController extends Controller
                 $image->resizeToShortSide(24);
                 $small_image = str_replace($user_name, "small-" . $user_name, $upload_url);
                 $image->save(BASEURL . $small_image);
+            } elseif (empty($_POST)) {
+                $error = array();
             }
 
             $input_img = $request_upload ? $upload->getError() : null;
@@ -209,7 +222,8 @@ class AuthController extends Controller
                 "display_name"      => $user->getDisplayName(),
                 "unit_kerja"        => $user->getSection(),
                 "display_picture"   => $user->getDisplayPicture()
-            ]
+            ],
+            'error' => $error
         ]);
     }
 
@@ -218,45 +232,73 @@ class AuthController extends Controller
         // no login
         $this->useGuest();
 
-        # identifikasi form input
+        //  identifikasi form input
         $user_name = $_POST['userName'] ?? '';
-        $email     = $_POST['email'] ?? '';
-        $password  = $_POST['password'] ?? '';
-        $confirm_password = $_POST['password2'] ?? '';
-        $display_name     = $_POST['dispName'] ?? '';
+        $email = $_POST['email'] ?? '';
+        $display_name = $_POST['dispName'] ?? '';
 
-        if( isset( $_POST['submit'])){
-            # verifikasi user input
-            $verify_user_name = sv::UserValidation($user_name, 2, 32);
-            $verify_email = sv::EmailValidation($email);
-            $verify_password = sv::GoodPasswordValidation($password);
-            $verify_display_name = sv::NoHtmlTagValidation($display_name);   
+        // validation
+        $validation = new GUMP('id');
+        $validation->validation_rules(
+            array (
+                'userName' => "required|min_len,4|max_len,16|regex,/^[A-Za-z]{1}[A-Za-z0-9]/",
+                'email' => 'required|valid_email',
+                'password' => 'required|min_len,8|max_len,100',
+                'password2' => 'required|equalsfield,password',
+                'dispName' => 'required|alpha_space|min_len,2|max_len,32'
+            )
+        );
+        $validation->set_fields_error_messages(
+            array (
+                'userName' => array (
+                    'min_len' => 'Username terlalu pendek',
+                    'max_len' => 'Username terlalu panjang',
+                    'regex' => 'Username tidak tersedia'
+                ),
+                'email' => array (
+                    'valid_email' => 'Alamat email tidak didukung'
+                ),
+                'password' => array (
+                    'min_len' => 'Password terlalu lemah',
+                    'max_len' => 'gunakan password lain'
+                ),
+                'password2' => array (
+                    'required' => 'Password harus diisi',
+                    'equalsfield' => 'Konfirmasi password salah'
+                ),
+                'dispName' => array (                    
+                    'required' => 'Display Name harus diisi',
+                    'alpha_space' => 'Nama tidak boleh mengandung karakter selain huruf',                    
+                    'min_len' => 'Display name terlalu pendek',
+                    'max_len' => 'Display Name terlalu panjang'
+                )
+            )
+        );
+        $validation->run($_POST);
+        $error = $validation->errors();
 
-            # esekusi jika password sama, dan form input sudah benar
-            if( $password === $confirm_password &&
-                $verify_user_name && 
-                $verify_email &&
-                $verify_password &&
-                $verify_display_name ){
-                
-                #buat user baru
-                $newUser = new Registartion( $_POST );
-                $veryNewUser = $newUser->Verify( $user_name, $email );
-                #cek dan simpan
-                if( $veryNewUser ==  4 ){ # emapt menujukan user dan email bemul digunkan
-                    if( $newUser->AddToArchive() ) { # file disimpan dipenampungan semntara 
-                        echo 'data berhasil disimpan, hubungi administator untuk melakukan validasi<br>';
-                        $_POST = [];
-                    }
+        //  logic
+        if (! $validation->errors()) {
+            // buat user baru
+            $newUser = new Registartion( $_POST );
+            $veryNewUser = $newUser->Verify($user_name, $email);
+            // cek dan simpan (4 = username & email blm digunakan)
+            if( $veryNewUser ==  4 ){
+                if( $newUser->AddToArchive() ) { 
+                    // file disimpan dipenampungan semntara 
+                    echo 'data berhasil disimpan, hubungi administator untuk melakukan validasi<br>';
+                    // reset data
+                    $_POST = [];
+                    $user_name = $email = $display_name = null;
                 }
             }
+        } elseif (empty($_POST)) {
+            $error = array();
+        }
 
-            # message untuk user jika form input tidak tepat
-            $msg_user = $verify_user_name  ? null : 'User Name tidak diperbolehkan';
-            $msg_email = $verify_email  ? null : 'format Email tidak dizinkan';
-            $msg_display_name = $verify_display_name  ? null : 'Display Name tidak diperbolehkan';
-            $msg_password = $verify_password  ? null : 'password terlalu lemah';
-            }
+        $veryNewUser = $veryNewUser ?? 4;
+        $veryNewUser = $veryNewUser == 4 ? null : $veryNewUser;
+
         return $this->view('auth/register', [
             "input"     => [
                 "userName-input"    => $msg_user ?? null,
@@ -268,8 +310,9 @@ class AuthController extends Controller
                 "user_name"         => $user_name,
                 "email"             => $email,
                 "display_name"      => $display_name,
-                "veryNewUser"       => $veryNewUser ?? null
-            ]
+                "veryNewUser"       => $veryNewUser
+            ],
+            'error' => $error
         ]);
     }
 
@@ -280,33 +323,56 @@ class AuthController extends Controller
         $user_name      = $this->getMiddleware()['auth']['user_name'];
         $display_name   = $this->getMiddleware()['auth']['display_name'];
 
+        // validation
+        $validation = new GUMP('id');
+        $validation->validation_rules(
+            array (
+                'password' => 'required|min_len,8|max_len,100',
+                'password2' => 'required|min_len,8|max_len,100',
+                'password3' => 'required|equalsfield,password2',
+            )
+        );
+        $validation->set_fields_error_messages(
+            array (
+                'password' => array (
+                    'between_len' => 'Password tidak tepat'
+                ),
+                'password2' => array (
+                    'required' => 'Password baru  wajib terisi',
+                    'min_len' => 'Password terlalu lemah',
+                    'max_len' => 'gunakan password lain'
+                ),
+                'password3' => array (
+                    'required' => 'Password baru harus terisi',
+                    'equalsfield' => 'Konfirmasi password salah'
+                )
+            )
+        );
+        $validation->run($_POST);        
+        $error = $validation->get_errors_array();
 
         $msg = '';
-        if( isset( $_POST['reset']) ){
+        
+        if (! $validation->errors()) {
             $p1 = $_POST['password'];
             $p2 = $_POST['password2'];
-            $p3 = $_POST['password3'];
+            $new_pass = new ResetPassword($user_name, $p1);
 
-            # validasi user input
-            $verify_pass = sv::GoodPasswordValidation($p2);
+            if ($new_pass->passwordVerify()) { 
+                $new_pass->newPassword($p2);    
 
-
-            if( $p2 === $p3 && $verify_pass) {
-                $new_pass = new ResetPassword($user_name, $p1);
-
-                if( $new_pass->passwordVerify() ){ 
-                    $new_pass->newPassword($p2);    
-
-                    header("Location: /logout?url=/login");    
-                    exit() ;
-                }else{
-                    # password salah
-                    $msg = 'masukan kembali password Anda';
-                }
-            }else{     
-                # konfirmasi password salah  
-                $msg = $verify_pass ? 'konirmasi password salah' : 'password terlalu lemah';
+                header("Location: /logout?url=/login");    
+                exit() ;
+            } else {
+                # password salah
+                $msg = 'masukan kembali password Anda';
+                $error = array('password' => 'Password Anda salah');
             }
+        } elseif (empty($_POST)) {     
+            $error = array();
+        } else {
+            # konfirmasi password salah
+            $msg = 'konirmasi password salah / password terlalu lemah';
         }
 
         // result
@@ -314,78 +380,103 @@ class AuthController extends Controller
             "contents"      => [
                 "display_name"      => $display_name,
                 "message"           => $msg ?? null
-            ]
+            ],
+            'error' => $error
         ]);
     }
 
     public function hardReset()
     {
         $this->useGuest();
-        #page ini bekerja dengan membaca url -> $_GET
-        #ambil token/key/link
-        $key = ( isset( $_GET['id'] ) ) ? $_GET['id'] : '';
-        $code = ( isset( $_POST['validate'] ) ) ? $_POST['validate'] : '';
-        if( isset( $_GET['id'] ) ){
-            #cek dari form
-            if( isset($_POST['reset']) 
-                && isset($_POST['password']) 
-                && isset($_POST['password2'])  ){
-                
-                $p1 = $_POST['password'];
-                $p2 = $_POST['password2'];
 
-                # verifikasi code dan password
-                $verify_code = sv::NumberValidation( $code, 6, 6 );
-                # verifikasi password berkulitas
-                $verify_psw = sv::GoodPasswordValidation( $p1 );
+        // validation
+        $validation = new GUMP('id');
+        $validation->validation_rules(array (
+            'id' => 'required',
+            'validate' => 'required|exact_len,6|numeric',
+            'password' => 'required|between_len,8;100',
+            'password2' => 'required|equalsfield,password'
+        ));
+        $validation->set_fields_error_messages(
+            array (
+                'id' => array('required' => 'Link tidak berlaku'),
+                'validate' => array (
+                    'required' => 'Validasi code harus diisi',
+                    'exact_len' => 'Validasi code tidak valid',
+                    'numeric' => 'Validasi code tidak valid'
+                ),
+                'password' => array (
+                    'between_len' => 'password terlalu lemah'
+                ),
+                'password2' => array (
+                    'required' => 'Password baru harus diisi',
+                    'equalsfield' => 'Konfirmasi password salah'
+                )
+            )
+        );
+        $validation->run(array_merge($_POST, $_GET));
+        $error = $validation->get_errors_array();
 
-                if( $p1 === $p2 && $verify_code && $verify_psw){
-                    $newPassword = new ForgotPassword($key, $code);
-                    $newPassword->NewPassword( $p1 );
+        if (isset($_GET['id'])) {
+            if (! $validation->errors()) {                
+                $key = $_GET['id'];
+                $code = $_POST['validate'];
 
-                    # self distruction link dan code
-                    $newPassword->deleteSection();
-        
-                    #header ke login
-                    header("Location: /login");   
-                    exit();                        
-                }           
+                $newPassword = new ForgotPassword($key, $code);
+                $newPassword->NewPassword($_POST['password']);
+
+                # self distruction link dan code
+                $newPassword->deleteSection();
+    
+                #header ke login
+                header("Location: /login");   
+                exit();
+            } elseif (empty($_POST)) {
+                $error = array();
             }
-            #ganti password 
-
-        }else{
+        } else {
             # hanya yg punya id yg bisa masuk          
             header('HTTP/1.1 400 Bad Request');
+            echo '<h1>Halaman tidak diizinkan</h1>';
             exit();
         }
-        return $this->view('auth/forgot', []);
+        return $this->view('auth/forgot', array (
+            'error' => $error
+        ));
     }
 
     public function send()
     {
         $this->useGuest();
 
-        # validate user input
-        # 1 format email benar
-        $verify_email = (isset($_POST['email'])) ? sv::EmailValidation($_POST['email']) : false;
+        // validation
+        $validation = new GUMP('id');
+        $validation->validation_rules(array (
+            'email' => 'required|valid_email'
+        ));
+        $validation->run($_POST);
+        $error = $validation->errors();
 
-        if( isset( $_POST['submit'] ) && $verify_email ){
+        if (! $validation->errors()) {
             $msg = true; #pesan untuk ditampilkan
 
             #verifikasi keapsahan email
             $verify =  new EmailAuth($_POST['email']);
-            if( $verify->UserVerify() ){
+            if ($verify->UserVerify()) {
                 #header ke lokasi
                 $link = $verify->KeyResult();
                 header("Location: /forgot/reset?id=" . $link);   
                 exit();
             }
+        } elseif (empty($_POST)) {
+            $error = array();
         }
 
         return $this->view('auth/send', [
             "contents"  => [
                 "message"   => $msg ?? false
-            ]
+            ],
+            'error' => $error
         ]);
     }
 }

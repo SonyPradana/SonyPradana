@@ -6,10 +6,10 @@ use Simpus\Helper\HttpHeader;
 
 class KiaAnakService extends Middleware
 {
-    private function useAuth()
+    public function __construct()
     {
         // cek access
-        if( $this->getMiddleware()['auth']['login'] == false ){
+        if ($this->getMiddleware()['auth']['login'] == false) {
             HttpHeader::printJson(['status' => 'unauthorized'], 500, [
                 "headers" => [
                     'HTTP/1.0 401 Unauthorized',
@@ -17,12 +17,30 @@ class KiaAnakService extends Middleware
                 ]
             ]);
         }
-
     }
 
     public function search(array $params)
     {
-        $this->useAuth();
+        // validation
+        $validation = new GUMP('id');
+        $validation->validation_rules(array(
+            'main-search' => 'alpha_space|max_len,50',
+            'alamat-search' => 'alpha_space|max_len,20',
+            'no-rt-search' => 'numeric|max_len,2',
+            'no-rw-search' => 'numeric|max_len,2',
+            'nama-kk-search' => 'alpha_space|max_len,50',
+            'desa' => 'alpha|max_len,20',
+            'tempat_pemeriksaan' => 'numeric|3'
+        ));
+        $validation->run($_GET);
+        if ($validation->errors()) {
+            return array (
+                'status' => 'error',
+                'error' => $validation->get_errors_array(),
+                'headers'   => ['HTTP/1.1 200 Oke']
+            );
+        }
+
         // ambil parameter dari url
         $sort       = $params['sort'] ?? 'tanggal_dibuat';
         $order      = $params['order'] ?? 'ASC';

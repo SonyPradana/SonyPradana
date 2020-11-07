@@ -86,6 +86,26 @@ class RekamMedisService extends Middleware
 
     public function search(array $param) :array
     {
+        // vallidation
+        $validation = new GUMP('id');
+        $validation->validation_rules(array (
+            'main-search' => 'alpha_space|max_len,50',
+            'nomor-rm-search' => 'numeric|max_len,6',
+            'alamat-search' => 'alpha_space|max_len,20',
+            'no-rt-search' => 'numeric|max_len,2',
+            'no-rw-search' => 'numeric|max_len,2',
+            'nama-kk-search' => 'alpha_space|max_len,50',
+            'nomor-rm-kk-search' => 'numeric|max_len,6',
+        ));
+        $validation->run($param);
+        if ($validation->errors()) {
+            return array (
+                'status' => 'error',
+                'error' => $validation->get_errors_array(),
+                'headers'   => ['HTTP/1.1 200 Oke']
+            );
+        }
+
         // ambil configurasi
         $sort       = $param['sort'] ?? 'nomor_rm';
         $order      = $param['order'] ?? 'ASC';

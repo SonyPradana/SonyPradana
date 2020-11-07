@@ -2,8 +2,7 @@
 
 use Simpus\Apps\Middleware;
 use Simpus\Helper\HttpHeader;
-use Simpus\Message\Rating;
-use Simpus\Message\ReadMessage;
+use Simpus\Message\{Rating, ReadMessage};
 
 class MessageService extends Middleware
 {
@@ -33,13 +32,23 @@ class MessageService extends Middleware
         ]);
     }
 
-    public function rating(array $param)
+    public function rating(array $params): array
     {
+        // validation
+        $validation = new GUMP('id');
+        $validation->validation_rules(array (
+            'rating' => 'required|numeric|max_len,2',
+            'mrating' => 'required|numeric|max_len,2',
+            'unit' => 'required|alpha_space|max_len,20'
+        ));
+        $validation->run($params);
+        if ($validation->errors()) $this->errorhandler();
+
         // get parameter
         $sender         = $_SERVER['REMOTE_ADDR'];
-        $ratting        = $param['rating'] ?? $this->errorhandler();
-        $max_ratting    = $param['mrating'] ?? $this->errorhandler();
-        $unit           = $param['unit'] ?? $this->errorhandler();
+        $ratting        = $params['rating'];
+        $max_ratting    = $params['mrating'];
+        $unit           = $params['unit'];
 
         $new_review     = new Rating($sender, $ratting, $max_ratting, $unit);
         if( $new_review->spamDetector() ){
@@ -52,7 +61,8 @@ class MessageService extends Middleware
         $new_review->kirimPesan();
         return [
             'status'    => 'ok',
-            'headers'   => ['HTTP/1.1 200 Ok']
+            'headers'   => ['HTTP/1.1 200 Ok'],
+            'error' => $validation->get_errors_array()
         ];
     }
 

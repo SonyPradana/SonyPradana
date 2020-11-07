@@ -1,7 +1,4 @@
 <?php
-
-require BASEURL . '/vendor/autoload.php';
-
 use Simpus\Database\MyPDO;
 use Simpus\Apps\Controller;
 use Simpus\Helper\MathCaptcha;
@@ -19,39 +16,46 @@ class ContactController extends Controller{
         $captcha     = $_POST['ampcaptcha'] ?? null;
 
         // validation
-        $is_valid = GUMP::is_valid($_POST, [
+        $validation = new GUMP('id');
+        $validation->validation_rules(array (
             'mail' => 'required|valid_email',
-            'message' => 'required|between_len,3;200',
+            'message' => 'required|min_len,3|max_len,200',
             'regarding' => 'required',
             'ampcaptcha' => 'required|numeric'
-        ], [
-            'mail' => [
+        ));
+        $validation->set_fields_error_messages(array (            
+            'mail' => array (
                 'required' => 'Email tidak boleh kosong',
                 'valid_email' => 'Format email tidak tepat'
-            ],
-            'message' => [
-                'required' => 'Isi pesan tidak boleh kosong',
-                'between_len' => 'Pesan tidak boleh lebih dari 200 karakter'
-            ],
-            'ampcaptcha' => ['required' => 'Captcha wajib diisi']
-        ]);
+            ),
+            'message' => array (
+                'min_len' => 'Isi pesan terlalu pendek',
+                'max_len' => 'Isi pesan terlalu panjang {field}',
+            ),
+            'ampcaptcha' => array('required' => 'Captcha wajib diisi')
+        ));
+        $validation->filter_rules(array (
+            'mail' => 'trim|sanitize_email',
+            'message' => 'htmlencode'
+        ));
+        $validation->run($_POST);
+        $error = $validation->get_errors_array();
 
         // logic dan send message
-        if ($is_valid === true && $captcha == $cek_captcha) {
+        if (! $validation->errors() && $captcha == $cek_captcha) {
             // send message
             $send_message = new ContactUs($sender, $message, $regarding);
             if( $send_message->kirimPesan() ){
                 $msg = ["show" => true, "type" => 'success', "content" => 'Trimakasih atas dukungan Anda :)'];
             }
-            $is_valid = Array();
         } elseif ($captcha != $cek_captcha && $captcha != null) {
-            $msg = ["show" => true, "type" => 'danger', "content" => 'Captcha salah, silahkan ulangai kembali'];
-            $is_valid = ['Chaptcha salah'];
+            $msg = ["show" => true, "type" => 'danger', "content" => 'Captcha salah, silahkan ulangi kembali'];
+            $error = array('ampcaptcha' => 'Captcha salah, silahkan ulangi kembali');
+        } elseif (empty($_POST)) {
+            $error = array();
         } else {
             if (isset( $_POST['done'] )) {
-                $msg = ["show" => true, "type" => 'danger', "content" => 'Silahkan ulangai kembali'];
-            } else {
-                $is_valid = Array();
+                $msg = ["show" => true, "type" => 'danger', "content" => 'Silahkan ulangi kembali'];
             }
         }
 
@@ -77,7 +81,7 @@ class ContactController extends Controller{
                 'regarding' => $regarding,
                 'message' => $message
             ],
-            'error' => $is_valid,
+            'error' => $error,
             "message" => [
                 "show"      => $msg['show'],
                 "type"      => $msg['type'],

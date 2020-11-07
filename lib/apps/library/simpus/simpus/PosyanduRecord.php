@@ -1,5 +1,4 @@
-<?php
-namespace Simpus\Simpus;
+<?php namespace Simpus\Simpus;
 
 use Simpus\Database\MyPDO;
 use \PDO;
@@ -96,6 +95,11 @@ class PosyanduRecord
         if( $this->PDO->single() ){    
             return true;
         }
+        return false;
+    }
+
+    public function validation(): bool
+    {
         return false;
     }
 

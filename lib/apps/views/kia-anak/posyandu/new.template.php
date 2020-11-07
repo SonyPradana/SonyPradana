@@ -205,7 +205,7 @@
     function getGrupPosyandu(desa, select = null){
         // render grub desa
         $id('input-posyandu').innerHTML = '<option selected disabled hidden>Pilih Nama Posyandu</option>';
-        $json(`/lib/ajax/json/public/grup-posyandu/?desa=${desa}`)
+        $json(`/api/ver1.1/posyandu/grup_Posyandu.json?desa=${desa}`)
             .then( json => {
                 json.data.forEach(element => {
                     let creat_option = document.createElement('option');
