@@ -307,8 +307,8 @@
                             this.grapInfo(json);
                             
                             // data vue table 
-                            table.rows = json.data[16];
-                            // table.rows          = json.data.filter(k => k.kecamatan == 'ungaran-barat')[0];
+                            // table.rows = json.data[16];
+                            table.rows          = json.data.filter(k => k.kecamatan == 'ungaran-barat')[0];
                         }
                     })
             }
