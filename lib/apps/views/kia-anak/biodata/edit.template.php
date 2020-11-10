@@ -84,7 +84,7 @@
                                 <!-- nama rm -->
                                 <section>
                                     <label for="input-nama-rm">Nama RM</label>
-                                    <input class="textbox outline black rounded small" type="text" id="input-nama-rm" name="nama" placeholder="Nama Balita" value="<?= $content->nama ?>">
+                                    <input class="textbox outline black rounded small" type="text" id="input-nama-rm" required name="nama" placeholder="Nama Balita" value="<?= $content->nama ?>">
                                 </section>
                                 <!-- tanggal lahir -->
                                 <section>

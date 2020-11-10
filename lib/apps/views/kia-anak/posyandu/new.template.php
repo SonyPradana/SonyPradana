@@ -109,15 +109,15 @@
                         <!-- data -->
                         <section>
                             <label for="input-tanggal-pemeriksaan">Tanggal Pemeriksaan</label>
-                            <input class="textbox outline black rounded small" type="date" name="tanggal_pemeriksaan" id="input-tanggal-pemeriksaan">
+                            <input class="textbox outline black rounded small" type="date" name="tanggal_pemeriksaan" id="input-tanggal-pemeriksaan" required>
                         </section>
                         <section>
                             <label for="input-tinggi-badan">Tinggi Badan</label>
-                            <input class="textbox outline black rounded small" type="number" name="tinggi_badan" id="input-tinggi-badan" placeholder="Dalam satuan cm" required>
+                            <input class="textbox outline black rounded small" type="number" name="tinggi_badan" id="input-tinggi-badan" required placeholder="Dalam satuan cm" required>
                         </section>
                         <section>
                             <label for="input-berat-badan">Berat Badan</label>
-                            <input class="textbox outline black rounded small" type="number" name="berat_badan" id="input-berat-badan" placeholder="Dalam satuan gram" required>
+                            <input class="textbox outline black rounded small" type="number" name="berat_badan" id="input-berat-badan" required placeholder="Dalam satuan gram" required>
                         </section>
                          
                         <div class="btn-grup">

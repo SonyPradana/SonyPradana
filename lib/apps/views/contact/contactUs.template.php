@@ -24,9 +24,9 @@
             <div class="boxs">
                 <h1>Hubungi Kami</h1>
                 <h2>kritik dan saran untuk kami</h2>
-                <form action="" method="post">
+                <form id="form-contact" action="" method="post">
                     <label for="input-email">Email</label>
-                    <input type="email" name="mail" id="input-email" class="textbox outline blue rounded small" placeholder="email">
+                    <input type="email" name="mail" id="input-email" required class="textbox outline blue rounded small" placeholder="email">
 
                     <label for="input-regarding">Regarding</label>
                     <select name="regarding" id="input-regarding" class="textbox outline blue rounded small">
@@ -39,12 +39,12 @@
                     </select>
                     
                     <label for="input-message">Pesan</label>
-                    <textarea name="message" id="input-message" cols="30" rows="10" class="textbox outline blue rounded small" placeholder="saran dari Anda"></textarea>
+                    <textarea name="message" id="input-message" required cols="30" rows="10" class="textbox outline blue rounded small" placeholder="saran dari Anda"></textarea>
                     <p class="info">(Kerahasian Anda adalah yang utama)</p>
                     
                     <div class="grub-control horizontal">
                         <label for="input-ampcaptcha"><?= $content->captcha_quest ?></label>
-                        <input type="text" name="ampcaptcha" id="input-ampcaptcha" class="textbox outline blue rounded small" placeholder="wajib diisi">
+                        <input type="text" name="ampcaptcha" id="input-ampcaptcha" required class="textbox outline blue rounded small" placeholder="wajib diisi">
                     </div>
 
                     <button type="submit" id="input-submit" name="done" class="btn blue outline rounded normal">Kirim Pesan</button>
@@ -94,6 +94,18 @@
             window.location.href = "/logout?url=<?= $_SERVER['REQUEST_URI'] ?>"
         }
     );
+
+    // validation
+    $id('form-contact').addEventListener('submit', function(e) {
+        const regarding = $id('input-message').value.length;
+        const captcha = $id('input-ampcaptcha').value;
+        
+        if (regarding < 3 || regarding > 200 ||
+        ! Number.isInteger(captcha)) {
+            e.preventDefault();
+            return false;
+        }
+    })
 
 </script>
 </html>

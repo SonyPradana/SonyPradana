@@ -69,7 +69,7 @@
         <form action="" method="post">  
             <div class="body">
                 <div class="form-groub">
-                <input type="email" name="email" id="email-input" placeholder="masukan email terdaftar" autocomplete="off">
+                <input type="email" name="email" id="email-input" required placeholder="masukan email terdaftar" autocomplete="off">
                 </div>   
             </div> 
             <div class="footer">            

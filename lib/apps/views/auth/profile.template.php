@@ -61,7 +61,7 @@
         <div class="container">
             <div class="body right">
                 <h1>Ubah Profile</h1>
-                <form action="" method="post" enctype="multipart/form-data">
+                <form id="form-profile" action="" method="post" enctype="multipart/form-data">
                     <label for="input-user-name">User Name</label>
                     <input type="text" name="user-name" id="input-user-name" value="<?= $content->user_name  ?>" disabled>
                 
@@ -69,10 +69,10 @@
                     <input type="email" name="email" id="input-email" value="<?= $content->email ?>" disabled>
                     
                     <label for="input-display-name">Display name</label>
-                    <input type="text" name="disp-name" id="input-display-name" value="<?= $content->display_name ?>">
+                    <input type="text" name="disp-name" id="input-display-name" required value="<?= $content->display_name ?>">
 
                     <label for="input-section">Unit Kerja</label>
-                    <input type="text" name="section" id="input-section" value="<?= $content->unit_kerja ?>">
+                    <input type="text" name="section" id="input-section" required value="<?= $content->unit_kerja ?>">
                     
                     <label for="input-section">Avatar</label>
                     <div class="box display_picture">
@@ -117,6 +117,17 @@
             var info_warning = document.getElementById("info-warning");
             if( info_warning != null){
                 info_warning.remove();
+            }
+        }
+
+        document.getElementById('form-profile').onsubmit = function(e) {
+            var display_name = document.getElementById('input-display-name').value.length;
+            var unit_kerja = document.getElementById('input-section').value.length;
+
+            if (display_name < 4 || display_name > 32 ||
+                unit_kerja < 2 || unit_kerja > 32) {
+                e.preventDefault();
+                return false;
             }
         }
 

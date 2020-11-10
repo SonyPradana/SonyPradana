@@ -57,25 +57,26 @@
         <div class="container">
             <div class="body right">
                 <p>Selamat Datang Di System Informasi Majaemen Puskesmas Lerep</p>
-                <form action="" method="post">
+                <form id="form-register" action="" method="post">
                     <label for="userName">User Name</label>
-                    <input type="text" name="userName" id="userName-input" value="<?= $content->user_name  ?>">
-                    <?= isset( $portal['input']['userName-input'] ) ? '<p>' . $portal['input']['userName-input'] . '</p>' : '' ?>
+                    <input type="text" name="userName" id="userName-input" required value="<?= $content->user_name  ?>">
+                    <?= isset( $portal['error']['userName'] ) ? '<p>' . $portal['error']['userName'] . '</p>' : '' ?>
                 
                     <label for="email">Email</label>
-                    <input type="email" name="email" id="emali-input" value="<?= $content->email ?>">
-                    <?= isset( $portal['input']['email-input'] ) ? '<p>' . $portal['input']['email-input'] . '</p>' : '' ?>
+                    <input type="email" name="email" id="emali-input" required value="<?= $content->email ?>">
+                    <?= isset( $portal['error']['email'] ) ? '<p>' . $portal['error']['email'] . '</p>' : '' ?>
                     
                     <label for="dispName">Display name</label>
-                    <input type="text" name="dispName" id="dispName-input" value="<?= $content->display_name ?>">
-                    <?= isset( $portal['input']['dispName-input'] ) ? '<p>' . $portal['input']['dispName-input'] . '</p>' : '' ?>
+                    <input type="text" name="dispName" id="dispName-input" required value="<?= $content->display_name ?>">
+                    <?= isset( $portal['error']['dispName'] ) ? '<p>' . $portal['error']['dispName'] . '</p>' : '' ?>
                     
                     <label for="password">password</label>
-                    <input type="password" name="password" id="password-input">
-                    <?= isset( $portal['input']['password-input'] ) ? '<p>' . $portal['input']['password-input']. '</p>' : '' ?>
-                                
+                    <input type="password" name="password" id="password-input" required>
+                    <?= isset( $portal['error']['password'] ) ? '<p>' . $portal['error']['password'] . '</p>' : '' ?>
+                    
                     <label for="password2">Konfirm Password</label>
-                    <input type="password" name="password2" id="password2-input">
+                    <input type="password" name="password2" id="password2-input" required>
+                    <?= isset( $portal['error']['password2'] ) ? '<p>' . $portal['error']['password2'] . '</p>' : '' ?>
                 
                     <button type="submit" name="submit">Buat Akun</button>
                 <?php  
@@ -102,4 +103,27 @@
         
     </main>
 </body>
+<script>
+    document.getElementById('form-register').onsubmit = function(e) {
+        var user_name = document.getElementById('userName-input').value.length;
+        var display_name = document.getElementById('dispName-input').value.length;
+        var password = document.getElementById('password-input').value;
+        var password_confirm = document.getElementById('password2-input').value;
+
+        // validasi user name dan displayname
+        if (user_name < 4 || user_name > 32 ||
+            display_name < 4 || display_name > 32) {
+                console.log('invalid user name or displayname');
+                e.preventDefault();
+                return false;
+            }
+        // validasi password
+        if (password.length < 8 || password.length > 100 ||
+            password != password_confirm) {
+                console.log('invalid password');
+                e.preventDefault();
+                return false;
+            }
+    }
+</script>
 </html>

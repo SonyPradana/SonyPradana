@@ -75,10 +75,10 @@
             <form action="" method="post">  
                 <div class="body">
                     <div class="form-groub">
-                        <input type="text" name="userName" id="userName-input" placeholder="username" value="<?= $content->user_name ?>" maxlength="32" tabindex="1" autocomplete="off">
+                        <input type="text" name="userName" id="userName-input" required placeholder="username" value="<?= $content->user_name ?>" maxlength="32" tabindex="1" autocomplete="off">
                     </div>   
                     <div class="form-groub">                
-                        <input type="password" name="password" id="password-input" placeholder="Password" tabindex="2">
+                        <input type="password" name="password" id="password-input" required placeholder="Password" tabindex="2">
                     </div>    
                 </div> 
                 <div class="footer">

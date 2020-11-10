@@ -65,18 +65,18 @@
             </div>
             <p>Reset password</p>
             <p><?= $content->display_name ?></p>
-            <form action="" method="post">                
+            <form id="form-reset" action="" method="post">                
                 <div class="body">
                     <div class="form-groub">
-                        <input type="password" name="password" id="password-input" placeholder="curent password">
+                        <input type="password" name="password" id="password-input" required placeholder="curent password">
                     </div>
 
                     <div class="form-groub">
-                        <input type="password" name="password2" id="password2-input" placeholder="new password">
+                        <input type="password" name="password2" id="password2-input" required placeholder="new password">
                     </div>
 
                     <div class="form-groub">
-                        <input type="password" name="password3" id="password3-input" placeholder="confirm password">
+                        <input type="password" name="password3" id="password3-input" required placeholder="confirm password">
                     </div>
                 </div>
                 <div class="footer">
@@ -89,4 +89,26 @@
         </div>
     </main>
 </body>
+<script>
+    document.getElementById('form-reset').onsubmit = function(e) {
+        var password = document.getElementById('password-input').value;
+        var password_new = document.getElementById('password2-input').value;
+        var password_confirm = document.getElementById('password3-input').value;
+
+        // validation lenght password
+        if (password.length < 8 || password.length > 100 ||
+        password_new.length < 8 || password_new.length > 100 ||
+        password_confirm.length < 8 || password_confirm.length > 100) {
+            console.log('invalid passowrd');
+            e.preventDefault();
+            return false;
+        }
+        // validation confirm password
+        if (password_new != password_confirm ) {
+            console.log('invalid confirm password');
+            e.preventDefault();
+            return false;
+        }
+    }
+</script>
 </html>

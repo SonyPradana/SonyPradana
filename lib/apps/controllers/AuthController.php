@@ -155,7 +155,7 @@ class AuthController extends Controller
             'disp-name' => 'required|alpha_space|min_len,4|max_len,32',
             'section' => 'required|alpha_space|between_len,2;32',
         ));
-        $validation->set_error_messages(array (
+        $validation->set_fields_error_messages(array (
             'disp-name' => array (
                 'required' => 'Display Name harus diisi',
                 'alpha_space' => 'Tidak boleh menggunakan karakter',
@@ -275,7 +275,7 @@ class AuthController extends Controller
             )
         );
         $validation->run($_POST);
-        $error = $validation->errors();
+        $error = $validation->get_errors_array();
 
         //  logic
         if (! $validation->errors()) {

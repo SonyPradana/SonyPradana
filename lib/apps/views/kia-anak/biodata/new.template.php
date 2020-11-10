@@ -165,22 +165,22 @@
                                 <!-- bbl -->
                                 <section>
                                     <label for="input-bbl">Berat Bayi Lahir</label>
-                                    <input class="textbox outline black rounded small" type="number" id="input-bbl" name="bbl">
+                                    <input class="textbox outline black rounded small" type="number" id="input-bbl" required name="bbl">
                                 </section>
                                 <!-- pbl -->
                                 <section>
                                     <label for="input-pbl">Panjang Bayi Lahir</label>
-                                    <input class="textbox outline black rounded small" type="number" id="input-pbl" name="pbl">
+                                    <input class="textbox outline black rounded small" type="number" id="input-pbl" required name="pbl">
                                 </section>
                                 <!-- kia -->
                                 <section>
                                     <label for="input-kia">KIA</label>
-                                    <input class="textbox outline black rounded small" type="number" id="input-kia" name="kia">
+                                    <input class="textbox outline black rounded small" type="number" id="input-kia" required name="kia">
                                 </section>
                                 <!-- imd -->
                                 <section>
                                     <label for="input-imd">Indeks Masa </label>
-                                    <input class="textbox outline black rounded small" type="number" id="input-imd" name="imd">
+                                    <input class="textbox outline black rounded small" type="number" id="input-imd" required name="imd">
                                 </section>
                                 <!-- asi eks -->
                                 <div>

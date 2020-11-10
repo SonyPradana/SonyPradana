@@ -62,7 +62,7 @@
                 <?php else:?>
                     <h1>Edit data Rekam Medis</h1>
                     <form action="" method="post">
-                        <input class="textbox outline black rounded small block" type="text" name="nomor_rm" id="input-nomor-rm" placeholder="nomor rekam medis" value="<?= $content->nomor_rm ?>" maxlength="6" inputmode="numeric" pattern="[0-9]*">                        
+                        <input class="textbox outline black rounded small block" type="text" name="nomor_rm" id="input-nomor-rm" required placeholder="nomor rekam medis" value="<?= $content->nomor_rm ?>" maxlength="6" inputmode="numeric" pattern="[0-9]*">                        
                         <div class="input-information warning">
                         <?php if( $content->status_double ) : ?>
                             <p>nomor rekam medis sama :
@@ -71,7 +71,7 @@
                             </p>
                         <?php endif; ?>
                         </div>
-                        <input class="textbox outline black rounded small block" type="text" name="nama" id="input-nama" placeholder="nama" value="<?= $content->nama ?>" maxlength="50" <?= $portal["DNT"] ? 'autocomplete="off"' : 'autocomplete="on"' ?>>
+                        <input class="textbox outline black rounded small block" type="text" name="nama" id="input-nama" required placeholder="nama" value="<?= $content->nama ?>" maxlength="50" <?= $portal["DNT"] ? 'autocomplete="off"' : 'autocomplete="on"' ?>>
                         <input class="textbox outline black rounded small block" type="date" name="tgl_lahir" id="input-tgl-lahir" value="<?= $content->tanggal_lahir ?>">
                         <input class="textbox outline black rounded small block" type="text" name="alamat" id="input-alamat" placeholder="alamat tanpa rt/rw" value="<?= $content->alamat?>" <?= $portal["DNT"] ? 'autocomplete="off"' : 'autocomplete="on"' ?>>
                         <div class="grub-control horizontal">
