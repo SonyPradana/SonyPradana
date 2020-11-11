@@ -1,10 +1,13 @@
 <?php
 namespace Simpus\ApiGrabber;
+
+use CovidKabSemarangService;
 use Simpus\ApiGrabber\CovidKabSemarang;
 use Simpus\Database\MyPDO;
 use Simpus\Helper\ConvertCode;
 use Simpus\Helper\Scheduler;
 
+/** class untuk minyimpan data kedalam data base */
 class CovidKabSemarangTracker
 {
     /** @var MyPDO */
@@ -31,7 +34,10 @@ class CovidKabSemarangTracker
         $this->list_kecamatan   = $this->getListKecamatanDesa();
     }
 
-    public function createIndex()
+    /** menyimpan data kedalam database
+     * @return boolean true jika data berhasil disimpan
+     */
+    public function createIndex(): bool
     {
         $schadule       = new Scheduler(1);
         $schadule->read();
@@ -65,7 +71,83 @@ class CovidKabSemarangTracker
         return true;
     }
 
-    public function result()
+    /** menyimpan data kedalam database,
+     *  dengan membandingkan data lama terlebih dahulu.
+     * @return boolean true jika berhasil disimpan
+     * */
+    public function createIndex_compire(array $old_data): bool
+    {
+        $time = time();
+
+        // initial covid grabber
+        $covid = new CovidKabSemarang();
+        $kecamatan = $covid->Daftar_Kecamatan;
+        
+        // get data
+        $data_covid = array();
+        foreach( $kecamatan as $key => $val) {
+            $session_data = $covid->getData($key);
+            $data_covid[$val] = $session_data;
+            // cek keberhasilan memuat data
+            if ($session_data === false) return false;
+        }
+
+        // prepare data untuk compire dengan old data
+        $new_data = array (
+            'kasus_posi' => 0,
+            'kasus_isol' => 0,
+            'kasus_semb' => 0,
+            'kasus_meni' => 0,
+            'suspek' => 0,
+            'suspek_discharded' => 0,
+            'suspek_meninggal' => 0
+        );
+        foreach($data_covid as $key => $value) {
+            $new_data['kasus_posi'] += $value['kasus_posi'];
+            $new_data['kasus_isol'] += $value['kasus_isol'];
+            $new_data['kasus_semb'] += $value['kasus_semb'];
+            $new_data['kasus_meni'] += $value['kasus_meni'];
+            $new_data['suspek'] += $value['suspek'];
+            $new_data['suspek_discharded'] += $value['discharded'];
+            $new_data['suspek_meninggal'] += $value['suspek_meninggal'];
+        }
+        
+        // compire new data dan old data
+        if ($new_data != $old_data) {
+            $schadule   = new Scheduler(1);
+            $schadule->read();
+            // simpan data
+            foreach ($data_covid as $key => $value) {
+                $data_section = $value['data'];
+                foreach($data_section as $desa => $desa_val) {
+                    // simpan data kedatabase
+                    $this->creat(array (
+                        'date'                      => (int) $time, 
+                        'location'                  => $this->searchId($value['kecamatan'], $desa_val['desa']),
+                        'suspek'                    => (int) $desa_val['pdp']['dirawat'], 
+                        'suspek_discharded'         => (int) $desa_val['pdp']['sembuh'], 
+                        'suspek_meninggal'          => (int) $desa_val['pdp']['meninggal'], 
+                        'konfirmasi_symptomatik'    => (int) $desa_val['positif']['dirawat'],
+                        'konfirmasi_asymptomatik'   => (int) $desa_val['positif']['isolasi'], 
+                        'konfirmasi_sembuh'         => (int) $desa_val['positif']['sembuh'], 
+                        'konfirmasi_meninggal'      => (int) $desa_val['positif']['meninggal']
+                    ));
+                }
+            }
+
+            // ketika berhasil
+            $schadule->setLastModife((int) time());
+            $schadule->update();
+            return true;
+        }
+
+        return false;
+    }
+
+    /** menampilkan data berserta rincian perdesa dalam satu waktu (filter)
+     * @return array data covid per desa
+     */
+    public function result(): array
     {
         $grupByDate = [];
         foreach($this->_filters_waktu as $date){
@@ -76,13 +158,19 @@ class CovidKabSemarangTracker
         return $grupByDate;
     }
 
-    public function result_countAll()
-    {        
+    /** menghitung resume data dalam satu waktu (semua data)
+     * @return array resume data covid
+     */
+    public function result_countAll(): array
+    {
         $this->db->query($this->queryBuilder_count(null));
         return $this->db->resultset();
     }
     
-    public function result_count()
+    /** menghitung resume data dalam satu waktu (filter)
+     * @return array resume data covid
+     */
+    public function result_count(): array
     {
         if ($this->_filters_waktu == null ) return [];
         $date = implode(', ', $this->_filters_waktu);
@@ -90,6 +178,9 @@ class CovidKabSemarangTracker
         return $this->db->resultset();
     }
 
+    /** list data yang tersedia di databse
+     * @return array list tanggal format timestamp
+     */
     public function listOfDate() :array
     {
         $this->db->query("SELECT `date` 
@@ -99,6 +190,8 @@ class CovidKabSemarangTracker
                             DESC");
         return $this->db->resultset();
     }
+
+    // private method
     
     private function queryBuilder_count($date)
     {
@@ -153,7 +246,11 @@ class CovidKabSemarangTracker
         return implode(' AND ', $query);
     }
 
-    private function creat($params = [    
+    /** menyimpan data baru kedalam database (row by row) 
+     * @param array $params array data yang akan disimpan
+     * @return bool true jika data berhasil disimpan
+     */
+    private function creat(array $params = array (
         'date'                    => '', 
         'location'                => '',
         'suspek'                  => 0, 
@@ -163,7 +260,7 @@ class CovidKabSemarangTracker
         'konfirmasi_asymptomatik' => 0, 
         'konfirmasi_sembuh'       => 0, 
         'konfirmasi_meninggal'    => 0
-    ])
+    )): bool
     {
         $this->db->query("INSERT INTO `covid_tracker`
                             (`id`, `date`, `location`, `suspek`, `suspek_discharded`, `suspek_meninggal`, `konfirmasi_symptomatik`, `konfirmasi_asymptomatik`, `konfirmasi_sembuh`, `konfirmasi_meninggal`)

@@ -323,6 +323,7 @@ class CovidKabSemarangService extends Middleware
 
     public function indexing_compiere(array $param)
     {
+        // get old data
         $old_raw = $this->tracker_data(array());
         $old_data = [
             $old_raw['kasus_posi'],
@@ -333,35 +334,20 @@ class CovidKabSemarangService extends Middleware
             $old_raw['suspek_discharded'],
             $old_raw['suspek_meninggal'],
         ];
-
-        $new_raw = $this->fetch(array());
-        $new_data = [
-            $new_raw['kasus_posi'],
-            $new_raw['kasus_isol'],
-            $new_raw['kasus_semb'],
-            $new_raw['kasus_meni'],
-            $new_raw['suspek'],
-            $new_raw['suspek_discharded'],
-            $new_raw['suspek_meninggal'],
-        ];
         
+        // get last time data modife
         $schadule   = new Scheduler(1);
         $schadule->read();
-        if ($old_data != $new_data && $new_raw['status'] == 'ok') {
-            $new_reqeust = new CovidKabSemarangTracker();
-            if ($new_reqeust->createIndex()) {
-                $schadule->setLastModife(time());
-                $schadule->update();
-                // done
-                $index_status = 'sussessful';
-            }
-        }
+
+        // indexing data
+        $index = new CovidKabSemarangTracker();
+        $isNewData = $index->createIndex_compire($old_data);
 
         return [
-            'status'        => $new_raw['status'],
+            'status'        => 'ok',
             'last_index'    => date("Y/m/d h:i:sa", $schadule->getLastModife()),
             'next_index'    => date("Y/m/d h:i:sa", $schadule->getLastModife() + $schadule->getInterval()),
-            'index_status'  => $index_status ?? 'no index',
+            'index_status'  => $isNewData ? 'sussessful' : 'no index',
             'headers'       => ['HTTP/1.1 200 Oke']
         ];
     }

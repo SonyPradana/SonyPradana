@@ -74,6 +74,7 @@ class CovidKabSemarang
     /** mengkonvert data table kedalam array
      * @param string $nama_kecamatan nama kecamatan terdaftar diwillayah kabupaten semarang
      * @return array hasil kovert data table covid wilayah ksb semarang
+     * @return boolean false jika data gagal dimuat
      */
     public function getData($nama_kecamatan){
         // parameter untukmendapatkan total data per request
@@ -94,6 +95,7 @@ class CovidKabSemarang
         curl_setopt($ch, CURLOPT_HEADER, false);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         $html = curl_exec($ch);
+        if ($html === false) return false;
         curl_close($ch);
 
         // memuat data dalam bentuk DOM htlm -> mudah di parsing
