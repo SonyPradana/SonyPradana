@@ -113,7 +113,7 @@ class CovidKabSemarangTracker
         }
         
         // compire new data dan old data
-        if ($new_data != $old_data) {
+        if (array_values($new_data) != $old_data) {
             $schadule   = new Scheduler(1);
             $schadule->read();
             // simpan data
@@ -151,7 +151,7 @@ class CovidKabSemarangTracker
     {
         $grupByDate = [];
         foreach($this->_filters_waktu as $date){
-            $this->db->query($this->queryBuilder($date));        
+            $this->db->query($this->queryBuilder());        
             $this->db->bind(':date', $date);
             $grupByDate[$date] = $this->db->resultset();
         }
@@ -193,7 +193,11 @@ class CovidKabSemarangTracker
 
     // private method
     
-    private function queryBuilder_count($date)
+    /** Query builder untuk menghitung jumlah per kasus dalam atu waktu
+     * @param string tanggal data di-index
+     * @return string pdo query string
+     */
+    private function queryBuilder_count($date): string
     {
         $where_statment = $date == null ? '' : "WHERE `date` IN ($date)";
         $query          = " SELECT 
@@ -214,26 +218,33 @@ class CovidKabSemarangTracker
                             ";
         return $query;
     }
-    private function queryBuilder($date)
+
+    /** Query builder untuk mendapat data berupa query,
+     * (urut Ascending berdasrkan id)
+     * @return string pdo query string
+     */
+    private function queryBuilder(): string
     {
-        $query          = " SELECT 
-                                desa_kecamatan.kecamatan,
-                                desa_kecamatan.desa,
-                                covid_tracker.date,
-                                covid_tracker.location,               
-                                covid_tracker.suspek,                 
-                                covid_tracker.suspek_discharded,
-                                covid_tracker.suspek_meninggal,      
-                                covid_tracker.konfirmasi_symptomatik, 
-                                covid_tracker.konfirmasi_asymptomatik,
-                                covid_tracker.konfirmasi_sembuh,
-                                covid_tracker.konfirmasi_meninggal
-                            FROM `covid_tracker`
-                            INNER JOIN  `desa_kecamatan`
-                                    ON desa_kecamatan.id = covid_tracker.location
-                            WHERE
-                                `date` = :date 
-                            ";
+        $query = "SELECT 
+                    desa_kecamatan.kecamatan,
+                    desa_kecamatan.desa,
+                    covid_tracker.id,
+                    covid_tracker.date,
+                    covid_tracker.location,               
+                    covid_tracker.suspek,                 
+                    covid_tracker.suspek_discharded,
+                    covid_tracker.suspek_meninggal,      
+                    covid_tracker.konfirmasi_symptomatik, 
+                    covid_tracker.konfirmasi_asymptomatik,
+                    covid_tracker.konfirmasi_sembuh,
+                    covid_tracker.konfirmasi_meninggal
+                FROM `covid_tracker`
+                INNER JOIN  `desa_kecamatan`
+                        ON desa_kecamatan.id = covid_tracker.location
+                WHERE
+                    `date` = :date	    
+                ORDER BY `id` ASC
+                ";
         return $query;
     }
 
@@ -246,7 +257,7 @@ class CovidKabSemarangTracker
         return implode(' AND ', $query);
     }
 
-    /** menyimpan data baru kedalam database (row by row) 
+    /** menyimpan data baru kedalam database (row by row)
      * @param array $params array data yang akan disimpan
      * @return bool true jika data berhasil disimpan
      */
