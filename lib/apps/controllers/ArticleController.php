@@ -6,19 +6,18 @@ use Simpus\Auth\User;
 
 class ArticleController extends Controller
 {
-    public function articleNotFound()
-    {        
-        (new DefaultController())->status(404, []);
-        exit;
+    public function articleNotFound($path)
+    {
+        DefaultController::page_404(array('path' => '/read/'.$path));
     }
 
     public function index(string $articleID)
-    {        
+    {
         $read_article = new articleModel();
         $read_article->selectColomn(['*']);
         $read_article->filterURLID($articleID);
         $result = $read_article->result()[0] ?? null;
-        if( $result == null ) $this->articleNotFound();
+        if( $result == null ) $this->articleNotFound($articleID);
 
         $author = new User($result['author']);
         $selisih_waktu = time() - $result['create_time'];

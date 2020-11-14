@@ -21,8 +21,12 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/init.php';
         "DNT"       => isset( $_SERVER['HTTP_DNT']) && $_SERVER['HTTP_DNT'] == 1 ? true : false,
         "before"    => function() use ($auth) {
             if( !$auth->TrushClient() ){  
-                header("Location: /login?url=" . $_SERVER['REQUEST_URI']);  
-                exit();
+                DefaultController::page_401(array (
+                    'links' => array (
+                        array('Home Page', '/'),
+                        array('Login',  '/login?url=' . $_SERVER['REQUEST_URI'])
+                    )
+                ));
             }
         }
     ]);
@@ -51,10 +55,12 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/init.php';
     $app->match(['get', 'post'], '/forgot/(:text)', function(string $action){
         if( $action == 'reset' ){
             (new AuthController())->hardReset();
-        }elseif( $action = 'send'){
+        }elseif( $action == 'send'){
             (new AuthController())->send();
-        }else{            
-            (new DefaultController())->status(404, []);
+        }else{
+            DefaultController::page_404(array (
+                'path' => '/forgot/'.$action
+            ));
         }
     });
 
@@ -68,7 +74,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/init.php';
         (new MessageController())->public();
     });
 
-    // halaman standar
+    // halaman standar   
     $app->get('/About', function(){
         (new HomeController())->about();
     });    
@@ -82,9 +88,11 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/init.php';
     // info    
     $app->get('/info/(:any)', function(string $page) {
         if( Controller::view_exists('info/' . $page)){
-          (new InfoController())->show( $page );
+            (new InfoController())->show( $page );
         }else{
-            (new DefaultController())->status(404, []);
+            DefaultController::page_404(array (
+                'path' => '/info/'.$page
+            ));
         }
     });
 
@@ -111,7 +119,9 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/init.php';
         if( Controller::view_exists('kia-anak/'. $unit . '/'. $action)){
             (new KiaAnakController)->show($action, $unit);            
         }else{            
-            (new DefaultController())->status(404, []);
+            DefaultController::page_404(array (
+                'path' => '/kia-anak/'.$action.'/'.$unit
+            ));
         }
     });
 
@@ -122,10 +132,15 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/init.php';
 
     // default path 404, 405
     $app->pathNotFound(function($path) {
-        (new DefaultController())->status(404, []);
+        DefaultController::page_404(array(
+            'path' => $path
+        ));
     });
     $app->methodNotAllowed(function($path, $method) {
-        (new DefaultController())->status(405, ['path' => $path, 'method' => $method]);
+        DefaultController::page_405(array (
+            'path' => $path,
+            'method' => $method
+        ));
     });
 
     $app->run('/');

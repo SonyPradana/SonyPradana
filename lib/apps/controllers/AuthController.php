@@ -10,11 +10,13 @@ class AuthController extends Controller
     private function useAuth()
     {
         if ($this->getMiddleware()['auth']['login'] == false) {
-            header('HTTP/1.0 401 Unauthorized');   
-            header("Location: /login?url=" . $_SERVER['REQUEST_URI']);  
-            exit();
+            DefaultController::page_401(array (
+                'links' => array (
+                    array('Login',  '/login?url=' . $_SERVER['REQUEST_URI'])
+                )
+            ));
         }
-    }
+    }   
 
     private function useGuest()
     {

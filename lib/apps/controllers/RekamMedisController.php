@@ -14,9 +14,12 @@ class RekamMedisController extends Controller{
         
         // call_user_func_array($this->getMiddleware()['before'], []);
         if( $this->getMiddleware()['auth']['login'] == false ){            
-            header('HTTP/1.0 401 Unauthorized');   
-            header("Location: /login?url=" . $_SERVER['REQUEST_URI']);  
-            exit();
+            DefaultController::page_401(array (
+                'links' => array (
+                    array('Home Page', '/'),
+                    array('Login',  '/login?url=' . $_SERVER['REQUEST_URI'])
+                )
+            ));
         }
     }
 
