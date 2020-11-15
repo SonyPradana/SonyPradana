@@ -11,55 +11,91 @@
     <meta name="keywords" content="simpus lerep, puskesmas lerep, puskesmas, ungaran, kabupaten semarang, edit profile">
     <meta name="author" content="amp">
 <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/meta/metatag.html') ?>
-       
+    
     <style>
-        body{background-color: #d2d6de;}
-        form{
-            padding: 0 20px;
+        html, body {
+            background-color: #d9d9d9;
+            height: calc(100% - 50px);
+            margin: 0;
+            padding: 0;
+            display: grid;
+            justify-content: center;
+            top: 50px;
+            position: relative;
         }
-        input{
-            display: block;
-            margin-bottom: 10px;
-            font-size: 17px;
-        }        
-        main .container {
-            background-color: #fff;    
-            padding: 15px;        
-            margin: 7% auto;
+        .container {
+            display: flex;
+            justify-content: center;
+        }
+        .boxs {
+            background-color: #fff;
+            padding: 24px;
             width: 60%;
-            min-width: 320px;
-            max-width: 900px;
+            min-width: 472px;
+            max-width: 1000px;
             box-shadow: 0 4px 8px 0 #00000022, 0 6px 20px 0 #00000010;
+            gap: 8px;
             height: 450px;
 
             display: grid;
             grid-template-columns: 1fr 1fr;
         }
-        .container .body.right p{
-            font-size: 24px;
+        input{
+            width: calc(100% - 56px);
+            display: block;
+            margin-bottom: 10px;
+            font-size: 17px;
         }
-        .container .body.left{
-            border-left:  0.1px solid #ece9e9 ;
+        .box.display_picture img {
+            height: 48px;
+        }
+        .boxs .box-right {
+            border-left:  0.1px solid #ece9e9;
             padding: 10px;
         }
-        .container .body.left .center{
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
+        .boxs .box-right .logo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
-        .container .body.left p{
+        .boxs .box-right p {
             text-align: center;
             font-size: 20px
         }
-        .box.display_picture img{
-            height: 48px;
+        footer {
+            display: flex;
+            justify-content: center;
+            align-self: end;
+            margin: 12px
+        }
+        /* mobile */
+        @media screen and (max-width: 479px) {
+            html, body {
+                height: calc(100% - 12px);
+                top: 12px;
+            }
+            .boxs {
+                grid-template-columns: 1fr;
+                width: 300px;
+                min-width: 320px;
+                max-width: 479;
+                height: auto;
+            }
+            input{
+                width: 100%;
+            }
+            .boxs .box-right {
+                border-left:  none;
+                border-top: 1px solid #ece9e9;
+                padding: 10px;
+            }
         }
     </style>
 </head>
 <body>
-    <main>
-        <div class="container">
-            <div class="body right">
+    <main class="container">
+        <div class="boxs">
+            <div class="box-left">
                 <h1>Ubah Profile</h1>
                 <form id="form-profile" action="" method="post" enctype="multipart/form-data">
                     <label for="input-user-name">User Name</label>
@@ -88,16 +124,21 @@
                     <button type="button" name="close" id="close-button">Close</button>
                  </form>
             </div>
-            <div class="body left">
+            <div class="box-right">
                 <div class="logo">
-                    <img  class="center" src="/data/img/logo/logo-puskesmas.png" alt="logo" width="100px" height="100px">
+                    <img src="/data/img/logo/logo-puskesmas.png" alt="logo" width="100px" height="100px">
                 </div>
-                
-                <p>Bergabunglah untuk mendapatkan akses penuh dalam sinpus</p>
+                                
+                <p>Selamat Datang Di System Informasi Majaemen Puskesmas Lerep</p>
             </div>
         </div>
         
     </main>
+    <footer>
+        <div class="footer-box">
+            <a href="/">Home Page</a>
+        </div>
+    </footer>
     <script>
         document.getElementById("close-button").onclick = function(){
             window.location.href = "<?= isset( $_GET['url'] ) ? $_GET['url'] : '/' ?>";

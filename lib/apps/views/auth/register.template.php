@@ -7,56 +7,96 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Buat Acunt Baru</title>
-    <meta name="description" content="sistem informasi kesehatan puskesmas Lerep">
-    <meta name="keywords" content="simpus lerep, pkm lerep">
+    <meta name="description" content="daftar akun baru sistem informasi kesehatan puskesmas Lerep">
+    <meta name="keywords" content="simpus lerep, pkm lerep, register">
     <meta name="author" content="amp">
 <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/meta/metatag.html') ?>
        
-    <style>
-        body{background-color: #d2d6de;}
-        form{
-            padding: 0 20px;
+<style>
+        html, body {
+            background-color: #d9d9d9;
+            height: calc(100% - 50px);
+            margin: 0;
+            padding: 0;
+            display: grid;
+            justify-content: center;
+            top: 50px;
+            position: relative;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+        }
+        .boxs {
+            background-color: #fff;
+            padding: 24px;
+            width: 60%;
+            min-width: 472px;
+            max-width: 1000px;
+            box-shadow: 0 4px 8px 0 #00000022, 0 6px 20px 0 #00000010;
+            gap: 8px;
+            height: 450px;
+
+            display: grid;
+            grid-template-columns: 1fr 1fr;
         }
         input{
+            width: calc(100% - 56px);
             display: block;
             margin-bottom: 10px;
             font-size: 17px;
-        }        
-        main .container {
-            background-color: #fff;    
-            padding: 15px;        
-            margin: 7% auto;
-            width: 60%;
-            min-width: 320px;
-            max-width: 900px;
-            box-shadow: 0 4px 8px 0 #00000022, 0 6px 20px 0 #00000010;
-
-            display: grid;
-            grid-template-columns: 2fr 1fr;
         }
-        .container .body.right p{
-            font-size: 24px;
+        .box.display_picture img {
+            height: 48px;
         }
-        .container .body.left{
-            border-left:  0.1px solid #ece9e9 ;
+        .boxs .box-right {
+            border-left:  0.1px solid #ece9e9;
             padding: 10px;
         }
-        .container .body.left .center{
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
+        .boxs .box-right .logo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
-        .container .body.left p{
+        .boxs .box-right p {
             text-align: center;
             font-size: 20px
+        }
+        footer {
+            display: flex;
+            justify-content: center;
+            align-self: end;
+            margin: 12px
+        }
+        /* mobile */
+        @media screen and (max-width: 479px) {
+            html, body {
+                height: calc(100% - 12px);
+                top: 12px;
+            }
+            .boxs {
+                grid-template-columns: 1fr;
+                width: 300px;
+                min-width: 320px;
+                max-width: 479;
+                height: auto;
+            }
+            input{
+                width: 100%;
+            }
+            .boxs .box-right {
+                border-left:  none;
+                border-top: 1px solid #ece9e9;
+                padding: 10px;
+            }
         }
     </style>
 </head>
 <body>
-    <main>
-        <div class="container">
-            <div class="body right">
-                <p>Selamat Datang Di System Informasi Majaemen Puskesmas Lerep</p>
+    <main class="container">
+        <div class="boxs">
+            <div class="box-left">
+                <h1>Register User Baru</h1>
                 <form id="form-register" action="" method="post">
                     <label for="userName">User Name</label>
                     <input type="text" name="userName" id="userName-input" required value="<?= $content->user_name  ?>">
@@ -92,16 +132,19 @@
                 ?>
                  </form>
             </div>
-            <div class="body left">
+            <div class="box-right">
                 <div class="logo">
-                    <img  class="center" src="/data/img/logo/logo-puskesmas.png" alt="logo" width="100px" height="100px">
+                    <img src="/data/img/logo/logo-puskesmas.png" alt="logo" width="100px" height="100px">
                 </div>
-                
                 <p>Bergabunglah untuk mendapatkan akses penuh dalam simpus</p>
             </div>
-        </div>
-        
+        </div>        
     </main>
+    <footer>
+        <div class="footer-box">
+            <a href="/">Home Page</a>
+        </div>
+    </footer>
 </body>
 <script>
     document.getElementById('form-register').onsubmit = function(e) {

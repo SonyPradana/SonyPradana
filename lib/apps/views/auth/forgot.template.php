@@ -13,24 +13,32 @@
 <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/meta/metatag.html') ?>
        
     <style>
-        body {
-            background-color: #d2d6de;
+        .gg-dialpad{transform:scale(var(--ggs,1));}.gg-dialpad,.gg-dialpad::before{box-shadow:-5px 0 0,5px 0 0}.gg-dialpad,.gg-dialpad::after,.gg-dialpad::before{box-sizing:border-box;position:relative;display:block;width:3px;height:3px;background:currentColor}.gg-dialpad::after,.gg-dialpad::before{content:"";position:absolute;left:0;}.gg-dialpad::before{bottom:5px}.gg-dialpad::after{box-shadow:-5px 0 0,5px 0 0,0 5px 0;top:5px}.gg-lastpass{box-sizing:border-box;position:relative;display:block;transform:scale(var(--ggs,1));width:20px;height:12px}.gg-lastpass::after,.gg-lastpass::before{content:"";display:block;box-sizing:border-box;position:absolute;background:currentColor;border-radius:22px}.gg-lastpass::before{width:4px;height:4px;box-shadow:6px 0 0,12px 0 0;top:4px}.gg-lastpass::after{width:2px;height:12px;right:0}
+
+        html, body {
+            background-color: #d9d9d9;
+            height: calc(100% - 50px);
+            margin: 0;
+            padding: 0;
+            display: grid;
+            justify-content: center;
+            top: 50px;
+            position: relative;
         }
-        main .container {
-            background-color: #fff;    
-            padding: 15px;        
-            margin: 7% auto;
+        main .boxs {
+            background-color: #fff;
+            padding: 15px;
             width: 360px;
         }
-        main .container .logo {
-            margin-top: 10px
+        .boxs .logo {
+            margin-top: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
-        main .container .logo .center {
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        main .container p{
+        .boxs h1{
+            margin: 28px;
+            padding: 0;
             font-size: 24px;
             color: #666;
             text-align: center;
@@ -43,54 +51,92 @@
         }
         .form-groub{
             width: 100%;
-            height: 30px;
-            display: block;
             margin-bottom: 7px;      
             border: 1px solid #ccb8b8;
-        } 
+            display: flex;
+            align-items: center;
+        }
+        i {
+            margin-left: 8px;
+            max-width: 10px;
+            max-height: 16px;
+        }
         input{
             width: 100%;
             max-width: 320px;
             margin: 6px 12px;
             padding: 0;
             border: 0;
-            font-size: 14px
+            font-size: 16px
+        }
+        input:focus {
+            box-shadow: none;
+            border: none;
+            outline: none;
+        }
+        input:required {
+            box-shadow:none;
+        }
+        input:invalid {
+            box-shadow: none
+        }
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type=number] {
+            -moz-appearance: textfield;
         }
         button{
             width: 100%;
             height: 32px;
         }
+        footer {
+            display: flex;
+            justify-content: center;
+            align-self: end;
+            margin: 12px
+        }
 
     </style>
 </head>
 <body>
-    <main>
-        <div class="container">
+    <main class="container">
+        <div class="boxs">
             <div class="logo">
-                <img  class="center" src="/data/img/logo/logo-puskesmas.png" alt="logo" width="60px" height="60px">
+                <img src="/data/img/logo/logo-puskesmas.png" alt="logo" width="60px" height="60px">
             </div>
-            <p>Buat Ulang Password</p>
+            <h1>Buat Ulang Password</h1>
             <form id="form-forgot" action="" method="post">
-                <div class="body">
+                <div class="form-body">
                     <div class="form-groub">
-                        <input type="text" name="validate" id="validate-input" required placeholder="masukan 6 digit kode keamanan" maxlength="6">
+                        <i class="gg-dialpad"></i>
+                        <input type="number" name="validate" id="validate-input" required placeholder="masukan 6 digit kode keamanan" maxlength="6" tabindex="1">
                     </div>
                     <div class="white-space">
                     </div>
-                    
+                        
                     <div class="form-groub">
-                        <input type="password" name="password" id="password-input" required placeholder="new password">
+                        <i class="gg-lastpass"></i>
+                        <input type="password" name="password" id="password-input" autocomplete="off" required placeholder="new password" tabindex="2">
                     </div>
                     <div class="form-groub">
-                        <input type="password" name="password2" id="password2-input" required placeholder="confirm password">               
+                        <i class="gg-lastpass"></i>
+                        <input type="password" name="password2" id="password2-input" required placeholder="confirm password" tabindex="3">               
                     </div>
                 </div>
-                <div class="footer">
-                    <button type="submit" name="reset">reset password</button>
+                <div class="form-footer">
+                    <button type="submit" name="reset" tabindex="4">reset password</button>
                 </div>
             </form>
         </div>
     </main>
+    <footer>
+        <div class="footer-box">
+            <a href="/">Home Page</a>
+        </div>
+    </footer>
 </body>
 <script>
     document.getElementById('form-forgot').onsubmit = function(e) {
