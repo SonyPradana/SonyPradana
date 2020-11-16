@@ -1,9 +1,9 @@
-<?php
+<?php namespace Simpus\Helper;
 
-namespace Simpus\Helper;
-use Simpus\Database\MyPDO;
+use System\Database\MyPDO;
 
-class Scheduler{
+class Scheduler
+{
     /** @var MyPDO */
     private $db;
     private $id = '';
@@ -13,22 +13,22 @@ class Scheduler{
     private $looping;
 
     // getter
-    public function getProjectName() :string
+    public function getProjectName(): string
     {
         return $this->project_name;
     }
 
-    public function getLastModife() :int
+    public function getLastModife(): int
     {
         return (int) $this->last;
     }
 
-    public function getInterval() :int
+    public function getInterval(): int
     {
         return (int) $this->interval;
     }
 
-    public function getLooping() :string
+    public function getLooping(): string
     {
         return $this->looping;
     }
@@ -64,9 +64,9 @@ class Scheduler{
         $this->id = $id;
     }
 
-    public function create() :bool
+    public function create(): bool
     {
-        if( $this->id != '' ) return false;
+        if ($this->id != '') return false;
         
         $this->db->query("INSERT INTO `task_secheduler`
                             (
@@ -82,21 +82,22 @@ class Scheduler{
         $this->db->bind(':looping', $this->looping);
 
         $this->db->execute();
-        if( $this->db->rowCount() > 0) return true;
+        if ($this->db->rowCount() > 0) return true;
 
         return false;
     }
 
-    public function read() :bool
+    public function read(): bool
     {
-        if( $this->id == '' ) return false;
-        $this->db->query("SELECT *
-                          FROM `task_secheduler`
-                          WHERE `id` = :id
-                        ");
+        if ($this->id == '') return false;
+        $this->db->query(
+            "SELECT *
+                FROM `task_secheduler`
+                WHERE `id` = :id
+            ");
         $this->db->bind(':id', $this->id);
         $row = $this->db->single();
-        if( $row ){
+        if ($row) {
             $this->project_name = $row['project_name'];
             $this->last         = $row['last'];
             $this->interval     = $row['interval'];
@@ -109,16 +110,17 @@ class Scheduler{
 
     public function update()
     {
-        if( $this->id == '' ) return false;
-        $this->db->query("UPDATE `task_secheduler`
-                          SET
-                                `project_name` = :project_name,
-                                `last`  = :last,
-                                `interval`     = :interval,
-                                `looping`      = :looping
-                            WHERE
-                                `id` = :id
-                        ");
+        if ($this->id == '') return false;
+        $this->db->query(
+            "UPDATE `task_secheduler`
+                SET
+                    `project_name` = :project_name,
+                    `last`  = :last,
+                    `interval`     = :interval,
+                    `looping`      = :looping
+                WHERE
+                    `id` = :id
+            ");
         $this->db->bind(':project_name', $this->project_name);
         $this->db->bind(':last', $this->last);
         $this->db->bind(':interval', $this->interval);

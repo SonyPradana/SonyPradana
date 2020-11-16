@@ -1,7 +1,6 @@
-<?php
+<?php namespace Simpus\Auth;
 
-namespace Simpus\Auth;
-use Simpus\Database\MyPDO;
+use System\Database\MyPDO;
 
 /**
  *  Class Registrasi fungsinya untuk menyimpan user baru ke database
@@ -70,16 +69,16 @@ class Registartion
         $verifyEmail =  $newEmail->userVerify();
 
         # return
-        if( $veifyUser ){
+        if ($veifyUser) {
             # user telah terdaftar
             return 1;
-        }elseif( $verifyEmail ){
+        } elseif ($verifyEmail) {
             # email telah terdaftar
             return 2;
-        }elseif( $veifyUser AND $verifyEmail ){
+        } elseif($veifyUser AND $verifyEmail) {
             # user dan email terdaftar
             return 3;
-        }else {
+        } else {
             # user dan email tersedia
             return 4;
         }
@@ -113,11 +112,10 @@ class Registartion
         $this->PDO->execute();
         # result
         $res = $this->PDO->rowCount();
-        if( $res > 0){
+        if ($res > 0) {
             return true;
         }
         return false;
     }
-
 }
 

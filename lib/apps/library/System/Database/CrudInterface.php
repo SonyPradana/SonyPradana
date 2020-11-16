@@ -1,8 +1,6 @@
-<?php
+<?php namespace System\Database;
 
-namespace Simpus\Database;
-
-interface crudInterface
+interface CrudInterface
 {
   public function cread(): bool;
   public function read(): bool;

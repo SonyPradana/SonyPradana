@@ -2,7 +2,7 @@
 
 namespace Simpus\Simpus;
 
-use Simpus\Database\MyPDO;
+use System\Database\MyPDO;
 use Simpus\Helper\StringValidation;
 
 /**

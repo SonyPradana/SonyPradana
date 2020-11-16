@@ -1,7 +1,6 @@
-<?php
+<?php namespace Simpus\Auth;
 
-namespace Simpus\Auth;
-use Simpus\Database\MyPDO;
+use System\Database\MyPDO;
 
 /**
  * kelas ini berisi pembuatan password baru
@@ -30,7 +29,8 @@ class ForgotPassword
      * cek kombinasi passwod dan code sudah benar atau belum
      * @return boolean verifikasi key
      */
-    public function verifyKey():bool{
+    public function verifyKey(): bool
+    {
         return (boolean) $this->_verifyKey;
     }
     
@@ -50,18 +50,18 @@ class ForgotPassword
         $decodeKey = base64_decode($key);
         $decodeKey = json_decode($decodeKey, true);
         # cek expt terdaftar atau tidak dan expt timenya (kurang dari 30 menit)
-        if( isset( $decodeKey['exp']) ) {
-            if( $decodeKey['exp'] > time()){
+        if (isset( $decodeKey['exp'])) {
+            if ($decodeKey['exp'] > time()) {
                 # key tidak boleh kadaluarsa
 
                 # koneksi data base
                 $this->PDO->query('SELECT * FROM reset_pwd WHERE link=:link');
                 $this->PDO->bind(':link', $key);
 
-                if( $this->PDO->single() ){
+                if ($this->PDO->single()) {
                     $row = $this->PDO->single();
                     # mencocokan code ke data base
-                    if( $code == $row['code']){
+                    if ($code == $row['code']) {
                         $this->_verifyKey = true;
                         $this->userName = $decodeKey['user'];
                     }
@@ -82,7 +82,7 @@ class ForgotPassword
      */
     public function NewPassword($new_password): bool
     {
-        if( $this->_verifyKey ) {
+        if ($this->_verifyKey) {
             #koneksi data base
             #set property
             $user_name = $this->userName;
@@ -121,7 +121,7 @@ class ForgotPassword
      */
     public function deleteSection()
     {
-        if( $this->_verifyKey){
+        if ($this->_verifyKey) {
             $id = $this->_idKey;
             # koneksi data base
             $this->PDO->query('DELETE FROM `reset_pwd` WHERE `id`=:id');

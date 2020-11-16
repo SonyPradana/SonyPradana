@@ -1,6 +1,5 @@
-<?php
+<?php namespace System\Database;
 
-namespace Simpus\Database;
 use \PDO;
 use \PDOException;
 

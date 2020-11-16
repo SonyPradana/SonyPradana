@@ -1,7 +1,6 @@
-<?php
+<?php namespace Simpus\Auth;
 
-namespace Simpus\Auth;
-use Simpus\Database\MyPDO;
+use System\Database\MyPDO;
 
 /**
  * class ini berfungsi untuk mendaptakan informsai akun / profil dari user
@@ -26,26 +25,33 @@ class User
     private $_displayPicture;
 
     /** @return boolean Mengecek validitas user */
-    public function userVerify():bool{
+    public function userVerify():
+        bool
+    {
         return $this->_exisUser;
     }
     /** @return string Mendapatkan Nama tampilan user*/
-    public function getDisplayName(){
+    public function getDisplayName()
+    {
         return $this->_displayName;
     }
     /** @return string Mendapatkam alamat email user*/
-    public function getEmail(){
+    public function getEmail()
+    {
         return $this->_email;
     }
     /** @return string Unit kerja / bagian */
-    public function getSection(){
+    public function getSection()
+    {
         return $this->_section;
     }
     /** @return string url image display picture */
-    public function getDisplayPicture(){
+    public function getDisplayPicture()
+    {
         return $this->_displayPicture;
     }
-    public function getSmallDisplayPicture(){
+    public function getSmallDisplayPicture()
+    {
         $file_name = explode('/', $this->_displayPicture);
         $file_name = end( $file_name );
         $small_image = str_replace($file_name, "small-" . $file_name, $this->_displayPicture);
@@ -57,7 +63,8 @@ class User
      * menggati display name baru     * 
      * @param string $val nama tampilan baru
      */
-    public function setDisplayName($val){
+    public function setDisplayName($val)
+    {
         // senitazer
         $val = htmlspecialchars($val);
         
@@ -67,7 +74,8 @@ class User
      * menggati unit kerja / bagian
      * @param string unit kerja baru
      */
-    public function setSection($val){
+    public function setSection($val)
+    {
         // senitazer
         $val = htmlspecialchars($val);
 
@@ -77,7 +85,8 @@ class User
      * mengganti alamat display picture
      * @param string url display picture
      */
-    public function setDisplayPicture(string $val){
+    public function setDisplayPicture(string $val)
+    {
         $this->_displayPicture = $val;
     }
 
@@ -86,7 +95,8 @@ class User
      * 
      * @param string $user_name User Name yang digunakna
      */
-    public function __construct($user_name){
+    public function __construct($user_name)
+    {
         if( is_null($user_name) ) return;
         // senetalizer user_name
         $user_name = strtolower($user_name);
@@ -96,7 +106,7 @@ class User
         $this->PDO = new MyPDO();
         $this->PDO->query('SELECT * FROM `profiles` WHERE `user`=:user');
         $this->PDO->bind(':user', $user_name);
-        if( $this->PDO->single() ){
+        if ($this->PDO->single()) {
             $row = $this->PDO->single();
             $this->_exisUser = true;
             $this->_email = $row['email'];
@@ -109,8 +119,9 @@ class User
     /**
      * menyimpan perubahan profile ke dalam data base
      */
-    public function saveProfile(){
-        if( $this->_exisUser == false ) return false;
+    public function saveProfile()
+    {
+        if ($this->_exisUser == false) return false;
         $user_name = $this->_user;
         $display_name = $this->_displayName;
         $section = $this->_section;

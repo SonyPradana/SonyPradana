@@ -3,7 +3,7 @@
 use Simpus\Apps\Middleware;
 use Simpus\Simpus\MedicalRecords;
 use Simpus\Helper\HttpHeader;
-use Simpus\Database\MyPDO;
+use System\Database\MyPDO;
 
 class RekamMedisService extends Middleware
 {
@@ -13,7 +13,7 @@ class RekamMedisService extends Middleware
     {
         $this->db = new MyPDO();
         // cek access
-        if( $this->getMiddleware()['auth']['login'] == false ){
+        if ($this->getMiddleware()['auth']['login'] == false) {
             HttpHeader::printJson(['status' => 'unauthorized'], 500, [
                 "headers" => [
                     'HTTP/1.0 401 Unauthorized',

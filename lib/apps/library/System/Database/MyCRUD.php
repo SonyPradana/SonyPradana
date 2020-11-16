@@ -1,11 +1,9 @@
-<?php
+<?php namespace System\Database;
 
-namespace Simpus\Database;
+use System\Database\CrudInterface;
+use System\Database\MyPDO;
 
-use Simpus\Database\crudInterface;
-use Simpus\Database\MyPDO;
-
-class MyCRUD implements crudInterface
+class MyCRUD implements CrudInterface
 {
   /** @var MyPDO */
   protected $PDO;

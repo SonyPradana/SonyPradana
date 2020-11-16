@@ -2,14 +2,14 @@
 
 namespace Simpus\Simpus;
 
-use Simpus\Database\MyPDO;
-use Simpus\Database\QueryBuilder;
+use System\Database\MyPDO;
+use System\Database\MyModel;
 use \PDO;
 
 /**
  * TODO tambah fiture remove duplivcate by xxx (id_hash)
  */
-class PosyanduRecords extends QueryBuilder{
+class PosyanduRecords extends MyModel{
     private $_options = ["imperssion" => [":", ""], "operator"   => "="];
 
     public function filtterById( $val){

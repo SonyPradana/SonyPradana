@@ -1,7 +1,6 @@
-<?php
+<?php namespace Simpus\Auth;
 
-namespace Simpus\Auth;
-use Simpus\Database\MyPDO;
+use System\Database\MyPDO;
 
 /**
  * class ini berfung untuk membuat verifikasi ganti password
@@ -35,11 +34,12 @@ class EmailAuth
      * 
      * @param string $email email pemulih
      */
-    public function __construct($email){
+    public function __construct($email)
+    {
         $this->PDO = new MyPDO();
         $this->PDO->query('SELECT `user` FROM `profiles` WHERE email=:email');
         $this->PDO->bind(':email', $email);
-        if( $this->PDO->single() ) {
+        if ($this->PDO->single()) {
             $row = $this->PDO->single();
             #simpan parameter
             $this-> _userVerify = true;
@@ -56,7 +56,8 @@ class EmailAuth
      * berisi username, dan time expt    * 
      * 
      */
-    private function CreatKey(){
+    private function CreatKey()
+    {
         # property
         $user = $this->_userName;
         $expt = time() + 1800; #30 menit

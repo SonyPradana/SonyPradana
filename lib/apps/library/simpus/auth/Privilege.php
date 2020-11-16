@@ -1,7 +1,6 @@
-<?php
+<?php namespace Simpus\Auth;
 
-namespace Simpus\Auth;
-use Simpus\Database\MyPDO;
+use System\Database\MyPDO;
 
 /**
  * Class untuk melihat, mengedit dan mebuat privilege dari user.
@@ -25,7 +24,8 @@ class Privilege
      * Melihat dan mgedit privilege dari user yang terdaftar
      * @param Auth $user_auth Aunt/user yang akan di lihat
      */
-    public function __construct($user_auth){
+    public function __construct($user_auth)
+    {
         $this->PDO = new MyPDO();
         $this->_userName = $user_auth;
     }
@@ -94,7 +94,8 @@ class Privilege
      * @param string $target_acces target Page yang akan di simpan
      * @param string $privilege Nilai privilege yang akan disimpan
      */
-    public function ChangeAcces($target_acces = "default", $privilege){
+    public function ChangeAcces($target_acces = "default", $privilege)
+    {
         # koneksi dan simpan privile baru ke data base
         $query = "UPDATE privilege SET privilege = '$privilege' WHERE target = '$target_acces' ";
         #simpan ke databe 'auts'

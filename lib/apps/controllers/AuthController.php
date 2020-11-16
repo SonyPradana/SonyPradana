@@ -1,6 +1,7 @@
 <?php
+
 use Simpus\Auth\{User, Login, Logout, EmailAuth, Registartion, ResetPassword, ForgotPassword};
-use Simpus\Database\MyPDO;
+use System\Database\MyPDO;
 use Simpus\Apps\Controller;
 use Simpus\Helper\{UploadFile, StringValidation as sv};
 use \Gumlet\ImageResize;

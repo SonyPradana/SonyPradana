@@ -1,12 +1,10 @@
-<?php
+<?php namespace Model\Article;
 
-namespace Model;
-
-use Simpus\Database\QueryBuilder;
 use \PDO;
-use Simpus\Database\MyPDO;
+use System\Database\MyModel;
+use System\Database\MyPDO;
 
-class articleModel extends QueryBuilder
+class articleModel extends MyModel
 {
     private $_options = ["imperssion" => [":", ""], "operator"   => "="];
 

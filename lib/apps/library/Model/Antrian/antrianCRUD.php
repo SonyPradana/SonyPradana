@@ -2,8 +2,8 @@
 
 namespace Model\Antrian;
 
-use Simpus\Database\MyCRUD;
-use Simpus\Database\MyPDO;
+use System\Database\MyCRUD;
+use System\Database\MyPDO;
 
 class antrianCRUD extends MyCRUD
 {
@@ -13,12 +13,6 @@ class antrianCRUD extends MyCRUD
   private $_current_times;
   private $_queueing;
   private $_queueing_times;
-
-  // setter
-  public function sellectAll()
-  {
-    
-  }
 
   public function setID(string $val)
   {
@@ -77,11 +71,6 @@ class antrianCRUD extends MyCRUD
       $this->COLUMNS['date_time'] = $time;
     }
     return $this;
-  }
-
-  public function hombreng()
-  {
-    return $this->COLUMNS;
   }
 
   public function __construct()

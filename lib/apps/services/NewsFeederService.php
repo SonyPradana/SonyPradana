@@ -1,6 +1,6 @@
 <?php
 
-use Model\articleModel;
+use Model\Article\articleModel;
 use Simpus\Apps\Middleware;
 
 class NewsFeederService extends Middleware

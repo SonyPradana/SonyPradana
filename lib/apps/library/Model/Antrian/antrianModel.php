@@ -1,12 +1,9 @@
-<?php
+<?php namespace Model\Antrian;
 
-namespace Model\Antrian;
+use System\Database\MyModel;
+use System\Database\MyPDO;
 
-use Simpus\Database\QueryBuilder;
-use \PDO;
-use Simpus\Database\MyPDO;
-
-class antrianModel extends QueryBuilder
+class antrianModel extends MyModel
 {
     public function __construct()
     {

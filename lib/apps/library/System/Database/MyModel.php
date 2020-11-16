@@ -1,8 +1,6 @@
-<?php
+<?php namespace System\Database;
 
-namespace Simpus\Database;
-
-abstract class QueryBuilder
+abstract class MyModel
 {
     /** kumpulan array filter */
     protected $_GROUP_FILTER = [];

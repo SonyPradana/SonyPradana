@@ -1,7 +1,6 @@
-<?php
+<?php namespace Simpus\Message;
 
-namespace Simpus\Message;
-use Simpus\Database\MyPDO;
+use System\Database\MyPDO;
 
 /**
  * perent class untuk pengiriman pesan

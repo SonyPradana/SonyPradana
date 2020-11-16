@@ -1,7 +1,6 @@
-<?php
+<?php namespace Simpus\Services;
 
-namespace Simpus\Services;
-use Simpus\Database\MyPDO;
+use System\Database\MyPDO;
 use \DateTime;
 
 class JadwalKia
@@ -23,7 +22,7 @@ class JadwalKia
         $this->_year = $tahun;
     }
 
-    public function getdata() :array
+    public function getdata(): array
     {
         $month = $this->_month;
         $year  = $this->_year;
@@ -40,7 +39,7 @@ class JadwalKia
         $db->bind(':event', "imunisasi anak");
         $db->bind(':m', $month);
         // mengisi array sesuai hasil ditemukan didata base
-        foreach( $db->resultset() as $row){
+        foreach ($db->resultset() as $row) {
             // mengisi array jenis vaksin
             $data[$row['event_detail']][] = date("d M", strtotime($row['date']));
             // mengisi array tanggal berdasarkan jenis vaksin
@@ -75,14 +74,15 @@ class JadwalKia
     /**
      * Mengambil list bulan yang sudah terisi
      */
-    public static function getAvilabeMonth():array{
+    public static function getAvilabeMonth(): array
+    {
         // Koneksi data base
         $db = new MyPDO();
         $db->query("SELECT `date` FROM `list_of_services` WHERE `event`=:event");
         $db->bind(':event', 'imunisasi anak');
         $arr = [];
         // mengkovert foormat dari YYYY-MM-dd menjai M
-        foreach( $db->resultset() as $row){
+        foreach ($db->resultset() as $row) {
             $arr[] = date("m", strtotime($row['date']));
         }
         // List bulan yang sudah tersedia
@@ -95,13 +95,14 @@ class JadwalKia
      * @param string $vaksin Jenis vaksin
      * @return bool True ketika data sudah ada
      */
-    public function cekJadwal($date, $vaksin):bool{
+    public function cekJadwal($date, $vaksin): bool
+    {
         // koneksi data base
         $db = new MyPDO();
         $db->query("SELECT `date`, `event_detail` FROM `list_of_services` WHERE `date`=:tanggal AND `event_detail`= :ev_dt");
         $db->bind(':tanggal', $date);
         $db->bind(':ev_dt', $vaksin);
-        if( $db->single() ){
+        if ($db->single()) {
             // data sudah ada
             return true;
         }
@@ -115,9 +116,10 @@ class JadwalKia
      * @param string $vaksin Jenis vaksin
      * @return bool True kita data berhasil dibuat/disimpan
      */
-    public function buatJadwal($date, $vaksin):bool{
+    public function buatJadwal($date, $vaksin): bool
+    {
         // cek data kembar
-        if( $this->cekJadwal($date, $vaksin) ) return false;
+        if ($this->cekJadwal($date, $vaksin)) return false;
         // koneksi data base
         $db = new MyPDO();
         $db->query("INSERT INTO `list_of_services` (`id`, `date`, `unit`, `event`, `event_detail`) VALUES (:id, :tanggal, :unit, :ev, :ev_dt )");
@@ -127,7 +129,7 @@ class JadwalKia
         $db->bind(':ev', "imunisasi anak");
         $db->bind(':ev_dt', $vaksin);
         $db->execute();
-        if( $db->rowCount() > 0){
+        if ($db->rowCount() > 0) {
             // data berhasil disimpan
             return true;
         }
@@ -142,7 +144,8 @@ class JadwalKia
      * @param string $to_date       Tanggal baru
      * @param string $to_vaksin   Jenis vaksin baru
      */
-    public function editJadwal($from_date, $from_vaksin, $to_date, $to_vaksin){
+    public function editJadwal($from_date, $from_vaksin, $to_date, $to_vaksin)
+    {
         // koneksi data base
         $db = new MyPDO();
         $db->query("UPDATE `list_of_services` SET `date` = :t_tanggal', `event_detail` = :t_ev_dt WHERE `date` = :f_tanggal AND `event_detail`= :f_ev_dt");
@@ -158,7 +161,8 @@ class JadwalKia
      * @param int $bulan Bulan yang akan di index
      * @param int $tahun Tahun yang akan di index (base on bulan)     * 
      */
-    public function autoCreatJadwal(int $bulan, int $tahun){
+    public function autoCreatJadwal(int $bulan, int $tahun)
+    {
         // mengambil  jadwal jumat pertama dan ketiga
         $jumat_pertama = date("Y-m-d", strtotime("first friday $tahun-$bulan"));
         $jumat_ketiga  = date("Y-m-d", strtotime("third friday $tahun-$bulan"));

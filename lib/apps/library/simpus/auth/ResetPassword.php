@@ -1,7 +1,6 @@
-<?php
+<?php namespace Simpus\Auth;
 
-namespace Simpus\Auth;
-use Simpus\Database\MyPDO;
+use System\Database\MyPDO;
 
 /**
  * class ini berfungsi untuk merest passawod / ganti password
@@ -20,7 +19,8 @@ class ResetPassword
     private $userName;
 
     /** @return boolean password atau user banar atau tidak */
-    public function passwordVerify():bool{
+    public function passwordVerify(): bool
+    {
         return $this->password_veryfy;
     }
 
@@ -47,7 +47,7 @@ class ResetPassword
      */
     public function newPassword($new_Passsword): bool
     {
-        if( $this->password_veryfy){
+        if ($this->password_veryfy) {
             #query data base
             $user_name = $this->userName;
             $time = time() - 1;
@@ -63,7 +63,7 @@ class ResetPassword
             $log->set_event_type('auth');
             $log->save('reset password');
 
-            if( $this->PDO->rowCount() > 0 ) return true;
+            if ($this->PDO->rowCount() > 0) return true;
         }
         return false;
     }

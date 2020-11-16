@@ -1,7 +1,6 @@
-<?php 
+<?php namespace Simpus\Auth;
 
-namespace Simpus\Auth;
-use Simpus\Database\MyPDO;
+use System\Database\MyPDO;
 
 /**
  * class ini berfungsi untuk membuat log atifity user,
@@ -21,14 +20,15 @@ class Log
      * me-set evebt type
      * @param string $val event set
      */
-    public function set_event_type(string $val ){
+    public function set_event_type(string $val)
+    {
         $this->_event_type = $val;
     }
 
     /**
      * membuat log aktifitas baru dari user tertentu
      */
-    public function __construct(string $user )
+    public function __construct(string $user)
     {
         $this->PDO = new MyPDO();
         $this->_user = $user;

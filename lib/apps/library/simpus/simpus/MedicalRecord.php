@@ -1,6 +1,6 @@
 <?php namespace Simpus\Simpus;
 
-use Simpus\Database\MyPDO;
+use System\Database\MyPDO;
 /**
  * Perent Class fungsinya untuk menampung semua filed Rekam Medis
  */

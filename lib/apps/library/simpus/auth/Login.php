@@ -1,7 +1,6 @@
-<?php
+<?php namespace Simpus\Auth;
 
-namespace Simpus\Auth;
-use Simpus\Database\MyPDO;
+use System\Database\MyPDO;
 
 /**
  * class login fungsinya untuk meniram permintaan logindari user
@@ -46,14 +45,16 @@ class Login
      * 
      * @return string Hasil dr JWT
      */
-    public function JWTResult(){
+    public function JWTResult()
+    {
         return $this->_JWTResult;
     }
     
     /**
      * @var boolean user login status
      */
-    public function VerifyLogin(){
+    public function VerifyLogin()
+    {
         return (boolean) $this->_verifyJWT;;
     }
 
@@ -80,10 +81,10 @@ class Login
         #query data base
         $this->PDO->query('SELECT `pwd`, `stat` FROM `users` WHERE `user`=:user');
         $this->PDO->bind(':user', $user_name);
-        if( $this->PDO->single() )  {
+        if ($this->PDO->single()) {
             $row = $this->PDO->single();
             #cek password 
-            if( password_verify($this->_password, $row['pwd'])){
+            if (password_verify($this->_password, $row['pwd'])) {
                 #berhasil login
                 #jwt dibuat
                 $this->CreatJWT();
@@ -92,17 +93,17 @@ class Login
                 $log = new Log($user_name);
                 $log->set_event_type('auth');
                 $log->save('success login');
-            }else{
+            } else {
                 #password salah kirm ke database
                 $minusStat = $row['stat'] - 1;
-                if( $minusStat === 0 ){
+                if ($minusStat === 0) {
                     #jika salah > 8 x user dabe 8 jam
                     $baneUntil = time() + (3600 * 8);
                     $this->PDO->query('UPDATE `users` SET `stat`=:stat, `bane`=:bane WHERE `user`=:user');
                     $this->PDO->bind(':stat', 0);
                     $this->PDO->bind(':bane', $baneUntil);
                     $this->PDO->bind(':user', $user_name);
-                }else{
+                } else {
                     $this->PDO->query('UPDATE `users` SET `stat`=:stat WHERE `user`=:user');
                     $this->PDO->bind(':stat', $minusStat);
                     $this->PDO->bind(':user', $user_name);
@@ -119,7 +120,8 @@ class Login
      *
      * @return JWT 
      */
-    private function CreatJWT(){
+    private function CreatJWT()
+    {
         #parameter yg disimpan diJWT:
         #secratcode
         $secretKey =  $this->_secretKey[ array_rand($this->_secretKey) ];
@@ -169,12 +171,13 @@ class Login
      * @param mixe $user_name user name
      * @return boolean user valid atau tidak
      */
-    public static function BaneFase($user_name):bool{       
+    public static function BaneFase($user_name): bool
+    {
         #koneksi data base
         $db = new MyPDO();
         $db->query('SELECT user, stat, bane FROM users WHERE user=:user');
         $db->bind(':user', $user_name);
-        if( $db->single() )  {           
+        if ($db->single()) {
             $row = $db->single();
             if( $row['stat'] > 0 AND $row['bane'] < time()) {
                 # jika jumlah kesalahan lebih dari 0 dan
@@ -198,9 +201,9 @@ class Login
         $db = new MyPDO();
         $db->query('SELECT `user`, `stat`, `bane` FROM `users` WHERE `user`=:user');
         $db->bind(':user', $user_name);
-        if( $db->single() )  {           
+        if ($db->single()) {
             $row = $db->single();
-            if( $row['stat'] == 0 AND $row['bane'] < time()) {
+            if ($row['stat'] == 0 AND $row['bane'] < time()) {
                 #set user ke defult / hapus bane
                 $db->query('UPDATE `users` SET `stat`:stat, `bane`:bane WHERE `user`=:user');
                 $db->bind(':stat', 25);
@@ -219,15 +222,16 @@ class Login
      * @param string $password password
      * @return boolean user dan password banar atau tidak
      */
-    public static function PasswordVerify(string $user_name, string $password){
+    public static function PasswordVerify(string $user_name, string $password)
+    {
         $db = new MyPDO();
         #query data base
         $db->query('SELECT `pwd`, `stat` FROM `users` WHERE `user`=:user');
         $db->bind(':user', $user_name);
-        if( $db->single() )  {
+        if ($db->single()) {
             $row = $db->single();
             #cek password 
-            if( password_verify($password, $row['pwd'])){
+            if (password_verify($password, $row['pwd'])) {
                 return true;
             }
         }

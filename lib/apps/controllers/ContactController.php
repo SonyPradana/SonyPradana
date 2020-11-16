@@ -1,11 +1,14 @@
 <?php
-use Simpus\Database\MyPDO;
+
+use System\Database\MyPDO;
 use Simpus\Apps\Controller;
 use Simpus\Helper\MathCaptcha;
 use Simpus\Message\ContactUs;
 
-class ContactController extends Controller{
-    public function contactUs(){
+class ContactController extends Controller
+{
+    public function contactUs()
+    {
         $msg = ["show" => false, "type" => 'info', "content" => 'oke'];
         // previews captcha
         $cek_captcha = $_SESSION['MathCaptcha_ContactUs'] ?? null;
@@ -89,7 +92,8 @@ class ContactController extends Controller{
             ]
         ]);
     }
-    public function ourTeam(){
+    public function ourTeam()
+    {
         $db = new MyPDO();
         $db->query('SELECT `display_name`, `section`, `display_picture` FROM `profiles`');
         

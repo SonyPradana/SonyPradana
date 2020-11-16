@@ -1,11 +1,13 @@
 <?php
 
 use Simpus\Simpus\MedicalRecords;
-use Simpus\Database\MyPDO;
+use System\Database\MyPDO;
 use Simpus\Apps\Controller;
 
-class HomeController extends Controller{
-    public function index(){
+class HomeController extends Controller
+{
+    public function index()
+    {
         $data_rm = new MedicalRecords();    
         $jumlah_rm = $data_rm->maxData();
         
@@ -20,7 +22,7 @@ class HomeController extends Controller{
             7 => ["day" => "Minggu", "time" => "Tutup"],
         ];
         $n = date('N');
-        for($i = $n; $i <= 7; $i++) { 
+        for ($i = $n; $i <= 7; $i++) { 
             $sort_day[$i] = $jadwal[$i];
         }
         for ($i = 1; $i < $n ; $i++) { 
@@ -47,7 +49,8 @@ class HomeController extends Controller{
         ]);
     }
 
-    public function about(){        
+    public function about()
+    {
         $db = new MyPDO();
         $db->query('SELECT `id`, `date`, `note`, `ver` FROM `version`  ORDER BY `version`.`id` ASC');
 

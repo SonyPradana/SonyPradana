@@ -1,7 +1,6 @@
-<?php
+<?php namespace Simpus\Auth;
 
-namespace Simpus\Auth;
-use Simpus\Database\MyPDO;
+use System\Database\MyPDO;
 
 /**
  * class logout adalah kelas untuk menghilangakn hak akser user 
@@ -34,7 +33,7 @@ class Logout
         $this->PDO = new MyPDO();
         #veifikasi token
         $verify = new Auth($token, 2);
-        if( $verify->TrushClient() ){
+        if ($verify->TrushClient()) {
             #decode token
             $tokenId = $verify->getId();
             # query data base
@@ -44,7 +43,7 @@ class Logout
             $this->PDO->execute();
             # bila berhasil return true
             $res = $this->PDO->rowCount();
-            if( $res > 0){
+            if ($res > 0) {
                 // user log
                 $log = new Log( $verify->getUserName() );
                 $log->set_event_type('auth');

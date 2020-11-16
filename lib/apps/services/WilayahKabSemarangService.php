@@ -1,7 +1,7 @@
 <?php
 
 use Simpus\Apps\Middleware;
-use Simpus\Database\MyPDO;
+use System\Database\MyPDO;
 
 class WilayahKabSemarangService extends Middleware
 {

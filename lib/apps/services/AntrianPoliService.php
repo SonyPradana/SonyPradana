@@ -9,7 +9,6 @@ require BASEURL . '/vendor/autoload.php';
 
 use Model\Antrian\{antrianCRUD, antrianModel};
 use Simpus\Apps\Middleware;
-use Simpus\Database\MyPDO;
 use Simpus\Helper\HttpHeader;
 
 class AntrianPoliService extends Middleware
@@ -27,7 +26,8 @@ class AntrianPoliService extends Middleware
         }
     }
 
-  private function errorhandler(){
+  private function errorhandler()
+  {
     HttpHeader::printJson(['status' => 'bad request'], 500, [
         "headers" => [
             'HTTP/1.1 400 Bad Request',

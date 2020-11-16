@@ -1,20 +1,20 @@
-<?php
+<?php namespace Simpus\Simpus;
 
-namespace Simpus\Simpus;
-use Simpus\Database\MyPDO;
 use \PDO;
+use System\Database\MyPDO;
 
 class GroupsPosyandu{
     /**
      * @return array ALL
      */
-    public static function getPosyanduAll():array{
+    public static function getPosyanduAll(): array
+    {
         $db = new MyPDO();
         $db->query("SELECT * FROM groups_posyandu");
         $res = [];
-        if( $db->resultset() > 0){
+        if ($db->resultset() > 0) {
             // return $db->resultset();
-            foreach( $db->resultset() as $row ){
+            foreach ($db->resultset() as $row) {
                 $res[ $row['id'] ]  = [
                     "posyandu" => $row['posyandu'],
                     "desa"     => $row['desa']
@@ -27,11 +27,12 @@ class GroupsPosyandu{
     /**
      * @return array id dan nama posyandu
      */
-    public static function getPosyandu($desa):array{
+    public static function getPosyandu($desa): array
+    {
         $db = new MyPDO();
         $db->query("SELECT  `id`, `posyandu` FROM groups_posyandu WHERE `desa` = :desa");
         $db->bind(':desa', $desa, PDO::PARAM_STR);
-        if( $db->resultset() > 0){
+        if ($db->resultset() > 0) {
             return $db->resultset();
         }
         return [];
@@ -40,7 +41,8 @@ class GroupsPosyandu{
      /**
      * @return int id
      */
-    public static function getPosyanduId($desa, $nama_posyandu):int{
+    public static function getPosyanduId($desa, $nama_posyandu): int
+    {
         $db = new MyPDO();
         $db->query("SELECT * FROM groups_posyandu WHERE `desa` = :desa AND `posyandu` = :posyandu");
         $db->bind(':desa', $desa, PDO::PARAM_STR);
@@ -55,7 +57,8 @@ class GroupsPosyandu{
     /**
      * @return string nama posyandu
      */
-    public static function getPosyanduName($id):string{
+    public static function getPosyanduName($id): string
+    {
         $db = new MyPDO();    
         $db->query("SELECT  `posyandu` FROM groups_posyandu WHERE `id` = :id");
         $db->bind(':id', $id, PDO::PARAM_INT);
@@ -69,7 +72,8 @@ class GroupsPosyandu{
     /**
      * @return 
      */
-    public static function getPosyanduDesa($id):string{
+    public static function getPosyanduDesa($id): string
+    {
         $db = new MyPDO();
         $db->query("SELECT  `desa` FROM groups_posyandu WHERE `id` = :id");
         $db->bind(':id', $id, PDO::PARAM_INT);

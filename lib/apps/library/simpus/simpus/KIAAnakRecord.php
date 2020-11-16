@@ -1,6 +1,6 @@
-<?php
-namespace Simpus\Simpus;
-use Simpus\Database\MyPDO;
+<?php namespace Simpus\Simpus;
+
+use System\Database\MyPDO;
 use \PDO;
 
 class KIAAnakRecord
@@ -23,28 +23,36 @@ class KIAAnakRecord
     private $_data_posyandu = []; // array data posyandu
 
     // property - getter
-    public function getJenisKelamin(){
+    public function getJenisKelamin()
+    {
         return $this->_jenis_kelamin;
     }
-    public function getBeratBayiLahir(){
+    public function getBeratBayiLahir()
+    {
         return $this->_bbl;
     }
-    public function getPanjangBayiLahir(){
+    public function getPanjangBayiLahir()
+    {
         return $this->_pbl;
     }
-    public function getKIA(){
+    public function getKIA()
+    {
         return $this->_kia;
     }
-    public function getIndeksMasaTubuh(){
+    public function getIndeksMasaTubuh()
+    {
         return $this->_imd;
     }
-    public function getAsiEks(){
+    public function getAsiEks()
+    {
         return $this->_asi_eks;
     }
-    public function getGroubsPosyandu(){
+    public function getGroubsPosyandu()
+    {
         return $this->_grups_posyandu;
     }
-    public function getDataPosyandu(){
+    public function getDataPosyandu()
+    {
         return $this->_data_posyandu;
     }
     // property - setter
@@ -94,9 +102,10 @@ class KIAAnakRecord
     {
         $this->PDO = new MyPDO();
     }
-    public function loadWithID($id_hash, bool $refresh = true){
+    public function loadWithID($id_hash, bool $refresh = true)
+    {
         $this->_id_hash = $id_hash;
-        if( $refresh ){
+        if ($refresh) {
             $this->refresh();
         }
     }
@@ -105,13 +114,13 @@ class KIAAnakRecord
      * Memuat ulang data berdasarkan id yang telah dibuat sebelumnya
      * @return bool True ketika data berhasil di muat ulang
      */
-    public function refresh() :bool
+    public function refresh(): bool
     {
-        if( $this->_id_hash != null ){
+        if ($this->_id_hash != null) {
             // koneksi table data_kia_anak
             $this->PDO->query("SELECT * FROM `data_kia_anak` WHERE `id_hash` = :id_hash");
             $this->PDO->bind(":id_hash", $this->_id_hash, PDO::PARAM_STR);
-            if( $this->PDO->single() ){
+            if ($this->PDO->single()) {
                 // ambil data di table data_kia_anak
                 $this->convertFromArray( $this->PDO->single() );
                 return true;
@@ -119,7 +128,7 @@ class KIAAnakRecord
         }
         return false;
     }
-    public function creat($id_hash) :bool
+    public function creat($id_hash): bool
     {
         // creat data biodata anak baru
         $this->PDO->query("INSERT INTO
@@ -163,7 +172,7 @@ class KIAAnakRecord
         $this->PDO->bind(':grups_posyandu', $this->_grups_posyandu);
         // menyimpan ke data base
         $this->PDO->execute();
-        if( $this->PDO->rowCount() > 0){
+        if ($this->PDO->rowCount() > 0) {
             return true;
         }
         return false;
@@ -200,16 +209,16 @@ class KIAAnakRecord
         $this->PDO->bind(':id_hash', $this->_id_hash);
         // update biodata
         $this->PDO->execute();
-        if( $this->PDO->rowCount() > 0){
+        if ($this->PDO->rowCount() > 0) {
             return true;
         }
         return false;
     }
-    public function cekExist() :bool
+    public function cekExist(): bool
     {
         $this->PDO->query("SELECT `id_hash` FROM `data_kia_anak` WHERE `id_hash` = :id_hash");
         $this->PDO->bind(":id_hash", $this->_id_hash);
-        if( $this->PDO->single() ){
+        if ($this->PDO->single()) {
             return true;
         }
         return false;
@@ -219,7 +228,8 @@ class KIAAnakRecord
 
 
     // konverter
-    public function convertFromArray(array $data_kia):bool{
+    public function convertFromArray(array $data_kia): bool
+    {
         $this->_jenis_kelamin   = $data_kia['jenis_kelamin'] ?? 1;
         $this->_bbl             = $data_kia['bbl'] ?? 0;
         $this->_pbl             = $data_kia['pbl'] ?? 0;
@@ -231,7 +241,8 @@ class KIAAnakRecord
 
         return true;                                                                    // todo: inputvalidate
     }
-    public function convertToArray():array{
+    public function convertToArray(): array
+    {
         $data                   = [];
         $data['jenis_kelamin']  = $this->_jenis_kelamin;
         $data['bbl']            = $this->_bbl;

@@ -1,7 +1,7 @@
 <?php
 
 use Simpus\Apps\Controller;
-use Model\articleModel;
+use Model\Article\articleModel;
 use Simpus\Auth\User;
 
 class ArticleController extends Controller
