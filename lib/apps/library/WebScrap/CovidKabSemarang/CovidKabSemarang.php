@@ -1,6 +1,8 @@
 <?php
-namespace Simpus\ApiGrabber;
-use \DOMDocument;
+
+namespace WebScrap\CovidKabSemarang;
+
+use DOMDocument;
 
 class CovidKabSemarang
 {

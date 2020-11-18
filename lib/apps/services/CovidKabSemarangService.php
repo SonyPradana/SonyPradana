@@ -5,9 +5,9 @@
  */
 
 use Simpus\Apps\Middleware;
-use Simpus\ApiGrabber\CovidKabSemarang;
-use Simpus\ApiGrabber\CovidKabSemarangTracker;
 use Simpus\Helper\Scheduler;
+use WebScrap\CovidKabSemarang\CovidKabSemarang;
+use WebScrap\CovidKabSemarang\CovidKabSemarangTracker;
 
 class CovidKabSemarangService extends Middleware
 {

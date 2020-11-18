@@ -1,6 +1,8 @@
-<?php namespace Simpus\ApiGrabber;
+<?php 
 
-use Simpus\ApiGrabber\CovidKabSemarang;
+namespace WebScrap\CovidKabSemarang;
+
+use WebScrap\CovidKabSemarang\CovidKabSemarang;
 use System\Database\MyPDO;
 use Simpus\Helper\ConvertCode;
 use Simpus\Helper\Scheduler;
