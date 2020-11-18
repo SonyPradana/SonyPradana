@@ -2,8 +2,9 @@
 
 use Simpus\Auth\{User, Login, Logout, EmailAuth, Registartion, ResetPassword, ForgotPassword};
 use System\Database\MyPDO;
+use System\File\UploadFile;
 use Simpus\Apps\Controller;
-use Simpus\Helper\{UploadFile, StringValidation as sv};
+use Simpus\Helper\StringValidation as sv;
 use \Gumlet\ImageResize;
 
 class AuthController extends Controller
@@ -181,10 +182,10 @@ class AuthController extends Controller
 
             // upload image
             $upload = new UploadFile($_FILES['display-picture']);
-            $upload->setFileName( $user_name );
-            $upload->setFolderLocation('/data/img/display-picture/user/');
-            $upload->setMimeTypes(['image/jpg', 'image/jpeg', 'image/png']);
-            $upload->setMaxFileSize( 562500 ); #450 Kb
+            $upload->setFileName( $user_name )
+                ->setFolderLocation('/data/img/display-picture/user/')
+                ->setMimeTypes(array('image/jpg', 'image/jpeg', 'image/png'))
+                ->setMaxFileSize( 562500 ); #450 Kb
             $upload_url = $upload->upload();
             $file_location = $request_upload && $upload->Success() ? $upload_url: $url_picture;
 
