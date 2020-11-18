@@ -1,6 +1,6 @@
 <?php
 
-namespace Simpus\Simpus;
+namespace Model\Simpus;
 
 class KIAAnakRecords{
     // identitas

@@ -1,8 +1,8 @@
 <?php
 
-use Simpus\Simpus\MedicalRecords;
-use System\Database\MyPDO;
 use Simpus\Apps\Controller;
+use Model\Simpus\MedicalRecords;
+use System\Database\MyPDO;
 
 class HomeController extends Controller
 {

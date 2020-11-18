@@ -1,9 +1,10 @@
-<?php namespace Simpus\Simpus;
+<?php namespace Model\Simpus;
 
-use \PDO;
+use PDO;
 use System\Database\MyPDO;
 
-class GroupsPosyandu{
+class GroupsPosyandu
+{
     /**
      * @return array ALL
      */

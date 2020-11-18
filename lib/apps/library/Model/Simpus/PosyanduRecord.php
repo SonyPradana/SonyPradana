@@ -1,4 +1,4 @@
-<?php namespace Simpus\Simpus;
+<?php namespace Model\Simpus;
 
 use System\Database\MyPDO;
 use \PDO;

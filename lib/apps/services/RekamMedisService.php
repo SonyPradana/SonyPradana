@@ -1,7 +1,7 @@
 <?php
 
 use Simpus\Apps\Middleware;
-use Simpus\Simpus\MedicalRecords;
+use Model\Simpus\MedicalRecords;
 use Simpus\Helper\HttpHeader;
 use System\Database\MyPDO;
 

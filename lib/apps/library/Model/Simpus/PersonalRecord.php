@@ -1,5 +1,5 @@
 <?php
-namespace Simpus\Simpus;
+namespace Model\Simpus;
 /**
  * Class ini mengambil data rekam medis berupa data pribadi dari data base,
  * data berupa data yang telah di endcryption

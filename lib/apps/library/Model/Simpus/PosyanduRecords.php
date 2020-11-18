@@ -1,6 +1,6 @@
 <?php
 
-namespace Simpus\Simpus;
+namespace Model\Simpus;
 
 use System\Database\MyPDO;
 use System\Database\MyModel;

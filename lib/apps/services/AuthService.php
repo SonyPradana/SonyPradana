@@ -1,7 +1,7 @@
 <?php
 
 use Simpus\Apps\Middleware;
-use Simpus\Simpus\KIAAnakRecords;
+use Model\Simpus\KIAAnakRecords;
 use Simpus\Helper\HttpHeader;
 
 class AuthService extends Middleware

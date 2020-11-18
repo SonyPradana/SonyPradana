@@ -1,6 +1,6 @@
 <?php
 
-namespace Simpus\Simpus;
+namespace Model\Simpus;
 
 use System\Database\MyPDO;
 use Simpus\Helper\StringValidation;

@@ -3,9 +3,9 @@
 use System\Database\MyPDO;
 use Simpus\Apps\Controller;
 use Simpus\Helper\ConvertCode;
-use Simpus\Simpus\{Relation, MedicalRecord};
-use Simpus\Simpus\{KIAAnakRecord, KIAAnakRecords};
-use Simpus\Simpus\{GroupsPosyandu, PosyanduRecord, PosyanduRecords};
+use Model\Simpus\{Relation, MedicalRecord};
+use Model\Simpus\{KIAAnakRecord, KIAAnakRecords};
+use Model\Simpus\{GroupsPosyandu, PosyanduRecord, PosyanduRecords};
 
 class KiaAnakController extends Controller
 {

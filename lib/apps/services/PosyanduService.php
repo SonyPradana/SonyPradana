@@ -2,9 +2,9 @@
 
 use Simpus\Apps\Middleware;
 use Simpus\Helper\ConvertCode;
-use Simpus\Simpus\PosyanduRecords;
+use Model\Simpus\PosyanduRecords;
 use Simpus\Helper\HttpHeader;
-use Simpus\Simpus\GroupsPosyandu;
+use Model\Simpus\GroupsPosyandu;
 
 class PosyanduService extends Middleware
 {

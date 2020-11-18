@@ -1,6 +1,6 @@
 <?php
 
-use Simpus\Simpus\{MedicalRecord, MedicalRecords};
+use Model\Simpus\{MedicalRecord, MedicalRecords};
 use Simpus\Auth\Log;
 use Simpus\Apps\Controller;
 
