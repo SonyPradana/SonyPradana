@@ -6,6 +6,7 @@
     
     <link rel="stylesheet" href="/lib/css/ui/v1/table.css">
     <link rel="stylesheet" href="/lib/css/pages/v1.1/jadwal-kia.css">
+    <link rel="stylesheet" href="/lib/css/ui/v1.1/widgets.css">
     <script src="/lib/js/index.min.js"></script>
     <script src="/lib/js/bundles/keepalive.min.js"></script>
     <script src="/lib/js/vendor/vue/vue.min.js"></script>
@@ -121,7 +122,7 @@
             </article>
         </main>
         <aside class="right-side">
-
+            <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/widget/trivia.html') ?>
         </aside>
     </div>
     

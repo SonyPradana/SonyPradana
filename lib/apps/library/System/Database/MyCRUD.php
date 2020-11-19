@@ -3,7 +3,7 @@
 use System\Database\CrudInterface;
 use System\Database\MyPDO;
 
-class MyCRUD implements CrudInterface
+abstract class MyCRUD implements CrudInterface
 {
   /** @var MyPDO */
   protected $PDO;
@@ -14,12 +14,12 @@ class MyCRUD implements CrudInterface
   // TODO: merge ke FILTERS
   protected $ID;
 
-  public function setter(string $key, $val)
+  protected function setter(string $key, $val)
   {
     $this->COLUMNS[$key] = $val;
     return $this;
   }
-  public function getter($key)
+  protected function getter($key)
   {
     return $this->COLUMNS[$key];
   }

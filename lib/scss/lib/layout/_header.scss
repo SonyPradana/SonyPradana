@@ -36,7 +36,6 @@ header{
             // style
             min-height: 52px;
             height: 52px;
-            box-shadow: 0px 12px 52px -8px #000000bf;
             a, p{
                 font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial,sans-serif, Apple Color Emoji,Segoe UI Emoji;
                 outline: none;
@@ -129,6 +128,7 @@ header{
                 position: fixed;
                 top: 0;
                 width: 100%;
+                box-shadow: 0px 12px 52px -8px #000000bf;
             }
         }
     }

@@ -16,7 +16,7 @@ aside {
 
         .boxs-info{
             display: grid;
-            grid-template-columns: repeat(4, 130px);
+            grid-template-columns: repeat(4, 140px);
             gap: 12px;
             align-items: center;
 
@@ -199,6 +199,7 @@ aside {
     display: flex;
     align-items: flex-start;
     justify-content: center;
+    margin-bottom: 16px;
 
     .timetables{                        
         width: 280px; 
@@ -245,8 +246,66 @@ aside {
     }
 }
 
+// trivia widget
+.boxs-trivia {
+    position: sticky;
+    top: 64px;
+    width: auto; height: auto;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    margin-bottom: 16px;
+
+    .trivia {
+        width: 280px; 
+        padding: 16px;
+        /* style */
+        background-color: #55b9f3;
+        border-radius: 12px;
+        box-shadow: 5px 10px 19px -10px rgba(0,0,0,0.75);
+    }
+    .box-header p {
+        margin: 0;
+        color: #fff;
+        font-size: 16px;
+    }
+    .box-quest .quest-text p {
+        font-size: 22px;
+        line-height: 1.4;
+        font-weight: 500;
+        color: #1c1c1c;
+    }
+    .option-select {
+        border: 1px solid #fff;
+        margin: 8px 0;
+        border-radius: 4px;
+        min-height: 24px;
+        display: flex;
+        align-items: center;
+
+        &:hover {
+            background-color: #f9f8e1;;
+        }
+
+        .option-text {
+            display: flex;
+            justify-content: space-between;
+            p {
+                margin: 4px;
+            }
+        }
+    }
+    .selected {
+        background-color: #fff;
+    }
+    .correct {
+        background-color: #adf494;
+    }
+}
+
+
 @media screen  and (max-width: 767px) {        
     aside.top .boxs-info{
-        grid-template-columns: repeat(2, 132px);
+        grid-template-columns: repeat(2, 140px);
     }
 }

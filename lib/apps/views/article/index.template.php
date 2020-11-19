@@ -1,28 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>    
-<?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/meta/metatag.php') ?>
+    <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/meta/metatag.php') ?>
+
+    <link rel="stylesheet" href="/lib/css/ui/v1.1/style.css">
+    <link rel="stylesheet" href="/lib/css/ui/v1.1/widgets.css">
+    <?= $portal['meta']['css'] ?>
+    <script src="/lib/js/index.min.js"></script>
+    <script src="/lib/js/bundles/keepalive.min.js"></script>
+    <script src="/lib/js/vendor/vue/vue.min.js"></script>
+    <style>
+        .container.width-view {            
+            display: grid;
+            grid-template-columns: 1fr minmax(250px, 280px);
+            grid-column-gap: 32px; grid-row-gap: 32px;
+        }
+        main {
+            overflow-x: auto;
+        }
+    
+        aside {
+            margin-top: 150px;
+        }
+    
+        @media screen and (max-width: 767px) {
+            .container.width-view {
+                grid-template-columns: 1fr
+            }
+        }
+    </style>
 </head>
 
-<style>
-    .container.width-view {
-        display: grid;
-        grid-template-columns: 1fr 300px;
-    }
-    main {
-        overflow-x: auto;
-    }
-
-    @media screen and (max-width: 767px) {
-        .container.width-view {
-            grid-template-columns: 1fr
-        }
-    }
-</style>
-<link rel="stylesheet" href="/lib/css/ui/v1.1/style.css">
-<?= $portal['meta']['css'] ?>
-<script src="/lib/js/index.min.js"></script>
-<script src="/lib/js/bundles/keepalive.min.js"></script>
 <body>
     <header>
         <?php include(BASEURL . '/lib/components/header/header.php'); ?>
@@ -61,7 +69,9 @@
                 </div>     
             </article>
         </main>
-        <aside></aside>
+        <aside>
+            <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/widget/trivia.html') ?>
+        </aside>
     </div>
 
     <div class="gotop" onclick="gTop()"></div>

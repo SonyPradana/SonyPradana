@@ -1,0 +1,104 @@
+<div class="boxs-trivia">
+  <div class="trivia" id="trivia">
+      <div class="box-header">
+          <p>trvia/pertanyaan point: {{ point }}</p>
+      </div>
+      <div class="box-quest">
+          <div class="quest-image">
+              <img src="" alt="" v-if="quest_img != null">
+          </div>
+          <div class="quest-text">
+              <p v-text="quest"></p>
+          </div>
+      </div>
+      <div class="box-options">
+          <div v-for="option in options"
+          class="option-select"
+          :key="option.id"
+          v-on:click="sumbit_answer(option.id)"
+          v-bind:class="[
+              {selected: option.id == selected && correct_answer !=  option.id}, 
+              {correct: correct_answer ==  option.id}]"
+          >
+              <div class="option-image">
+                  <!-- <img src="" alt=""> -->
+              </div>
+              <div class="option-text">
+                  <p v-text="option.answer"></p>
+                  <p v-show="selected != null" v-text="`[${summary_find(option.id)}]`"></p>
+              </div>
+          </div>
+      </div>
+  </div>
+  
+
+  <script>
+      let triva = new Vue({
+          el: '#trivia',
+          data: function() {
+              return {
+                  quest_id: 0,
+                  quest: '',
+                  quest_img: null,
+                  options: Array(),
+                  summary: Array(),
+                  correct_answer: null,
+                  selected: null,
+                  point: 5
+              }
+          },
+          methods: {
+              new_quest: function() {
+                  $json('/API/v1.0/Trivia/Get-Ques.json')
+                      .then(json => {
+                          if (json.status == 'ok') {
+                              this.quest_id = json.data.quest_id;
+                              this.quest = json.data.quest.quest;
+                              this.quest_img = json.data.quest.image;
+                              this.options = json.data.options;
+                              // reset
+                              this.summary = Array();
+                              this.correct_answer = null;
+                              this.selected = null
+                          }
+                      })
+              },
+              sumbit_answer: function(id) {
+                  $json(`/API/v1.0/Trivia/Get-Answer.json?question_id=${this.quest_id}&question_answer=${id}`)
+                      .then(json => {
+                          if (json.status == 'ok') {
+                              this.summary = json.data.summary;
+                              this.correct_answer = json.data.correct;
+                              this.selected = id;
+                              this.reset_quest();
+                              if (json.data.correct == id) {
+                                  this.point += 5
+                              } else {
+                                  this.point -= 2;
+                                  this.point = this.point > 0 ? this.point : 0;
+                              }
+                          }
+                      })
+              },
+              reset_quest: function() {
+                  setTimeout(() => {
+                      this.new_quest();
+                  }, 3000)
+              },
+              summary_find: function(id) {
+                  let res = 0;
+                  this.summary.forEach(element => {
+                      if (element.id == id) {
+                          res = element.summary;
+                          return res;
+                      }
+                  });
+                  return res;
+              }
+          },
+          mounted() {
+              this.new_quest();
+          }
+      })
+  </script>
+</div>
