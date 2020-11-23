@@ -5,7 +5,9 @@
       </div>
       <div class="box-quest">
           <div class="quest-image">
-              <img src="" alt="" v-if="quest_img != null">
+              <img v-bind:src="quest_img"
+               alt="simpus trivia" 
+               v-if="quest_img != null">
           </div>
           <div class="quest-text">
               <p v-text="quest"></p>
@@ -13,19 +15,23 @@
       </div>
       <div class="box-options">
           <div v-for="option in options"
-          class="option-select"
           :key="option.id"
           v-on:click="sumbit_answer(option.id)"
           v-bind:class="[
-              {selected: option.id == selected && correct_answer !=  option.id}, 
-              {correct: correct_answer ==  option.id}]"
+          {selected: option.id == selected && correct_answer !=  option.id}, 
+          {correct: correct_answer ==  option.id}]"
+          class="option-select"
           >
               <div class="option-image">
-                  <!-- <img src="" alt=""> -->
+                <!-- <img src="" alt=""> -->
               </div>
               <div class="option-text">
-                  <p v-text="option.answer"></p>
-                  <p v-show="selected != null" v-text="`[${summary_find(option.id)}]`"></p>
+                <p v-text="option.answer"></p>
+                <p
+                    v-show="selected != null" 
+                    v-text="`${summary_value(option.id)}%`"
+                    >
+                </p>
               </div>
           </div>
       </div>
@@ -44,12 +50,13 @@
                   summary: Array(),
                   correct_answer: null,
                   selected: null,
+                  submited: 0,
                   point: 5
               }
           },
           methods: {
               new_quest: function() {
-                  $json('/API/v1.0/Trivia/Get-Ques.json')
+                  $json('/API/v1.0/Trivia/Get-Ques.json?rev=' + this.quest_id)
                       .then(json => {
                           if (json.status == 'ok') {
                               this.quest_id = json.data.quest_id;
@@ -59,7 +66,8 @@
                               // reset
                               this.summary = Array();
                               this.correct_answer = null;
-                              this.selected = null
+                              this.selected = null;
+                              this.submited = 0;
                           }
                       })
               },
@@ -70,6 +78,7 @@
                               this.summary = json.data.summary;
                               this.correct_answer = json.data.correct;
                               this.selected = id;
+                              this.submited = json.data.submited;
                               this.reset_quest();
                               if (json.data.correct == id) {
                                   this.point += 5
@@ -94,6 +103,11 @@
                       }
                   });
                   return res;
+              },
+              summary_value: function(id) {
+                  let value = this.summary_find(id);
+                  return this.submited == 0 ? 0 : Math.round(value / this.submited * 100);
+                  
               }
           },
           mounted() {

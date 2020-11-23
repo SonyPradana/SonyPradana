@@ -25,7 +25,7 @@ class TriviaController extends Controller
       }
     }
 
-    return $this->view('/trivia/submit', array (
+    return $this->view('/trivia-quest/submit', array (
       'auth' => $this->getMiddleware()['auth'],
       'meta' => array (
         'title' => 'submit pertanyaan Anda',

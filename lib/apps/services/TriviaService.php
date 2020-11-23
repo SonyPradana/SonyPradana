@@ -31,9 +31,10 @@ class TriviaService extends Middleware
     );
   }
 
-  public function Get_Ques(): array
+  public function Get_Ques(array $params): array
   {
-    $triva = new Trivia(null);
+    $rev = $params['rev'] ?? 0;
+    $triva = new Trivia(null, $rev);
     $triva->read();
 
     return array (

@@ -95,7 +95,7 @@
               <?php endif; ?>
             </section>
             <section>
-              <input type="hidden" name="quest_img" id="input-image" value="null">
+              <input type="hidden" name="quest_img" id="input-image" value="">
             </section>
             <section>
               <label for="input-answer-1">Jawaban benar</label>
@@ -128,6 +128,7 @@
       </div>
     </main>
   </div>
+  <div class="gotop" onclick="gTop()"></div>
   <footer>
     <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/footer/footer.html') ?>
   </footer>
@@ -144,8 +145,25 @@
               <?= $portal['message']['content'] ?>
           </div>
       </div>
-  <?php endif; ?>  
-  <script src="/lib/js/index.end.js"></script>
-
+  <?php endif; ?> 
 </body>
+<script src="/lib/js/index.end.js"></script>
+<script>
+  // sticky header
+  window.onscroll = function(){
+        stickyHeader('.container', '82px', '32px')
+    }
+    
+    // keep alive
+    keepalive(
+        () => {
+            // ok function : redirect logout and then redirect to login page to accses this page
+            window.location.href = "/login?url=<?= $_SERVER['REQUEST_URI'] ?>&logout=true"
+        },
+        () => {          
+            // close fuction : just logout
+            window.location.href = "/logout?url=<?= $_SERVER['REQUEST_URI'] ?>"
+        }
+    );
+</script>
 </html>

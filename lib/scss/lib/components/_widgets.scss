@@ -269,6 +269,16 @@ aside {
         color: #fff;
         font-size: 16px;
     }
+    .box-quest .quest-image {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 8px 0;
+        & img {
+            max-width: 200px;
+            max-height: 200px;
+        }
+    }
     .box-quest .quest-text p {
         font-size: 22px;
         line-height: 1.4;
@@ -284,13 +294,15 @@ aside {
         align-items: center;
 
         &:hover {
-            background-color: #f9f8e1;;
+            background-color: #f9f8e1;
         }
 
         .option-text {
+            width: 100%;
             display: flex;
             justify-content: space-between;
             p {
+                cursor: default;
                 margin: 4px;
             }
         }
@@ -300,12 +312,20 @@ aside {
     }
     .correct {
         background-color: #adf494;
+        &:hover {
+            background-color: #adf494;
+        }
     }
 }
 
 
 @media screen  and (max-width: 767px) {        
     aside.top .boxs-info{
-        grid-template-columns: repeat(2, 140px);
+        grid-template-columns: repeat(2, 144px);
+    }
+}
+@media(hover: hover) and (pointer: fine) {
+    .option-select:hover {
+        background-color: #f9f8e1;
     }
 }

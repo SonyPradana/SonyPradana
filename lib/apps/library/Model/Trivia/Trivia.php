@@ -112,10 +112,10 @@ class Trivia extends MyCRUD
 
   // int
 
-  public function __construct(string $id_quest = null)
+  public function __construct(string $id_quest = null, int $rev = 0)
   {
     $this->PDO = new MyPDO();
-    $id_quest = $id_quest ?? $this->getRandom();
+    $id_quest = $id_quest ?? $this->getRandom($rev);
 
     $this->TABLE_NAME = 'trivia_quest';
     $this->ID = array('id' => $id_quest);
@@ -135,7 +135,7 @@ class Trivia extends MyCRUD
   /** Random id pertanyaan
    * @return int random id quest (1-max)
    */
-  private function getRandom(): int
+  private function getRandom(int $rev = 0): int
   {
     // TODO: random quest menurut kategory
     
@@ -148,10 +148,11 @@ class Trivia extends MyCRUD
     );
     ;
     $this->PDO->execute();
-    $list = $this->PDO->resultset();
-    $list = array_values(array_column($list, 'id'));
+    $res = $this->PDO->resultset();
+    $list = array_values(array_column($res, 'id'));
     $rand = array_rand($list);
-    return (int) $list[$rand];
+    $return = (int) $list[$rand];
+    return $return == $rev ? $this->getRandom($rev) : $return;
   }
 
   /** Mengacak urutan jawaban dari pertanyaan
