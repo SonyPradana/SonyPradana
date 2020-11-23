@@ -2,6 +2,7 @@
 
 namespace Model\Trivia;
 
+use GUMP;
 use System\Database\MyCRUD;
 use System\Database\MyPDO;
 
@@ -9,7 +10,8 @@ class Trivia extends MyCRUD
 {
   // getter
 
-  public function get_ID(): int
+  /** Mengambil id sesuai id yang submit */
+  public function getID(): int
   {
     return $this->getter('id') ?? 0;
   }
@@ -17,7 +19,7 @@ class Trivia extends MyCRUD
   /** Mengambil pertanyaan berdasarkan ID
    * @return string Pertanyaan berdsarkan ID
    */
-  public function get_quest(): string
+  public function getQuest(): string
   {
     return $this->getter('quest') ?? null;
   }
@@ -26,7 +28,7 @@ class Trivia extends MyCRUD
    * @return string jika ada img urlnya
    * @return null jika pertanyaan tidak ada gambarnya
    */
-  public function get_quest_image()
+  public function getQuestImage()
   {
     return $this->getter('quest_img') == '' ? null : $this->getter('quest_img');
   }
@@ -34,15 +36,15 @@ class Trivia extends MyCRUD
   /** Mengambil pilihan jawaban dari pertnyaan sesuai ID
    * @return array random pilihan jawaban
    */
-  public function get_options(): array
+  public function getOptions(): array
   {
     $options = $this->getter('options');
     $options = json_decode($options);
-    return $this->shuffle_options($options);
+    return $this->shuffleOptions($options);
   }
 
-  /** Mengirim jawaban  */
-  public function submit_answer(int $answer)
+  /** Mengirim jawaban sekaligus mengambil hasil jawaban */
+  public function submitAnswer(int $answer)
   {
     $summary_str = $this->getter('summary');
     $summary_arr = json_decode($summary_str, true);
@@ -54,9 +56,58 @@ class Trivia extends MyCRUD
     return $summary_arr;
   }
 
-  public function get_answer(): int
+  /** Mengambil jawaban benar dari pertanyaan */
+  public function getAnswer(): int
   {
     return $this->getter('correct_answer');
+  }
+
+  /** Get informasi pembuat quest
+   * @return array info pembuat quest
+   */
+  public function getInfo(): array
+  {
+    return array (
+      'author' => $this->getter('author'),
+      'date_create' => $this->getter('date_create')
+    );
+  }
+
+  public function newQuest($params)
+  {
+    $validation = new GUMP('id');
+    $validation->validation_rules(array (
+      'author' => 'required|max_len,20|min_len,3|alpha_dash',
+      'level' => 'required|numeric',
+      'quest' => 'required|max_len,255|min_len,6',
+      'options' => 'required|max_len,500',
+      'summary' => 'required|max_len,255',
+      'correct_answer' => 'required|numeric',
+      'explanation' => 'max_len,500'
+    ));
+    $validation->filter_rules(array (
+      'id' => 'sanitize_numbers',
+      'quest' => 'sanitize_string|trim',
+      'explanation' => 'sanitize_string|trim'
+    ));
+    $validation->run($params);
+
+    if (! $validation->errors()) {
+      $this->setter('id', '')
+        ->setter('author', $params['author'])
+        ->setter('level', $params['level'])
+        ->setter('date_create', time())
+        ->setter('quest', $params['quest'])
+        ->setter('quest_img', $params['quest_img'])
+        ->setter('options', $params['options'])
+        ->setter('summary', $params['summary'])
+        ->setter('correct_answer', $params['correct_answer'])
+        ->setter('explanation', $params['explanation']);
+      
+      return $this->cread();
+    }
+
+    return $validation->get_errors_array();
   }
 
   // int
@@ -70,7 +121,9 @@ class Trivia extends MyCRUD
     $this->ID = array('id' => $id_quest);
     $this->COLUMNS = [
       'id' => null,
-      'quest_id' => null,
+      'author' => null,
+      'level' => null,
+      'date_create' => null,
       'quest' => null,
       'quest_img' => null,
       'options' => null,
@@ -84,24 +137,28 @@ class Trivia extends MyCRUD
    */
   private function getRandom(): int
   {
+    // TODO: random quest menurut kategory
+    
     $this->PDO->query(
       "SELECT
-        max(`id`) as max_number
+        `id`
       FROM
         `trivia_quest`
       "
     );
     ;
     $this->PDO->execute();
-    $row = (int) $this->PDO->resultset()[0]['max_number'];
-    return rand(1, $row);
+    $list = $this->PDO->resultset();
+    $list = array_values(array_column($list, 'id'));
+    $rand = array_rand($list);
+    return (int) $list[$rand];
   }
 
   /** Mengacak urutan jawaban dari pertanyaan
    * @param array opsi jawawab urut
    * @return array opsi jawaban random
    */
-  private function shuffle_options(array $sorted_array): array
+  private function shuffleOptions(array $sorted_array): array
   {
     $shuffle_array = array();
     $keys = array_keys($sorted_array);

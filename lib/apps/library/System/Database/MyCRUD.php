@@ -50,7 +50,28 @@ abstract class MyCRUD implements CrudInterface
 
   public function cread(): bool
   {
-    return false;
+    $get_table  = $this->TABLE_NAME;
+    $get_column = $this->column_names();
+    $column_name = implode('`, `', $get_column);
+    $column_bind = implode(', :', $get_column);
+
+    $this->PDO->query(
+      "INSERT INTO
+        `$get_table`
+        (`$column_name`)
+      VALUES
+        (:$column_bind)"
+    );
+    // binding
+    foreach ($this->COLUMNS as $key => $val) {
+      $this->PDO->bind(':' . $key, $val);      
+    }
+
+    $this->PDO->execute();
+    if ($this->PDO->rowCount() > 0) {
+        return true;
+    }
+    return false;    
   }
 
   public function update(): bool
@@ -86,13 +107,31 @@ abstract class MyCRUD implements CrudInterface
 
   public function delete(): bool
   {
+    $this->PDO->query(
+      "DELETE FROM $this->TABLE_NAME WHERE `id` = :id"
+    );
+    $this->PDO->bind(':id', $this->ID['id']);
+    $this->PDO->execute();
+
+    if ($this->PDO->rowCount() > 0) {
+      return true;
+    }
     return false;
   }
 
   public function isExist(): bool
   {
+    $this->PDO->query(
+      "SELECT `id` FROM $this->TABLE_NAME WHERE `id` =  :id"
+    );
+    $this->PDO->bind(':id', $this->ID['id']);
+    $this->PDO->execute();
+    if ($this->PDO->rowCount() > 0) {
+      return true;
+    }
     return false;
   }
+
   public function convertFromArray(): bool
   {
     return false;
@@ -100,6 +139,23 @@ abstract class MyCRUD implements CrudInterface
   public function convertToArray(): array
   {
     return $this->COLUMNS;
+  }
+
+  protected function column_names()
+  {
+    $this->PDO->query(
+      "SELECT 
+        COLUMN_NAME
+      FROM 
+        INFORMATION_SCHEMA.COLUMNS
+      WHERE 
+        TABLE_SCHEMA = :dbs AND TABLE_NAME = :table
+    ");
+    $this->PDO->bind(':dbs', 'simpusle_simpus_lerep');
+    $this->PDO->bind(':table', 'trivia_quest');
+    $this->PDO->execute();
+    $column_name = $this->PDO->resultset();
+    return array_values(array_column($column_name, 'COLUMN_NAME'));
   }
 
   // helper
