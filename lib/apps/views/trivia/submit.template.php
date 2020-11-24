@@ -65,7 +65,7 @@
       <div class="boxs-app">
         <div class="box-left">
           <h1>Buat Pertanyaan Baru</h1>
-          <form action="" method="post">
+          <form action="" method="post" enctype="multipart/form-data">
             <div class="group-input">
               <section>
                 <label for="input-author">Author</label>
@@ -95,7 +95,8 @@
               <?php endif; ?>
             </section>
             <section>
-              <input type="hidden" name="quest_img" id="input-image" value="">
+              <label for="input-quest-img">Quest Image (< 500kb)</label>
+              <input type="file" name="quest_img" id="input-quest-img" accept=".jpg, .png, .jpeg">
             </section>
             <section>
               <label for="input-answer-1">Jawaban benar</label>

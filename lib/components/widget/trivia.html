@@ -1,118 +1,128 @@
 <div class="boxs-trivia">
   <div class="trivia" id="trivia">
       <div class="box-header">
-          <p>trvia/pertanyaan point: {{ point }}</p>
+        <p>Trvia/pertanyaan</p>
+        <p v-text="'Point: ' + point"></p>
       </div>
       <div class="box-quest">
-          <div class="quest-image">
-              <img v-bind:src="quest_img"
-               alt="simpus trivia" 
-               v-if="quest_img != null">
-          </div>
-          <div class="quest-text">
-              <p v-text="quest"></p>
-          </div>
+        <div class="quest-image">
+        <img
+            v-bind:src="quest_img"
+            alt="simpus trivia" 
+            v-if="quest_img != null"
+        >
+        </div>
+        <div class="quest-text">
+        <p v-text="quest"></p>
+        </div>
       </div>
       <div class="box-options">
-          <div v-for="option in options"
-          :key="option.id"
-          v-on:click="sumbit_answer(option.id)"
-          v-bind:class="[
-          {selected: option.id == selected && correct_answer !=  option.id}, 
-          {correct: correct_answer ==  option.id}]"
-          class="option-select"
-          >
-              <div class="option-image">
-                <!-- <img src="" alt=""> -->
-              </div>
-              <div class="option-text">
-                <p v-text="option.answer"></p>
-                <p
-                    v-show="selected != null" 
-                    v-text="`${summary_value(option.id)}%`"
-                    >
-                </p>
-              </div>
-          </div>
+        <div 
+            v-for="option in options"
+            :key="option.id"
+            v-on:click="sumbit_answer(option.id)"
+            class="option-select"
+            v-bind:class="classObject(option.id)"
+        >
+            <div class="option-image">
+            <!-- <img src="" alt=""> -->
+            </div>
+            <div class="option-text">
+            <p 
+                v-text="option.answer"
+            ></p>
+            <p
+                v-show="selected != null" 
+                v-text="`${summary_value(option.id)}%`"
+            ></p>
+            </div>
+        </div>
       </div>
   </div>
   
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.2.4/gsap.min.js"></script>
   <script>
-      let triva = new Vue({
-          el: '#trivia',
-          data: function() {
-              return {
-                  quest_id: 0,
-                  quest: '',
-                  quest_img: null,
-                  options: Array(),
-                  summary: Array(),
-                  correct_answer: null,
-                  selected: null,
-                  submited: 0,
-                  point: 5
-              }
-          },
-          methods: {
-              new_quest: function() {
-                  $json('/API/v1.0/Trivia/Get-Ques.json?rev=' + this.quest_id)
-                      .then(json => {
-                          if (json.status == 'ok') {
-                              this.quest_id = json.data.quest_id;
-                              this.quest = json.data.quest.quest;
-                              this.quest_img = json.data.quest.image;
-                              this.options = json.data.options;
-                              // reset
-                              this.summary = Array();
-                              this.correct_answer = null;
-                              this.selected = null;
-                              this.submited = 0;
-                          }
-                      })
-              },
-              sumbit_answer: function(id) {
-                  $json(`/API/v1.0/Trivia/Get-Answer.json?question_id=${this.quest_id}&question_answer=${id}`)
-                      .then(json => {
-                          if (json.status == 'ok') {
-                              this.summary = json.data.summary;
-                              this.correct_answer = json.data.correct;
-                              this.selected = id;
-                              this.submited = json.data.submited;
-                              this.reset_quest();
-                              if (json.data.correct == id) {
-                                  this.point += 5
-                              } else {
-                                  this.point -= 2;
-                                  this.point = this.point > 0 ? this.point : 0;
-                              }
-                          }
-                      })
-              },
-              reset_quest: function() {
-                  setTimeout(() => {
-                      this.new_quest();
-                  }, 3000)
-              },
-              summary_find: function(id) {
-                  let res = 0;
-                  this.summary.forEach(element => {
-                      if (element.id == id) {
-                          res = element.summary;
-                          return res;
-                      }
-                  });
-                  return res;
-              },
-              summary_value: function(id) {
-                  let value = this.summary_find(id);
-                  return this.submited == 0 ? 0 : Math.round(value / this.submited * 100);
-                  
-              }
-          },
-          mounted() {
-              this.new_quest();
-          }
-      })
+    const triva = new Vue({
+        el: '#trivia',
+        data: function() {
+            return {
+                quest_id: 0,
+                quest: '',
+                quest_img: null,
+                options: Array(),
+                summary: Array(),
+                correct_answer: -2,
+                selected: -1,
+                submited: 0,
+                point: +getCookie('trivia_point') ?? 5,
+                classObject: function(id) {
+                    return {
+                        'option-selected': id == this.selected && this.correct_answer != id,
+                        correct: id == this.correct_answer
+                    }
+                } 
+            }
+        },
+        methods: {
+            new_quest: function() {
+                $json('/API/v1.0/Trivia/Get-Ques.json?rev=' + this.quest_id)
+                    .then(json => {
+                        if (json.status == 'ok') {
+                            this.quest_id = json.data.quest_id;
+                            this.quest = json.data.quest.quest;
+                            this.quest_img = json.data.quest.image;
+                            this.options = json.data.options;
+                            // reset
+                            this.summary = Array();
+                            this.correct_answer = null;
+                            this.selected = null;
+                            this.submited = 0;
+                        }
+                    })
+            },
+            sumbit_answer: function(id) {
+                $json(`/API/v1.0/Trivia/Get-Answer.json?question_id=${this.quest_id}&question_answer=${id}`)
+                    .then(json => {
+                        if (json.status == 'ok') {
+                            this.summary = json.data.summary;
+                            this.correct_answer = json.data.correct;
+                            this.selected = id;
+                            this.submited = json.data.submited;
+                            this.reset_quest();
+                            if (json.data.correct == id) {
+                                this.point += 5
+                            } else {
+                                this.point -= 2;
+                                this.point = this.point > 0 ? this.point : 0;
+                            }
+                            document.cookie = `trivia_point=${this.point}; path=/`;
+                        }
+                    })
+            },
+            reset_quest: function() {
+                setTimeout(() => {
+                    this.new_quest();
+                }, 3000)
+            },
+            summary_find: function(id) {
+                let res = 0;
+                this.summary.forEach(element => {
+                    if (element.id == id) {
+                        res = element.summary;
+                        return res;
+                    }
+                });
+                return res;
+            },
+            summary_value: function(id) {
+                let value = this.summary_find(id);
+                return this.submited == 0 ? 0 : Math.round(value / this.submited * 100);                  
+            },
+        
+        },
+        mounted() {
+            this.new_quest();                     
+        },
+    })
   </script>
 </div>

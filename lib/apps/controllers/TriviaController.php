@@ -2,6 +2,7 @@
 
 use Model\Trivia\Trivia;
 use Simpus\Apps\Controller;
+use System\File\UploadFile;
 
 class TriviaController extends Controller
 {
@@ -9,23 +10,42 @@ class TriviaController extends Controller
   {
     $msg = array('show' => false, 'type' => 'info', 'content' => 'oke');
     
+    // upload image
+    $isUploaded = true;
+    if (isset($_FILES['quest_img'])) {
+      $file_name = 'quest_image_' . time();
+      $upload_image = new UploadFile($_FILES['quest_img']);
+      $slug = $upload_image
+        ->setFileName($file_name)
+        ->setFolderLocation('/data/img/trivia/asset/')
+        ->setMimeTypes(array ('image/jpg', 'image/jpeg', 'image/png'))
+        ->setMaxFileSize( 562500 )
+        ->upload();
+      $isUploaded = $upload_image->Success();
+    }
+    
     $error = array();
-    if (isset($_POST['sumbit'])) {
+    if (isset($_POST['sumbit']) && $isUploaded) {
       $trivia = new TriviaService();
-      $respone = $trivia->Submit_Ques($_POST);
+      $respone = $trivia->Submit_Ques(array_merge($_POST, array('quest_img' => $slug ?? null)));
       $error = $respone['error'];
-      if ($error === true ) {
+      if ($error === true) {
         $msg['show'] = true;
         $msg['type'] = 'success';
-        $msg['content'] = 'Berhasil disimpan';
-      } else {        
+        $msg['content'] = 'Berhasil disimpan';        
+      } else {
         $msg['show'] = true;
         $msg['type'] = 'danger';
         $msg['content'] = 'Cek Kembali Data Anda';
       }
+    } elseif (! $isUploaded) {
+      $msg['show'] = true;
+      $msg['type'] = 'danger';
+      $msg['content'] = 'Gambar gagal diupload';
+      $error = array($upload_image->getError());
     }
 
-    return $this->view('/trivia-quest/submit', array (
+    return $this->view('/trivia/submit', array (
       'auth' => $this->getMiddleware()['auth'],
       'meta' => array (
         'title' => 'submit pertanyaan Anda',

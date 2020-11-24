@@ -264,10 +264,16 @@ aside {
         border-radius: 12px;
         box-shadow: 5px 10px 19px -10px rgba(0,0,0,0.75);
     }
-    .box-header p {
-        margin: 0;
-        color: #fff;
-        font-size: 16px;
+    .box-header{
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+
+        p {
+            margin: 0;
+            color: #fff;
+            font-size: 16px;
+        }
     }
     .box-quest .quest-image {
         display: flex;
@@ -287,7 +293,7 @@ aside {
     }
     .option-select {
         border: 1px solid #fff;
-        margin: 8px 0;
+        margin: 12px 0;
         border-radius: 4px;
         min-height: 24px;
         display: flex;
@@ -307,7 +313,7 @@ aside {
             }
         }
     }
-    .selected {
+    .option-selected {
         background-color: #fff;
     }
     .correct {

@@ -21,7 +21,7 @@ class Trivia extends MyCRUD
    */
   public function getQuest(): string
   {
-    return $this->getter('quest') ?? null;
+    return ucfirst($this->getter('quest')) ?? null;
   }
 
   /** Mengambil Gambar dari pertanyaan
