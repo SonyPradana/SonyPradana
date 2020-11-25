@@ -130,7 +130,12 @@ $app->match(['get', 'post'], '/kia-anak/(:text)/(:text)', function(string $actio
 $app->match(['get', 'put'], '/API/([0-9a-zA-Z.]*)/(:any)/(:any).json', function($access, $unit, $action) {
     (new ApiController())->index($unit, $action);
 });
+// API - Mix
+$app->get('/css/style.css', function(){
+    (new MixController())->mix_css();
+});
 
+// Trivia
 $app->match(array('get', 'post'), '/trivia/submit', function() {
     (new TriviaController())->submit();
 });
