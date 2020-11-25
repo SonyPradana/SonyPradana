@@ -345,7 +345,7 @@ class CovidKabSemarangService extends Middleware
         ];
     }
 
-    public function indexing_compiere(array $param)
+    public function indexing_compiere(array $params)
     {
         $version =  $params['x-version'] ?? 'ver1.0';
         if ($version == 'ver1.0') {
