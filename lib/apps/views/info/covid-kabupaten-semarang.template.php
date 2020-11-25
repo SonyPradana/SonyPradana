@@ -222,14 +222,9 @@
     $load(function() {
         update_chart();
         
-        $json('/api/ver1.1/Covid-Kab-Semarang/indexing.json')
+        $json('/api/ver1.1/Covid-Kab-Semarang/info.json')
             .then(json => {
                 $id('last-index').innerText = json['last_index'];
-                if(json['index_status'] == 'sussessful'){
-                    // reload
-                    card.render_card();
-                    update_chart();
-                }
             })
     })
 

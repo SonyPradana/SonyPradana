@@ -14,8 +14,8 @@ class UploadFile
 {
     /** @var string Succes file upload status*/
     private $_success = false;
-    /** @var string Error file upload message */
-
+    /** @var boolean Is set property */
+    private $_isset = false;
     // property file
     /** @var string Original file name */
     private $file_name;
@@ -176,6 +176,9 @@ class UploadFile
      */
     public function upload(): string
     {
+        // isset property, enable when data has been validate
+        $this->_isset = true;
+        
         if ($this->validate()) {
             $destination =  $this->upload_location . $this->upload_name . '.' . $this->file_extension;
             if (move_uploaded_file($this->file_tmp, $_SERVER['DOCUMENT_ROOT'] . $destination)) {
@@ -208,5 +211,13 @@ class UploadFile
             return mkdir( $_SERVER['DOCUMENT_ROOT'] . $path, 0777, true );
         }
         return false;
+    }
+
+    /** 
+     * True jika class di contruc
+     */
+    public function __isset($name): bool
+    {
+        return $this->_isset;
     }
 }

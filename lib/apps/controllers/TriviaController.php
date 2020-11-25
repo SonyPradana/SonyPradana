@@ -11,8 +11,10 @@ class TriviaController extends Controller
     $msg = array('show' => false, 'type' => 'info', 'content' => 'oke');
     
     // upload image
-    $isUploaded = true;
-    if (isset($_FILES['quest_img'])) {
+    $fileSize = $_FILES['quest_img']['size'] ?? 0;
+    $isUploaded = $fileSize ==  0 ? true : false;
+    if (! $isUploaded) {
+      // upload file jika file tersedia
       $file_name = 'quest_image_' . time();
       $upload_image = new UploadFile($_FILES['quest_img']);
       $slug = $upload_image
@@ -27,7 +29,7 @@ class TriviaController extends Controller
     $error = array();
     if (isset($_POST['sumbit']) && $isUploaded) {
       $trivia = new TriviaService();
-      $respone = $trivia->Submit_Ques(array_merge($_POST, array('quest_img' => $slug ?? null)));
+      $respone = $trivia->Submit_Ques(array_merge($_POST, array('quest_img' => $slug ?? '')));
       $error = $respone['error'];
       if ($error === true) {
         $msg['show'] = true;
@@ -37,6 +39,10 @@ class TriviaController extends Controller
         $msg['show'] = true;
         $msg['type'] = 'danger';
         $msg['content'] = 'Cek Kembali Data Anda';
+        // delete file upload
+        if (isset($upload_image)) {
+          $upload_image->delete($slug);
+        }
       }
     } elseif (! $isUploaded) {
       $msg['show'] = true;

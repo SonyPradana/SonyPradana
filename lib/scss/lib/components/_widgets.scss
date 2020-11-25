@@ -330,8 +330,3 @@ aside {
         grid-template-columns: repeat(2, 144px);
     }
 }
-@media(hover: hover) and (pointer: fine) {
-    .option-select:hover {
-        background-color: #f9f8e1;
-    }
-}
