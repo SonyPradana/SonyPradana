@@ -131,8 +131,11 @@ $app->match(['get', 'put'], '/API/([0-9a-zA-Z.]*)/(:any)/(:any).json', function(
     (new ApiController())->index($unit, $action, $version);
 });
 // API - Mix
-$app->get('/css/style.css', function(){
+$app->get('/css/style.css', function() {
     (new MixController())->mix_css();
+});
+$app->get('/js/app.js', function() {
+    (new MixController())->mix_javascript();
 });
 
 // Trivia
