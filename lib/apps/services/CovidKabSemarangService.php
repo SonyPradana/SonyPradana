@@ -11,6 +11,25 @@ use WebScrap\CovidKabSemarang\CovidKabSemarangTracker;
 
 class CovidKabSemarangService extends Middleware
 {
+    // TODO: add leyer for version control in construct
+    public function __construct()
+    {
+        
+    }
+
+
+    private function versionControl(): array
+    {
+        return array(
+            'status'    => 'error',
+            'error'     => 'endpoint version not support',
+            'info'      => array (
+                'support_version' => 'ver1.1',
+            ),
+            'headers'       => ['HTTP/1.1 200 Oke']
+        );
+    }
+
     public function tracker(array $params)
     {
         // option
@@ -295,6 +314,11 @@ class CovidKabSemarangService extends Middleware
 
     public function indexing(array $params)
     {
+        $version =  $params['x-version'] ?? 'ver1.0';
+        if ($version == 'ver1.0') {
+            return $this->versionControl();
+        }
+
         $schadule   = new Scheduler(1);
         $schadule->read();
 
@@ -323,6 +347,11 @@ class CovidKabSemarangService extends Middleware
 
     public function indexing_compiere(array $param)
     {
+        $version =  $params['x-version'] ?? 'ver1.0';
+        if ($version == 'ver1.0') {
+            return $this->versionControl();
+        }
+
         // get old data
         $old_raw = $this->tracker_data(array());
         $old_data = [

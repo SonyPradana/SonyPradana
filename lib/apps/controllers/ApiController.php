@@ -5,8 +5,8 @@ use Simpus\Helper\HttpHeader;
 
 class ApiController extends Controller
 {
-
-    public function index($unit, $action)
+    
+    public function index($unit, $action, $version)
     {
         $method = $_SERVER['REQUEST_METHOD'];
         $params = $_GET;
@@ -14,6 +14,9 @@ class ApiController extends Controller
             $body   = file_get_contents('php://input');
             $params = json_decode($body, true);
         }
+        // send version request
+        $params['x-version'] = $version;
+
         $result = $this->getService( $unit . 'Service', $action, [$params]);
 
         // get header and them remove header from result
