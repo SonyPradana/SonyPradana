@@ -3,15 +3,10 @@
 <head>
     <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/meta/metatag.php') ?>
     <meta name="robots" content="all,index,follow">
-    
+
     <link rel="stylesheet" href="/lib/css/ui/v1/table.css">
-    <link rel="stylesheet" href="/lib/css/pages/v1.1/jadwal-kia.css">
-    <link rel="stylesheet" href="/lib/css/ui/v1.1/style.css">
-    <link rel="stylesheet" href="/lib/css/ui/v1.1/cards.css">
-    <link rel="stylesheet" href="/lib/css/ui/v1.1/widgets.css">
-    <script src="/lib/js/index.min.js"></script>
-    <script src="/lib/js/bundles/keepalive.min.js"></script>
-    <script src="/lib/js/vendor/vue/vue.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css?ver=1.0&ref=jadwal-kia&mix=style;cards;widgets">
+    <script src="/js/app.js?mix=index.min;bundles/keepalive.min;vendor/vue/vue.min"></script>
     <style>
         .container.width-view {
             display: grid;
