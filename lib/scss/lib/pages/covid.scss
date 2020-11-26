@@ -1,8 +1,5 @@
 // cmd: sass --no-source-map --style=compressed lib/scss/lib/pages/covid.scss lib/css/pages/v1.1/covid.css
 
-@import '../../style.scss';
-@import '../../cards.scss';
-
 .header-article{margin-bottom: 24px}
 .header-article h1{
     font-size: 2.3rem;

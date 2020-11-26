@@ -1,8 +1,5 @@
 // cmd: sass --no-source-map --style=compressed lib/scss/lib/pages/jadwal-kia.scss lib/css/pages/v1.1/jadwal-kia.css
 
-@import '../../style.scss';
-@import '../../cards.scss';
-
 .cards-box .box-container{
   overflow-x: auto;
   display: grid;

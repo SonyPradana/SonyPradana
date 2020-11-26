@@ -1,7 +1,17 @@
 // cmd: sass --no-source-map --style=compressed lib/scss/lib/pages/antrian.scss lib/css/pages/v1.1/antrian.css
 
-@import '../../style.scss';
-@import '../../cards.scss';
+.container.width-view {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+}
+main {
+  overflow-x: auto;
+}
+
+.button-group button {
+  margin: 8px 4px;
+  min-width: 70px;
+}
 
 .gab-12pt {
   min-height: 12px;
@@ -85,6 +95,10 @@
 @media screen and (max-width: 767px) {
   .antrian-container {
       grid-template-columns: 1fr;
+  }
+  
+  .container.width-view {
+    grid-template-columns: 1fr
   }
 }
 @media screen and (max-width: 479px) {

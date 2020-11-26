@@ -3,27 +3,9 @@
 <head>
     <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/meta/metatag.php') ?>
 
-    <style>
-        .container.width-view {
-            display: grid;
-            grid-template-columns: 1fr 300px;
-        }
-        main {
-            overflow-x: auto;
-        }
-        
-        .button-group button {
-            margin: 8px 4px;
-            min-width: 70px;
-        }
-
-        @media screen and (max-width: 767px) {
-            .container.width-view {
-                grid-template-columns: 1fr
-            }
-        }
-    </style>
     <link rel="stylesheet" href="/lib/css/pages/v1.1/antrian.css">
+    <link rel="stylesheet" href="/lib/css/ui/v1.1/style.css">
+    <link rel="stylesheet" href="/lib/css/ui/v1.1/cards.css">
     <link rel="stylesheet" href="/lib/css/ui/v1.1/widgets.css">
     <script src="/lib/js/index.min.js"></script>
     <script src="/lib/js/bundles/keepalive.min.js"></script>
