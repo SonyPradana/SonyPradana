@@ -3,8 +3,13 @@
 <head>
     <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/meta/metatag.php') ?>
 
-    <link rel="stylesheet" href="/css/style.css?ver=1.0&mix=cards;style;widgets">
-    <script src="/js/app.js?mix=index.min;bundles/message.min;bundles/keepalive.min;vendor/vue/vue.min"></script>
+    <link rel="stylesheet" href="/lib/css/ui/v1.1/style.css">
+    <link rel="stylesheet" href="/lib/css/ui/v1.1/widgets.css">
+    <link rel="stylesheet" href="/lib/css/ui/v1.1/cards.css">
+    <script src="/lib/js/index.min.js"></script>
+    <script src="/lib/js/bundles/message.js"></script>
+    <script src="/lib/js/bundles/keepalive.min.js"></script>
+    <script src="/lib/js/vendor/vue/vue.min.js"></script>
     <style>
         /* costume main container */
         .container.width-view{
