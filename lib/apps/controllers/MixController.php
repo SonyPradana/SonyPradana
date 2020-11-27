@@ -11,7 +11,7 @@ class MixController extends Controller
     $css_reference = array();
     if (isset($_GET['ref'])) { 
       $css_reference = array (
-        '/lib/css/pages/v1.1/' . $_GET['ref'] . '.css'
+        '/public/lib/css/pages/v1.1/' . $_GET['ref'] . '.css'
       );
     }
     
@@ -19,7 +19,7 @@ class MixController extends Controller
     $mix_params = explode(';', $_GET['mix'] ?? 'style');
     $css_mix = array_map (
       function($css) {
-        return '/lib/css/ui/v1.1/' .$css. '.css';
+        return '/public/lib/css/ui/v1.1/' .$css. '.css';
       }
     , $mix_params);
 
@@ -32,7 +32,7 @@ class MixController extends Controller
     $js_reference = array();
     if (isset($_GET['ref'])) {
       $js_reference = array (
-        '/lib/js/page/' . $_GET['ref']
+        '/public/lib/js/page/' . $_GET['ref']
       );
     }
 
@@ -40,7 +40,7 @@ class MixController extends Controller
     $mix_params = explode(';', $_GET['mix'] ?? 'index.min');
     $js_mix = array_map (
       function($js) {
-        return '/lib/js/' . $js . '.js';
+        return '/public/lib/js/' . $js . '.js';
       }
     , $mix_params);
 

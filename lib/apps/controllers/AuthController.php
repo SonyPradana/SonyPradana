@@ -177,13 +177,13 @@ class AuthController extends Controller
         
         # cek form
         if (! $validation->errors()) {
-            $url_picture    = $_POST['url-display-picture'] ?? '/data/img/display-picture/no-image.png';
+            $url_picture    = $_POST['url-display-picture'] ?? '/public/data/img/display-picture/no-image.png';
             $request_upload = isset( $_FILES['display-picture']) ? true :false;
 
             // upload image
             $upload = new UploadFile($_FILES['display-picture']);
             $upload->setFileName( $user_name )
-                ->setFolderLocation('/data/img/display-picture/user/')
+                ->setFolderLocation('/public/data/img/display-picture/user/')
                 ->setMimeTypes(array('image/jpg', 'image/jpeg', 'image/png'))
                 ->setMaxFileSize( 562500 ); #450 Kb
             $upload_url = $upload->upload();

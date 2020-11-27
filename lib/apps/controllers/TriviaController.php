@@ -19,7 +19,7 @@ class TriviaController extends Controller
       $upload_image = new UploadFile($_FILES['quest_img']);
       $slug = $upload_image
         ->setFileName($file_name)
-        ->setFolderLocation('/data/img/trivia/asset/')
+        ->setFolderLocation('/public/data/img/trivia/asset/')
         ->setMimeTypes(array ('image/jpg', 'image/jpeg', 'image/png'))
         ->setMaxFileSize( 562500 )
         ->upload();

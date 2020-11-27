@@ -1,0 +1,16 @@
+Options -Indexes
+RewriteEngine on
+
+RewriteCond %{HTTPS} off
+RewriteCond %{HTTP:X-Forwarded-SSL} !on
+RewriteCond %{HTTP_HOST} ^simpuslerep\.com$ [OR]
+RewriteCond %{HTTP_HOST} ^www\.simpuslerep\.com$
+# force https
+RewriteRule ^(.*)$ "https\:\/\/simpuslerep\.com\/\?$1" [R=301,L]
+
+
+# Deliver the folder or file directly if it exists on the server
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d 
+# Push every request to index.php
+RewriteRule ^(.*)$ index.php [QSA]

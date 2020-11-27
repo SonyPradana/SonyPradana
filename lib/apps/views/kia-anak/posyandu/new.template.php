@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="/lib/css/ui/v1/table.css">
     <script src="/lib/js/index.min.js"></script>
     <script src="/lib/js/bundles/keepalive.min.js"></script>
-    <script src="/lib/js/bundles/dialog.modal.js"></script>
+    <script src="/lib/js/bundles/dialog.modal.min.js"></script>
     <style>
         .boxs-container{
             /* width: 100%; height: 100%; */

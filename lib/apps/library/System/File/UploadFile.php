@@ -34,7 +34,7 @@ class UploadFile
     /** @var string Upload file name (without extention) */
     private $upload_name;
     /** @var string Upload file to save location */
-    private $upload_location = '/data/img/';
+    private $upload_location = '/public/data/img/';
     /** @var array Upload allow file extention */
     private $upload_types    = ['jpg', 'jpeg', 'png'];
     /** @var array Upload allow file mime type */

@@ -1,4 +1,4 @@
-// terser -c -m -- lib/js/bundles/keepalive.js > public/lib/js/bundles/keepalive.min.js
+// terser -c -m -- lib/js/bundles/keepalive.js > lib/js/bundles/keepalive.min.js
 /**
  * Function untuk mengecek status login
  * @param {function} submitFunction Function ketika tombol oke diclick

@@ -55,7 +55,7 @@ class User
         $file_name = explode('/', $this->_displayPicture);
         $file_name = end( $file_name );
         $small_image = str_replace($file_name, "small-" . $file_name, $this->_displayPicture);
-        $return = file_exists( $_SERVER['DOCUMENT_ROOT'] . $small_image) ? $small_image : '/data/img/display-picture/user/small-no-image.png';
+        $return = file_exists( $_SERVER['DOCUMENT_ROOT'] . $small_image) ? $small_image : '/public/data/img/display-picture/user/small-no-image.png';
         return $return;
     }
     // setter

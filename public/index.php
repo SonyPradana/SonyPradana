@@ -1,7 +1,6 @@
 <?php
 session_start();
 
-use Model\Trivia\Trivia;
 use Simpus\Apps\{Route, Controller, Middleware};
 use Simpus\Auth\{Auth, User};
 
@@ -10,18 +9,18 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/init.php';
 $app   = new Route();
 $token = $_SESSION['token'] ?? '';
 $auth  = new Auth($token, 2);
-$user  = new User( $auth->getUserName() );
-Middleware::setMiddleware([
-    "auth" => [
+$user  = new User($auth->getUserName());
+Middleware::setMiddleware( array (
+    "auth" => array (
         "token"                 => $token,
         "login"                 => $auth->TrushClient(),
         "user_name"             => $auth->TrushClient() ? $auth->getUserName() : null,
         "display_name"          => $auth->TrushClient() ? $user->getDisplayName() : null,
         "display_picture_small" => $auth->TrushClient() ? $user->getSmallDisplayPicture() : null
-    ],
+    ),
     "DNT"       => isset( $_SERVER['HTTP_DNT']) && $_SERVER['HTTP_DNT'] == 1 ? true : false,
     "before"    => function() use ($auth) {
-        if( !$auth->TrushClient() ){  
+        if (!$auth->TrushClient) {  
             DefaultController::page_401(array (
                 'links' => array (
                     array('Home Page', '/'),
@@ -30,7 +29,7 @@ Middleware::setMiddleware([
             ));
         }
     }
-]);
+));
 
 // home
 $app->get('/', function() {
@@ -131,10 +130,10 @@ $app->match(['get', 'put'], '/API/([0-9a-zA-Z.]*)/(:any)/(:any).json', function(
     (new ApiController())->index($unit, $action, $version);
 });
 // API - Mix
-$app->get('/css/style.css', function() {
+$app->get('/css/mix.style.css', function() {
     (new MixController())->mix_css();
 });
-$app->get('/js/app.js', function() {
+$app->get('/js/mix.app.js', function() {
     (new MixController())->mix_javascript();
 });
 

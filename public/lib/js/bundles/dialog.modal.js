@@ -1,4 +1,4 @@
-// terser -c -m -- lib/js/bundles/dialog.modal.js > public/lib/js/bundles/dialog.modal.min.js
+// terser -c -m -- lib/js/bundles/dialog.modal.js > lib/js/bundles/dialog.modal.min.js
 const def_pref =  {
     type    : 'search-by-name-adress',
     status  : 'run',

@@ -1,31 +1,5 @@
-
 RewriteEngine on
 
-Options -Indexes
-RewriteCond %{HTTPS} off
-RewriteCond %{HTTP:X-Forwarded-SSL} !on
-RewriteCond %{HTTP_HOST} ^simpuslerep\.com$ [OR]
-RewriteCond %{HTTP_HOST} ^www\.simpuslerep\.com$
-RewriteRule ^(.*)$ "https\:\/\/simpuslerep\.com\/\?$1" [R=301,L]
-
-RewriteBase /
-
-# Deliver the folder or file directly if it exists on the server
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
- 
-# Push every request to index.php
-RewriteRule ^(.*)$ index.php [QSA]
-
-# old url to pretty url 19/08/2020
-Redirect 301 /p/auth/login/index.php /login
-Redirect 301 /p/auth/logout/index.php /logout
-Redirect 301 /p/auth/profile/index.php /profile
-Redirect 301 /p/auth/register/index.php /register
-Redirect 301 /p/auth/reset-password/index.php /reset-password
-Redirect 301 /p/messages/public/index.php /messages/public
-Redirect 301 /p/about/index.php /About
-Redirect 301 /p/contact/ourteam/index.php /Ourteam
-Redirect 301 /p/contact/contactus/index.php /Contactus
-Redirect 301 /p/info/jadwal-pelayanan/ /info/jadwal-pelayanan/
-Redirect 301 /p/info/covid-kabupaten-semarang /info/covid-kabupaten-semarang
+# delivery all request to public folder
+RewriteCond %{REQUEST_URI} !^public
+RewriteRule ^(.*)$ public/$1 [L]
