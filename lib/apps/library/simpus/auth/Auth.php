@@ -10,7 +10,11 @@ use System\Database\MyPDO;
  * @author sonypradana@gmail.com
  */
 class Auth
-{    
+{
+    const IP_OLNY = 0;
+    const USER_AGENT_OR_IP = 1;
+    const USER_AGENT_AND_IP = 2;
+    const USER_NAME_AND_USER_AGENT_OR_IP = 3;
     /** @var MyPDO Instant PDO */
     private $PDO;
     /** @var boolean  */
@@ -55,7 +59,7 @@ class Auth
      * @param string $token jwt token 
      * @param int $securityLevel
      */
-    public function __construct(string $token, int $securityLevel = 0)
+    public function __construct(string $token, int $securityLevel = AUTH::IP_OLNY)
     {
         if( $token == "" ) return;
         # koneksi database
@@ -105,8 +109,7 @@ class Auth
                         # ip sama
                         if ($JWT->IP == $ip) {
                             $this->_trushClinet = true;
-                        }
-                        
+                        }                        
                 }
             } 
         }            

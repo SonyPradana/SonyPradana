@@ -8,7 +8,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/init.php';
 
 $app   = new Route();
 $token = $_SESSION['token'] ?? '';
-$auth  = new Auth($token, USER_AGENT_AND_IP);
+$auth  = new Auth($token, Auth::USER_AGENT_OR_IP);
 $user  = new User($auth->getUserName());
 Middleware::setMiddleware( array (
     "auth" => array (
@@ -67,7 +67,6 @@ $app->match(['get', 'post'], '/forgot/(:text)', function(string $action) {
 $app->get('/admin', function() {
     (new AdminController())->index  ();
 });
-
 
 // message
 $app->get('/messages/public', function() {
