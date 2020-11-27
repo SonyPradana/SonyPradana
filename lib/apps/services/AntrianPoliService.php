@@ -37,15 +37,14 @@ class AntrianPoliService extends Middleware
   }
   private function pusher($data)
   {
-    $options = array(
-      'cluster' => 'ap1',
-      'useTLS' => true
-    );
     $pusher = new Pusher\Pusher(
-      '6c9ed3de96e572726af9',
-      '5c3c760eac0a35d99093',
-      '1069541',
-      $options
+      PUSHER_APP_KEY,
+      PUSHER_APP_SECRET,
+      PUSHER_APP_ID,
+      array (
+        'cluster' => PUSHER_APP_CLUSTER,
+        'useTLS' => true
+      )
     );
 
     $pusher->trigger('my-channel', 'my-event', $data);

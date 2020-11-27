@@ -8,7 +8,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/init.php';
 
 $app   = new Route();
 $token = $_SESSION['token'] ?? '';
-$auth  = new Auth($token, 2);
+$auth  = new Auth($token, USER_AGENT_AND_IP);
 $user  = new User($auth->getUserName());
 Middleware::setMiddleware( array (
     "auth" => array (

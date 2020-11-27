@@ -1,4 +1,7 @@
 <?php
+// Autoload Vendor
+require_once $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
+
 //config
 require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/config/config.php';
 
@@ -11,6 +14,3 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/services/autoload.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/core/Middleware.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/core/Router.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/core/Controller.php';
-
-// Autoload Vendor
-require_once $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';

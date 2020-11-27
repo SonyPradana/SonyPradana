@@ -3,6 +3,7 @@ public/data/img/
 test/thumbnail
 vendor/
 /lib/apps/config/database_local.config.php
+.env
 
 ### MicrosoftOffice ###
 *.tmp
