@@ -3,9 +3,7 @@
 <head>
     <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/meta/metatag.php') ?>
 
-    <link rel="stylesheet" href="/lib/css/ui/v1.1/style.css">
-    <link rel="stylesheet" href="/lib/css/ui/v1.1/widgets.css">
-    <link rel="stylesheet" href="/lib/css/ui/v1.1/cards.css">
+    <link rel="stylesheet" href="/lib/css/ui/v1.1/full.style.css">
     <script src="/lib/js/index.min.js"></script>
     <script src="/lib/js/bundles/message.js"></script>
     <script src="/lib/js/bundles/keepalive.min.js"></script>
