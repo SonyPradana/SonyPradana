@@ -1,0 +1,28 @@
+{
+  "name": "simpuslerep",
+  "version": "1.1.0",
+  "description": "sistem informasi managemen puskesmas lerep (unofficial)",
+  "main": "/lib/js/app.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "sass" : "npm run sass-full && npm run sass-cards && npm run sass-style && npm run sass-widget",
+    "sass-full": "sass --no-source-map --style=compressed lib/scss/full.style.scss lib/css/ui/v1.1/full.style.css",
+    "sass-cards": "sass --no-source-map --style=compressed lib/scss/cards.scss lib/css/ui/v1.1/cards.css",
+    "sass-style": "sass --no-source-map --style=compressed lib/scss/style.scss lib/css/ui/v1.1/style.css",
+    "sass-widget": "sass --no-source-map --style=compressed lib/scss/widgets.scss lib/css/ui/v1.1/widgets.css",
+    "terser-index": "terser -c -m -- lib/js/index.js > lib/js/index.min.js",
+    "publish": "git checkout master && git merge feature && git push github master && git ftp push"
+  },
+  "keywords": [
+    "simpus",
+    "public",
+    "healt",
+    "medical",
+    "record",
+    "puskesmas"
+  ],
+  "author": "angger",
+  "license": "ISC"
+}
