@@ -64,19 +64,19 @@
         <div class="boxs-info" id="c-covid">
             <div class="info one">
                 <div class="item-info left"></div>
-                <div class="item-info right">{{ msgPosi }}</div>
+                <div class="item-info right" v-text="msgPosi">0 positif</div>
             </div>
             <div class="info three">
                 <div class="item-info left"></div>
-                <div class="item-info right">{{ msgIsol }}</div>
+                <div class="item-info right" v-text="msgIsol">0 isolasi</div>
             </div>
             <div class="info two">
                 <div class="item-info left"></div>
-                <div class="item-info right">{{ msgSemb }}</div>
+                <div class="item-info right" v-text="msgSemb">0 sembuh</div>
             </div>
             <div class="info three">
                 <div class="item-info left"></div>
-                <div class="item-info right">{{ msgMeni }}</div>
+                <div class="item-info right" v-text="msgMeni">0 meninggal<div>
             </div>
         </div>
     </aside>
@@ -133,16 +133,14 @@
                         <div class="details">
                             <a v-bind:href="news.url">
                                 <header class="news-header">
-                                    <h2>{{ news.title }}</h2>
+                                    <h2 v-text="news.title"></h2>
                                 </header>
                                 <section class="nesw-detail">
-                                    <p>{{ news.details }}</p>
+                                    <p v-text="news.details"></p>
                                 </section>
                             </a>                    
                             <div class="footer">
-                                <div class="info">
-                                    {{ news.date }}
-                                </div>
+                                <div class="info" v-text="news.date"></div>
                             </div class="footer">
                         </div>
                     </article>

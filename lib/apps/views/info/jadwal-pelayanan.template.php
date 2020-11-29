@@ -53,31 +53,31 @@
                 </div>
                 <div class="media-article">
                     <div class="cards-box blue">
-                        <div class="box-title">Jadwal Bulan {{ raw.bulan }}</div>
+                        <div class="box-title" v-text="`Jadwal Bulan ${raw.bulan}`">Jadwal Bulan </div>
                         <div class="box-container">
                             <div class="card event neum-blue neum-light neum-concave radius-small" id="jumat-pertama">
                                 <div class="card-time">
-                                    <div class="mount">{{ raw.jadwal[0].split(' ')[1] }}</div>
-                                    <div class="day">{{ raw.jadwal[0].split(' ')[0] }}</div>
+                                    <div class="mount" v-text="raw.jadwal[0].split(' ')[1]"></div>
+                                    <div class="day" v-text="raw.jadwal[0].split(' ')[0]"></div>
                                 </div>
                                 <div class="gab"></div>
                                 <div class="card-content">
                                     <div class="title">Imunisasi
                                     </div>
-                                    <div class="description">{{ raw['jumat pertama'].join(', ') }}</div>
+                                    <div class="description" v-text="raw['jumat pertama'].join(', ')"></div>
                                 </div>
                             </div>
                             <div class="gab"></div>
                             <div class="card event neum-blue neum-light neum-concave radius-small" id="jumat-ketiga">
                                 <div class="card-time">
-                                    <div class="mount">{{ raw.jadwal[2].split(' ')[1] }}</div>
-                                    <div class="day">{{ raw.jadwal[2].split(' ')[0] }}</div>
+                                    <div class="mount" v-text="raw.jadwal[2].split(' ')[1]"></div>
+                                    <div class="day" v-text="raw.jadwal[2].split(' ')[0]"></div>
                                 </div>
                                 <div class="gab"></div>
                                 <div class="card-content">
                                     <div class="title">Imunisasi
                                     </div>
-                                    <div class="description">{{ raw['jumat ketiga'].join(', ') }}</div>
+                                    <div class="description" v-text="raw['jumat ketiga'].join(', ')"></div>
                                 </div>
                             </div>
                         </div>
@@ -92,7 +92,7 @@
                         <label for="input-pilih-bulan">Lihat Imunisasi Bulan Lainnya: </label>
                         <select name="pilih-bulan" id="input-pilih-bulan" v-on:change="onChange($event)">
                             <option hidden selected>Pilih Bulan</option>
-                            <option v-for="date in month" v-bind:value="date" :key="date">{{ months[ Number( date ) - 1 ] }}</option>
+                            <option v-for="date in month" v-bind:value="date" :key="date" v=text="months[ Number( date ) - 1 ]"></option>
                         </select>
                     </div>
                     <h2>Jadwal Pelayanan</h2>
@@ -103,16 +103,14 @@
                                     <td>No</td>
                                     <td>Jenis Vaksin</td>
                                     <!-- fleksible header -->
-                                    <td v-for="(jadwal, index) in raw.jadwal" :key="jadwal">Jumat {{ index + 1}} ~ {{ jadwal }}</td>
+                                    <td v-for="(jadwal, index) in raw.jadwal" :key="jadwal" v-text="`Jumat ${index + 1} ~ ${jadwal}`"></td>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr v-for="(tanggal, namaVaksin, index) in raw.data">
-                                    <td>{{ index + 1}}</td>
-                                    <td>{{ namaVaksin }}</td>
-                                    <td v-for="jadwal in raw.jadwal" :key="jadwal">
-                                        {{ tanggal.includes( jadwal ) ? 'Ya' : 'Tidak' }}
-                                    </td>
+                                    <td v-text="index + 1"></td>
+                                    <td v-text="namaVaksin"></td>
+                                    <td v-for="jadwal in raw.jadwal" :key="jadwal" v-text="tanggal.includes( jadwal ) ? 'Ya' : 'Tidak' "></td>
                                 </tr>
                             </tbody>
                         </table>

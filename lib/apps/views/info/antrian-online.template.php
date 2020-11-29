@@ -39,14 +39,14 @@
                 </div>
                 <div id="app" class="article-media">                    
                     <div class="cards-box blue">
-                        <div class="box-title">Antrian Pendaftaran {{ tanggal }}</div>
+                        <div class="box-title" v-text="format_tanggal">Antrian Pendaftaran</div>
                         <div class="box-container">
                             <div class="antrian-container">
                                 <div class="antrian-box left">
                                     <div class="big-antrian-card  card neum-blue neum-light neum-concave radius-small">
                                         <div class="card-content">
                                             <div class="details">Nomor dipanggil</div>
-                                            <div class="title">{{ last_call }}</div>
+                                            <div class="title" v-text="last_call">Antrian Pendaftaran</div>
                                         </div>
                                     </div>
                                 </div>
@@ -57,23 +57,23 @@
                                 <div class="antrian-box right">
                                     <div class="antraian-container-small">                                        
                                         <div class="small-antrian-card card neum-blue neum-light neum-concave radius-small">
-                                            <div class="title">A </br> {{ poli['A'].current }} / {{ poli['A'].queueing }}</div>
-                                            <div class="details">{{ poli['A'].times}}</div>
+                                            <div class="title" v-html="poli_title('A')"></div>
+                                            <div class="details" v-text="poli_details('A')"></div>
                                         </div>                                        
                                         <div class="gab-12pt"></div>
                                         <div class="small-antrian-card card neum-blue neum-light neum-concave radius-small">
-                                            <div class="title">B </br> {{ poli['B'].current }} / {{ poli['B'].queueing }}</div>
-                                            <div class="details">{{ poli['B'].times}}</div>
+                                            <div class="title" v-html="poli_title('B')"></div>
+                                            <div class="details" v-text="poli_details('B')"></div>
                                         </div>                                        
                                         <div class="gab-12pt"></div>
                                         <div class="small-antrian-card card neum-blue neum-light neum-concave radius-small">
-                                            <div class="title">C </br> {{ poli['C'].current }} / {{ poli['C'].queueing }}</div>
-                                            <div class="details">{{ poli['C'].times}}</div>
+                                            <div class="title" v-html="poli_title('C')"></div>
+                                            <div class="details" v-text="poli_details('C')"></div>
                                         </div>
                                         <div class="gab-12pt"></div>
                                         <div class="small-antrian-card card neum-blue neum-light neum-concave radius-small">
-                                            <div class="title">D </br> {{ poli['D'].current }} / {{ poli['D'].queueing }}</div>
-                                            <div class="details">{{ poli['D'].times}}</div>
+                                            <div class="title" v-html="poli_title('D')"></div>
+                                            <div class="details" v-text="poli_details('D')"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -343,8 +343,19 @@
                             });
                             this.tanggal = data[0].date_time;
                         })
+                },
+                poli_title: function(p) {
+                    return `${p} </br> ${this.poli[p].current} / ${this.poli[p].queueing}`
+                },
+                poli_details: function(p) {
+                    return this.poli[p].times
                 }
-            }
+            },
+            computed: {
+                format_tanggal: function() {
+                    return `Antrian Pendaftaran ${this.tanggal}`;
+                }
+            },
         });
     </script>
 </body>

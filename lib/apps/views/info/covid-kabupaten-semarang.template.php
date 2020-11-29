@@ -56,25 +56,25 @@
                     <div id="covid-card" class="box cards">
                         <div class="card covid-card grad-blue" id="card-positif" data-tooltips="Pasien Positif">
                             <div class="card title">Pasien Positif</div>
-                            <div class="card content">{{ dirawat }}</div>
+                            <div class="card content" v-text="dirawat"></div>
                             <div class="card note">Orang</div>
                         </div>
                         <div class="gap-space"></div>
                         <div class="card covid-card  grad-yellowtored" id="card-isolasi" data-tooltips="Pasien Isolasi">
                             <div class="card title">Pasien Isolasi</div>
-                            <div class="card content">{{ isolasi }}</div>
+                            <div class="card content" v-text="isolasi"></div>
                             <div class="card note">Orang</div>
                         </div>
                         <div class="gap-space"></div>
                         <div class="card covid-card grad-pinktoyellow" id="card-sembuh" data-tooltips="Pasien Sembuh">
                             <div class="card title">Pasien Sembuh</div>
-                            <div class="card content">{{ sembuh }}</div>
+                            <div class="card content" v-text="sembuh"></div>
                             <div class="card note">Orang</div>
                         </div>
                         <div class="gap-space"></div>
                         <div class="card covid-card grad-yellowtored"  id="card-meninggal" data-tooltips="Pasien Meninggal">
                             <div class="card title">Pasien Meninggal</div>
-                            <div class="card content">{{ meninggal }}</div>
+                            <div class="card content" v-text="meninggal"></div>
                             <div class="card note">Orang</div>
                         </div>
                     </div>
@@ -106,25 +106,25 @@
                             </thead>
                             <tbody>
                                 <tr v-for="(row, index) in rows.data" :key="rows.data.desa">
-                                    <td>{{ index + 1}}</td>
-                                    <td>{{ row.desa }}</td>
-                                    <td>{{ row.pdp.dirawat }}</td>
-                                    <td>{{ row.pdp.sembuh }}</td>
-                                    <td>{{ row.pdp.meninggal }}</td>
-                                    <td>{{ row.positif.dirawat }}</td>
-                                    <td>{{ row.positif.isolasi }}</td>
-                                    <td>{{ row.positif.sembuh }}</td>
-                                    <td>{{ row.positif.meninggal }}</td>
+                                    <td v-text="index + 1"></td>
+                                    <td v-text="row.desa"></td>
+                                    <td v-text="row.pdp.dirawat"></td>
+                                    <td v-text="row.pdp.sembuh"></td>
+                                    <td v-text="row.pdp.meninggal"></td>
+                                    <td v-text="row.positif.dirawat"></td>
+                                    <td v-text="row.positif.isolasi"></td>
+                                    <td v-text="row.positif.sembuh"></td>
+                                    <td v-text="row.positif.meninggal"></td>
                                 </tr>
                                 <tr>
                                     <td colspan="2">Jumlah</td>
-                                    <td>{{ rows.suspek }}</td>
-                                    <td>{{ rows.suspek_discharded }}</td>
-                                    <td>{{ rows.suspek_meninggal }}</td>
-                                    <td>{{ rows.kasus_posi }}</td>
-                                    <td>{{ rows.kasus_isol }}</td>
-                                    <td>{{ rows.kasus_semb }}</td>
-                                    <td>{{ rows.kasus_meni }}</td>
+                                    <td v-text="rows.suspek"></td>
+                                    <td v-text="rows.suspek_discharded"></td>
+                                    <td v-text="rows.suspek_meninggal"></td>
+                                    <td v-text="rows.kasus_posi"></td>
+                                    <td v-text="rows.kasus_isol"></td>
+                                    <td v-text="rows.kasus_semb"></td>
+                                    <td v-text="rows.kasus_meni"></td>
                                 </tr>
                             </tbody>
                         </table>
