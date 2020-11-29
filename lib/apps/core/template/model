@@ -1,0 +1,33 @@
+<?php
+
+namespace Model\__model__;
+
+use System\Database\MyCRUD;
+use System\Database\MyPDO;
+
+class __model__ extends MyCRUD
+{
+  // getter
+  public function getID()
+  {
+    return $this->getter('id');
+  }
+
+  // setter
+  public function setID(int $val)
+  {
+    $this->setter('id', $val);
+    return $this;
+  }
+
+
+  public function __construct()
+  {
+    $this->PDO = new MyPDO();
+    $this->TABLE_NAME = '__table__';
+    $this->COLUMNS = array(
+      __column__
+    );
+  }
+
+}

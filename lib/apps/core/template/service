@@ -1,0 +1,44 @@
+<?php
+
+require BASEURL . '/vendor/autoload.php';
+
+use Simpus\Apps\Middleware;
+use Simpus\Helper\HttpHeader;
+
+class __service__Service extends Middleware
+{
+  // private function
+  private function useAuth()
+    {
+        // cek access
+        if( $this->getMiddleware()['auth']['login'] == false ){
+            HttpHeader::printJson(['status' => 'unauthorized'], 500, [
+                "headers" => [
+                    'HTTP/1.0 401 Unauthorized',
+                    'Content-Type: application/json'
+                ]
+            ]);
+        }
+    }
+
+  private function errorhandler()
+  {
+    HttpHeader::printJson(['status' => 'bad request'], 500, [
+        "headers" => [
+            'HTTP/1.1 400 Bad Request',
+            'Content-Type: application/json'
+        ]
+    ]);
+  }
+
+  public function Test(array $params): array
+  {
+    return array(
+      'status'  => 'ok',
+      'data'    => null,
+      'error'   => false,
+      'headers' => array('HTTP/1.1 200 Oke')
+    );
+  }
+}
+

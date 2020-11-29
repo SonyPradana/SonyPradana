@@ -1,0 +1,36 @@
+<?php
+
+use Simpus\Apps\Controller;
+
+class __controller__Controller extends Controller
+{
+    public function index()
+    {
+      $msg = array('show' => false, 'type' => 'info', 'content' => 'oke');
+      $error = array();
+      
+      return $this->view('__controller__', array (
+        "auth"          => $this->getMiddleware()['auth'],
+            "DNT"           => $this->getMiddleware()['DNT'],
+            "redirect_to"   => $_GET['redirect_to'] ?? '/',
+            "meta"          => array (
+                "title"         => "Documnet Title",
+                "discription"   => "Sistem Informasi Manajemen Puskesmas SIMPUS Lerep",
+                "keywords"      => "simpus lerep, puskesmas lerep, puskesmas, ungaran, kabupaten semarang"
+            ),
+            "header"        => array (
+                "active_menu"   => 'null',
+                "header_menu"   => MENU_MEDREC
+            ),
+            "contents" => array (
+
+            ),
+            'error' => $error,
+            "message" => array (
+                "show"      => $msg['show'],
+                "type"      => $msg['type'],
+                "content"   => $msg['content']
+            )
+      ));
+    }
+}
