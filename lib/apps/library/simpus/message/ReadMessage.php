@@ -2,12 +2,16 @@
 
 namespace Simpus\Message;
 
+use System\Database\MyPDO;
+
 /**
  * class ini digunakan untuk melihat pesan yg dikirim/diterima dan disimpan pada data base.
  * 
  * @author sonypradana@gmail.com
  */
-class ReadMessage{
+class ReadMessage{    
+    /** @var MyPDO PDO proprety*/
+    protected $PDO;
     /** @var string pengirim */
     private $_sender;
     /** @var string penerima */
@@ -20,6 +24,7 @@ class ReadMessage{
     private $_date;
     /** @var integer data yang ditampilkan */
     private $_limit = 10;
+    private $_current_pos = 1;
     /** @var string lebih besar atau lebih kecil */
     private $_sign = ">";
 
@@ -107,8 +112,35 @@ class ReadMessage{
             $val = $val > 100 ? 100 : $val;
 
             $this->_limit = $val;
-            return $this;
         }
+        return $this;
+    }
+    
+    public function currentPage($val){
+        $val = is_numeric( $val ) ? $val : 1;
+        $val = $val < 1 ? 1 : $val;
+        $val = $val > 100 ? 100 : $val;
+
+        $this->_current_pos = $val;
+    }
+
+    public function maxData(){
+        $sender = $this->queryBuilder('sender', $this->_sender);
+        $resiver = $this->queryBuilder('resiver', $this->_resiver);
+        $type = $this->queryBuilder('type', $this->_type);
+        $msg = $this->queryBuilder('message', $this->_message);
+        $date = $this->queryBuilder_diff('date', $this->_date, $this->_sign);
+
+        $all =  $sender . $resiver . $type . $msg . $date;
+        // replace frist ' AND '
+        $all = preg_replace('/^( AND )/', '', $all);
+        $all = $all != '' ? " WHERE ($all)" : $all;
+
+        $this->PDO->query(
+            "SELECT COUNT(id) FROM public_message $all"
+        );
+        $this->PDO->execute();
+        return (int) $this->PDO->single()['COUNT(id)'] ?? 0;
     }
 
     /** membatasi data yang akan ditampilkan, resiver.
@@ -118,6 +150,13 @@ class ReadMessage{
         $this->_view_resiver = is_bool($val) ? $val : $this->_view_resiver;
         return $this;
     }
+
+    // contructor
+    public function __construct(MyPDO $PDO = null)
+    {
+        $this->PDO = $PDO ?? new MyPDO();
+    }
+
 
     /**
      * membuat sebuah query string dari filter dan configurasi lainya, menjadi query yang dibaca mesin.
@@ -151,7 +190,8 @@ class ReadMessage{
         $select = preg_replace('/(, )$/', '', $select);
         $select = $select == '' ? '*' : $select;
         
-        return "SELECT $select FROM public_message$all LIMIT $limit";
+        $start_data = ($this->_current_pos * $limit) - $limit;
+        return "SELECT $select FROM public_message$all ORDER BY `date` DESC LIMIT $start_data, $limit ";
     }
 
     /**
@@ -217,22 +257,9 @@ class ReadMessage{
      */
     public function bacaPesan($convrt_to_json = false)
     {
-        // koneksi dan membuat query
-        $link = mysqli_connect(DB_HOST, DB_USER, DB_PASS, "simpusle_simpus_lerep");
-        $query = $this->query();
-        // echo $query;
-        if ($query != '') {
-            // mengambil data dari database
-            $result = mysqli_query($link, $query);
-            $data = [];
-            while ($feedback = mysqli_fetch_assoc( $result)) {
-                $data[] = $feedback;
-            }
-            // mengembalikan data dengan format array
-            return $convrt_to_json ? json_encode( $data ) : $data;
-        }
-        // tidak bs memuat data karena tidak query yang akan dicari
-        return $convrt_to_json ? json_encode( [] ) : [];
+        $this->PDO->query($this->query());
+        $this->PDO->execute();
+        return $convrt_to_json ? json_encode($this->PDO->resultset()) : $this->PDO->resultset();
     }
     /**
      * menampilkan semua hasil yang ada di data base
@@ -241,17 +268,12 @@ class ReadMessage{
      */
     public function bacaSemua(): array
     {
-        // koneksi data base
-        $link = mysqli_connect(DB_HOST, DB_USER, DB_PASS, "simpusle_simpus_lerep");
         $limit = $this->_limit;
-        $query = "SELECT * FROM public_message LIMIT $limit";
-        // mengambil data dari data base (mengambil semua tanpa di filter)
-        $result = mysqli_query($link, $query);
-        $data = array();
-        while ($feedback = mysqli_fetch_assoc( $result)) {
-            $data[] = $feedback;
-        }
-        // mengembailkan data dengan format array 
-        return $data;
+        $start_data = ($this->_current_pos * $limit) - $limit;
+        $this->PDO->query(
+            "SELECT * FROM public_message ORDER BY `date` DESC  LIMIT $start_data, $limit"
+        );
+        $this->PDO->execute();
+        return $this->PDO->resultset();
     }
 }

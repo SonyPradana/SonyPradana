@@ -4,7 +4,15 @@ use Simpus\Apps\Controller;
 
 class MessageController extends Controller{
     public function __construct(){        
-      call_user_func_array($this->getMiddleware()['before'], []);
+    //   call_user_func_array($this->getMiddleware()['before'], []);      
+      if( $this->getMiddleware()['auth']['login'] == false ){            
+        DefaultController::page_401(array (
+            'links' => array (
+                array('Home Page', '/'),
+                array('Login',  '/login?url=' . $_SERVER['REQUEST_URI'])
+            )
+        ));
+    }  
     }
     
     public function public(){

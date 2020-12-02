@@ -70,17 +70,28 @@ class MessageService extends Middleware
     {
         $this->useAuth();
 
-        $page       = $_GET['page'] ?? 10;
+        $limit      = $_GET['limit'] ?? 100;
+        $page       = $_GET['page'] ?? 1;
+        $type       = $_GET['type'] ?? '';
         $resiver    = 'sonypradana@gmail.com';
 
         $read_message = new ReadMessage();
         $read_message->filterByPenerima($resiver);
-        $read_message->limitView( $page );
+        $read_message->filterByType($type);
+        $read_message->currentPage($page);
+        $read_message->limitView($limit);
         $read_message->viewResiver(true);
         $result = $read_message->bacaPesan();
+        $maksData =   $read_message->maxData();
 
         return [
             'status'    => 'ok',
+            'info'      => array (
+                'maks_data' => $maksData,
+                'page'      => $page,
+                'limit'     => $limit,
+                'maks_page' => ceil($maksData / $limit)
+            ),
             'data'      => $result ?? [],
             'headers'   => ['HTTP/1.1 200 ok']
         ];

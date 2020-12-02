@@ -18,17 +18,7 @@ Middleware::setMiddleware( array (
         "display_name"          => $auth->TrushClient() ? $user->getDisplayName() : null,
         "display_picture_small" => $auth->TrushClient() ? $user->getSmallDisplayPicture() : null
     ),
-    "DNT"       => isset( $_SERVER['HTTP_DNT']) && $_SERVER['HTTP_DNT'] == 1 ? true : false,
-    "before"    => function() use ($auth) {
-        if (!$auth->TrushClient) {  
-            DefaultController::page_401(array (
-                'links' => array (
-                    array('Home Page', '/'),
-                    array('Login',  '/login?url=' . $_SERVER['REQUEST_URI'])
-                )
-            ));
-        }
-    }
+    "DNT"       => isset( $_SERVER['HTTP_DNT']) && $_SERVER['HTTP_DNT'] == 1 ? true : false
 ));
 
 // home
