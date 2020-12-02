@@ -7,7 +7,8 @@ use System\Database\MyPDO;
  * 
  * @author sonypradana@gmail.com
  */
-abstract class Message{
+abstract class Message
+{
     /** @var string pengirim pesan */
     protected $_sender;
     /** @var string penerima pesan */
@@ -32,15 +33,21 @@ abstract class Message{
      * -true jika pesan berhaisl disimpan
      * -false jika pesan gagal disimpan
     */
-    public function kirimPesan(){
+    public function kirimPesan(MyPDO $PDO = null)
+    {
         // koneksi data base
-        $db = new MyPDO();
+        $db = $PDO ?? new MyPDO();
 
         $sender = $this->_sender; $resiver = $this->_resiver;
         $type = $this->_type; $date = $this->_date;
         $msg = $this->_message; $meta = $this->_meta;
         // query      
-        $db->query('INSERT INTO `public_message` (`id`, `sender`, `resiver`, `type`, `date`, `message`, `meta`) VALUES (:id, :sender, :resiver, :type, :date, :msg, :meta)');
+        $db->query(
+            "INSERT INTO `public_message`
+                (`id`, `sender`, `resiver`, `type`, `date`, `message`, `meta`)
+            VALUES
+                (:id, :sender, :resiver, :type, :date, :msg, :meta)
+        ");
         $db->bind(':id', '');
         $db->bind(':sender', $sender);
         $db->bind(':resiver', $resiver);
@@ -51,7 +58,7 @@ abstract class Message{
         // esekusi query
         $db->execute();
         // bila berhasil return true
-        if( $db->rowCount() > 0){
+        if ($db->rowCount() > 0) {
             return true;
         }
         // defult nya adalah salah
@@ -64,7 +71,8 @@ abstract class Message{
      * -true artinya pesan termasuk spam
      * -false artinya pesan tidak termasuk spam
     */
-    public function spamDetector(){
+    public function spamDetector()
+    {
         // detact by ip / user name
         // scope pertama (sender):
         // step 1:  ambil 5 data terahir dari sender yang sama di database
@@ -73,12 +81,13 @@ abstract class Message{
         // scope kedua (resiver):
         // berlaku hal yang sama       
         $get_msg = new ReadMessage();
-        $get_msg->filterByPengirim($this->_sender);
-        $get_msg->filterByPenerima($this->_resiver);
-        $get_msg->filterByDate(time() - 120, '>');
-        $get_msg->limitView(5);
-        $msg = $get_msg->bacaPesan();
-        if( count($msg) > 0){
+        $msg = $get_msg
+            ->filterByPengirim($this->_sender)
+            ->filterByPenerima($this->_resiver)
+            ->filterByDate(time() - 120, '>')
+            ->limitView(5)
+            ->bacaPesan();
+        if (count($msg) > 0) {
             return true;
         }
 

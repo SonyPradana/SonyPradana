@@ -213,11 +213,11 @@ class KiaAnakController extends Controller
                 $dataKIA = new KIAAnakRecord();
                 $dataKIA->convertFromArray( $_POST );
                 // table relation
-                $table_relation = new Relation(ConvertCode::ConvertToCode( $id_hash ), $id_hash);
+                $table_relation = Relation::creat(ConvertCode::ConvertToCode( $id_hash ), $id_hash);
                 // simpan data biodata kia
                 $success_dataKIA = $dataKIA->creat( ConvertCode::ConvertToCode( $id_hash ) );
 
-                if ($success_dataKIA && $table_relation->creat()) {
+                if ($success_dataKIA && $table_relation) {
                     $success = true;
                     $msg = ["show" => true, "type" => 'success', "content" => 'Berhasil disimpan'];
                 }
@@ -362,8 +362,8 @@ class KiaAnakController extends Controller
         $code_hash  = $params[0];                                                // validasi document id type, harus angka
         $id         = $params[1] ?? $this->deny_access();
         // 
-        $posyandu   = new PosyanduRecord($code_hash);
-        $isValided  = $posyandu->IsValided();
+        $posyandu   = new PosyanduRecord();
+        $isValided  = $posyandu->validate($code_hash)->IsValided();
         $read       = $posyandu->read( $id );
         
         if (! $validation->errors() && $isValided && $read) {
@@ -437,8 +437,10 @@ class KiaAnakController extends Controller
         $error = $validation->get_errors_array();
 
         if (! $validation->errors()) {    
-            $posyandu = new PosyanduRecord($_POST['code_hash']);
-            $posyandu->convertFromArray($_POST);
+            $posyandu = new PosyanduRecord();
+            $posyandu
+                ->validate($_POST['code_hash'])
+                ->convertFromArray($_POST);
             if ($posyandu->creat()) {
                 $msg = ["show" => true, "type" => 'success', "content" => 'berhasil menyimpan'];
             } else {

@@ -8,10 +8,13 @@ use System\Database\MyPDO;
 class RekamMedisService extends Middleware
 {
     /** @var MyPDO */
-    private $db;
-    public function __construct()
+    private $PDO;
+    /**
+     * @param MyPDO $PDO DataBase class Dependency Injection
+     */
+    public function __construct(MyPDO $PDO = null)
     {
-        $this->db = new MyPDO();
+        $this->PDO = $PDO ?? new MyPDO();
         // cek access
         if ($this->getMiddleware()['auth']['login'] == false) {
             HttpHeader::printJson(['status' => 'unauthorized'], 500, [
@@ -39,7 +42,7 @@ class RekamMedisService extends Middleware
         $rt         = $params['r'] ?? $this->errorhandler();
         $rw         = $params['w'] ?? $this->errorhandler();
 
-        $data = new MedicalRecords( $this->db );
+        $data = new MedicalRecords( $this->PDO );
         $data->filterByNamaKK($nama_kk);
         $data->filterByAlamat($alamat);
         $data->filterByRt($rt);
@@ -58,7 +61,7 @@ class RekamMedisService extends Middleware
     {
         $nomor_rm = $params[ 'nomor_rm' ] ?? null;
 
-        $data = new MedicalRecords( $this->db );
+        $data = new MedicalRecords( $this->PDO );
         $data->filterByNomorRm( $nomor_rm );
         $data->forceLimitView(1);
         $result = $data->result()[0] ?? null;
@@ -72,7 +75,7 @@ class RekamMedisService extends Middleware
 
     public function valid_nomor_rm(array $params) :array
     {
-        $data = new MedicalRecords( $this->db );
+        $data = new MedicalRecords( $this->PDO );
         $data->filterByNomorRm( $params[ 'nr' ] ?? null );
         $data->forceLimitView(1);
         $result = $data->maxData() ?? null;
@@ -124,7 +127,7 @@ class RekamMedisService extends Middleware
         $strict_search      = isset( $param['strict-search'] ) ? true : false;
 
         // core
-        $data = new MedicalRecords( $this->db );
+        $data = new MedicalRecords( $this->PDO );
 
         // setup data
         $data->sortUsing($sort);
@@ -175,7 +178,7 @@ class RekamMedisService extends Middleware
         $duplicate  = $param['duplicate'] ?? null;
 
         if( isset($param['all']) ){
-            $data = new MedicalRecords( $this->db );
+            $data = new MedicalRecords( $this->PDO );
 
             // set-up data
             $data->sortUsing($sort);
@@ -203,7 +206,7 @@ class RekamMedisService extends Middleware
             return ['status'  => 'Bad Request', 'message' => 'time format not support', 'headers' => ['HTTP/1.1 400 Bad Request'] ];
         }
         
-        $data = new MedicalRecords( $this->db );        
+        $data = new MedicalRecords( $this->PDO );        
         // configurasi
         $data->sortUsing($sort);
         $data->orderUsing($order);
@@ -250,7 +253,7 @@ class RekamMedisService extends Middleware
 
     private function getDuplicate($duplicate, $where_statment)
     {
-        $this->db->query("
+        $this->PDO->query("
                     SELECT
                         y.*
                         FROM data_rm y
@@ -262,7 +265,7 @@ class RekamMedisService extends Middleware
                                         ) dt ON y.nama = dt.nama AND y.$duplicate = dt.$duplicate
                     ORDER BY y.nama, y.$duplicate
                     ");
-        return $this->db->resultset();
+        return $this->PDO->resultset();
     }
 
     private function parseRangeTime(string $time)

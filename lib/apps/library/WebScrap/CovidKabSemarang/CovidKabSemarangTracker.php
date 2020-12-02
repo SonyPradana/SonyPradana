@@ -11,7 +11,7 @@ use Simpus\Helper\Scheduler;
 class CovidKabSemarangTracker
 {
     /** @var MyPDO */
-    private $db;
+    private $PDO;
     private $list_kecamatan  = [];
     private $_filters_lokasi = [];
     private $_filters_waktu  = [];
@@ -27,10 +27,12 @@ class CovidKabSemarangTracker
         $this->_filters_waktu = $val;
         return $this;
     }
-
-    public function __construct()
+    /**
+     * @param MyPDO $PDO DataBase class Dependency Injection
+     */
+    public function __construct(MyPDO $PDO = null)
     {
-        $this->db               = new MyPDO();
+        $this->PDO              = $PDO ?? new MyPDO();
         $this->list_kecamatan   = $this->getListKecamatanDesa();
     }
 
@@ -151,9 +153,9 @@ class CovidKabSemarangTracker
     {
         $grupByDate = [];
         foreach($this->_filters_waktu as $date){
-            $this->db->query($this->queryBuilder());        
-            $this->db->bind(':date', $date);
-            $grupByDate[$date] = $this->db->resultset();
+            $this->PDO->query($this->queryBuilder());        
+            $this->PDO->bind(':date', $date);
+            $grupByDate[$date] = $this->PDO->resultset();
         }
         return $grupByDate;
     }
@@ -163,8 +165,8 @@ class CovidKabSemarangTracker
      */
     public function result_countAll(): array
     {
-        $this->db->query($this->queryBuilder_count(null));
-        return $this->db->resultset();
+        $this->PDO->query($this->queryBuilder_count(null));
+        return $this->PDO->resultset();
     }
     
     /** menghitung resume data dalam satu waktu (filter)
@@ -174,8 +176,8 @@ class CovidKabSemarangTracker
     {
         if ($this->_filters_waktu == null ) return [];
         $date = implode(', ', $this->_filters_waktu);
-        $this->db->query($this->queryBuilder_count($date));
-        return $this->db->resultset();
+        $this->PDO->query($this->queryBuilder_count($date));
+        return $this->PDO->resultset();
     }
 
     /** list data yang tersedia di databse
@@ -183,12 +185,12 @@ class CovidKabSemarangTracker
      */
     public function listOfDate() :array
     {
-        $this->db->query("SELECT `date` 
+        $this->PDO->query("SELECT `date` 
                             FROM `covid_tracker`
                             GROUP BY `date`
                             ORDER BY `date`
                             DESC");
-        return $this->db->resultset();
+        return $this->PDO->resultset();
     }
 
     // private method
@@ -273,7 +275,7 @@ class CovidKabSemarangTracker
         'konfirmasi_meninggal'    => 0
     )): bool
     {
-        $this->db->query("INSERT INTO `covid_tracker`
+        $this->PDO->query("INSERT INTO `covid_tracker`
                             (`id`, `date`, `location`, `suspek`, `suspek_discharded`, `suspek_meninggal`, `konfirmasi_symptomatik`, `konfirmasi_asymptomatik`, `konfirmasi_sembuh`, `konfirmasi_meninggal`)
                           VALUES
                             (
@@ -289,19 +291,19 @@ class CovidKabSemarangTracker
                             :konfirmasi_meninggal
                             )
                         ");
-        $this->db->bind(':id', '');
-        $this->db->bind(':date', $params['date']);
-        $this->db->bind(':location', $params['location']);
-        $this->db->bind(':suspek', $params['suspek']);
-        $this->db->bind(':suspek_discharded', $params['suspek_discharded']);
-        $this->db->bind(':suspek_meninggal', $params['suspek_meninggal']);
-        $this->db->bind(':konfirmasi_symptomatik', $params['konfirmasi_symptomatik']);
-        $this->db->bind(':konfirmasi_asymptomatik', $params['konfirmasi_asymptomatik']);
-        $this->db->bind(':konfirmasi_sembuh', $params['konfirmasi_sembuh']);
-        $this->db->bind(':konfirmasi_meninggal', $params['konfirmasi_meninggal']);
+        $this->PDO->bind(':id', '');
+        $this->PDO->bind(':date', $params['date']);
+        $this->PDO->bind(':location', $params['location']);
+        $this->PDO->bind(':suspek', $params['suspek']);
+        $this->PDO->bind(':suspek_discharded', $params['suspek_discharded']);
+        $this->PDO->bind(':suspek_meninggal', $params['suspek_meninggal']);
+        $this->PDO->bind(':konfirmasi_symptomatik', $params['konfirmasi_symptomatik']);
+        $this->PDO->bind(':konfirmasi_asymptomatik', $params['konfirmasi_asymptomatik']);
+        $this->PDO->bind(':konfirmasi_sembuh', $params['konfirmasi_sembuh']);
+        $this->PDO->bind(':konfirmasi_meninggal', $params['konfirmasi_meninggal']);
 
-        $this->db->execute();
-        if( $this->db->rowCount() > 0) return true;
+        $this->PDO->execute();
+        if( $this->PDO->rowCount() > 0) return true;
 
         return false;
     }
@@ -318,7 +320,7 @@ class CovidKabSemarangTracker
 
     private function getListKecamatanDesa() :array
     {
-        $this->db->query("SELECT * FROM `desa_kecamatan`");
-        return $this->db->resultset();
+        $this->PDO->query("SELECT * FROM `desa_kecamatan`");
+        return $this->PDO->resultset();
     }
 }

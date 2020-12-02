@@ -19,11 +19,12 @@ class TriviaService extends Middleware
     }
   }
 
-  public function Delete_Ques()
+  public function Delete_Ques(int $id)
   {
     $this->UseAuth();
 
-    $triva = new Trivia(0);
+    $triva = new Trivia();
+    $triva->setID($id);
 
     return array (
       'status' => 'ok',
@@ -35,7 +36,7 @@ class TriviaService extends Middleware
   {
     $rev = $params['rev'] ?? 0;
     $triva = new Trivia(null, $rev);
-    $triva->read();
+    $triva->randomID($rev)->read();
 
     return array (
       'status' => 'ok',
@@ -58,8 +59,8 @@ class TriviaService extends Middleware
     $question_id = $params['question_id'] ?? 1;
     $question_answer = $params['question_answer'] ?? 1;
 
-    $triva = new Trivia($question_id);
-    $triva->read();
+    $triva = new Trivia();
+    $triva->setID($question_id)->read();
 
     $summary = $triva->submitAnswer($question_answer);
     $sumbited = 0;
@@ -107,7 +108,7 @@ class TriviaService extends Middleware
       'explanation' => $params['explanation'] ?? ''
     );
 
-    $trivia = new Trivia(1);
+    $trivia = new Trivia();
     $status = $trivia->newQuest($data);
 
     return array (

@@ -110,15 +110,13 @@ class Trivia extends MyCRUD
     return $validation->get_errors_array();
   }
 
-  // int
-
-  public function __construct(string $id_quest = null, int $rev = 0)
+  // MARKED
+  public function __construct(MyPDO $PDO = null)
   {
-    $this->PDO = new MyPDO();
-    $id_quest = $id_quest ?? $this->getRandom($rev);
+    $this->PDO = $PDO ?? new MyPDO();
 
     $this->TABLE_NAME = 'trivia_quest';
-    $this->ID = array('id' => $id_quest);
+    $this->ID = array('id' => '');
     $this->COLUMNS = [
       'id' => null,
       'author' => null,
@@ -130,6 +128,18 @@ class Trivia extends MyCRUD
       'summary' => null,
       'correct_answer' => null,
     ];
+  }
+
+  public function setID(int $id)
+  {
+    $this->ID = array('id' => $id);
+    return $this;
+  }
+
+  public function randomID(int $rev = 0)
+  {
+    $this->ID = array('id' => $this->getRandom($rev));
+    return $this;
   }
 
   /** Random id pertanyaan

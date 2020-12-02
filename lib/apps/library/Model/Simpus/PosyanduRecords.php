@@ -12,7 +12,8 @@ use \PDO;
 class PosyanduRecords extends MyModel{
     private $_options = ["imperssion" => [":", ""], "operator"   => "="];
 
-    public function filtterById( $val){
+    public function filtterById( $val)
+    {
         $this->_FILTERS['id_hash']  = [
             "value"     => $val,
             "option"    => $this->_options,
@@ -22,7 +23,8 @@ class PosyanduRecords extends MyModel{
         return $this;
     }
 
-    public function filtterByAlamat(int $val){
+    public function filtterByAlamat(int $val)
+    {
         $this->_FILTERS['tempat_pemeriksaan']  = [
             "value"     => $val,
             "option"    => $this->_options,
@@ -31,7 +33,8 @@ class PosyanduRecords extends MyModel{
         return $this;
     }
 
-    public function __construct($PDO = null){
+    public function __construct(MyPDO $PDO = null)
+    {
         $this->_TABELS[] = 'data_posyandu';
 
         // contoh penambahan groub filter
@@ -53,27 +56,26 @@ class PosyanduRecords extends MyModel{
             ]
         ];
 
-        if( $PDO == null){
-            $this->PDO = new MyPDO();
-        }else{
-            $this->PDO = $PDO;
-        }
+        $this->PDO = $PDO ?? new MyPDO();
     }
 
-    public function CountID(){
-        if( $this->PDO == null) return [];                              
+    public function CountID()
+    {
+        if ($this->PDO == null) return array();
         $whereStatment = $this->getWhere();// WHERE $whereStatment
 
-        $this->PDO->query("SELECT
-                            COUNT(`id`) AS jumlah_kunjungan, `id_hash` 
-                         FROM
-                            `data_posyandu`
-                         GROUP BY 
-                            `id_hash`");
-        
-        foreach( $this->mergeFilters() as $filters){
-            foreach( $filters['filters'] as $key => $val){
-                if( isset( $val['value']) && $val['value'] != ''){
+        $this->PDO->query(
+            "SELECT
+                COUNT(`id`) AS jumlah_kunjungan, `id_hash` 
+            FROM
+                `data_posyandu`
+            GROUP BY 
+                `id_hash`"
+        );
+
+        foreach ($this->mergeFilters() as $filters) {
+            foreach ($filters['filters'] as $key => $val) {
+                if (isset( $val['value']) && $val['value'] != '') {
                     $type = $val['type'] ?? null;
                     $this->PDO->bind(":" . $key, $val['value'], $type);
                 }

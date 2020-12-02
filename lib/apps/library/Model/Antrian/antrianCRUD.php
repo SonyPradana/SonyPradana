@@ -16,6 +16,7 @@ class antrianCRUD extends MyCRUD
 
   public function setID(string $val)
   {
+    $val = strtoupper($val);
     $this->ID = ['poli' => $val];
     $this->COLUMNS['poli'] = $val;
     return $this;
@@ -25,9 +26,9 @@ class antrianCRUD extends MyCRUD
     $this->COLUMNS['current'] = $val;
     return $this;
   }
-  public function setCurrentTime(int $val)
+  public function setCurrentTime(int $val = null)
   {
-    $this->COLUMNS['current_times'] = $val;
+    $this->COLUMNS['current_times'] = $val ?? time();
     return $this;
   }
   public function setQueueing(int $val)
@@ -35,9 +36,9 @@ class antrianCRUD extends MyCRUD
     $this->COLUMNS['queueing'] = $val;
     return $this;
   }
-  public function setQueueingTime(int $val)
+  public function setQueueingTime(int $val = null)
   {
-    $this->COLUMNS['queueing_times'] = $val;
+    $this->COLUMNS['queueing_times'] = $val ?? time();
     return $this;
   }
 
@@ -73,9 +74,12 @@ class antrianCRUD extends MyCRUD
     return $this;
   }
 
-  public function __construct()
+  /**
+   * @param MyPDO $PDO DataBase class Dependency Injection
+   */
+  public function __construct(MyPDO $PDO = null)
   {
-    $this->PDO = new MyPDO();
+    $this->PDO = $PDO ?? new MyPDO();
     $this->TABLE_NAME = 'antrian';
     $this->COLUMNS = [
       'date_time' => null,

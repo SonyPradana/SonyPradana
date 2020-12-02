@@ -6,19 +6,22 @@ use System\Database\MyPDO;
 class WilayahKabSemarangService extends Middleware
 {
     /** @var MyPDO */
-    private $db;
+    private $PDO;
 
-    public function __construct()
+    /**
+     * @param MyPDO $PDO DataBase class Dependency Injection
+     */
+    public function __construct(MyPDO $PDO = null)
     {
-        $this->db = new MyPDO();
+        $this->PDO = $PDO ?? new MyPDO();
     }
 
     public function Data_Kabupaten()
     {
-        $this->db->query("SELECT `kecamatan`
+        $this->PDO->query("SELECT `kecamatan`
                             FROM `desa_kecamatan`
                             GROUP BY `kecamatan`");
-        $result = $this->db->resultset();
+        $result = $this->PDO->resultset();
 
         return [
             'status'        => 'ok',
@@ -32,11 +35,11 @@ class WilayahKabSemarangService extends Middleware
     public function Data_Kecamatan(array $params)
     {
         $kecamatan = $params['kecamatan'] ?? 'ungaran-barat';
-        $this->db->query("SELECT `desa`
+        $this->PDO->query("SELECT `desa`
                             FROM `desa_kecamatan`
                             WHERE `kecamatan` = :kecamatan");
-        $this->db->bind(':kecamatan', $kecamatan);
-        $result = $this->db->resultset();
+        $this->PDO->bind(':kecamatan', $kecamatan);
+        $result = $this->PDO->resultset();
         $result = array_column($result, 'desa');       
 
         return [

@@ -5,10 +5,13 @@ use System\Database\MyPDO;
 
 class antrianModel extends MyModel
 {
-    public function __construct()
+    /**
+     * @param MyPDO $PDO DataBase class Dependency Injection
+     */
+    public function __construct(MyPDO $PDO = null)
     {
         $this->_TABELS[]  = 'antrian';
-        $this->PDO = new MyPDO();
+        $this->PDO = $PDO ?? new MyPDO();
     }
 
     public function lastUpdate()

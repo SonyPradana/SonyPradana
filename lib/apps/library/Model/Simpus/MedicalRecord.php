@@ -244,21 +244,25 @@ class MedicalRecord
     }
 #endregion
 
-    /** buat class baru */
-    public function __construct()
+    /**
+     * buat class baru
+     * @param MyPDO $PDO Intial PDO
+     * */
+    public function __construct(MyPDO $PDO = null)
     {
-        $this->PDO = new MyPDO();
+        $this->PDO = $PDO ?? new MyPDO();
     }    
     
     /**
      * buat kelas baru menggunkan id
      * 
      * **multy contruct dost support by php**
-     * @param int $id 
+     * @param int $id
+     * @param MyPDO $PDO Intial PDO
      * @return MedicalRecord
      */
-    public static function withId($id){
-        $instance = new MedicalRecord();
+    public static function withId($id, MyPDO $PDO = null){
+        $instance = new MedicalRecord($PDO);
         $instance->_id = $id;
         $instance->refresh();
         return $instance;
@@ -269,10 +273,11 @@ class MedicalRecord
      * 
      * **multy contruct dost support by php**
      * @param array $data
+     * @param MyPDO $PDO Intial PDO
      * @return MedicalRecord
      */
-    public static function withData($data){
-        $instance = new MedicalRecord();
+    public static function withData($data, MyPDO $PDO = null){
+        $instance = new MedicalRecord($PDO);
         $instance->convertFromData($data);
         return $instance;
     }

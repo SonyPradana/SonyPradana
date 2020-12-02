@@ -5,8 +5,6 @@
  * - update antrian bisa langsung banyak (beberapa poli sekaligus)
  */
 
-require BASEURL . '/vendor/autoload.php';
-
 use Model\Antrian\{antrianCRUD, antrianModel};
 use Simpus\Apps\Middleware;
 use Simpus\Helper\HttpHeader;
@@ -15,25 +13,25 @@ class AntrianPoliService extends Middleware
 {  
   private function useAuth()
     {
-        // cek access
-        if( $this->getMiddleware()['auth']['login'] == false ){
-            HttpHeader::printJson(['status' => 'unauthorized'], 500, [
-                "headers" => [
-                    'HTTP/1.0 401 Unauthorized',
-                    'Content-Type: application/json'
-                ]
-            ]);
-        }
+      // cek access
+      if ($this->getMiddleware()['auth']['login'] == false ) {
+        HttpHeader::printJson(array('status' => 'unauthorized'), 500, array (
+          "headers" => array (
+              'HTTP/1.0 401 Unauthorized',
+              'Content-Type: application/json'
+          )
+        ));
+      }
     }
 
   private function errorhandler()
   {
-    HttpHeader::printJson(['status' => 'bad request'], 500, [
-        "headers" => [
-            'HTTP/1.1 400 Bad Request',
-            'Content-Type: application/json'
-        ]
-    ]);
+    HttpHeader::printJson(array('status' => 'bad request'), 500, array (
+      "headers" => array (
+          'HTTP/1.1 400 Bad Request',
+          'Content-Type: application/json'
+      )
+    ));
   }
   private function pusher($data)
   {
@@ -62,7 +60,7 @@ class AntrianPoliService extends Middleware
     }, $get_antrian);
   
     $this->pusher($get_antrian);
-    return array(
+    return array (
       'status' => 'ok',
       'last' => $antrian->lastUpdate(),
       'date' => '15 Oct 2020',
@@ -79,10 +77,12 @@ class AntrianPoliService extends Middleware
     $update_antrian = $this->validInput($params);
 
     $antrian_poli =  new antrianCRUD();
-    $antrian_poli->setID(strtoupper($update_poli));
-    $antrian_poli->setCurrent($update_antrian);
-    $antrian_poli->setCurrentTime(time());
-    $status = $antrian_poli->update();
+    $status = $antrian_poli
+      ->setID($update_poli)
+      ->setCurrent($update_antrian)
+      ->setCurrentTime()
+      ->update();
+
     $get_antrian = $antrian_poli->getAll()[0];
     $get_antrian['date_time'] = date('d F Y', $get_antrian['date_time']);
     $get_antrian['current_times'] = date('h:i a', $get_antrian['current_times']);
@@ -103,11 +103,13 @@ class AntrianPoliService extends Middleware
     $update_poli = $this->validPoli($params);
     $update_antrian = $this->validInput($params);
 
-    $antrian_poli =  new antrianCRUD();
-    $antrian_poli->setID(strtoupper($update_poli));
-    $antrian_poli->setQueueing($update_antrian);
-    $antrian_poli->setQueueingTime(time());
-    $status = $antrian_poli->update();
+    $antrian_poli =  new antrianCRUD();      
+    $status = $antrian_poli
+      ->setID($update_poli)
+      ->setQueueing($update_antrian)
+      ->setQueueingTime()
+      ->update();
+
     $get_antrian = $antrian_poli->getAll()[0];
     $get_antrian['date_time'] = date('d F Y', $get_antrian['date_time']);
     $get_antrian['queueing_times'] = date('h:i a', $get_antrian['current_times']);
@@ -115,7 +117,7 @@ class AntrianPoliService extends Middleware
 
     $this->pusher($get_antrian);
 
-    return array(
+    return array (
       'status'  => $status ? 'ok' : 'error',
       'data' => $get_antrian,
       'headers' => array('HTTP/1.1 200 Oke')
@@ -130,7 +132,7 @@ class AntrianPoliService extends Middleware
     $poli = $params['poli'] ?? $this->errorhandler();
     $antrian = new antrianCRUD();
     
-    $data = [];
+    $data = array();
     $status = false;
 
     if ($poli == 'full_reset') {
@@ -169,7 +171,7 @@ class AntrianPoliService extends Middleware
     $this->pusher($data);
 
 
-    return array(
+    return array (
       'status'  => $status ? 'ok' : 'error',
       'data' => $data,
       'headers' => array('HTTP/1.1 200 Oke')

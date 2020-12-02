@@ -23,10 +23,10 @@ class articleModel extends MyModel
         $this->_COLUMNS = $val;
     }
 
-    public function __construct()
+    public function __construct(MyPDO $PDO = null)
     {
         $this->_TABELS[]  = 'articles';
-        $this->PDO = new MyPDO();
+        $this->PDO = $PDO ?? new MyPDO();
     }
 
     public function rowCount(): int

@@ -98,9 +98,9 @@ class KIAAnakRecord
     }
 
     // constructor
-    public function __construct()
+    public function __construct(MyPDO $PDO = null)
     {
-        $this->PDO = new MyPDO();
+        $this->PDO = $PDO ?? new MyPDO();
     }
     public function loadWithID($id_hash, bool $refresh = true)
     {

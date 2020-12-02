@@ -45,6 +45,7 @@ class ReadMessage{
         $val = strtolower($val);
 
         $this->_sender = $val;
+        return $this;
     }
     /** filter pencarian berdasarkan penerima pesan
      * 
@@ -55,6 +56,7 @@ class ReadMessage{
         $val = strtolower($val);
 
         $this->_resiver = $val;
+        return $this;
     }
     /** filter pencarian berdasarkan jenis/category pesan
      * 
@@ -65,6 +67,7 @@ class ReadMessage{
         $val = strtolower($val);
 
         $this->_type = $val;
+        return $this;
     }
     /** filter pencarian berdasarkan isi pesan/content
      * 
@@ -75,6 +78,7 @@ class ReadMessage{
         $val = strtolower($val);
 
         $this->_message = $val;
+        return $this;
     }
     /** filter pencarian berdasarkan tanggal pengriman
      * 
@@ -88,6 +92,7 @@ class ReadMessage{
 
         $this->_date = $val;
         $this->_sign = $sign;
+        return $this;
     }
     
     /** menampilkan hasil sebanyak
@@ -102,6 +107,7 @@ class ReadMessage{
             $val = $val > 100 ? 100 : $val;
 
             $this->_limit = $val;
+            return $this;
         }
     }
 
@@ -110,6 +116,7 @@ class ReadMessage{
      */
     public function viewResiver($val){
         $this->_view_resiver = is_bool($val) ? $val : $this->_view_resiver;
+        return $this;
     }
 
     /**
@@ -117,7 +124,8 @@ class ReadMessage{
      * 
      * @return string query pencarian sql database
      */
-    private function query(){
+    private function query()
+    {
         $sender = $this->queryBuilder('sender', $this->_sender);
         $resiver = $this->queryBuilder('resiver', $this->_resiver);
         $type = $this->queryBuilder('type', $this->_type);
@@ -154,8 +162,9 @@ class ReadMessage{
      * @param string $val isi data dari colom yg akan digunakan
      * @return string format parameter query (eg: AND table_name = 'value')
      */
-    private function queryBuilder($key, $val){
-        if( $val != '' ){
+    private function queryBuilder($key, $val)
+    {
+        if ($val != '') {
             $bulider = " AND " ."$key" . " LIKE " . "'$val'";
             return $bulider;
         }
@@ -173,9 +182,10 @@ class ReadMessage{
      * @param string $sign tanda baca ntuk mencari data diatas atau dibawah parameter
      * @return string format parameter query (eg: AND table_name > 'value')
      */
-    private function queryBuilder_diff($key, $val, $sign = ">"){
+    private function queryBuilder_diff($key, $val, $sign = ">")
+    {
         $sign = $sign == ">" ? $sign : "<";
-        if( $val != '' ){
+        if ($val != '') {
             $bulider = " AND " ."$key" . $sign . "'$val'";
             return $bulider;
         }
@@ -189,8 +199,9 @@ class ReadMessage{
      * @param string $key nama column data base
      * @param boolean $val opsi untuk nenampilkan column pada result
      */
-    private function colmBulider($key, $val){
-        if( $val ){
+    private function colmBulider($key, $val)
+    {
+        if ($val) {
             $bulider = $key . ', ';
             return $bulider;
         }
@@ -204,16 +215,17 @@ class ReadMessage{
      * @param boolean convert data dalam bentuk json
      * @return array hasil dari table data base
      */
-    public function bacaPesan($convrt_to_json = false){
+    public function bacaPesan($convrt_to_json = false)
+    {
         // koneksi dan membuat query
         $link = mysqli_connect(DB_HOST, DB_USER, DB_PASS, "simpusle_simpus_lerep");
         $query = $this->query();
         // echo $query;
-        if( $query != ''){
+        if ($query != '') {
             // mengambil data dari database
             $result = mysqli_query($link, $query);
             $data = [];
-            while( $feedback = mysqli_fetch_assoc( $result) ){
+            while ($feedback = mysqli_fetch_assoc( $result)) {
                 $data[] = $feedback;
             }
             // mengembalikan data dengan format array
@@ -227,15 +239,16 @@ class ReadMessage{
      * 
      * @return array hasil dari table data base
      */
-    public function bacaSemua(){
+    public function bacaSemua(): array
+    {
         // koneksi data base
         $link = mysqli_connect(DB_HOST, DB_USER, DB_PASS, "simpusle_simpus_lerep");
         $limit = $this->_limit;
         $query = "SELECT * FROM public_message LIMIT $limit";
         // mengambil data dari data base (mengambil semua tanpa di filter)
         $result = mysqli_query($link, $query);
-        $data = [];
-        while( $feedback = mysqli_fetch_assoc( $result) ){
+        $data = array();
+        while ($feedback = mysqli_fetch_assoc( $result)) {
             $data[] = $feedback;
         }
         // mengembailkan data dengan format array 

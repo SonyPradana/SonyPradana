@@ -78,16 +78,27 @@ class PosyanduRecord
         return $this;
     }
 
-
-    public function __construct(string $code_hash)
+    /**
+     * Constructer
+     * 
+     * After make new instant you MUST validate before you can make CRUD
+     * @param MyPDO $PDO DataBase class Dependency Injection
+     */
+    public function __construct(MyPDO $PDO = null)
     {
-        $this->PDO = new MyPDO();
+        $this->PDO = $PDO ?? new MyPDO();
+        $this->_isValid = false;
+    }
+    
+    public function validate(string $code_hash)
+    {
+        $this->_isValid = $this->isValid($code_hash);      //  TODO data pertama selalu bernilai true
         $this->_code_hash = $code_hash;
-        $this->_isValid = $this->isValid( $this->_code_hash );      //  TODO data pertama selalu bernilai true
+        return $this;
     }
 
     // function
-    private function isValid($code_hash) :bool
+    private function isValid($code_hash): bool
     {
         if( $code_hash == 0) return false;
         $this->PDO->query("SELECT `id_hash` FROM `data_kia_anak` WHERE `id_hash` = :id_hash LIMIT 1");
@@ -95,11 +106,6 @@ class PosyanduRecord
         if( $this->PDO->single() ){    
             return true;
         }
-        return false;
-    }
-
-    public function validation(): bool
-    {
         return false;
     }
 
