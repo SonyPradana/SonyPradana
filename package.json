@@ -7,13 +7,12 @@
     "lib": "lib"
   },
   "scripts": {
-    "sass" : "npm run sass-full && npm run sass-cards && npm run sass-style && npm run sass-widget",
-    "sass-full": "sass --no-source-map --style=compressed lib/scss/full.style.scss public/lib/css/ui/v1.1/full.style.css",
-    "sass-cards": "sass --no-source-map --style=compressed lib/scss/cards.scss public/lib/css/ui/v1.1/cards.css",
-    "sass-style": "sass --no-source-map --style=compressed lib/scss/style.scss public/lib/css/ui/v1.1/style.css",
-    "sass-widget": "sass --no-source-map --style=compressed lib/scss/widgets.scss public/lib/css/ui/v1.1/widgets.css",
-    "terser-index": "terser -c -m -- lib/js/index.js > public/lib/js/index.min.js",
-    "publish": "git checkout master && git merge feature && git push github master && git ftp push"
+    "dev": "npm run development",
+    "development": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "watch": "npm run development -- --watch",
+    "hot": "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "prod": "npm run production",
+    "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
   },
   "keywords": [
     "simpus",
@@ -24,5 +23,13 @@
     "puskesmas"
   ],
   "author": "angger",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "laravel-mix": "^5.0.9",
+    "resolve-url-loader": "^3.1.0",
+    "sass": "^1.29.0",
+    "sass-loader": "^8.0.2",
+    "vue-template-compiler": "^2.6.12"
+  }
 }

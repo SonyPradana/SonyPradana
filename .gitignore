@@ -4,6 +4,8 @@ test/thumbnail
 vendor/
 /lib/apps/config/database_local.config.php
 .env
+node_modules/
+public/mix-manifest.json
 
 ### MicrosoftOffice ###
 *.tmp
