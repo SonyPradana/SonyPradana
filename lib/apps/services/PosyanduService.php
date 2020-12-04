@@ -1,7 +1,7 @@
 <?php
 
 use Simpus\Apps\Middleware;
-use Simpus\Helper\ConvertCode;
+use Convert\Converter\ConvertCode;
 use Model\Simpus\PosyanduRecords;
 use Simpus\Helper\HttpHeader;
 use Model\Simpus\GroupsPosyandu;

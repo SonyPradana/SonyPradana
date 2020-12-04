@@ -5,12 +5,20 @@
     "authors": [
     {
         "name": "Angger Mulia Pradana",
-        "homepage": "http://simpuslerep.com/"
+        "homepage": "http://simpuslerep.com/",
+        "email": "sonypradana@gmail.com"
     }],
     "require": {
         "gumlet/php-image-resize": "^1.9",
         "pusher/pusher-php-server": "^4.1",
         "wixel/gump": "^1.12",
-        "vlucas/phpdotenv": "^5.2"
+        "vlucas/phpdotenv": "^5.2",        
+        "sonypradana/convertcode": "^0.9.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.3"
+    },
+    "scripts": {
+        "test": "phpunit"
     }
 }

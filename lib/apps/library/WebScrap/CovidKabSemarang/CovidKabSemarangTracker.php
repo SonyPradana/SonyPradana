@@ -4,7 +4,7 @@ namespace WebScrap\CovidKabSemarang;
 
 use WebScrap\CovidKabSemarang\CovidKabSemarang;
 use System\Database\MyPDO;
-use Simpus\Helper\ConvertCode;
+use Convert\Converter\ConvertCode;
 use Simpus\Helper\Scheduler;
 
 /** class untuk minyimpan data kedalam data base */
