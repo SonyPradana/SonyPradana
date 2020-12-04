@@ -4,7 +4,7 @@ session_start();
 use Simpus\Apps\{Route, Controller, Middleware};
 use Simpus\Auth\{Auth, User};
 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/init.php';
+require_once __DIR__. '/../lib/apps/init.php';
 
 $app   = new Route();
 $token = $_SESSION['token'] ?? '';
