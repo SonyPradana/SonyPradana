@@ -3,11 +3,14 @@
 use Simpus\Apps\Middleware;
 use Simpus\Helper\HttpHeader;
 use Simpus\Message\{Rating, ReadMessage};
+use System\Database\MyPDO;
 
 class MessageService extends Middleware
 {
-    public function __construct()
+    protected $PDO = null;
+    public function __construct(MyPDO $PDO = null)
     {
+        $this->PDO = $PDO ?? new MyPDO();
     }
 
     private function useAuth()
@@ -70,12 +73,12 @@ class MessageService extends Middleware
     {
         $this->useAuth();
 
-        $limit      = $_GET['limit'] ?? 100;
-        $page       = $_GET['page'] ?? 1;
-        $type       = $_GET['type'] ?? '';
+        $limit      = $param['limit'] ?? 100;
+        $page       = $param['page'] ?? 1;
+        $type       = $param['type'] ?? '';
         $resiver    = 'sonypradana@gmail.com';
 
-        $read_message = new ReadMessage();
+        $read_message = new ReadMessage($this->PDO);
         $read_message->filterByPenerima($resiver);
         $read_message->filterByType($type);
         $read_message->currentPage($page);
@@ -93,7 +96,7 @@ class MessageService extends Middleware
                 'maks_page' => ceil($maksData / $limit)
             ),
             'data'      => $result ?? [],
-            'headers'   => ['HTTP/1.1 200 ok']
+            'headers'   => ['HTTP/1.1 200 Oke']
         ];
     }
 

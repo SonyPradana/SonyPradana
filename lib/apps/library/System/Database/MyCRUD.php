@@ -1,18 +1,20 @@
 <?php namespace System\Database;
 
+use PDO;
+use phpDocumentor\Reflection\Types\This;
 use System\Database\CrudInterface;
 use System\Database\MyPDO;
 
 abstract class MyCRUD implements CrudInterface
 {
   /** @var MyPDO */
-  protected $PDO;
+  protected MyPDO $PDO;
 
-  protected $TABLE_NAME;
+  protected string $TABLE_NAME;
   /** @var array */
-  protected $COLUMNS = [];
+  protected array $COLUMNS = [];
   // TODO: merge ke FILTERS
-  protected $ID;
+  protected array $ID;
 
   protected function setter(string $key, $val)
   {
@@ -130,6 +132,11 @@ abstract class MyCRUD implements CrudInterface
       return true;
     }
     return false;
+  }
+
+  public function getLastInsertID(): string
+  {
+    return $this->PDO->lastInsertId() ?? '';
   }
 
   public function convertFromArray(): bool

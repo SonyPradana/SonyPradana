@@ -3,6 +3,8 @@
 use Simpus\Apps\Middleware;
 use Model\Simpus\KIAAnakRecords;
 use Simpus\Helper\HttpHeader;
+use Simpus\Auth\Auth;
+use Simpus\Auth\User;
 
 class AuthService extends Middleware
 {

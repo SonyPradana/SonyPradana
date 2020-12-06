@@ -6,15 +6,17 @@
 
 use Simpus\Apps\Middleware;
 use Simpus\Helper\Scheduler;
+use System\Database\MyPDO;
 use WebScrap\CovidKabSemarang\CovidKabSemarang;
 use WebScrap\CovidKabSemarang\CovidKabSemarangTracker;
 
 class CovidKabSemarangService extends Middleware
 {
-    // TODO: add leyer for version control in construct
-    public function __construct()
+    protected $PDO = null;
+
+    public function __construct(Mypdo $PDO = null)
     {
-        
+        $this->PDO = $PDO ?? new MyPDO();
     }
 
 
@@ -39,7 +41,7 @@ class CovidKabSemarangService extends Middleware
             $date_format = 'Y-m-d h:i:sa';
         }
 
-        $covid_tracker  = new CovidKabSemarangTracker();
+        $covid_tracker  = new CovidKabSemarangTracker($this->PDO);
 
         // configurasi
         $list_date      = $covid_tracker->listOfDate();
@@ -108,7 +110,7 @@ class CovidKabSemarangService extends Middleware
             ];
         }
 
-        $end_point['data'] = count($result) == 1 ? $result[0] : $result;
+        $end_point['data']      = count($result) == 1 ? $result[0] : $result;
         $end_point['status']    = 'ok';
         $end_point['headers']   = ['HTTP/1.1 200 Oke'];
 
@@ -319,15 +321,15 @@ class CovidKabSemarangService extends Middleware
             return $this->versionControl();
         }
 
-        $schadule   = new Scheduler(1);
-        $schadule->read();
+        $schadule   = new Scheduler($this->PDO);
+        $schadule(1)->read();
 
         $next_index     = $schadule->getLastModife() + $schadule->getInterval();
         $allow_index    = $next_index > (int) time() ? false : true;
         $index_status   = 'no index';
 
         if($allow_index){
-            $new_reqeust = new CovidKabSemarangTracker();
+            $new_reqeust = new CovidKabSemarangTracker($this->PDO);
             if( $new_reqeust->createIndex() ){
                 $schadule->setLastModife(time());
                 $schadule->update();
@@ -365,8 +367,8 @@ class CovidKabSemarangService extends Middleware
         ];
         
         // get last time data modife
-        $schadule   = new Scheduler(1);
-        $schadule->read();
+        $schadule   = new Scheduler($this->PDO);
+        $schadule(1)->read();
 
         // indexing data
         $index = new CovidKabSemarangTracker();
@@ -383,14 +385,15 @@ class CovidKabSemarangService extends Middleware
 
     public function info(array $params)
     {
-        $schadule   = new Scheduler(1);
-        $schadule->read();
+        $schadule   = new Scheduler($this->PDO);
+        $status     = $schadule(1)->read();
 
         $last_index     = date("Y/m/d h:i:sa", $schadule->getLastModife());
         $next_index     = date("Y/m/d h:i:sa", $schadule->getLastModife() + $schadule->getInterval());
         $allow_index    = $schadule->getLastModife() + $schadule->getInterval() > (int) time() ? false : true;
 
         return [
+            'status'        => $status ? 'ok' : 'error',
             'last_index'    => $last_index,
             'next_index'    => $next_index,
             'allow_index'   => $allow_index,

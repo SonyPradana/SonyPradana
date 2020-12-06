@@ -58,10 +58,23 @@ class Scheduler
         return $this;
     }
 
-    public function __construct(string $id = '')
+    /**
+     * @param MyPDO $PDO DI database
+     */
+    public function __construct(MyPDO $PDO = null)
     {
-        $this->db = new MyPDO();
+        $this->db = $PDO ?? new MyPDO();
+    }
+
+    /**
+     * Set id using invoke class
+     * @param string $id ID project
+     * @return Schaduler chain-support
+     */
+    public function __invoke(string $id = '')
+    {
         $this->id = $id;
+        return $this;
     }
 
     public function create(): bool

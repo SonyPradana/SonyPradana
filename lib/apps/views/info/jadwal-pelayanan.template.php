@@ -92,7 +92,7 @@
                         <label for="input-pilih-bulan">Lihat Imunisasi Bulan Lainnya: </label>
                         <select name="pilih-bulan" id="input-pilih-bulan" v-on:change="onChange($event)">
                             <option hidden selected>Pilih Bulan</option>
-                            <option v-for="date in month" v-bind:value="date" :key="date" v=text="months[ Number( date ) - 1 ]"></option>
+                            <option v-for="date in month" v-bind:value="date" :key="date" v-text="months[ Number( date ) - 1 ]"></option>
                         </select>
                     </div>
                     <h2>Jadwal Pelayanan</h2>

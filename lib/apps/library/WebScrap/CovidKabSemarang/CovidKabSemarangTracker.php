@@ -41,8 +41,8 @@ class CovidKabSemarangTracker
      */
     public function createIndex(): bool
     {
-        $schadule       = new Scheduler(1);
-        $schadule->read();
+        $schadule       = new Scheduler($this->PDO);
+        $schadule(1)->read();
        
         $new_request    = new CovidKabSemarang();
         $daftar         = $new_request->Daftar_Kecamatan;
@@ -116,8 +116,8 @@ class CovidKabSemarangTracker
         
         // compire new data dan old data
         if (array_values($new_data) != $old_data) {
-            $schadule   = new Scheduler(1);
-            $schadule->read();
+            $schadule   = new Scheduler($this->PDO);
+            $schadule(1)->read();
             // simpan data
             foreach ($data_covid as $key => $value) {
                 $data_section = $value['data'];

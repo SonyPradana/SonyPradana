@@ -48,4 +48,24 @@ final class BasicTest extends TestCase
     $this->assertFileExists('./simpus');
     $this->assertFileExists('./webpack.mix.js');
   }
+
+  public function testAssetStrucktur(): void
+  {
+    // scss
+    $this->assertFileExists('./lib/scss/cards.scss');
+    $this->assertFileExists('./lib/scss/full.style.scss');
+    $this->assertFileExists('./lib/scss/style.scss');
+    $this->assertFileExists('./lib/scss/widgets.scss');
+
+    // js
+    $this->assertFileExists('./lib/js/index.js');
+    $this->assertFileExists('./lib/js/bundles/keepalive.js');
+    $this->assertFileExists('./lib/js/bundles/message.js');
+    // $this->assertFileExists('./public/lib/js/bundles.js');
+    
+    // data
+    $this->assertFileExists('./public/data/img/display-picture/no-image.png');
+    $this->assertFileExists('./public/data/img/logo/logo-puskesmas.png');
+
+  }
 }

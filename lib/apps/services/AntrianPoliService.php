@@ -8,6 +8,7 @@
 use Model\Antrian\{antrianCRUD, antrianModel};
 use Simpus\Apps\Middleware;
 use Simpus\Helper\HttpHeader;
+use System\Database\MyPDO;
 
 class AntrianPoliService extends Middleware
 {  
@@ -35,7 +36,15 @@ class AntrianPoliService extends Middleware
   }
   private function pusher($data)
   {
-    $pusher = new Pusher\Pusher(
+    $this->Pusher->trigger('my-channel', 'my-event', $data);
+  }
+  protected $PDO = null;
+  protected $Pusher = null;
+
+  public function __construct(MyPDo $PDO = null)
+  {
+    $this->PDO = $PDO ?? new MyPDO();  
+    $this->Pusher = new Pusher\Pusher(
       PUSHER_APP_KEY,
       PUSHER_APP_SECRET,
       PUSHER_APP_ID,
@@ -43,14 +52,12 @@ class AntrianPoliService extends Middleware
         'cluster' => PUSHER_APP_CLUSTER,
         'useTLS' => true
       )
-    );
-
-    $pusher->trigger('my-channel', 'my-event', $data);
+    );;
   }
 
   public function antrian(array $params): array
   {
-    $antrian = new antrianModel();
+    $antrian = new antrianModel($this->PDO);
     $get_antrian = $antrian->resultAll();
     
     $get_antrian = array_map(function($x) {
@@ -76,7 +83,7 @@ class AntrianPoliService extends Middleware
     $update_poli = $this->validPoli($params);
     $update_antrian = $this->validInput($params);
 
-    $antrian_poli =  new antrianCRUD();
+    $antrian_poli =  new antrianCRUD($this->PDO);
     $status = $antrian_poli
       ->setID($update_poli)
       ->setCurrent($update_antrian)
@@ -103,7 +110,7 @@ class AntrianPoliService extends Middleware
     $update_poli = $this->validPoli($params);
     $update_antrian = $this->validInput($params);
 
-    $antrian_poli =  new antrianCRUD();      
+    $antrian_poli =  new antrianCRUD($this->PDO);      
     $status = $antrian_poli
       ->setID($update_poli)
       ->setQueueing($update_antrian)
@@ -130,7 +137,7 @@ class AntrianPoliService extends Middleware
     $this->useAuth();
 
     $poli = $params['poli'] ?? $this->errorhandler();
-    $antrian = new antrianCRUD();
+    $antrian = new antrianCRUD($this->PDO);
     
     $data = array();
     $status = false;

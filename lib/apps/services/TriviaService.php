@@ -3,6 +3,7 @@
 use Model\Trivia\Trivia;
 use Simpus\Apps\Middleware;
 use Simpus\Helper\HttpHeader;
+use System\Database\MyPDO;
 
 class TriviaService extends Middleware
 {
@@ -19,16 +20,23 @@ class TriviaService extends Middleware
     }
   }
 
-  public function Delete_Ques(int $id)
+  protected $PDO = null;
+  public function __construct(MyPDO $PDO = null)
+  {
+    $this->PDO = $PDO ?? new MyPDO();;
+  }
+
+  public function Delete_Ques(array $params)
   {
     $this->UseAuth();
 
-    $triva = new Trivia();
-    $triva->setID($id);
+    $triva = new Trivia($this->PDO);
+    $triva->setID($params['id'] ?? 0);
 
     return array (
       'status' => 'ok',
-      'success_deleted' => $triva->delete()
+      'success_deleted' => $triva->delete(),
+      'headers' => ['HTTP/1.1 200 Oke']
     );
   }
 
@@ -59,7 +67,7 @@ class TriviaService extends Middleware
     $question_id = $params['question_id'] ?? 1;
     $question_answer = $params['question_answer'] ?? 1;
 
-    $triva = new Trivia();
+    $triva = new Trivia($this->PDO);
     $triva->setID($question_id)->read();
 
     $summary = $triva->submitAnswer($question_answer);
@@ -108,12 +116,15 @@ class TriviaService extends Middleware
       'explanation' => $params['explanation'] ?? ''
     );
 
-    $trivia = new Trivia();
+    $trivia = new Trivia($this->PDO);
     $status = $trivia->newQuest($data);
 
     return array (
       'status' => $status === true ? 'ok' : 'error',
       'error' => $status,
+      'info' => array (
+        'last_id' => $trivia->getLastInsertID()
+      ),
       'headers' => ['HTTP/1.1 200 Oke']
     );
   }  

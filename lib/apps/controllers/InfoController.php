@@ -71,7 +71,7 @@ class InfoController extends Controller
   public function Jadwal_Pelayanan()
   {
     $author = new User("angger");
-    $imun   = new JadwalKia(date('m'), date('Y'));
+    $imun   = new JadwalKia();
 
     return $this->view('/info/jadwal-pelayanan', [
       "auth"    => $this->getMiddleware()['auth'],
@@ -89,7 +89,7 @@ class InfoController extends Controller
             "display_name"          => $author->getDisplayName(),
             "display_picture_small" => $author->getSmallDisplayPicture()
         ],
-        "raw_data"          => $imun->getData(),
+        "raw_data"          => $imun->getData(date('m'), date('Y')),
         "avilable_month"    => $imun->getAvilabeMonth()
       ]
     ]);

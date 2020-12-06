@@ -4,42 +4,33 @@ use System\Database\MyPDO;
 use \DateTime;
 
 class JadwalKia
-{    
-    /** @var int Bulan dalam angka */
-    private $_month;
-    /** @var int Tahun */
-    private $_year;
+{
+    /** @var MyPDO */
+    protected $PDO = null;
 
     /**
      * Membuat kelas untuk memenage jadwal poli KIA
-     * @param string $bulan Bulan dalam angka
-     * @param string $year Tahun
+     * @param MyPDO Database Dependecy Injection
      */
-    public function __construct(string $bulan, string $tahun = "2020")
+    public function __construct(MyPDO $PDO = null)
     {
-        // cek bulan sudah terdaftar atau belum
-        $this->_month = $bulan;
-        $this->_year = $tahun;
+        $this->PDO = $PDO ?? new MyPDO();
     }
 
-    public function getdata(): array
+    public function getdata(string $bulan, string $tahun = "2020"): array
     {
-        $month = $this->_month;
-        $year  = $this->_year;
-
         // array untuk dikembalikan di result
         $date = [];
         $data = [];
-        $first_week = [];   $date_fw = date("Y-m-d", strtotime("first friday $year-$month"));
-        $third_week = [];   $date_tw = date("Y-m-d", strtotime("third friday $year-$month"));
+        $first_week = [];   $date_fw = date("Y-m-d", strtotime("first friday $tahun-$bulan"));
+        $third_week = [];   $date_tw = date("Y-m-d", strtotime("third friday $tahun-$bulan"));
 
         // koneksi data base ambil berdasarkan kriteria yang dibuat (bulan / tahun)
-        $db = new MyPDO();
-        $db->query("SELECT `date`, `event_detail` FROM `list_of_services` WHERE `event`=:event AND MONTH(Date) = :m");
-        $db->bind(':event', "imunisasi anak");
-        $db->bind(':m', $month);
+        $this->PDO->query("SELECT `date`, `event_detail` FROM `list_of_services` WHERE `event`=:event AND MONTH(Date) = :m");
+        $this->PDO->bind(':event', "imunisasi anak");
+        $this->PDO->bind(':m', $bulan);
         // mengisi array sesuai hasil ditemukan didata base
-        foreach ($db->resultset() as $row) {
+        foreach ($this->PDO->resultset() as $row) {
             // mengisi array jenis vaksin
             $data[$row['event_detail']][] = date("d M", strtotime($row['date']));
             // mengisi array tanggal berdasarkan jenis vaksin
@@ -60,7 +51,7 @@ class JadwalKia
         // menyusun hasil data
         $result = [
             "version" => "1.0",
-            "bulan" => date("M Y", strtotime("$year-$month-1")),
+            "bulan" => date("M Y", strtotime("$tahun-$bulan-1")),
             "jadwal" => $date,
             "jumat pertama" => $first_week,
             "jumat ketiga" => $third_week,
@@ -98,11 +89,10 @@ class JadwalKia
     public function cekJadwal($date, $vaksin): bool
     {
         // koneksi data base
-        $db = new MyPDO();
-        $db->query("SELECT `date`, `event_detail` FROM `list_of_services` WHERE `date`=:tanggal AND `event_detail`= :ev_dt");
-        $db->bind(':tanggal', $date);
-        $db->bind(':ev_dt', $vaksin);
-        if ($db->single()) {
+        $this->PDO->query("SELECT `date`, `event_detail` FROM `list_of_services` WHERE `date`=:tanggal AND `event_detail`= :ev_dt");
+        $this->PDO->bind(':tanggal', $date);
+        $this->PDO->bind(':ev_dt', $vaksin);
+        if ($this->PDO->single()) {
             // data sudah ada
             return true;
         }
@@ -121,15 +111,14 @@ class JadwalKia
         // cek data kembar
         if ($this->cekJadwal($date, $vaksin)) return false;
         // koneksi data base
-        $db = new MyPDO();
-        $db->query("INSERT INTO `list_of_services` (`id`, `date`, `unit`, `event`, `event_detail`) VALUES (:id, :tanggal, :unit, :ev, :ev_dt )");
-        $db->bind(':id', "");
-        $db->bind(':tanggal', $date);
-        $db->bind(':unit', "kia");
-        $db->bind(':ev', "imunisasi anak");
-        $db->bind(':ev_dt', $vaksin);
-        $db->execute();
-        if ($db->rowCount() > 0) {
+        $this->PDO->query("INSERT INTO `list_of_services` (`id`, `date`, `unit`, `event`, `event_detail`) VALUES (:id, :tanggal, :unit, :ev, :ev_dt )");
+        $this->PDO->bind(':id', "");
+        $this->PDO->bind(':tanggal', $date);
+        $this->PDO->bind(':unit', "kia");
+        $this->PDO->bind(':ev', "imunisasi anak");
+        $this->PDO->bind(':ev_dt', $vaksin);
+        $this->PDO->execute();
+        if ($this->PDO->rowCount() > 0) {
             // data berhasil disimpan
             return true;
         }
@@ -147,13 +136,12 @@ class JadwalKia
     public function editJadwal($from_date, $from_vaksin, $to_date, $to_vaksin)
     {
         // koneksi data base
-        $db = new MyPDO();
-        $db->query("UPDATE `list_of_services` SET `date` = :t_tanggal', `event_detail` = :t_ev_dt WHERE `date` = :f_tanggal AND `event_detail`= :f_ev_dt");
-        $db->bind(':f_tanggal', $from_date);
-        $db->bind(':f_ev_dt', $from_vaksin);
-        $db->bind(':t_tanggal', $to_date);
-        $db->bind(':t_ev_dt', $to_vaksin);
-        $db->execute();
+        $this->PDO->query("UPDATE `list_of_services` SET `date` = :t_tanggal', `event_detail` = :t_ev_dt WHERE `date` = :f_tanggal AND `event_detail`= :f_ev_dt");
+        $this->PDO->bind(':f_tanggal', $from_date);
+        $this->PDO->bind(':f_ev_dt', $from_vaksin);
+        $this->PDO->bind(':t_tanggal', $to_date);
+        $this->PDO->bind(':t_ev_dt', $to_vaksin);
+        $this->PDO->execute();
     }
 
     /**

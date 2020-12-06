@@ -2,12 +2,20 @@
 
 use Model\Article\articleModel;
 use Simpus\Apps\Middleware;
+use System\Database\MyPDO;
 
 class NewsFeederService extends Middleware
 {
+    protected $PDO = null;
+
+    public function __construct(MyPDO $PDO = null)
+    {
+        $this->PDO = $PDO ?? new MyPDO();
+    }
+
     public function ResendNews(array $params): array
     {
-        $article_feed   = new articleModel();
+        $article_feed   = new articleModel($this->PDO);
         $article_feed->selectColomn(
             [
                 'id', 
@@ -43,7 +51,7 @@ class NewsFeederService extends Middleware
         }
 
         return [
-            'status'    => 'ok',
+            'status'    => empty($result) ? 'no content' : 'ok',
             'data'      => $result,
             'headers'   => ['HTTP/1.1 200 Oke']
         ];
