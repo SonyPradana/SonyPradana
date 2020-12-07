@@ -10,7 +10,7 @@ class articleModel extends MyModel
 
     public function filterURLID(string $val)
     {
-        $this->_FILTERS['url_id'] = [
+        $this->_FILTERS['slug'] = [
             'value'     => $val,
             'option'    => $this->_options,
             'type'      => PDO::PARAM_STR

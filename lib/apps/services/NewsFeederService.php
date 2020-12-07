@@ -23,7 +23,7 @@ class NewsFeederService extends Middleware
                 'create_time',
                 'image_url',
                 'image_alt',
-                'url_id',
+                'slug',
                 'title',
                 'raw_content'
             ]);
@@ -44,7 +44,7 @@ class NewsFeederService extends Middleware
                 'date' => $format_tanggal,
                 'image' => $img_loc,
                 'alt' => $article['image_alt'],
-                'url' => '/read/' . $article['url_id'],
+                'url' => '/read/' . $article['slug'],
                 'title' => $article['title'],
                 'details' =>  $article['discription']
             ];
