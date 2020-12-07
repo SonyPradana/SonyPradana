@@ -13,9 +13,14 @@ class Middleware
         ]
     ];
 
+    private static $hasSet = false;
     public static function setMiddleware(array $middleware){
-        self::$_middleware = (array) $middleware;
+        if (! self::$hasSet) {
+            self::$_middleware = (array) $middleware;
+            self::$hasSet = true;
+        }
     }
+
     protected static function getMiddleware() :array{
         return (array) self::$_middleware;
     }
