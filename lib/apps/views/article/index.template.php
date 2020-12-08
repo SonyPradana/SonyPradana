@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>    
+<head>
     <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/meta/metatag.php') ?>
 
     <link rel="stylesheet" href="/lib/css/ui/v1.1/style.css">
@@ -10,7 +10,7 @@
     <script src="/lib/js/bundles/keepalive.min.js"></script>
     <script src="/lib/js/vendor/vue/vue.min.js"></script>
     <style>
-        .container.width-view {            
+        .container.width-view {
             display: grid;
             grid-template-columns: 1fr minmax(250px, 280px);
             grid-column-gap: 32px; grid-row-gap: 32px;
@@ -18,11 +18,14 @@
         main {
             overflow-x: auto;
         }
-    
+        .table-container {
+            overflow-x: auto;
+        }
+
         aside {
             margin-top: 150px;
         }
-    
+
         @media screen and (max-width: 767px) {
             .container.width-view {
                 grid-template-columns: 1fr
@@ -37,7 +40,7 @@
     </header>
 
     <div class="container width-view">
-        <main>            
+        <main>
             <div class="coit breadcrumb">
                 <ul class="crumb">
                     <li><a href="/">Home</a></li>
@@ -50,7 +53,7 @@
                     <h1><?= $content->article['title'] ?></h1>
                     <div class="article breadcrumb">
                         <div class="author">
-                            <img src="<?= $content->article['display_picture_small'] ?>" alt="@<?= $content->article['display_name'] ?>">    
+                            <img src="<?= $content->article['display_picture_small'] ?>" alt="@<?= $content->article['display_name'] ?>">
                             <div class="author-name"><a href="/Ourteam"><?= $content->article['display_name'] ?></a></div>
                         </div>
                         <div class="time"><?= $content->article['article_create'] ?></div>
@@ -66,7 +69,7 @@
                 </div>
                 <div class="article-body">
                    <?= $content->article['raw_content'] ?>
-                </div>     
+                </div>
             </article>
         </main>
         <aside>
@@ -78,7 +81,7 @@
     <footer>
         <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/footer/footer.html') ?>
     </footer>
-    
+
     <!-- hidden -->
     <div id="modal">
         <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/control/modal.html') ?>
@@ -101,7 +104,7 @@
                 // ok function : redirect logout and then redirect to login page to accses this page
                 window.location.href = "/login?url=<?= $_SERVER['REQUEST_URI'] ?>&logout=true"
             },
-            () => {          
+            () => {
                 // close fuction : just logout
                 window.location.href = "/logout?url=<?= $_SERVER['REQUEST_URI'] ?>"
             }

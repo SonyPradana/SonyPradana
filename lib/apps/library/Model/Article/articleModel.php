@@ -15,7 +15,7 @@ class articleModel extends MyModel
             'option'    => $this->_options,
             'type'      => PDO::PARAM_STR
         ];
-        
+
         return $this;
     }
     public function selectColomn(array $val)
@@ -27,6 +27,7 @@ class articleModel extends MyModel
     {
         $this->_TABELS[]  = 'articles';
         $this->PDO = $PDO ?? new MyPDO();
+        $this->_SORT_ORDER = "`create_time` DESC";
     }
 
     public function rowCount(): int

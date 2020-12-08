@@ -28,6 +28,17 @@ article.news-card {
 
 }
 
+article.news-card:not(:last-child) {
+    margin-bottom: 16px;
+}
+
+@media screen  and (max-width: 767px) {
+    article.news-card:not(:last-child) {
+        border-bottom: 1px solid #ddd;
+        margin-bottom: 20px;
+    }
+}
+
 @media screen and (max-width: 479px) {
     article.news-card {
         flex-direction: column;

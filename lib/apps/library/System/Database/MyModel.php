@@ -10,6 +10,8 @@ abstract class MyModel
     protected $_TABELS  = [];
     /** column yang dugunaka */
     protected $_COLUMNS = ['*'];
+    /** column order */
+    protected $_SORT_ORDER = "`id` DESC";
     /** logica where stactment [AND / OR] */
     protected $_STRICT_SEARCH = true;
 
@@ -38,8 +40,8 @@ abstract class MyModel
 
     /**
      * HELPER
-     * 
-     * menggabungkan primery filter array dengan groups filter, tanpa merubah isi groups class. 
+     *
+     * menggabungkan primery filter array dengan groups filter, tanpa merubah isi groups class.
      * karean query di-runing dalam bentuk group filter
      * @return array New Groups array
      */
@@ -56,7 +58,7 @@ abstract class MyModel
         // membuat group filter baru tanpa merubah grups filter dr classs
         return $new_grups_filters;
     }
-    
+
     /**
      * mengenered grups filter ke-dalam format sql query (preapre statment)
      * @return string query yg siap di esekusi
@@ -66,8 +68,9 @@ abstract class MyModel
         $table  = $this->_TABELS[0];
         $column = implode(', ', $this->_COLUMNS);
         $where_statment = $this->getWhere();
+        $sortOrder = $this->_SORT_ORDER;
 
-        $my_query = "SELECT $column FROM `$table` WHERE  $where_statment";
+        $my_query = "SELECT $column FROM `$table` WHERE  $where_statment ORDER BY $sortOrder";
 
         return $my_query;
     }
@@ -79,14 +82,15 @@ abstract class MyModel
     {
         $table  = $this->_TABELS[0];
         $column = implode(', ', $this->_COLUMNS);
-        
-        $my_query = "SELECT $column FROM `$table`";
+        $sortOrder = $this->_SORT_ORDER;
+
+        $my_query = "SELECT $column FROM `$table` ORDER BY $sortOrder";
 
         return $my_query;
-        
+
     }
 
-    // main function 
+    // main function
     protected function grupQueryFilters(array $grup_fillters)
     {
         $where_statment = [];
@@ -120,15 +124,15 @@ abstract class MyModel
         }
         return "";
     }
-    
-    /** 
+
+    /**
      * menampilkan data dari hasil query yang ditentukan sebelumnya
      */
     public function result(): array
     {
         if( $this->PDO == null) return [];                              // return null jika db belum siap
         $this->PDO->query( $this->query() );
-        
+
         foreach( $this->mergeFilters() as $filters) {
             foreach( $filters['filters'] as $key => $val) {
                 if( isset( $val['value']) && $val['value'] != '') {
@@ -140,14 +144,14 @@ abstract class MyModel
         return $this->PDO->resultset();
     }
 
-    /** 
+    /**
      * menmpilkan semua data yang tersedia
      */
     public function resultAll(): array
     {
         if( $this->PDO == null) return [];                          // return null jika db belum siap
         $this->PDO->query( $this->originQuery() );
-        
+
         foreach( $this->mergeFilters() as $filters) {
             foreach( $filters['filters'] as $key => $val) {
                 if( isset( $val['value']) && $val['value'] != '') {
