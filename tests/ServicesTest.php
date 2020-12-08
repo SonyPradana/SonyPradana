@@ -1,6 +1,6 @@
 <?php
 
-namespace Simpus\Apps;
+namespace Simpus\Tests;
 
 use AntrianPoliService;
 use AuthService;
@@ -13,6 +13,7 @@ use RekamMedisService;
 use System\Database\MyPDO;
 use TriviaService;
 use WilayahKabSemarangService;
+use Simpus\Apps\Middleware;
 
 final class ServicesTest extends TestCase
 {

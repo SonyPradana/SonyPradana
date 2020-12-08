@@ -1,6 +1,6 @@
 <?php
 
-namespace Simpus\Apps;
+namespace Simpus\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Simpus\Auth\Login;
