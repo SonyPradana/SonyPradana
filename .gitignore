@@ -1,40 +1,8 @@
-#folder
+# folder
 public/data/img/
-test/thumbnail
 vendor/
-/lib/apps/config/database_local.config.php
-.env
 node_modules/
+
+# file
+.env
 public/mix-manifest.json
-
-### MicrosoftOffice ###
-*.tmp
-
-# Word temporary
-~$*.doc*
-
-# Word Auto Backup File
-Backup of *.doc*
-
-# Excel temporary
-~$*.xls*
-
-# Excel Backup File
-*.xlk
-
-# PowerPoint temporary
-~$*.ppt*
-
-# Visio autosave temporary files
-*.~vsd*
-
-### VisualStudioCode ###
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-
-### VisualStudioCode Patch ###
-# Ignore all local history of files
-.history

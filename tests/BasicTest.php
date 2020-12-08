@@ -61,11 +61,6 @@ final class BasicTest extends TestCase
     $this->assertFileExists('./lib/js/index.js');
     $this->assertFileExists('./lib/js/bundles/keepalive.js');
     $this->assertFileExists('./lib/js/bundles/message.js');
-    // $this->assertFileExists('./public/lib/js/bundles.js');
-    
-    // data
-    $this->assertFileExists('./public/data/img/display-picture/no-image.png');
-    $this->assertFileExists('./public/data/img/logo/logo-puskesmas.png');
-
+    // $this->assertFileExists('./public/lib/js/bundles.js');    
   }
 }
