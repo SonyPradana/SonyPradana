@@ -11,9 +11,9 @@ class RekamMedisController extends Controller{
             $_SESSION['active_menu'] = MENU_MEDREC;
         }
         //  WARNING:    fungsi ini adalah funsi authrization, wajib ada
-        
+
         // call_user_func_array($this->getMiddleware()['before'], []);
-        if( $this->getMiddleware()['auth']['login'] == false ){            
+        if( $this->getMiddleware()['auth']['login'] == false ){
             DefaultController::page_401(array (
                 'links' => array (
                     array('Home Page', '/'),
@@ -39,10 +39,10 @@ class RekamMedisController extends Controller{
         $rm->reset();
         $arr_umur  = ["0-5", "5-16", "17-25", "26-45", "46-65", "65-100"];
         $arr_data2 = [];
-        foreach( $arr_umur as $umur ){        
+        foreach( $arr_umur as $umur ){
             $min_max = explode("-", $umur);
             $min =  $min_max[0];
-            $max =  $min_max[1];        
+            $max =  $min_max[1];
             $min  = date("Y-m-d", time() - ($min * 31536000) );
             $max  = date("Y-m-d", time() - ($max * 31536000) );
             $rm->filterRangeTanggalLahir($min, $max);
@@ -74,19 +74,19 @@ class RekamMedisController extends Controller{
     }
 
     /* view page di panggil secara manual, keculai index.php */
-    
+
 
     public function edit()
     {
         $msg = ["show" => false, "type" => 'info', "content" => 'oke'];
         $error = array();
-        
+
         // ambil id dari url jika tidak ada akes ditolak
         if (isset($_GET['document_id'])) {
             // ambil data rm menggunakn  id
             $id = $_GET['document_id'];
             // default property
-            $status_kk = $status_double = false;    
+            $status_kk = $status_double = false;
 
             // validasi data
             $validation = new GUMP('id');
@@ -108,10 +108,10 @@ class RekamMedisController extends Controller{
             $validation->run($_POST);
             $error = $validation->get_errors_array();
 
-            if (! $validation->errors()) { 
+            if (! $validation->errors()) {
                 //  menjegah duplikasi data saaat merefresh page
                 $last_data = $_SESSION['last_data'] ?? [];
-        
+
                 // kita anggap semua field form sudah benar
                 $new_rm = MedicalRecord::withId($id);
                 $new_rm->setNomorRM( $_POST['nomor_rm'] );
@@ -124,24 +124,24 @@ class RekamMedisController extends Controller{
                 // opsonal
                 $new_rm->setNamaKK( $_POST['nama_kk'] );
                 $new_rm->setNomorRM_KK( $_POST['nomor_rm_kk'] );
-        
+
                 //simpan data
                 $simpan = $new_rm->save();
-                if( $simpan && $last_data != $_POST){                
+                if( $simpan && $last_data != $_POST){
                     $msg = ["show" => true, "type" => 'success', "content" => 'berhasil diupdate'];
                     $_SESSION['last_data'] = $_POST;
-                } else{                
+                } else{
                     $msg = ["show" => true, "type" => 'danger', "content" => 'gagal disimpan'];
-                }    
-                
+                }
+
                 // user log
                 $log = new Log( $this->getMiddleware()['auth']['user_name'] );
                 $log->set_event_type('med-rec');
                 $log->save( $new_rm->getLastQuery() );
-            
+
             } elseif (empty($_POST)) {
                 $error = array();
-            } 
+            }
 
             // memuat data dari data base
             $load_rm = MedicalRecord::withId($id);
@@ -166,7 +166,7 @@ class RekamMedisController extends Controller{
                 $status_double = true;
             }
             // cek data rm terdaftar atau tidak
-            if( $load_rm->cekAxis() == false){                        
+            if( $load_rm->cekAxis() == false){
                 echo 'acces deny!!!';
                 header('HTTP/1.1 403 Forbidden');
                 exit;
@@ -243,14 +243,6 @@ class RekamMedisController extends Controller{
         $validation->run($_POST);
         $error = $validation->get_errors_array();
 
-
-        // ambil nomor rm terakhir
-        $data = new MedicalRecords();
-        $data->limitView(1);
-        $data->sortUsing('nomor_rm');
-        $data->orderUsing("DESC");
-        $last_nomor_rm = $data->resultAll()[0]['nomor_rm'];
-
         if (! $validation->errors()) {
             // menjegah duplikasi data saat form direfresh
             $last_data = $_SESSION['last_data'] ?? [];
@@ -278,17 +270,10 @@ class RekamMedisController extends Controller{
             } else {
                 $msg = ["show" => true, "type" => 'danger', "content" => 'Gagal disimpan'];
             }
-
-            // merefrresh nomor rm terakhir saad form dikirim
-            $data = new MedicalRecords( );
-            $data->forceLimitView(1);
-            $data->sortUsing('nomor_rm');
-            $data->orderUsing("DESC");
-            $last_nomor_rm = $data->resultAll()[0]['nomor_rm'];
         } elseif (empty($_POST)) {
             $error = array();
         }
-        
+
         // result
         return $this->view('rekam-medis/new', [
             "auth"     => $this->getMiddleware()['auth'],
@@ -311,8 +296,6 @@ class RekamMedisController extends Controller{
                 "nomor_rw"      => $nomor_rw,
                 "nama_kk"       => $nama_kk,
                 "nomor_rm_kk"   => $nomor_rm_kk,
-
-                "last_nomor_rm" => $last_nomor_rm
             ],
             'error' => $error,
             "message" => [
@@ -324,7 +307,7 @@ class RekamMedisController extends Controller{
     }
 
     public function search(){
-        $msg = ["show" => false, "type" => 'info', "content" => 'oke'];   
+        $msg = ["show" => false, "type" => 'info', "content" => 'oke'];
         // ambil parameter dari url
         $main_search     = $_GET['main-search'] ?? '';
         $nomor_rm_search = $_GET['nomor-rm-search'] ?? '';
@@ -333,7 +316,7 @@ class RekamMedisController extends Controller{
         $no_rw_search    = $_GET['no-rw-search'] ?? '';
         $nama_kk_search  = $_GET['nama-kk-search'] ?? '';
         $no_rm_kk_search = $_GET['no-rm-kk-search'] ?? '';
-        $strict_search   = isset( $_GET['strict-search'] ) ? true : false;   
+        $strict_search   = isset( $_GET['strict-search'] ) ? true : false;
 
         return $this->view('rekam-medis/search', [
             "auth"     => $this->getMiddleware()['auth'],
@@ -368,10 +351,10 @@ class RekamMedisController extends Controller{
 
     public function view_(){
         $msg = ["show" => false, "type" => 'info', "content" => 'oke'];
-        
+
         // config
         $sort = 'nomor_rm';
-        $order = 'ASC';
+        $order = 'DESC';
         $page = $_GET['page'] ?? 1;
         $page = is_numeric($page) ? $page : 1;
 
@@ -385,7 +368,7 @@ class RekamMedisController extends Controller{
         $show_data->currentPage($page);
         $get_data = $show_data->resultAll();
 
-        return $this->view('rekam-medis/view',[            
+        return $this->view('rekam-medis/view',[
             "auth"      => $this->getMiddleware()['auth'],
             "DNT"       => $this->getMiddleware()['DNT'],
             "meta"      => [
@@ -416,7 +399,7 @@ class RekamMedisController extends Controller{
         $profile_id = $_GET["useid"] ?? rand(4, 100);
         $profile    = MedicalRecord::withId( $profile_id );
 
-        return $this->view('rekam-medis/profile',[            
+        return $this->view('rekam-medis/profile',[
             "auth"      => $this->getMiddleware()['auth'],
             "DNT"       => $this->getMiddleware()['DNT'],
             "meta"      => [

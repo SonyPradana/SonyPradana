@@ -35,7 +35,12 @@ class RekamMedisService extends Middleware
         ]);
     }
 
-    public function search_nomor_rm_kk(array $params) :array
+    /**
+     * Cek nomor rm kk bedasrkan paramater yang ada
+     * @param array $params Rule pengecekan nomor kk
+     * @return array hasil pencarian data
+     */
+    public function search_nomor_rm_kk(array $params): array
     {
         $nama_kk    = $params['n'] ?? $this->errorhandler();
         $alamat     = $params['a'] ?? $this->errorhandler();
@@ -57,7 +62,12 @@ class RekamMedisService extends Middleware
         ];
     }
 
-    public function search_rm(array $params) :array
+    /**
+     * Mencari profile rm dengan menggunakn nomor rm
+     * @param array $params Nomor rm
+     * @return array Profile data Rm
+     */
+    public function search_rm(array $params): array
     {
         $nomor_rm = $params[ 'nomor_rm' ] ?? null;
 
@@ -73,7 +83,12 @@ class RekamMedisService extends Middleware
         ];
     }
 
-    public function valid_nomor_rm(array $params) :array
+    /**
+     * Cek nomor rm valid atau tidak
+     * @param array $params nomor rm yang akan dicek
+     * @return array jumlah data yang ditemukan
+     */
+    public function valid_nomor_rm(array $params): array
     {
         $data = new MedicalRecords( $this->PDO );
         $data->filterByNomorRm( $params[ 'nr' ] ?? null );
@@ -87,7 +102,35 @@ class RekamMedisService extends Middleware
         ];
     }
 
-    public function search(array $param) :array
+    public function nomor_rm_terahir(array $pramas): array
+    {
+      // ambil nomor rm terakhir
+      $data = new MedicalRecords();
+      $data->limitView(1);
+      $data->orderUsing("DESC");
+
+      $data->sortUsing('nomor_rm');
+      $last_nomor_rm = $data->resultAll()[0]['nomor_rm'];
+
+      $data->sortUsing('id');
+      $last_id = $data->resultAll()[0]['nomor_rm'];
+
+      return array (
+        'status'        => 'ok',
+        'data' => array (
+          "last_nomor_rm" => $last_nomor_rm,
+          "last_id"       => $last_id,
+        ),
+        'headers'       => ['HTTP/1.1 200 Oke']
+      );
+    }
+
+    /**
+     * Search data rm by using query search
+     * @param array $param search querys
+     * @return array list data rm yang sesuai query pencarian
+     */
+    public function search(array $param): array
     {
         // vallidation
         $validation = new GUMP('id');
@@ -162,7 +205,12 @@ class RekamMedisService extends Middleware
 
     }
 
-    public function filter(array $param)
+    /**
+     * View data rm with some filter
+     * @param array $param filters rule
+     * @return array list data rm
+     */
+    public function filter(array $param): array
     {
         // ambil configurasi
         $sort       = $param['sort'] ?? 'nomor_rm';
@@ -205,13 +253,13 @@ class RekamMedisService extends Middleware
         if( $min_max == false ) {
             return ['status'  => 'Bad Request', 'message' => 'time format not support', 'headers' => ['HTTP/1.1 400 Bad Request'] ];
         }
-        
-        $data = new MedicalRecords( $this->PDO );        
+
+        $data = new MedicalRecords( $this->PDO );
         // configurasi
         $data->sortUsing($sort);
         $data->orderUsing($order);
         $data->limitView($limit);
-        
+
         // filter by tanggal
         if( $umur != '0-100' ) $data->filterRangeTanggalLahir($min_max[0], $min_max[1]);
 
@@ -226,7 +274,7 @@ class RekamMedisService extends Middleware
 
         // filter status kk
         if( $status_kk == 'on' ) $data->filterStatusKK();
-        
+
         // setup data
         $max_page = $data->maxPage();
         $page = $page > $max_page ? $max_page : $page;
@@ -251,20 +299,33 @@ class RekamMedisService extends Middleware
         ];
     }
 
+    // private function (helper)
+
     private function getDuplicate($duplicate, $where_statment)
     {
-        $this->PDO->query("
-                    SELECT
-                        y.*
-                        FROM data_rm y
-                            INNER JOIN (SELECT
-                                            *, COUNT(*) AS CountOf
-                                            FROM data_rm
-                                            GROUP BY nama, $duplicate
-                                            HAVING COUNT(*) > 1 AND ($where_statment)
-                                        ) dt ON y.nama = dt.nama AND y.$duplicate = dt.$duplicate
-                    ORDER BY y.nama, y.$duplicate
-                    ");
+        $this->PDO->query(
+          "SELECT
+            y.*
+          FROM
+            data_rm y
+          INNER JOIN
+            (
+              SELECT
+                *,
+                COUNT(*) AS CountOf
+              FROM
+                  data_rm
+               GROUP BY
+                  nama, $duplicate
+               HAVING
+                  COUNT(*) > 1
+                AND
+                  ($where_statment)
+            )
+          dt ON y.nama = dt.nama AND y.$duplicate = dt.$duplicate
+          ORDER BY
+            y.nama, y.$duplicate"
+        );
         return $this->PDO->resultset();
     }
 
