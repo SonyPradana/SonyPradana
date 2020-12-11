@@ -128,6 +128,7 @@
   $load( () => {
     new form_rm({
       nomor_RmTerahir: document.createElement('div'),
+      nomor_RmUpper: document.createElement('div'),
     }).init();
   })
 

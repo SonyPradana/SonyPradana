@@ -104,22 +104,21 @@ class RekamMedisService extends Middleware
 
     public function nomor_rm_terahir(array $pramas): array
     {
+      $upper_limit = $pramas['limit'] ?? 14000;
       // ambil nomor rm terakhir
-      $data = new MedicalRecords();
-      $data->limitView(1);
-      $data->orderUsing("DESC");
+      $data = new MedicalRecords($this->PDO);
+      $data->limitView(1)
+        ->orderUsing("DESC")
+        ->sortUsing('nomor_rm');
 
-      $data->sortUsing('nomor_rm');
-      $last_nomor_rm = $data->resultAll()[0]['nomor_rm'];
-
-      $data->sortUsing('id');
-      $last_id = $data->resultAll()[0]['nomor_rm'];
+      $last_nomor_rm  = $data->resultAll("WHERE `nomor_rm` < $upper_limit");
+      $upper_nomor_rm = $data->resultAll();
 
       return array (
-        'status'        => 'ok',
+        'status' => 'ok',
         'data' => array (
-          "last_nomor_rm" => $last_nomor_rm,
-          "last_id"       => $last_id,
+          "last_nomor_rm"   => $last_nomor_rm[0]['nomor_rm'],
+          "upper_nomor_rm"  => $upper_nomor_rm[0]['nomor_rm'],
         ),
         'headers'       => ['HTTP/1.1 200 Oke']
       );

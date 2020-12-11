@@ -64,7 +64,7 @@
                     <h1>Data Rekam Medis Baru</h1>
                         <form class="new-rm" action="" method="post">
                             <input class="textbox outline black rounded small block" type="number" name="nomor_rm" id="input-nomor-rm" required placeholder="nomor rekam medis" value="<?= $content->nomor_rm ?>" maxlength="6" inputmode="numeric" pattern="[0-9]*">
-                            <div class="input-information auto-fill"><p>nomor rm terahir : <a href="javascript:void(0)" id="tambah-nomor-rm" tabindex="10"></a></p></div>
+                            <div class="input-information auto-fill"><p>nomor rm terahir : <a href="javascript:void(0)" id="tambah-nomor-rm" tabindex="10"></a></p><p><a href="javascript:void(0)" id="tambah-nomor-rm-upper" tabindex="10">id</a></p></div>
                             <div class="input-information warning"></div>
                             <input class="textbox outline black rounded small block" type="text" name="nama" id="input-nama" required placeholder="nama" value="<?= $content->nama ?>" maxlength="50" <?= $portal["DNT"] ? 'autocomplete="off"' : 'autocomplete="on"' ?>>
                             <input class="textbox outline black rounded small block" type="date" name="tgl_lahir" id="input-tgl-lahir" value="<?= $content->tgl_lahir ?>">

@@ -10,6 +10,7 @@ const default_form_element = {
   nomor_kk: $id('input-nomor-rm-kk'),
   // other
   nomor_RmTerahir: $id('tambah-nomor-rm'),
+  nomor_RmUpper: $id('tambah-nomor-rm-upper'),
   info_nomorRm: $query('.input-information.warning'),
   info_nomorRmKk: $query('.input-information.no-rm-kk'),
   info_Kk: $query('.input-information.kk-sama'),
@@ -24,8 +25,7 @@ const form_rm = function (el = default_form_element) {
   let dataDesa = undefined;
   let nomor_RmTerahir = {
     last_nomor_rm: 0,
-    last_id: 0,
-    last_date: 0
+    last_id: 0
   };
 
   function cekRm() {
@@ -150,6 +150,11 @@ const form_rm = function (el = default_form_element) {
       // nomor rm terahir
       el.nomor_RmTerahir.addEventListener('click', () => {
         el.nomor_rm.value = nomor_RmTerahir.last_nomor_rm + 1;
+        el.nomor_rm.focus();
+        cekRm();
+      });
+      el.nomor_RmUpper.addEventListener('click', () => {
+        el.nomor_rm.value = nomor_RmTerahir.upper_nomor_rm + 1;
         el.nomor_rm.focus();
         cekRm();
       });
