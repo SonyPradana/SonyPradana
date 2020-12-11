@@ -297,11 +297,13 @@ class MedicalRecords
         $merge_filter = $query_filter . $query_filters;
         $merge_filter = $merge_filter != '' ? "WHERE " . $merge_filter : "";
 
-        $this->PDO->query (
-          "SELECT COUNT(id) FROM data_rm $merge_filter"
-        );
-        $this->PDO->execute();
-        return (int) $this->PDO->single()["COUNT(id)"] ?? 0;
+        $query = "SELECT COUNT(id) FROM data_rm $merge_filter";
+
+        $link = mysqli_connect(DB_HOST, DB_USER, DB_PASS, "simpusle_simpus_lerep");
+        $result = mysqli_query($link, $query);
+        $feedback = mysqli_fetch_assoc( $result );
+
+        return (int) $feedback['COUNT(id)'] ?? 0;
     }
 
     /**
