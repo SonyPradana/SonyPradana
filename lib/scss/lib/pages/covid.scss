@@ -1,4 +1,4 @@
-// cmd: sass --no-source-map --style=compressed lib/scss/lib/pages/covid.scss lib/css/pages/v1.1/covid.css
+// cmd: sass --no-source-map --style=compressed lib/scss/lib/pages/covid.scss public/lib/css/pages/v1.1/covid.css
 
 .header-article{margin-bottom: 24px}
 .header-article h1{
@@ -27,7 +27,16 @@ article .info {
     background-color: #ace1ff;
     padding: 8px 4px;
     border-left: solid 8px #2aaffb;
+    margin: 8px 0;
 }
+
+.box-button-groub {
+    margin: 8px 0;
+    display: flex;
+    gap: 4px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
 
 /* tablet vie view */
 @media screen and (max-width: 767px) {

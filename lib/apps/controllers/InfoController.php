@@ -16,7 +16,7 @@ class InfoController extends Controller
   {
     $msg = ['show' => false, 'type' => 'info', 'content' => 'oke'];
     // your code
-    
+
     $author = new User("angger");
     return $this->view('info/antrian-online', [
       "auth" => $this->getMiddleware()['auth'],
@@ -53,7 +53,7 @@ class InfoController extends Controller
       "meta"     => [
         "title"         => "Info Covid 19 Ungaran Barat",
         "discription"   => "Data Pasien Dalam Pengawasan dan Positif di Wilayah Kecamtan Ungaran Barat",
-        "keywords"      => "simpus lerep, info covid, kawal covid, covid ungaran, covid branjang, wilyah ungran, Suspek, Discharded, Meninggal, Symptomatik, Asymptomatik, Sembuh, Meninggal, Terkomfirmasi"
+        "keywords"      => "info covid, covid kabupaten semrang, kawal covid, covid ungaran, covid branjang, wilayah ungaran, Suspek, Discharded, Meninggal, Symptomatik, Asymptomatik, Sembuh, Meninggal, Terkomfirmasi"
       ],
       "header"   => [
         "active_menu"   => 'home',

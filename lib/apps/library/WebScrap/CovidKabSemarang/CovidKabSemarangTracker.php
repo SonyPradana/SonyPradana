@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace WebScrap\CovidKabSemarang;
 
@@ -43,25 +43,25 @@ class CovidKabSemarangTracker
     {
         $schadule       = new Scheduler($this->PDO);
         $schadule(1)->read();
-       
+
         $new_request    = new CovidKabSemarang();
         $daftar         = $new_request->Daftar_Kecamatan;
-        
+
         $time       = (int) time();
         $id_track   = ConvertCode::ConvertToCode(time());
         foreach( $daftar as $kecamatan => $kecamatan_val){
             $section = $new_request->getData($kecamatan)['data'];
             foreach( $section as $desa => $desa_val){
                 if(! $this->creat([
-                    'date'                      => (int) $time, 
+                    'date'                      => (int) $time,
                     'location'                  => $this->searchId($kecamatan, $desa_val['desa']),
-                    'suspek'                    => (int) $desa_val['pdp']['dirawat'], 
-                    'suspek_discharded'         => (int) $desa_val['pdp']['sembuh'], 
-                    'suspek_meninggal'          => (int) $desa_val['pdp']['meninggal'], 
+                    'suspek'                    => (int) $desa_val['pdp']['dirawat'],
+                    'suspek_discharded'         => (int) $desa_val['pdp']['sembuh'],
+                    'suspek_meninggal'          => (int) $desa_val['pdp']['meninggal'],
                     'konfirmasi_symptomatik'    => (int) $desa_val['positif']['dirawat'],
-                    'konfirmasi_asymptomatik'   => (int) $desa_val['positif']['isolasi'], 
-                    'konfirmasi_sembuh'         => (int) $desa_val['positif']['sembuh'], 
-                    'konfirmasi_meninggal'      => (int) $desa_val['positif']['meninggal']                
+                    'konfirmasi_asymptomatik'   => (int) $desa_val['positif']['isolasi'],
+                    'konfirmasi_sembuh'         => (int) $desa_val['positif']['sembuh'],
+                    'konfirmasi_meninggal'      => (int) $desa_val['positif']['meninggal']
                 ]) ){
                     return false;
                 }
@@ -84,7 +84,7 @@ class CovidKabSemarangTracker
         // initial covid grabber
         $covid = new CovidKabSemarang();
         $kecamatan = $covid->Daftar_Kecamatan;
-        
+
         // get data
         $data_covid = array();
         foreach( $kecamatan as $key => $val) {
@@ -113,7 +113,7 @@ class CovidKabSemarangTracker
             $new_data['suspek_discharded'] += $value['discharded'];
             $new_data['suspek_meninggal'] += $value['suspek_meninggal'];
         }
-        
+
         // compire new data dan old data
         if (array_values($new_data) != $old_data) {
             $schadule   = new Scheduler($this->PDO);
@@ -124,14 +124,14 @@ class CovidKabSemarangTracker
                 foreach($data_section as $desa => $desa_val) {
                     // simpan data kedatabase
                     $this->creat(array (
-                        'date'                      => (int) $time, 
+                        'date'                      => (int) $time,
                         'location'                  => $this->searchId($value['kecamatan'], $desa_val['desa']),
-                        'suspek'                    => (int) $desa_val['pdp']['dirawat'], 
-                        'suspek_discharded'         => (int) $desa_val['pdp']['sembuh'], 
-                        'suspek_meninggal'          => (int) $desa_val['pdp']['meninggal'], 
+                        'suspek'                    => (int) $desa_val['pdp']['dirawat'],
+                        'suspek_discharded'         => (int) $desa_val['pdp']['sembuh'],
+                        'suspek_meninggal'          => (int) $desa_val['pdp']['meninggal'],
                         'konfirmasi_symptomatik'    => (int) $desa_val['positif']['dirawat'],
-                        'konfirmasi_asymptomatik'   => (int) $desa_val['positif']['isolasi'], 
-                        'konfirmasi_sembuh'         => (int) $desa_val['positif']['sembuh'], 
+                        'konfirmasi_asymptomatik'   => (int) $desa_val['positif']['isolasi'],
+                        'konfirmasi_sembuh'         => (int) $desa_val['positif']['sembuh'],
                         'konfirmasi_meninggal'      => (int) $desa_val['positif']['meninggal']
                     ));
                 }
@@ -152,8 +152,9 @@ class CovidKabSemarangTracker
     public function result(): array
     {
         $grupByDate = [];
+
         foreach($this->_filters_waktu as $date){
-            $this->PDO->query($this->queryBuilder());        
+            $this->PDO->query($this->queryBuilder());
             $this->PDO->bind(':date', $date);
             $grupByDate[$date] = $this->PDO->resultset();
         }
@@ -168,7 +169,7 @@ class CovidKabSemarangTracker
         $this->PDO->query($this->queryBuilder_count(null));
         return $this->PDO->resultset();
     }
-    
+
     /** menghitung resume data dalam satu waktu (filter)
      * @return array resume data covid
      */
@@ -183,18 +184,25 @@ class CovidKabSemarangTracker
     /** list data yang tersedia di databse
      * @return array list tanggal format timestamp
      */
-    public function listOfDate() :array
+    public function listOfDate(int $date = 0) :array
     {
-        $this->PDO->query("SELECT `date` 
-                            FROM `covid_tracker`
-                            GROUP BY `date`
-                            ORDER BY `date`
-                            DESC");
+        $this->PDO->query(
+          "SELECT
+            `date`
+          FROM
+            `covid_tracker`
+          WHERE
+            `date` > :date
+          GROUP BY `date`
+          ORDER BY `date`
+          DESC"
+        );
+        $this->PDO->bind(':date', $date);
         return $this->PDO->resultset();
     }
 
     // private method
-    
+
     /** Query builder untuk menghitung jumlah per kasus dalam atu waktu
      * @param string tanggal data di-index
      * @return string pdo query string
@@ -202,13 +210,13 @@ class CovidKabSemarangTracker
     private function queryBuilder_count($date): string
     {
         $where_statment = $date == null ? '' : "WHERE `date` IN ($date)";
-        $query          = " SELECT 
+        $query          = " SELECT
                                 covid_tracker.location,
-                                covid_tracker.date                          AS date_create,               
+                                covid_tracker.date                          AS date_create,
                                 SUM(covid_tracker.suspek)                   AS suspek,
                                 SUM(covid_tracker.suspek_discharded)        AS suspek_discharded,
-                                SUM(covid_tracker.suspek_meninggal)         AS suspek_meninggal,      
-                                SUM(covid_tracker.konfirmasi_symptomatik)   AS konfirmasi_symptomatik, 
+                                SUM(covid_tracker.suspek_meninggal)         AS suspek_meninggal,
+                                SUM(covid_tracker.konfirmasi_symptomatik)   AS konfirmasi_symptomatik,
                                 SUM(covid_tracker.konfirmasi_asymptomatik)  AS konfirmasi_asymptomatik,
                                 SUM(covid_tracker.konfirmasi_sembuh)        AS konfirmasi_sembuh,
                                 SUM(covid_tracker.konfirmasi_meninggal)     AS konfirmasi_meninggal
@@ -227,27 +235,30 @@ class CovidKabSemarangTracker
      */
     private function queryBuilder(): string
     {
-        $query = "SELECT 
-                    desa_kecamatan.kecamatan,
-                    desa_kecamatan.desa,
-                    covid_tracker.id,
-                    covid_tracker.date,
-                    covid_tracker.location,               
-                    covid_tracker.suspek,                 
-                    covid_tracker.suspek_discharded,
-                    covid_tracker.suspek_meninggal,      
-                    covid_tracker.konfirmasi_symptomatik, 
-                    covid_tracker.konfirmasi_asymptomatik,
-                    covid_tracker.konfirmasi_sembuh,
-                    covid_tracker.konfirmasi_meninggal
-                FROM `covid_tracker`
-                INNER JOIN  `desa_kecamatan`
-                        ON desa_kecamatan.id = covid_tracker.location
-                WHERE
-                    `date` = :date	    
-                ORDER BY `id` ASC
-                ";
-        return $query;
+      $listDate = implode("','", $this->_filters_lokasi);
+      $query =
+        "SELECT
+          desa_kecamatan.kecamatan,
+          desa_kecamatan.desa,
+          covid_tracker.id,
+          covid_tracker.date,
+          covid_tracker.location,
+          covid_tracker.suspek,
+          covid_tracker.suspek_discharded,
+          covid_tracker.suspek_meninggal,
+          covid_tracker.konfirmasi_symptomatik,
+          covid_tracker.konfirmasi_asymptomatik,
+          covid_tracker.konfirmasi_sembuh,
+          covid_tracker.konfirmasi_meninggal
+        FROM `covid_tracker`
+        INNER JOIN  `desa_kecamatan`
+          ON desa_kecamatan.id = covid_tracker.location
+        WHERE
+          `date` = :date
+          AND
+           `kecamatan` IN ('$listDate')
+        ORDER BY `id` ASC";
+      return $query;
     }
 
     private function whereStatment($colomn_name, array $array_val)
@@ -264,14 +275,14 @@ class CovidKabSemarangTracker
      * @return bool true jika data berhasil disimpan
      */
     private function creat(array $params = array (
-        'date'                    => '', 
+        'date'                    => '',
         'location'                => '',
-        'suspek'                  => 0, 
-        'suspek_discharded'       => 0, 
-        'suspek_meninggal'        => 0, 
+        'suspek'                  => 0,
+        'suspek_discharded'       => 0,
+        'suspek_meninggal'        => 0,
         'konfirmasi_symptomatik'  => 0,
-        'konfirmasi_asymptomatik' => 0, 
-        'konfirmasi_sembuh'       => 0, 
+        'konfirmasi_asymptomatik' => 0,
+        'konfirmasi_sembuh'       => 0,
         'konfirmasi_meninggal'    => 0
     )): bool
     {
@@ -280,14 +291,14 @@ class CovidKabSemarangTracker
                           VALUES
                             (
                             :id,
-                            :date, 
+                            :date,
                             :location,
-                            :suspek, 
-                            :suspek_discharded, 
-                            :suspek_meninggal, 
-                            :konfirmasi_symptomatik, 
-                            :konfirmasi_asymptomatik, 
-                            :konfirmasi_sembuh, 
+                            :suspek,
+                            :suspek_discharded,
+                            :suspek_meninggal,
+                            :konfirmasi_symptomatik,
+                            :konfirmasi_asymptomatik,
+                            :konfirmasi_sembuh,
                             :konfirmasi_meninggal
                             )
                         ");

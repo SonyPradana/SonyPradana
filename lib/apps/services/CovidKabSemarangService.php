@@ -57,9 +57,9 @@ class CovidKabSemarangService extends Middleware
                 ];
             }
         }
-        
+
         $lokasi         = $params['lokasi'] ?? [''];
-        
+
         $covid_tracker->setFiltersDate( $date )->setFiltersLocation( $lokasi );
         // var_dump($date);exit;
 
@@ -94,9 +94,17 @@ class CovidKabSemarangService extends Middleware
         }
 
         $covid_tracker  = new CovidKabSemarangTracker();
-       
+
+        // configurasi - date
+        $list_date      = $covid_tracker->listOfDate();
+        $list_date      = array_column($list_date, 'date');
+
+        $date           = $params['range_waktu'] ?? $list_date[0];
+        $date = explode('-', $date);
+        $covid_tracker->setFiltersDate($date);
+
         $result = [];
-        foreach( $covid_tracker->result_countAll() as $covid_data) {
+        foreach( $covid_tracker->result_count() as $covid_data) {
             $result[] = [
                 "location"          => "kab. semarang",
                 "time"              => date($date_format, $covid_data['date_create']),
@@ -128,9 +136,10 @@ class CovidKabSemarangService extends Middleware
         // TODO:
         // 1. support filter berdasarkan wilayah
         $covid_tracker  = new CovidKabSemarangTracker();
-        $list_kecamatan = (new CovidKabSemarang())->Daftar_Kecamatan;
 
         // configurasi
+
+        // configurasi - date
         $list_date      = $covid_tracker->listOfDate();
         $list_date      = array_column($list_date, 'date');
 
@@ -144,13 +153,22 @@ class CovidKabSemarangService extends Middleware
                 ];
             }
         }
-        
+
+        // configurasi - lokasi
+        if (isset($params['kecamatan'])) {
+          $location = explode('--', $params['kecamatan']);
+        } else {
+          $list_kecamatan = (new CovidKabSemarang())->Daftar_Kecamatan;
+          $location = array_keys($list_kecamatan);
+        }
+
+        $covid_tracker->setFiltersLocation($location);
         $covid_tracker->setFiltersDate( $date );
 
         $result = [];
-        foreach( $date as $this_date ){      
+        foreach( $date as $this_date ) {
             $session            = $covid_tracker->result()[ $this_date ];
-            
+
             // counting - tingkat kabupaten
             $kasus_positif      = 0;
             $kasus_isolasi      = 0;
@@ -159,7 +177,7 @@ class CovidKabSemarangService extends Middleware
             $suspek             = 0;
             $suspek_dischraded  = 0;
             $suspek_meninggal   = 0;
-    
+
             // counting - tingkat kecamatan
             $groups                  = array();
             $last_kecamatan          = '';
@@ -170,12 +188,12 @@ class CovidKabSemarangService extends Middleware
             $last_suspek             = 0;
             $last_suspek_dischraded  = 0;
             $last_suspek_meninggal   = 0;
-            
+
             foreach($session as $data_desa){
                 $kasus_positif      += $data_desa['konfirmasi_symptomatik'];
                 $kasus_isolasi      += $data_desa['konfirmasi_asymptomatik'];
                 $kasus_sembuh       += $data_desa['konfirmasi_sembuh'];
-                $kasus_meninggal    += $data_desa['konfirmasi_meninggal'];    
+                $kasus_meninggal    += $data_desa['konfirmasi_meninggal'];
                 $suspek             += $data_desa['suspek'];
                 $suspek_dischraded  += $data_desa['suspek_discharded'];
                 $suspek_meninggal   += $data_desa['suspek_meninggal'];
@@ -196,7 +214,7 @@ class CovidKabSemarangService extends Middleware
                     $last_suspek_dischraded  = 0;
                     $last_suspek_meninggal   = 0;
                 }
-                
+
                 $last_kasus_positif      += $data_desa['konfirmasi_symptomatik'];
                 $last_kasus_isolasi      += $data_desa['konfirmasi_asymptomatik'];
                 $last_kasus_sembuh       += $data_desa['konfirmasi_sembuh'];
@@ -204,8 +222,8 @@ class CovidKabSemarangService extends Middleware
                 $last_suspek             += $data_desa['suspek'];
                 $last_suspek_dischraded  += $data_desa['suspek_discharded'];
                 $last_suspek_meninggal   += $data_desa['suspek_meninggal'];
-                
-                                
+
+
                 $key = array_search($kecamatan, array_column($groups, 'kecamatan', 0));
                 $groups[$key]['kasus_posi']         = $last_kasus_positif;
                 $groups[$key]['kasus_isol']         = $last_kasus_isolasi;
@@ -300,7 +318,7 @@ class CovidKabSemarangService extends Middleware
             }
             $result = $data->getData( $id );
             return array_merge(
-                $result, 
+                $result,
                 [
                     'status' => 'ok',
                     'headers'    => ['HTTP/1.1 200 Oke']
@@ -365,7 +383,7 @@ class CovidKabSemarangService extends Middleware
             $old_raw['suspek_discharded'],
             $old_raw['suspek_meninggal'],
         ];
-        
+
         // get last time data modife
         $schadule   = new Scheduler($this->PDO);
         $schadule(1)->read();
@@ -404,9 +422,18 @@ class CovidKabSemarangService extends Middleware
     public function track_record(array $params) :array
     {
         $covid_tracker  = new CovidKabSemarangTracker();
-        $result         = $covid_tracker->listOfDate();
         $to_string      = $params['toString'] ?? false;
-        
+        $filter         = $params['day'] ?? null;
+
+        if ($filter != null) {
+          // $filter = $filter < 1 ? 1 : $filter;
+          $dateLimit = time() - ($filter * 86400);
+          $result = $covid_tracker->listOfDate($dateLimit);
+        } else {
+          $result = $covid_tracker->listOfDate();
+
+        }
+
         return [
             'status'        => 'ok',
             'data'          => $to_string ? implode('-', array_values(array_column($result, 'date'))) : $result,
