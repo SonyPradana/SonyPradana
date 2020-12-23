@@ -8,11 +8,11 @@ final class BasicTest extends TestCase
 {
   public function testFrameworkStrucktur(): void
   {
-    $this->assertFileExists('./lib/apps/init.php');
+    $this->assertFileExists('./bootstrap/init.php');
 
-    $this->assertFileExists('./lib/apps/config/config.php');
+    $this->assertFileExists('./lib/apps/core/Config.php');
+    $this->assertFileExists('./bootstrap/autoload.php');
 
-    $this->assertFileExists('./lib/apps/controllers/autoload.php');
     $this->assertFileExists('./lib/apps/controllers/HomeController.php');
     $this->assertFileExists('./lib/apps/controllers/ApiController.php');
 
@@ -26,18 +26,15 @@ final class BasicTest extends TestCase
     $this->assertFileExists('./lib/apps/core/template/service');
     $this->assertFileExists('./lib/apps/core/template/view');
 
-    $this->assertFileExists('./lib/apps/library/autoload.php');
     $this->assertFileExists('./lib/apps/library/System/Database/CrudInterface.php');
     $this->assertFileExists('./lib/apps/library/System/Database/MyCRUD.php');
     $this->assertFileExists('./lib/apps/library/System/Database/MyModel.php');
     $this->assertFileExists('./lib/apps/library/System/Database/MyPDO.php');
-    
-    $this->assertFileExists('./lib/apps/services/autoload.php');    
 
-    $this->assertFileExists('./lib/apps/views/');    
-    $this->assertFileExists('./lib/apps/views/default/error.template.php');    
+    $this->assertFileExists('./lib/apps/views/');
+    $this->assertFileExists('./lib/apps/views/default/error.template.php');
     $this->assertFileExists('./lib/apps/views/home/index.template.php');
-    
+
     $this->assertFileExists('./public/index.php');
 
     $this->assertFileExists('./.env.example');
@@ -61,6 +58,6 @@ final class BasicTest extends TestCase
     $this->assertFileExists('./lib/js/index.js');
     $this->assertFileExists('./lib/js/bundles/keepalive.js');
     $this->assertFileExists('./lib/js/bundles/message.js');
-    // $this->assertFileExists('./public/lib/js/bundles.js');    
+    // $this->assertFileExists('./public/lib/js/bundles.js');
   }
 }

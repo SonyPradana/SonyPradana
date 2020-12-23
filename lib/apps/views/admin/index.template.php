@@ -1,7 +1,7 @@
 <?php
-#import modul 
+#import modul
 use Simpus\Auth\Auth;
-require_once $_SERVER['DOCUMENT_ROOT'] . '/lib/apps/init.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/bootstrap/init.php';
 ?>
 <?php
 #Aunt cek
