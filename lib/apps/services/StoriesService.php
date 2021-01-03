@@ -59,7 +59,7 @@ class StoriesService extends Middleware
       // uplad image
       $upload = new UploadFile($request['files']['upload_stories']);
       $imgURL = $upload->setFileName($storyID)
-        ->setFolderLocation('\\public\\data\\img\stories\\original\\')
+        ->setFolderLocation('/public/data/img/stories/original/')
         ->setMimeTypes(array('image/jpg', 'image/jpeg', 'image/png'))
         ->setMaxFileSize( 5_242_880 )
         ->upload();
