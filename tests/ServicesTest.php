@@ -7,6 +7,7 @@ use AuthService;
 use CovidKabSemarangService;
 use JadwalPelayananService;
 use MessageService;
+use Model\Stories\Story;
 use NewsFeederService;
 use PHPUnit\Framework\TestCase;
 use RekamMedisService;
@@ -14,6 +15,7 @@ use System\Database\MyPDO;
 use TriviaService;
 use WilayahKabSemarangService;
 use Simpus\Apps\Middleware;
+use StoriesService;
 
 final class ServicesTest extends TestCase
 {
@@ -82,12 +84,12 @@ final class ServicesTest extends TestCase
     // success auth
     $data = $api->login_status(array());
     $this->assertEquals('ok', $data['status']);
-    
+
     // not login auth
     // $data = $api->login_status(array());
     // $this->assertEquals('not login', $data['status']);
-    
-    // session end    
+
+    // session end
     // $data = $api->login_status(array());
     // $this->assertEquals('Session end', $data['status']);
   }
@@ -95,7 +97,7 @@ final class ServicesTest extends TestCase
   public function testServiceCovidKabSemarang(): void
   {
     $api = new CovidKabSemarangService($this->getPDO());
-    
+
     // success
 
     // success daftar kecamatan
@@ -126,7 +128,7 @@ final class ServicesTest extends TestCase
     //   array (
     //     'x-version' => 'ver1.1'
     //   )
-    // );    
+    // );
     // $this->assertEquals('ok', $data_indexCompiere['status']);
     // $this->assertEquals(['HTTP/1.1 200 Oke'], $data_indexCompiere['headers']);
 
@@ -152,7 +154,7 @@ final class ServicesTest extends TestCase
     $this->assertEquals(['HTTP/1.1 200 Oke'], $data_trackData['headers']);
 
     //  failed
-    
+
     // faild ferch
     $data_fetch = $api->fetch(
       array (
@@ -176,7 +178,7 @@ final class ServicesTest extends TestCase
       array (
         'x-version' => 'ver1.0'
       )
-    );    
+    );
     $this->assertEquals('error', $data_indexCompiere['status']);
     $this->assertEquals(['HTTP/1.1 200 Oke'], $data_indexCompiere['headers']);
 
@@ -205,7 +207,7 @@ final class ServicesTest extends TestCase
     // success
     $data = $api->Imunisasi(array());
     $this->assertNotEmpty($data['data']);
-    
+
     // failed
     $data = $api->Imunisasi (
       array (
@@ -213,7 +215,7 @@ final class ServicesTest extends TestCase
         'year' => 1994
       )
     );
-    $this->assertEmpty($data['data']);    
+    $this->assertEmpty($data['data']);
     $this->assertEquals(['HTTP/1.1 200 Oke'], $data['headers']);
   }
 
@@ -233,11 +235,11 @@ final class ServicesTest extends TestCase
   {
     $api = new NewsFeederService($this->getPDO());
 
-    // success 
+    // success
     $data = $api->ResendNews(array());
     $this->assertEquals('ok', $data['status']);
     $this->assertEquals(['HTTP/1.1 200 Oke'], $data['headers']);
-  }  
+  }
 
   public function testServiceTrivia(): void
   {
@@ -248,7 +250,7 @@ final class ServicesTest extends TestCase
     // success assert test
 
     // success get quest
-    $data_quest = $api->Get_Ques(array());    
+    $data_quest = $api->Get_Ques(array());
     $this->assertEquals('ok', $data_quest['status']);
     $this->assertEquals(['HTTP/1.1 200 Oke'], $data_quest['headers']);
 
@@ -266,21 +268,21 @@ final class ServicesTest extends TestCase
         )
       )
     );
-    $this->assertEquals('ok', $data_submit['status']);    
+    $this->assertEquals('ok', $data_submit['status']);
     $this->assertEquals(['HTTP/1.1 200 Oke'], $data_submit['headers']);
-    
+
     // success delete quest
     $last_successID = array('id' => $data_submit['info']['last_id']);
     $data_delete = $api->Delete_Ques($last_successID);
-    $this->assertFalse(! $data_delete['success_deleted']);    
+    $this->assertFalse(! $data_delete['success_deleted']);
     $this->assertEquals(['HTTP/1.1 200 Oke'], $data_delete['headers']);
 
     // success get answer
     $data_answer = $api->Get_Answer(array(
       'question_id' => 1,
       'question_answer' => 1
-    ));    
-    $this->assertEquals('ok', $data_answer['status']);    
+    ));
+    $this->assertEquals('ok', $data_answer['status']);
     $this->assertEquals(['HTTP/1.1 200 Oke'], $data_answer['headers']);
 
     // failed assert test
@@ -288,7 +290,7 @@ final class ServicesTest extends TestCase
     // failed deleted data
     $data_delete = $api->Delete_Ques(array('id' => 0))['success_deleted'];
     $this->assertFalse($data_delete);
-    
+
     // failed submit data
     $data_submit = $api->Submit_Ques(array(
       'author' => 'x',
@@ -297,7 +299,7 @@ final class ServicesTest extends TestCase
     ));
     $this->assertEquals('error', $data_submit['status']);
   }
-  
+
   public function testServiceRekamMedis(): void
   {
     // setup midleware for simulation login
@@ -339,7 +341,7 @@ final class ServicesTest extends TestCase
       )
     );
     $this->assertEquals('ok', $data_searchRm['status']);
-    
+
     // success validate rm
     $data_validRm = $api->valid_nomor_rm (
       array (
@@ -383,7 +385,7 @@ final class ServicesTest extends TestCase
       )
     );
     $this->assertEquals('no content', $data_searchRm['status']);
-    
+
     // failed valid rm
     $data_validRm = $api->valid_nomor_rm (
       array (
@@ -392,15 +394,15 @@ final class ServicesTest extends TestCase
     );
     $this->assertEquals('no content', $data_validRm['status']);
   }
-  
+
   public function testServiceWilayahKabupatenSemarang(): void
   {
     $api  = new WilayahKabSemarangService($this->getPDO());
-    
+
     $data_kabupaten = $api->Data_Kabupaten();
     $this->assertEquals('ok', $data_kabupaten['status']);
     $this->assertEquals(['HTTP/1.1 200 Oke'], $data_kabupaten['headers']);
-    
+
     $data_desa = $api->Data_Desa(array());
     $this->assertEquals('ok', $data_desa['status']);
     $this->assertEquals(['HTTP/1.1 200 Oke'], $data_desa['headers']);
@@ -408,5 +410,49 @@ final class ServicesTest extends TestCase
     $data_kecamatan = $api->Data_Kecamatan(array());
     $this->assertEquals('ok', $data_kecamatan['status']);
     $this->assertEquals(['HTTP/1.1 200 Oke'], $data_kecamatan['headers']);
+  }
+
+  public function testServiceStories(): void
+  {
+    $api = new StoriesService($this->getPDO());
+    $story = new Story($this->getPDO());
+    $story->setID(0)->read();
+    $viewerBefore = $story->getViewer();
+
+    // test add viewer
+    $respone = $api->Add_Viewer(array('stories_id' => 0));
+    $this->assertGreaterThan($viewerBefore, $respone['data']['viewer']);
+
+    // test group stories
+    $respone = $api->Group_Story(array());
+    $this->assertNotEmpty($respone['data']);
+
+    // test roll stories
+    $respone = $api->Rolling(array('group_name' => 'dev'));
+    $this->assertNotEmpty($respone['data']);
+
+    // test stories
+    $respone = $api->Stories(array());
+    $this->assertNotEmpty($respone['data']);
+
+    // test upload
+    $respone = $api->Upload(
+      array (
+        'caption' => 'phpunit',
+        'uploader' => 'dev',
+        'end' => time() + 8240,
+        'files' => array (
+          'upload_stories' => array (
+            'name' => '0.jpg',
+            'type' => 'image/jpeg',
+            'tmp_name' => __DIR__ . '\asset\0.jpg',
+            'error' => 0,
+            'size'  => 18_979,
+          )
+        )
+      )
+    );
+    // skip test conditon couse file distenation cant be rich
+    // $this->assertEquals('ok', $respone['status']);
   }
 }

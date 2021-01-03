@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="/lib/css/ui/v1.1/style.css">
     <link rel="stylesheet" href="/lib/css/ui/v1/table.css">
 
-    <script src="/lib/js/index.min.js"></script>         
+    <script src="/lib/js/index.min.js"></script>
     <script src="/lib/js/bundles/keepalive.min.js"></script>
     <script src="/lib/js/controller/table-rm/index.js"></script>
     <style>
@@ -32,9 +32,14 @@
         .boxs .box.right .box-right {
             width: 100%;
             overflow-x: auto;
-        } 
+        }
+
+        input[type=text] {
+          min-width: 100px;
+        }
+
         /* mobile */
-        @media screen and (max-width: 600px) {                
+        @media screen and (max-width: 600px) {
             .box.left form.search-box {
                 position: unset;
                 top: unset;
@@ -49,7 +54,7 @@
     <header>
         <?php include(BASEURL . '/lib/components/header/header.php'); ?>
     </header>
-    
+
     <div class="container">
         <main>
             <div class="coit breadcrumb">
@@ -86,8 +91,8 @@
                         <input class="textbox outline black rounded small block" type="text" name="no-rm-kk-search" id="input-no-rm-kk" placeholder="cari nomor rm kk" value="<?= $content->nomor_rm_kk ?>">
                     </form>
                 </div>
-                <div class="box right">                        
-                    <div class="box-right">   
+                <div class="box right">
+                    <div class="box-right">
                         <table class="data-rm">
                             <thead>
                                 <tr>
@@ -99,7 +104,7 @@
                                     <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="sort_table('nomor_rw')">RT / RW</a></th>
                                     <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="sort_table('nama_kk')">Nama KK</a></th>
                                     <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="sort_table('nomor_rm_kk')">No. Rm KK</a></th>
-                                    <th>Action</th>                                                     
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -111,7 +116,7 @@
                                 <!-- pagination -->
                             </div>
                         </div>
-                    </div> 
+                    </div>
                 </div>
             </div>
         </main>
@@ -139,7 +144,7 @@
         }
     })
 
-    //claer button    
+    //claer button
     var btnBack = document.querySelector('#reset-btn');
     btnBack.onclick = function () {
         document.querySelector('#input-main-search').setAttribute('value', '');
@@ -150,8 +155,8 @@
         document.querySelector('#input-no-rw-search').setAttribute('value', '');
         document.querySelector('#input-nama-kk-search').setAttribute('value', '');
         document.querySelector('#input-no-rm-kk').setAttribute('value', '');
-    };    
-    
+    };
+
     window.addEventListener('load', () => {
         // get data from DOM or URL
         const queryString = window.location.search
@@ -171,14 +176,14 @@
     window.onscroll = function(){
             stickyHeader('.container', '82px', '32px')
     }
-    
+
     // keep alive
     keepalive(
         () => {
             // ok function : redirect logout and then redirect to login page to accses this page
             window.location.href = "/login?url=<?= $_SERVER['REQUEST_URI'] ?>&logout=true"
         },
-        () => {          
+        () => {
             // close fuction : just logout
             window.location.href = "/logout?url=<?= $_SERVER['REQUEST_URI'] ?>"
         }

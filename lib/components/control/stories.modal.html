@@ -1,0 +1,113 @@
+
+<div id="stories-modal" class="modal dialog bg-dark-200 " >
+  <div class="modal-box">    
+    <span class="close" id="modalStoriesClose">&times;</span>     
+    <div class="boxs-content">
+      <h2>Upload Story</h2>
+      <div class="preview-image">
+        <div class="img">
+          <img id="img-upload" src="/data/img/thumbnail/thumbnail.png" alt="preview" height="250" width="200">
+        </div>
+      </div>
+      <div class="form stories">
+        <form id="upload-stories" action="/" method="post">
+          <input accept="image/*;capture=camera" type="file" name="upload_stories" id="input-image">
+          <input type="hidden" name="end" id="input-end" value="8600">
+          <section class="group-input">
+            <label for="input-caption">Pengirim</label>
+            <input class="textbox outline blue rounded normal" type="text" name="uploader" id="input-uploader" value="" placeholder="Pengirim...">
+          </section>
+          <section class="group-input">
+            <label for="input-caption">Caption</label>
+            <input class="textbox outline blue rounded normal" type="text" name="caption" id="input-caption" placeholder="Krtikan sesuatu...">
+          </section>
+          <button class="btn normal rounded fill blue">Upload</button>
+          <!-- <div class="from-bottom">
+          </div> -->
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  $id("upload-stories").addEventListener('submit', function(e) {
+    let data = new FormData(e.target);
+    data.append('caption', $id('input-caption').value);
+    data.append('uploader', $id('input-uploader').value);
+    data.append('end', 8400);
+
+
+    $json('/API/v1.0/Stories/Upload.json', 
+      {
+        method: 'POST', 
+        mode: 'cors',
+        cache: 'no-cache',
+        credentials: 'same-origin',
+        redirect: 'follow',
+        referrerPolicy: 'no-referrer',
+        body: data
+      })
+    .then(json => {
+      if (json.status == 'ok') {
+
+        // clear
+        $id('input-caption').value = '';
+        $id('stories-modal').style.display = "none";
+        $id('img-upload').src = '/data/img/thumbnail/thumbnail.png';
+        cardsStories.loadStories();
+      }
+      })
+    
+    e.preventDefault();
+    })
+
+  $id('modalStoriesClose').addEventListener('click', function(e) {
+    $id('stories-modal').style.display = "none"
+  });
+
+  $id('input-image').addEventListener('change', function(e) {
+    let readFile = new FileReader();
+    readFile.readAsDataURL(e.target.files[0]);
+
+    readFile.onload = function(eload) {
+      $id('img-upload').src = eload.target.result;
+    }
+  })
+
+</script>
+
+<style>
+  .moda.dialog {
+    display: none;
+  }
+  .preview-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 12px 0;
+  }
+  .preview-image img {
+    object-fit: cover;
+  }
+
+  .form.stories,  
+  .form.stories form  {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .group-input {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  input {
+    min-width: 325px;
+  }
+
+</style>

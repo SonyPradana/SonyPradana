@@ -219,6 +219,7 @@
       </article>
     </main>
     <aside class="right-side">
+          <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/widget/stories.html') ?>
       <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/widget/trivia.html') ?>
     </aside>
   </div>

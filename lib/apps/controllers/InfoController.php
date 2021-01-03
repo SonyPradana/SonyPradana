@@ -53,7 +53,7 @@ class InfoController extends Controller
       "meta"     => [
         "title"         => "Info Covid 19 Ungaran Barat",
         "discription"   => "Data Pasien Dalam Pengawasan dan Positif di Wilayah Kecamtan Ungaran Barat",
-        "keywords"      => "info covid, covid kabupaten semrang, kawal covid, covid ungaran, covid branjang, wilayah ungaran, Suspek, Discharded, Meninggal, Symptomatik, Asymptomatik, Sembuh, Meninggal, Terkomfirmasi"
+        "keywords"      => "info covid, covid kabupaten semarang, kawal covid, covid ungaran, covid branjang, wilayah ungaran, Suspek, Discharded, Meninggal, Symptomatik, Asymptomatik, Sembuh, Meninggal, Terkomfirmasi"
       ],
       "header"   => [
         "active_menu"   => 'home',

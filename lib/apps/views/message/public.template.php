@@ -16,8 +16,8 @@
             grid-template-columns: 1fr 300px;
         }
 
-        main {            
-            overflow-x: hidden
+        main {
+            overflow-x:auto
         }
 
         @media screen and (max-width: 767px) {
@@ -25,7 +25,7 @@
                 grid-template-columns: 1fr
             }
         }
-        
+
         section.group-input {
             margin: 12px 0;
         }
@@ -81,16 +81,17 @@
                         </tbody>
                     </table>
                 </div>
-                <!-- paganation -->                
+                <!-- paganation -->
                 <div class="box-pagination">
                     <div class="pagination" id="pagination">
                     </div>
                 </div>
             </div>
         </main>
-        
+
         <aside class="right-side">
-            <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/widget/trivia.html') ?>
+          <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/widget/stories.html') ?>
+          <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/widget/trivia.html') ?>
         </aside>
     </div>
 
@@ -105,19 +106,19 @@
     </div>
 </body>
 <script src="/lib/js/index.end.js"></script>
-<script>   
+<script>
     // sticky header
     window.onscroll = function(){
             stickyHeader('.container', '82px', '32px')
     }
-    
+
     // keep alive
     keepalive(
         () => {
             // ok function : redirect logout and then redirect to login page to accses this page
             window.location.href = "/login?url=<?= $_SERVER['REQUEST_URI'] ?>&logout=true"
         },
-        () => {          
+        () => {
             // close fuction : just logout
             window.location.href = "/logout?url=<?= $_SERVER['REQUEST_URI'] ?>"
         }
@@ -136,7 +137,7 @@
                 limit: 0,
                 maks_page: 0
             }
-        }, 
+        },
         methods: {
             refresh_message: function(page = 1, limit = 10) {
                 $json(`/api/ver1.0/Message/read.json?page=${page}&limit=${limit}&type=${this.option.filter}`)
@@ -164,7 +165,7 @@
             render_pagination: function (){
                 let dom_paginaiton = document.querySelector('#pagination')
                 dom_paginaiton.innerHTML = '<!-- pagination -->'
-                    
+
                 let creat_p = (page, text) => {
                     let p = document.createElement('a')
                     if (page == this.info.page) {
@@ -173,7 +174,7 @@
                     p.href = '#table-message';
                     p.addEventListener('click', () => {
                         this.info.page = page;
-                        this.refresh_message(page, this.maks_page);                     
+                        this.refresh_message(page, this.maks_page);
                     })
                     p.innerHTML = text;
                     dom_paginaiton.appendChild(p);

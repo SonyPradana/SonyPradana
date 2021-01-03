@@ -26,13 +26,13 @@ $app->get('/', function() {
     (new HomeController())->index();
 });
 
-// auth    
+// auth
 $app->match(['get', 'post'], '/login', function() {
     (new AuthController())->login();
-});  
+});
 $app->match(['get', 'post'], '/logout', function() {
     (new AuthController())->logout();
-});  
+});
 $app->match(['get', 'post'], '/profile', function() {
     (new AuthController())->profile();
 });
@@ -63,10 +63,10 @@ $app->get('/messages/public', function() {
     (new MessageController())->public();
 });
 
-// halaman standar   
+// halaman standar
 $app->get('/About', function() {
     (new HomeController())->about();
-});    
+});
 $app->get('/Ourteam', function() {
     (new ContactController())->ourTeam();
 });
@@ -74,7 +74,7 @@ $app->match(['get', 'post'], '/Contactus', function() {
     (new ContactController())->contactUs();
 });
 
-// info    
+// info
 $app->get('/info/(:any)', function(string $page) {
     if (Controller::view_exists('info/' . $page)) {
         (new InfoController())->show( $page );
@@ -87,7 +87,7 @@ $app->get('/info/(:any)', function(string $page) {
 
 // aricle
 $app->get('/read/(:any)', function(string $title) {
-    // TODO: article exist cheacker before call index 
+    // TODO: article exist cheacker before call index
     (new ArticleController())->index($title);
 });
 
@@ -106,8 +106,8 @@ $app->match(['get', 'post'], '/rekam-medis/(:text)', function(string $page) {
 // kia-anak biodata/posyandu
 $app->match(['get', 'post'], '/kia-anak/(:text)/(:text)', function(string $action, string $unit) {
     if (Controller::view_exists('kia-anak/'. $unit . '/'. $action)) {
-        (new KiaAnakController)->show($action, $unit);            
-    } else {            
+        (new KiaAnakController)->show($action, $unit);
+    } else {
         DefaultController::page_404(array (
             'path' => '/kia-anak/'.$action.'/'.$unit
         ));
@@ -115,7 +115,7 @@ $app->match(['get', 'post'], '/kia-anak/(:text)/(:text)', function(string $actio
 });
 
 // API
-$app->match(['get', 'put'], '/API/([0-9a-zA-Z.]*)/(:any)/(:any).json', function($version, $unit, $action) {
+$app->match(['get', 'put', 'post'], '/API/([0-9a-zA-Z.]*)/(:any)/(:any).json', function($version, $unit, $action) {
     (new ApiController())->index($unit, $action, $version);
 });
 // API - Mix
@@ -129,6 +129,18 @@ $app->get('/js/mix.app.js', function() {
 // Trivia
 $app->match(array('get', 'post'), '/trivia/submit', function() {
     (new TriviaController())->submit();
+});
+
+// Stories
+$app->get('/stories', function() {
+  return (new StoriesController)->index();
+});
+
+$app->get('/stories/view/(:any)', function($storyID) {
+  return (new StoriesController)->preview($storyID);
+});
+$app->get('/stories/roll/(:any)', function($group_name) {
+  return (new StoriesController)->roll($group_name);
 });
 
 // default path 404, 405

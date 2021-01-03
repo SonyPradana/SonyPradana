@@ -66,14 +66,14 @@ abstract class MyCRUD implements CrudInterface
     );
     // binding
     foreach ($this->COLUMNS as $key => $val) {
-      $this->PDO->bind(':' . $key, $val);      
+      $this->PDO->bind(':' . $key, $val);
     }
 
     $this->PDO->execute();
     if ($this->PDO->rowCount() > 0) {
         return true;
     }
-    return false;    
+    return false;
   }
 
   public function update(): bool
@@ -151,15 +151,15 @@ abstract class MyCRUD implements CrudInterface
   protected function column_names()
   {
     $this->PDO->query(
-      "SELECT 
+      "SELECT
         COLUMN_NAME
-      FROM 
+      FROM
         INFORMATION_SCHEMA.COLUMNS
-      WHERE 
+      WHERE
         TABLE_SCHEMA = :dbs AND TABLE_NAME = :table
     ");
     $this->PDO->bind(':dbs', 'simpusle_simpus_lerep');
-    $this->PDO->bind(':table', 'trivia_quest');
+    $this->PDO->bind(':table',  $this->TABLE_NAME);
     $this->PDO->execute();
     $column_name = $this->PDO->resultset();
     return array_values(array_column($column_name, 'COLUMN_NAME'));

@@ -3,10 +3,10 @@
 <head>
     <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/meta/metatag.php') ?>
 
-    <link rel="stylesheet" href="/lib/css/ui/v1.1/style.css">   
+    <link rel="stylesheet" href="/lib/css/ui/v1.1/style.css">
     <link rel="stylesheet" href="/lib/css/ui/v1/table.css">
 
-    <script src="/lib/js/index.min.js"></script>         
+    <script src="/lib/js/index.min.js"></script>
     <script src="/lib/js/bundles/keepalive.min.js"></script>
     <script src="/lib/js/controller/table-kia-anak/index.js"></script>
     <style>
@@ -34,9 +34,14 @@
         .boxs .box.right .box-right {
             width: 100%;
             overflow-x: auto;
-        } 
+        }
+
+        input[type=text] {
+          min-width: 100px;
+        }
+
         /* mobile */
-        @media screen and (max-width: 600px) {                
+        @media screen and (max-width: 600px) {
             .box.left form.search-box {
                 position: unset;
                 top: unset;
@@ -51,7 +56,7 @@
     <header>
         <?php include(BASEURL . '/lib/components/header/header.php'); ?>
     </header>
-    
+
     <div class="container">
         <main>
             <div class="coit breadcrumb">
@@ -86,7 +91,7 @@
 
                         <p>Grup Posyandu</p>
                         <select class="textbox outline black rounded small block" name="desa" id="input-desa">
-                            <option <?= $content->desa == null ? 'selected' : null ?> disabled hidden>Pilih Desa</option> 
+                            <option <?= $content->desa == null ? 'selected' : null ?> disabled hidden>Pilih Desa</option>
                             <option <?= $content->desa == 'bandarjo' ? 'selected' : null ?> value="bandarjo">Bandarjo</option>
                             <option <?= $content->desa == 'branjang' ? 'selected' : null ?> value="branjang">Branjang</option>
                             <option <?= $content->desa == 'kalisidi' ? 'selected' : null ?> value="kalisidi">Kalisidi</option>
@@ -107,8 +112,8 @@
                         </select>
                     </form>
                 </div>
-                <div class="box right">                        
-                    <div class="box-right">   
+                <div class="box right">
+                    <div class="box-right">
                         <table class="data-rm">
                             <thead>
                                 <tr>
@@ -119,7 +124,7 @@
                                     <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="tableKiaAnak.sortTable('nomor_rw')">RT / RW</a></th>
                                     <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="tableKiaAnak.sortTable('nama_kk')">Nama KK</a></th>
                                     <th scope="col"><a class="sort-by" href="javascript:void(0)" onclick="tableKiaAnak.sortTable('nama_kk')">Grup Posyandu</a></th>
-                                    <th>Action</th>                                                     
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -131,7 +136,7 @@
                                 <!-- pagination -->
                             </div>
                         </div>
-                    </div> 
+                    </div>
                 </div>
             </div>
         </main>
@@ -162,21 +167,21 @@
         if( query != '&'){
             tableKiaAnak.getData(tableKiaAnak.sort, tableKiaAnak.order, tableKiaAnak.curentPage, query)
             tableKiaAnak.search_query = query
-        }        
+        }
     })
 
     // sticky header
     window.onscroll = function(){
             stickyHeader('.container', '82px', '32px')
     }
-    
+
     // keep alive
     keepalive(
         () => {
             // ok function : redirect logout and then redirect to login page to accses this page
             window.location.href = "/login?url=<?= $_SERVER['REQUEST_URI'] ?>&logout=true"
         },
-        () => {          
+        () => {
             // close fuction : just logout
             window.location.href = "/logout?url=<?= $_SERVER['REQUEST_URI'] ?>"
         }
@@ -206,11 +211,11 @@
     });
 
     // get group posyandu
-    $id('input-desa').addEventListener('change', function(e){        
+    $id('input-desa').addEventListener('change', function(e){
         $id('input-posyandu').innerHTML = '<option selected disabled hidden>Pilih Nama Posyandu</option>';
         $json('/api/ver1.0/posyandu/grup-posyandu.json?desa=' + e.target.value)
             .then( function(json){
-                if(json.status == 'ok' && json.data.length > 0){                    
+                if(json.status == 'ok' && json.data.length > 0){
                     // render
                     json.data.forEach( function(el){
                         let creat_option = document.createElement('option');

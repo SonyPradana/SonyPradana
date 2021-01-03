@@ -5,14 +5,20 @@ use Simpus\Helper\HttpHeader;
 
 class ApiController extends Controller
 {
-    
+
     public function index($unit, $action, $version)
     {
         $method = $_SERVER['REQUEST_METHOD'];
         $params = $_GET;
-        if( $method == 'PUT' ){
+        if ($method == 'PUT') {
             $body   = file_get_contents('php://input');
             $params = json_decode($body, true);
+        } elseif ($method == 'POST') {
+          $params = $_POST;
+        }
+
+        if (! empty($_FILES)) {
+          $params['files'] = $_FILES;
         }
         // send version request
         $params['x-version'] = $version;
@@ -22,7 +28,7 @@ class ApiController extends Controller
         // get header and them remove header from result
         $headers = $result['headers'] ?? [];
         unset($result['headers']);
-        
+
         // isnsert defult header
         array_push($headers, 'Content-Type: application/json');
 

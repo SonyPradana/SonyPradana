@@ -31,13 +31,13 @@
                     <h1><?= $content->article['title'] ?></h1>
                     <div class="article breadcrumb">
                         <div class="author">
-                            <img src="<?= $content->article['display_picture_small'] ?>" alt="@<?= $content->article['display_name'] ?>">    
+                            <img src="<?= $content->article['display_picture_small'] ?>" alt="@<?= $content->article['display_name'] ?>">
                             <div class="author-name"><a href="/Ourteam"><?= $content->article['display_name'] ?></a></div>
                         </div>
                         <div class="time"><?= $content->article['article_create'] ?></div>
                     </div>
                 </div>
-                <div id="app" class="article-media">                    
+                <div id="app" class="article-media">
                     <div class="cards-box blue">
                         <div class="box-title" v-text="format_tanggal">Antrian Pendaftaran</div>
                         <div class="box-container">
@@ -55,16 +55,16 @@
                                     Dalam Antrian
                                 </div>
                                 <div class="antrian-box right">
-                                    <div class="antraian-container-small">                                        
+                                    <div class="antraian-container-small">
                                         <div class="small-antrian-card card neum-blue neum-light neum-concave radius-small">
                                             <div class="title" v-html="poli_title('A')"></div>
                                             <div class="details" v-text="poli_details('A')"></div>
-                                        </div>                                        
+                                        </div>
                                         <div class="gab-12pt"></div>
                                         <div class="small-antrian-card card neum-blue neum-light neum-concave radius-small">
                                             <div class="title" v-html="poli_title('B')"></div>
                                             <div class="details" v-text="poli_details('B')"></div>
-                                        </div>                                        
+                                        </div>
                                         <div class="gab-12pt"></div>
                                         <div class="small-antrian-card card neum-blue neum-light neum-concave radius-small">
                                             <div class="title" v-html="poli_title('C')"></div>
@@ -90,7 +90,7 @@
                         </ul>
                     </div>
                 </div>
-    
+
                 <div class="article-body">
                     <?php if ($portal['auth']['login']): ?>
                         <h2>Tombol Antrian</h2>
@@ -184,7 +184,7 @@
                                         });
                                 });
                             }
-                            
+
                             clicker_plus('kia-plus', 'A');      clicker_minus('kia-minus', 'A');        clicker_reset('kia-reset', 'A');
                             clicker_plus('gigi-plus', 'B');     clicker_minus('gigi-minus', 'B');       clicker_reset('gigi-reset', 'B');
                             clicker_plus('umum-plus', 'C');     clicker_minus('umum-minus', 'C');       clicker_reset('umum-reset', 'C');
@@ -200,13 +200,14 @@
             </article>
 
 
-        </main>                
-        
+        </main>
+
         <aside class="right-side">
+          <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/widget/stories.html') ?>
             <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/widget/trivia.html') ?>
         </aside>
     </div>
-    
+
     <div class="gotop" onclick="gTop()"></div>
     <footer>
         <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/footer/footer.html') ?>
@@ -216,7 +217,7 @@
     <div id="modal">
         <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/control/modal.html') ?>
     </div>
-    
+
     <?php if( $portal['message']['show'] ) :?>
         <div class="snackbar <?= $portal['message']['type'] ?>">
             <div class="icon">
@@ -226,7 +227,7 @@
                 <?= $portal['message']['content'] ?>
             </div>
         </div>
-    <?php endif; ?> 
+    <?php endif; ?>
 
     <script src="/lib/js/index.end.js"></script>
     <script>
@@ -234,14 +235,14 @@
         window.onscroll = function(){
                 stickyHeader('.container', '82px', '32px')
         }
-        
+
         // keep alive
         keepalive(
             () => {
                 // ok function : redirect logout and then redirect to login page to accses this page
                 window.location.href = "/login?url=<?= $_SERVER['REQUEST_URI'] ?>&logout=true"
             },
-            () => {          
+            () => {
                 // close fuction : just logout
                 window.location.href = "/logout?url=<?= $_SERVER['REQUEST_URI'] ?>"
             }
@@ -255,7 +256,7 @@
         });
 
         let channel = pusher.subscribe('my-channel');
-        channel.bind('my-event', function (data) {            
+        channel.bind('my-event', function (data) {
             if(! Array.isArray(data)) {
                 app.tanggal = data.date_time;
                 app.poli[data.poli].current = data.current;

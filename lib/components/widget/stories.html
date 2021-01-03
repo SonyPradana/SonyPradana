@@ -1,0 +1,124 @@
+<div class="widget-stories">
+  <div id="story-app" class="stories-app">
+    <div class="widget-title">
+      <h4>Stories</h4>
+    </div>
+    <div class="box-stories-preview">
+      <div class="container-stories-preview">
+        <a class="story-preview" href="/stories">
+          <div class="story-image">
+            <div class="new-story">+</div>
+          </div>
+          <div class="story-title">
+            <p>buat</p>
+          </div>
+        </a>
+
+        <div 
+          class="story-preview"
+          v-for="story in stories"
+          :key="story.id"
+          v-on:click="roll(story.uploader)">
+
+          <div class="story-image">
+            <img 
+            v-bind:src="`/data/img/stories/small/${story.image_id}`"
+            v-bind:alt="story.uploader">
+          </div>
+          <div class="story-title">
+            <p 
+              v-text="story.uploader">
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const storieWidget = new Vue({
+    el: '#story-app',
+    data: {
+      stories: null
+    },
+    methods: {
+      getStories: function() {
+        $json('/API/v1.0/Stories/Group-Story.json')
+          .then(json => {
+            if (json.status == 'ok') {
+              this.stories = json.data;
+            }
+          })
+      },
+      roll: function(groupName) {        
+        window.location.href = `/stories/roll/${groupName}`;
+      }
+    },
+    mounted() {
+      this.getStories()
+    },
+  })
+</script>
+
+<style>
+  .widget-stories {
+    cursor:default;
+  }
+  .widget-stories a{
+    text-decoration: none;
+    color: #202020;
+  }
+  .container-stories-preview {
+    display: flex;
+    gap: 8px;
+    flex-wrap: nowrap;
+    overflow-x:scroll;
+  }
+
+  .story-image {
+    cursor: pointer;
+    background: #d6249f;
+    background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%,#d6249f 60%,#285AEB 90%);
+    border-radius: 9999px;
+    /* padding: 2px; */
+    
+    max-height: 62px;
+    max-width: 62px;
+    min-height: 62px;
+    min-width: 62px;
+  }
+
+  .story-image,
+  .new-story {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .new-story {
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: #20202033;
+  }
+
+  .story-image img,
+  .new-story {
+    border-radius: 100%;
+    background-color: #ffffff;
+    padding: 4px;
+    width: 50px;
+    width: 50px;
+    max-height: 50px;
+    max-width: 50px;
+    min-height: 50px;
+    min-width: 50px;
+    object-fit: cover;
+  }
+
+  .story-title p {
+    margin: 0;
+    text-align: center;
+    color: #202020;
+  }
+</style>

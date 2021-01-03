@@ -3,7 +3,7 @@
 <head>
     <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/meta/metatag.php') ?>
     <meta name="robots" content="all,index,follow">
-    
+
     <link rel="stylesheet" href="/lib/css/ui/v1/table.css">
     <link rel="stylesheet" href="/lib/css/pages/v1.1/jadwal-kia.css">
     <link rel="stylesheet" href="/lib/css/ui/v1.1/full.style.css">
@@ -45,7 +45,7 @@
                     <H1>Jadwal Pelayanan Poli KIA Anak (Imunisasi) Setiap Hari Jumat</H1>
                     <div class="article breadcrumb">
                         <div class="author">
-                            <img src="<?= $content->article['display_picture_small'] ?>" alt="@<?= $content->article['display_name'] ?>" srcset="">    
+                            <img src="<?= $content->article['display_picture_small'] ?>" alt="@<?= $content->article['display_name'] ?>" srcset="">
                             <div class="author-name"><a href="/Ourteam"><?= $content->article['display_name'] ?></a></div>
                         </div>
                         <div class="time">18 Juni 2020</div>
@@ -115,15 +115,16 @@
                             </tbody>
                         </table>
                     </div>
-                </div>  
+                </div>
 
             </article>
         </main>
         <aside class="right-side">
-            <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/widget/trivia.html') ?>
+          <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/widget/stories.html') ?>
+          <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/widget/trivia.html') ?>
         </aside>
     </div>
-    
+
     <div class="gotop" onclick="gTop()"></div>
     <footer>
         <?php include($_SERVER['DOCUMENT_ROOT'] . '/lib/components/footer/footer.html') ?>
@@ -135,19 +136,19 @@
     </div>
 </body>
 <script src="/lib/js/index.end.js"></script>
-<script>    
+<script>
     // sticky header
     window.onscroll = function(){
         stickyHeader('.container', '82px', '32px')
     }
-    
+
     // keep alive
     keepalive(
         () => {
             // ok function : redirect logout and then redirect to login page to accses this page
             window.location.href = "/login?url=<?= $_SERVER['REQUEST_URI'] ?>&logout=true"
         },
-        () => {          
+        () => {
             // close fuction : just logout
             window.location.href = "/logout?url=<?= $_SERVER['REQUEST_URI'] ?>"
         }
