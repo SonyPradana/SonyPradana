@@ -3,9 +3,9 @@
 namespace System\File;
 
 /**
- * This class use for uplaod file to server using move_uploaded_file() function, 
+ * This class use for uplaod file to server using move_uploaded_file() function,
  * make with easy use and manitens, every one can use and modifi this class to improve performense.
- * 
+ *
  * @author sonypradana@gmail.com
  * @link https://gist.github.com/SonyPradana
  */
@@ -51,12 +51,11 @@ class UploadFile
     {
         // file name without extension
         $file_name = urlencode( $file_name );
-        $file_name = strtolower( $file_name );
         $this->upload_name = $file_name;
         return $this;
     }
     /**
-     * File to save/upload location (server folder),  
+     * File to save/upload location (server folder),
      * Warning:: not creat new folder if location not exis
      * @param string $folder_location Upload file to save location
      */
@@ -122,7 +121,7 @@ class UploadFile
         $this->file_size  = $file['size'];
         // random file name by default
         $this->upload_name = uniqid("simpuslerep_"); // file name without extension
-        // parse file extention        
+        // parse file extention
         $extension = explode('.', $file['name']);
         $this->file_extension = strtolower( end( $extension ) );
     }
@@ -132,7 +131,7 @@ class UploadFile
      * - cek file error
      * - cek extention / mime (optional)
      * - cek maskimum size
-     * 
+     *
      * also return error message
      * @return bool True on error found not found
      */
@@ -167,7 +166,7 @@ class UploadFile
         }
 
         $this->_error_message = "success";
-        return true;        
+        return true;
     }
 
     /**
@@ -178,7 +177,7 @@ class UploadFile
     {
         // isset property, enable when data has been validate
         $this->_isset = true;
-        
+
         if ($this->validate()) {
             $destination =  $this->upload_location . $this->upload_name . '.' . $this->file_extension;
             if (move_uploaded_file($this->file_tmp, $_SERVER['DOCUMENT_ROOT'] . $destination)) {
@@ -213,7 +212,7 @@ class UploadFile
         return false;
     }
 
-    /** 
+    /**
      * True jika class di contruc
      */
     public function __isset($name): bool
