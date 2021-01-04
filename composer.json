@@ -22,6 +22,6 @@
         "test": "phpunit"
     },
     "autoload": {
-        "files": ["lib/apps/init.php"]
+        "files": ["bootstrap/init.php"]
     }
 }
