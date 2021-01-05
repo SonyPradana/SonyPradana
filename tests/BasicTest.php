@@ -10,30 +10,30 @@ final class BasicTest extends TestCase
   {
     $this->assertFileExists('./bootstrap/init.php');
 
-    $this->assertFileExists('./lib/apps/core/Config.php');
+    $this->assertFileExists('./app/core/Config.php');
     $this->assertFileExists('./bootstrap/autoload.php');
 
-    $this->assertFileExists('./lib/apps/controllers/HomeController.php');
-    $this->assertFileExists('./lib/apps/controllers/ApiController.php');
+    $this->assertFileExists('./app/controllers/HomeController.php');
+    $this->assertFileExists('./app/controllers/ApiController.php');
 
-    $this->assertFileExists('./lib/apps/core/CLI.php');
-    $this->assertFileExists('./lib/apps/core/Controller.php');
-    $this->assertFileExists('./lib/apps/core/Middleware.php');
-    $this->assertFileExists('./lib/apps/core/Router.php');
+    $this->assertFileExists('./app/core/CLI.php');
+    $this->assertFileExists('./app/core/Controller.php');
+    $this->assertFileExists('./app/core/Middleware.php');
+    $this->assertFileExists('./app/core/Router.php');
 
-    $this->assertFileExists('./lib/apps/core/template/controller');
-    $this->assertFileExists('./lib/apps/core/template/model');
-    $this->assertFileExists('./lib/apps/core/template/service');
-    $this->assertFileExists('./lib/apps/core/template/view');
+    $this->assertFileExists('./app/core/template/controller');
+    $this->assertFileExists('./app/core/template/model');
+    $this->assertFileExists('./app/core/template/service');
+    $this->assertFileExists('./app/core/template/view');
 
-    $this->assertFileExists('./lib/apps/library/System/Database/CrudInterface.php');
-    $this->assertFileExists('./lib/apps/library/System/Database/MyCRUD.php');
-    $this->assertFileExists('./lib/apps/library/System/Database/MyModel.php');
-    $this->assertFileExists('./lib/apps/library/System/Database/MyPDO.php');
+    $this->assertFileExists('./app/library/System/Database/CrudInterface.php');
+    $this->assertFileExists('./app/library/System/Database/MyCRUD.php');
+    $this->assertFileExists('./app/library/System/Database/MyModel.php');
+    $this->assertFileExists('./app/library/System/Database/MyPDO.php');
 
-    $this->assertFileExists('./lib/apps/views/');
-    $this->assertFileExists('./lib/apps/views/default/error.template.php');
-    $this->assertFileExists('./lib/apps/views/home/index.template.php');
+    $this->assertFileExists('./app/views/');
+    $this->assertFileExists('./app/views/default/error.template.php');
+    $this->assertFileExists('./app/views/home/index.template.php');
 
     $this->assertFileExists('./public/index.php');
 
@@ -44,20 +44,21 @@ final class BasicTest extends TestCase
     $this->assertFileExists('./package.json');
     $this->assertFileExists('./simpus');
     $this->assertFileExists('./webpack.mix.js');
+    $this->assertFileExists('./CHANGELOG.MD');
   }
 
   public function testAssetStrucktur(): void
   {
     // scss
-    $this->assertFileExists('./lib/scss/cards.scss');
-    $this->assertFileExists('./lib/scss/full.style.scss');
-    $this->assertFileExists('./lib/scss/style.scss');
-    $this->assertFileExists('./lib/scss/widgets.scss');
+    $this->assertFileExists('./resources/sass/cards.scss');
+    $this->assertFileExists('./resources/sass/full.style.scss');
+    $this->assertFileExists('./resources/sass/style.scss');
+    $this->assertFileExists('./resources/sass/widgets.scss');
 
     // js
-    $this->assertFileExists('./lib/js/index.js');
-    $this->assertFileExists('./lib/js/bundles/keepalive.js');
-    $this->assertFileExists('./lib/js/bundles/message.js');
+    $this->assertFileExists('./resources/js/index.js');
+    $this->assertFileExists('./resources/js/bundles/keepalive.js');
+    $this->assertFileExists('./resources/js/bundles/message.js');
     // $this->assertFileExists('./public/lib/js/bundles.js');
   }
 }

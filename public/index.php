@@ -4,7 +4,7 @@ session_start();
 use Simpus\Apps\{Route, Controller, Middleware};
 use Simpus\Auth\{Auth, User};
 
-require_once __DIR__ . '/../vendor/autoload.php';
+require_once dirname(__DIR__) . '/vendor/autoload.php';
 
 $app   = new Route();
 $token = $_SESSION['token'] ?? '';
