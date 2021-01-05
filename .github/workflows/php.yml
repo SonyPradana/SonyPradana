@@ -36,6 +36,9 @@ jobs:
       with:
         source: ".env.example"
         target: ".env"
+    
+    - name: reload autoload
+      run: composer dump-autoload 
 
     - name: Run test suite
       run: composer test tests/BasicTest.php
