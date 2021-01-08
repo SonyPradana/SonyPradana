@@ -84,6 +84,7 @@ class StoriesController extends Controller
         ),
         "contents" => array (
           'exist' => $storyExist,
+          'storyID' => $storyID,
           'imageID' => $imageID ?? '',
           'caption' => $caption ?? '',
           'storiesCount' => 3,

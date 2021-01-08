@@ -177,6 +177,7 @@ class StoriesService extends Middleware
     return array (
       'status' => 'ok',
       'data' => $stories->resultAll(),
+      'headers' => array('HTTP/1.1 200 Oke')
     );
   }
 
@@ -189,6 +190,7 @@ class StoriesService extends Middleware
     return array (
       'status' => 'ok',
       'data' => $stories->result(),
+      'headers' => array('HTTP/1.1 200 Oke')
     );
   }
 
@@ -210,7 +212,8 @@ class StoriesService extends Middleware
 
     return array (
       'status' => 'ok',
-      'data' => $data
+      'data' => $data,
+      'headers' => array('HTTP/1.1 200 Oke')
     );
   }
 

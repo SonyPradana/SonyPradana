@@ -7,11 +7,11 @@ use System\Database\MyPDO;
  * privile user dibagi menjadi:
  * - r: read -> untuk tamu/nologin menampilkan data ecara umum
  * - R: read -> user hanya dapat melihat data
- * - w: write -> user dapat membuat 
+ * - w: write -> user dapat membuat
  * - W: write(kapital) -> user dapat membuat dan mengedit
  * - A: adimin(kapital) -> melakukan manipulasi data dan user
  * dan target adalah file/class/folder/link yang akan diesekusi
- * 
+ *
  */
 class Privilege
 {
@@ -70,11 +70,11 @@ class Privilege
     }
 
     /**
-     * Membuat privilage user 
+     * Membuat privilage user
      * @param string $target_acces target Page yang akan di simpan
      * @param string $privilege Nilai privilege yang akan disimpan
      */
-    public function CreatAcces($target_acces = "default", $privilege): int
+    public function CreatAcces($target_acces = "default", $privilege): string
     {
         # koneksi dan simpan privile baru ke data base
          $this->PDO->query('INSERT INTO `privilege` (`id`, `user`, `target`, `privilege`) VALUES (:id, :user, :target, :privilege)');
@@ -90,7 +90,7 @@ class Privilege
     }
 
     /**
-     * mengupdate privilage user 
+     * mengupdate privilage user
      * @param string $target_acces target Page yang akan di simpan
      * @param string $privilege Nilai privilege yang akan disimpan
      */
@@ -99,7 +99,7 @@ class Privilege
         # koneksi dan simpan privile baru ke data base
         $query = "UPDATE privilege SET privilege = '$privilege' WHERE target = '$target_acces' ";
         #simpan ke databe 'auts'
-        mysqli_query($this->conn, $query);        
+        mysqli_query($this->conn, $query);
     }
 
 }

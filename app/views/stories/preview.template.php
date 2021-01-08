@@ -101,7 +101,7 @@
       <div class="stories-card">
 
         <?php if ($content->beforeExist): ?>
-        <div class="story-box">
+        <div class="story-box" onclick="navPage('<?= $content->storyID + 1 ?>')">
           <div class="body">
             <img src="/data/img/stories/original/<?= $content->imageBefore ?>" alt="">
           </div>
@@ -129,7 +129,7 @@
         </div>
 
         <?php if ($content->afterExist): ?>
-        <div class="story-box">
+        <div class="story-box" onclick="navPage('<?= $content->storyID - 1 ?>')">
           <div class="body">
             <img src="/data/img/stories/original/<?= $content->imageAfter ?>" alt="">
           </div>
@@ -152,37 +152,8 @@
   <?php endif; ?>
 </body>
 <script>
-
-  let curentPos = 0;
-  const maxPos = <?= $content->storiesCount ?? 0 ?>;
-  const getPosition = pos => -(pos * 320);
-
-  const plus = () => {
-    if (curentPos < maxPos - 1) {
-      curentPos++;
-      let setPos = `${getPosition(curentPos)}px`
-      document.querySelector('.stories-card').style.marginLeft = setPos
-      updateActivecard();
-    }
-  }
-
-  const min = () => {
-    if (curentPos > 0) {
-      curentPos--;
-      let setPos = `${getPosition(curentPos)}px`;
-      document.querySelector('.stories-card').style.marginLeft = setPos;
-      updateActivecard();
-    }
-  }
-
-  const updateActivecard = () => {
-    const storyCard = document.querySelectorAll('.story-box:not(:first-child)')
-    let i = 0;
-    storyCard.forEach( e => {
-      console.log(e);
-      e.className = i == curentPos ? 'story-box active' : 'story-box';
-      i++;
-    })
+  function navPage(storyID) {
+    window.location.href = `/stories/view/${storyID}`;
   }
 </script>
 </html>

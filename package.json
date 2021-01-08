@@ -2,7 +2,7 @@
   "name": "simpuslerep",
   "version": "1.1.0",
   "description": "sistem informasi managemen puskesmas lerep (unofficial)",
-  "main": "/lib/js/app.js",
+  "main": "/resources/js/app.js",
   "directories": {
     "lib": "lib"
   },
@@ -27,8 +27,8 @@
   "devDependencies": {
     "cross-env": "^7.0.3",
     "laravel-mix": "^5.0.9",
-    "resolve-url-loader": "^3.1.0",
-    "sass": "^1.29.0",
+    "resolve-url-loader": "^3.1.2",
+    "sass": "^1.32.2",
     "sass-loader": "^8.0.2",
     "vue-template-compiler": "^2.6.12"
   }

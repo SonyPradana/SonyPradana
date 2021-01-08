@@ -31,33 +31,40 @@
 </div>
 
 <script>
+  let uploadRunning = false;
+
   $id("upload-stories").addEventListener('submit', function(e) {
-    let data = new FormData(e.target);
-    data.append('caption', $id('input-caption').value);
-    data.append('uploader', $id('input-uploader').value);
-    data.append('end', 8400);
+    if (! uploadRunning) {
+      uploadRunning = true;
 
-
-    $json('/API/v1.0/Stories/Upload.json', 
-      {
-        method: 'POST', 
-        mode: 'cors',
-        cache: 'no-cache',
-        credentials: 'same-origin',
-        redirect: 'follow',
-        referrerPolicy: 'no-referrer',
-        body: data
+      let data = new FormData(e.target);
+      data.append('caption', $id('input-caption').value);
+      data.append('uploader', $id('input-uploader').value);
+      data.append('end', 8400);
+  
+      $json('/API/v1.0/Stories/Upload.json', 
+        {
+          method: 'POST', 
+          mode: 'cors',
+          cache: 'no-cache',
+          credentials: 'same-origin',
+          redirect: 'follow',
+          referrerPolicy: 'no-referrer',
+          body: data
+        })
+      .then(json => {
+        if (json.status == 'ok') {
+          // clear
+          $id('input-caption').value = '';
+          $id('stories-modal').style.display = "none";
+          $id('img-upload').src = '/data/img/thumbnail/thumbnail.png';
+          cardsStories.loadStories();
+          // close modal after click
+          $id('stories-modal').style.display = "none";
+        }
+        uploadRunning = false;
       })
-    .then(json => {
-      if (json.status == 'ok') {
-
-        // clear
-        $id('input-caption').value = '';
-        $id('stories-modal').style.display = "none";
-        $id('img-upload').src = '/data/img/thumbnail/thumbnail.png';
-        cardsStories.loadStories();
-      }
-      })
+    }
     
     e.preventDefault();
     })

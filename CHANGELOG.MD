@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.3.1] - 2021-01-08
+
+### Added
+- Support Cache Controll
+- Add Request and Respone class, to handle header (reqest and respone)
+- MyPDO DB_NAME can access from .env (config)
+
+### Fixed
+- Prevent double upload, Story upload delay when upload data on progress
+
+### Removed
+- ConvertCode (localy), ConvertCode vendor is keeped
+
 ## [2.3.0] - 2021-01-05
 
 ### Added

@@ -130,7 +130,7 @@
                 v-bind:alt="story.uploader">
                 <div
                   class="viewer"
-                  v-text="story.date_taken">
+                  v-text="story.uploader">
                 </div>
                 <div
                   class="caption"
@@ -175,11 +175,6 @@
           window.location.href = "/logout?url=<?= $_SERVER['REQUEST_URI'] ?>"
       }
   );
-  // dialog box (add stories)
-  $id('add-new-stories').addEventListener('click', function(){
-    $work()
-  });
-
 
   // Vue
   const cardsStories = new Vue({
@@ -189,7 +184,13 @@
     },
     methods: {
       loadStories: function() {
-        $json(`/API/v1.0/Stories/Stories.json`)
+        $json(`/API/v1.0/Stories/Stories.json`, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0',
+            'Pragma': 'no-cache',
+          }
+        })
           .then( json => {
             if (json.status == 'ok') {
               this.stories = json.data;
@@ -201,6 +202,11 @@
       },
       storiesView: function(storiesID) {
         window.location.href = `/stories/view/${storiesID}`;
+      },
+
+      getTimestamp: function() {
+        const dateNow = new Date();
+        return (dateNow.getSeconds() * 1000) + dateNow.getMilliseconds()
       }
     },
     mounted() {

@@ -66,8 +66,8 @@
     }
 
     .body img, .v-img {
-      width: 447px;
       width: 320px;
+      max-width: 320px;
       height: 80vh;
       object-fit: cover;
     }
@@ -124,30 +124,11 @@
       right: -75px;
     }
 
-
-    @media screen and (max-width: 767px) {
-      .body img {
-        max-width: 767px;
-        min-width: 447px;
-      }
-    }
-
-    @media screen and (max-width: 447px) {
-      .body img {
-        max-width: 447px;
-        min-width: 320px;
-        max-height: 100vh;
-      }
-    }
     @media screen and (max-width: 320px) {
       .content .scroll-indicator {
         left: 0;
         width: 95vw;
         transform: translateX(0);
-
-      }
-      .body img {
-        max-width: 320px;
       }
     }
   </style>
@@ -161,9 +142,11 @@
       <div class="stories-card">
 
         <?php if ($content->stories): ?>
+          <?php $index = -1; ?>
           <?php foreach ($content->stories as $story): ?>
+            <?php $index += 1; ?>
 
-        <div class="story-box <?= $content->fristItem ? 'active' : '' ?>">
+        <div class="story-box <?= $content->fristItem ? 'active' : '' ?>" onclick="navClick(<?= $index ?>)">
           <div class="body">
             <img
               src="/data/img/stories/small/<?= $story['image_id'] ?>"

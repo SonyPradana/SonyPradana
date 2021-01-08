@@ -33,7 +33,13 @@ const form_rm = function (el = default_form_element) {
     const nomor_rm = el.nomor_rm.value;
 
     if (nomor_rm.length != 0 && nomor_rm.length < 7) {
-      $json(`/api/ver1.0/RekamMedis/valid-nomor-rm.json?nr=${nomor_rm}`)
+      $json(`/api/ver1.0/RekamMedis/valid-nomor-rm.json?nr=${nomor_rm}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0',
+          'Pragma': 'no-cache',
+        }
+      })
         .then(json => {
           el.info_nomorRm.innerHTML = '';
 
@@ -56,7 +62,13 @@ const form_rm = function (el = default_form_element) {
     const nomor_rt = el.rt.value;
     const nomor_rw = el.rw.value;
 
-    $json(`/api/ver1.0/RekamMedis/search-nomor-rm-kk.json?n=${namaKk}&a=${alamat}&r=${nomor_rt}&w=${nomor_rw}`)
+    $json(`/api/ver1.0/RekamMedis/search-nomor-rm-kk.json?n=${namaKk}&a=${alamat}&r=${nomor_rt}&w=${nomor_rw}`, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0',
+        'Pragma': 'no-cache',
+      }
+    })
       .then(json => {
         el.info_nomorRmKk.innerHTML = '';
         el.info_Kk.innerHTML = ``;
@@ -111,7 +123,13 @@ const form_rm = function (el = default_form_element) {
         }
       });
 
-    $json('/api/ver1.1/RekamMedis/nomor-rm-terahir.json?limit=14000')
+    $json('/api/ver1.1/RekamMedis/nomor-rm-terahir.json?limit=14000', {
+      headers: {
+        'Content-Type': 'application/json',
+        'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0',
+        'Pragma': 'no-cache',
+      }
+    })
       .then(json => {
         if (json.status == 'ok') {
           nomor_RmTerahir = json.data;
