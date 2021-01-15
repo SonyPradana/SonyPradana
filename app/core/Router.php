@@ -1,27 +1,44 @@
 <?php
+
 namespace Simpus\Apps;
 
-class Route {
+class Route
+{
 
   private static $routes = Array();
   private static $pathNotFound = null;
   private static $methodNotAllowed = null;
 
-  public static $patterns = Array(
-          '(:num)' => '([0-9]*)',
-          '(:text)' => '([a-zA-Z]*)',
-          '(:any)' => '([0-9a-zA-Z_-]*)'
+  public static $patterns = Array (
+    '(:id)' => '(\d+)',
+    '(:num)' => '([0-9]*)',
+    '(:text)' => '([a-zA-Z]*)',
+    '(:any)' => '([0-9a-zA-Z_-]*)',
+    '(:slug)' => '([0-9a-zA-Z_-]*)',
+    '(:all)' => '(.*)',
   );
 
-  public static function match($method, $uri, $callback){    
+  public static function match($method, $uri, $callback)
+  {
     $user_pattern   = array_keys(self::$patterns);
     $allow_pattern  = array_values(self::$patterns);
     $new_uri        = str_replace($user_pattern, $allow_pattern, $uri);
-    array_push(self::$routes, Array(
+    $route = Array (
       'expression' => $new_uri,
       'function' => $callback,
       'method' => $method
-    ));    
+    );
+
+    array_push(self::$routes, $route);
+  }
+
+  public static function setRoutes($route)
+  {
+    self::$routes = $route;
+  }
+  public static function getRoutes()
+  {
+    return self::$routes;
   }
 
   /**
@@ -30,7 +47,8 @@ class Route {
     * @param callable $function    Function to call if route with allowed method is found
     *
     */
-  public static function any($expression, $function){
+  public static function any(string $expression, $function)
+  {
     self::match(['get','post', 'put', 'patch', 'delete', 'options'], $expression, $function);
   }
 
@@ -40,7 +58,8 @@ class Route {
     * @param callable $function    Function to call if route with allowed method is found
     *
     */
-  public static function get($expression, $function){
+  public static function get(string $expression, $function)
+  {
     self::match('get', $expression, $function);
   }
 
@@ -50,20 +69,23 @@ class Route {
     * @param callable $function    Function to call if route with allowed method is found
     *
     */
-  public static function post($expression, $function){
+  public static function post(string $expression, $function)
+  {
     self::match('post', $expression, $function);
   }
-  
 
-  public static function pathNotFound($function) {
+  public static function pathNotFound($function)
+  {
     self::$pathNotFound = $function;
   }
 
-  public static function methodNotAllowed($function) {
+  public static function methodNotAllowed($function)
+  {
     self::$methodNotAllowed = $function;
   }
 
-  public static function run($basepath = '', $case_matters = false, $trailing_slash_matters = false, $multimatch = false) {
+  public static function run($basepath = '', $case_matters = false, $trailing_slash_matters = false, $multimatch = false)
+  {
 
     // The basepath never needs a trailing slash
     // Because the trailing slash will be added using the route expressions
@@ -81,7 +103,7 @@ class Route {
   		  $path = $parsed_url['path'];
   	  } else {
         // If the path is not equal to the base path (including a trailing slash)
-        if($basepath.'/'!=$parsed_url['path']) {
+        if ($basepath.'/'!=$parsed_url['path']) {
           // Cut the trailing slash away because it does not matters
           $path = rtrim($parsed_url['path'], '/');
         } else {
@@ -113,7 +135,7 @@ class Route {
       $route['expression'] = $route['expression'].'$';
 
       // Check path match
-      if (preg_match('#'.$route['expression'].'#'.($case_matters ? '' : 'i'), $path, $matches)) {
+      if (preg_match('#'.$route['expression'].'#'.($case_matters ? '' : 'i').'u', $path, $matches)) {
         $path_match_found = true;
 
         // Cast allowed method to array if it's not one already, then run through all methods
@@ -125,7 +147,7 @@ class Route {
             if ($basepath != '' && $basepath != '/') {
               array_shift($matches); // Remove basepath
             }
-            
+
             call_user_func_array($route['function'], $matches);
 
             $route_match_found = true;
@@ -137,7 +159,7 @@ class Route {
       }
 
       // Break the loop if the first found route is a match
-      if($route_match_found&&!$multimatch){
+      if ($route_match_found && !$multimatch) {
         break;
       }
 
@@ -155,7 +177,6 @@ class Route {
           call_user_func_array(self::$pathNotFound, Array($path));
         }
       }
-
     }
   }
 
