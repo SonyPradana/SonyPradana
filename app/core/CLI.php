@@ -10,7 +10,7 @@ use System\Database\MyPDO;
 //  b. buat function khusu untuk mangambil flag
 class CLI
 {
-  public const CLI_VERSION = '0.1.0';
+  public const CLI_VERSION = '0.2.0';
   private $BASE_DIR;
   private const MAKE_CONTROLLER = array (
     'template_location' => '/app/core/template/controller',
@@ -36,9 +36,19 @@ class CLI
     'pattern' => '__model__',
     'surfix' => '.php'
   );
+  private const MAKE_MODELS = array (
+    'template_location' => '/app/core/template/models',
+    'save_location' => '/app/library/Model/',
+    'pattern' => '__models__',
+    'surfix' => 's.php'
+  );
 
   public function __construct(array $arguments, string $base_directory = __DIR__)
   {
+    define('DB_HOST', 'localhost');
+    define('DB_USER', 'root');
+    define('DB_PASS', '');
+
     $this->BASE_DIR = $base_directory;
     // throw to cli routing
     if (isset($arguments[1])) {
@@ -128,6 +138,20 @@ class CLI
           }
           break;
 
+        case 'models':
+          echo "making models...\n";
+          $makeModels = $this->makeTemplate($option[0], self::MAKE_MODELS, $option[0] . '/');
+          if ($makeModels) {
+            echo "\nfinish created model ". round(microtime(true) - APP_START, 4) . ' second';
+          } else {
+            echo "\nfailed to creat model";
+          }
+          if (substr($option[1], 0, 12) == '--table-name') {
+            $table_name = explode('=', $option[1])[1];
+            $this->FillModelsDatabase($this->BASE_DIR . '/app/library/Model/' . $option[0] . '/' . $option[0] . self::MAKE_MODELS['surfix'], $table_name);
+          }
+          break;
+
         default:
           echo "Argumet not allow\n";
           break;
@@ -156,10 +180,7 @@ class CLI
 
   private function FillModelDatabase(string $model_location, string $table_name)
   {
-    define('DB_HOST', 'localhost');
-    define('DB_USER', 'root');
-    define('DB_PASS', '');
-    $pdo = new MyPDO();
+    $pdo = new MyPDO('simpusle_simpus_lerep');
     $pdo->query(
       "SELECT
         *
@@ -181,6 +202,14 @@ class CLI
     $getContent = file_get_contents($model_location);
     $getContent = str_replace('__table__', $table_name, $getContent);
     $getContent = str_replace('__column__', $to_string, $getContent);
+    $isCopied   = file_put_contents($model_location, $getContent);
+
+    return $isCopied === false ? false : true;
+  }
+  private function FillModelsDatabase(string $model_location, string $table_name)
+  {
+    $getContent = file_get_contents($model_location);
+    $getContent = str_replace('__table__', $table_name, $getContent);
     $isCopied   = file_put_contents($model_location, $getContent);
 
     return $isCopied === false ? false : true;

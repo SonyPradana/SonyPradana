@@ -1,6 +1,7 @@
 <?php
 session_start();
 
+use Gregwar\Captcha\CaptchaBuilder;
 use Simpus\Apps\{Route, Controller, Middleware};
 use Simpus\Auth\{Auth, User};
 
@@ -141,6 +142,19 @@ $app->get('/stories/view/(:any)', function($storyID) {
 });
 $app->get('/stories/roll/(:any)', function($group_name) {
   return (new StoriesController)->roll($group_name);
+});
+
+$app->get('/QnA', function() {
+  return (new QuestionAnswerController)->index();
+});
+$app->get('/question/(:id)/(:slug)', function($thread_ID, $slug) {
+  return (new QuestionAnswerController)->thread($thread_ID);
+});
+$app->get('/question/ask', function() {
+  return (new QuestionAnswerController)->ask();
+});
+$app->get('/question/answer/(:id)', function($id) {
+  return (new QuestionAnswerController)->answer($id);
 });
 
 // default path 404, 405

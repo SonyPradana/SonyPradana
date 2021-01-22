@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.3.2] - 2021-01-22
+
+### Added 
+- Add new CLI command to add models and model (ver 0.2)
+- Add new feature QNA (system forum tanya jawab)
+- Add SCRF protection (Captcha form)
+- Menambah library Alpine.js
+
 ## [2.3.1] - 2021-01-08
 
 ### Added

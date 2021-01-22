@@ -10,19 +10,19 @@
   <script src="/lib/js/vendor/vue/vue.min.js"></script>
   <style>
     .container.width-view {
-        display: grid;
-        grid-template-columns: 1fr 300px;
+      display: grid;
+      grid-template-columns: 1fr 300px;
     }
     main {
-        overflow-x: auto;
+      overflow-x: auto;
     }
 
     @media screen and (max-width: 767px) {
-        .container.width-view {
-            grid-template-columns: 1fr
-        }
+      .container.width-view {
+        grid-template-columns: 1fr
+      }
     }
-</style>
+  </style>
 </head>
 <body>  
   <header>
@@ -36,7 +36,7 @@
 
   <div class="gotop" onclick="gTop()"></div>
   <footer>
-      <?php include($_SERVER['DOCUMENT_ROOT'] . '/resources/components/footer/footer.html') ?>
+    <?php include($_SERVER['DOCUMENT_ROOT'] . '/resources/components/footer/footer.html') ?>
   </footer>
 
   <!-- hidden -->
@@ -48,19 +48,19 @@
 <script>
   // sticky header
   window.onscroll = function(){
-        stickyHeader('.container', '82px', '32px')
-    }
+    stickyHeader('.container', '82px', '32px')
+  }
     
     // keep alive
-    keepalive(
-        () => {
-            // ok function : redirect logout and then redirect to login page to accses this page
-            window.location.href = "/login?url=<?= $_SERVER['REQUEST_URI'] ?>&logout=true"
-        },
-        () => {          
-            // close fuction : just logout
-            window.location.href = "/logout?url=<?= $_SERVER['REQUEST_URI'] ?>"
-        }
-    );
+  keepalive(
+    () => {
+      // ok function : redirect logout and then redirect to login page to accses this page
+      window.location.href = "/login?url=<?= $_SERVER['REQUEST_URI'] ?>&logout=true"
+    },
+    () => {          
+      // close fuction : just logout
+      window.location.href = "/logout?url=<?= $_SERVER['REQUEST_URI'] ?>"
+    }
+  );
 </script>
 </html>

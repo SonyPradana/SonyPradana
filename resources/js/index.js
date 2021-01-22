@@ -155,21 +155,21 @@ function creat_snackbar(message, type = 'success'){
          body.removeChild(dom_snackbar)
      }
 
-     let class_perrent = document.createElement('div')
+     let class_perent = document.createElement('div')
      let class_icon = document.createElement('div')
      let new_commnet = document.createComment('ccs image' )
      let class_message = document.createElement('div')
     // isi data
-    class_perrent.className = `snackbar ${type}`
+    class_perent.className = `snackbar ${type}`
     class_icon.className = 'icon'
     class_icon.appendChild( new_commnet )
     class_message.className = 'message'
     class_message.innerText = message
 
-    class_perrent.appendChild(class_icon)
-    class_perrent.appendChild(class_message)
+    class_perent.appendChild(class_icon)
+    class_perent.appendChild(class_message)
 
-    body.appendChild(class_perrent)
+    body.appendChild(class_perent)
  }
  function lazyImageLoader(){
     document.querySelectorAll("[data-src]").forEach(async function(el){

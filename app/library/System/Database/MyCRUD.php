@@ -139,9 +139,10 @@ abstract class MyCRUD implements CrudInterface
     return $this->PDO->lastInsertId() ?? '';
   }
 
-  public function convertFromArray(): bool
+  public function convertFromArray(array $cloulumnValue)
   {
-    return false;
+    $this->COLUMNS = $cloulumnValue;
+    return true;
   }
   public function convertToArray(): array
   {

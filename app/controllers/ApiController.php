@@ -20,6 +20,10 @@ class ApiController extends Controller
     if (! empty($_FILES)) {
       $params['files'] = $_FILES;
     }
+
+    // send method type
+    $params['x-method'] = $method;
+
     // send version request
     $params['x-version'] = $version;
 

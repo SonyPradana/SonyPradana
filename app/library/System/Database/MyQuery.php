@@ -2,6 +2,8 @@
 
 namespace System\Database;
 
+use PhpParser\Node\Expr\Cast\Array_;
+
 /**
  * Query Builder untuk mempermudah pembuatan/penyusunan query,
  * penyusunan query menggunkan chain-function,
@@ -59,6 +61,12 @@ class MyQuery
   {
     $this->PDO = null; // unset all database
     $this->PDO = new MyPDO($dbs_name);
+    return $this;
+  }
+
+  public function distroy()
+  {
+    $this->_binder = Array();
     return $this;
   }
 

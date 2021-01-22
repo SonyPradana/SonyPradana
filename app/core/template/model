@@ -10,13 +10,15 @@ class __model__ extends MyCRUD
   // getter
   public function getID()
   {
-    return $this->getter('id');
+    return $this->ID['id'] ?? null;
   }
 
   // setter
   public function setID(int $val)
   {
-    $this->setter('id', $val);
+    $this->ID = array (
+      'id' => $val
+    );
     return $this;
   }
 

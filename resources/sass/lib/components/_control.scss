@@ -153,9 +153,11 @@ input{
         background-color: #fff !important;
         &.blue{
             border-color: #2196F3;
+            caret-color: #2196F3;
         }
         &.black{
             border-color: #333;
+            caret-color: #333;
         }
     }
 }
@@ -174,5 +176,43 @@ input{
     }
     .gap-space{
         width: 10px;
+    }
+}
+
+label, section {
+    &.v-group-input {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        
+        &:not(:last-child) {
+            margin-bottom: 12px;
+        }
+    }
+
+    &.h-group-input {
+        display: flex;
+        gap: 4px;
+        align-items: center;
+
+        &.wrap {
+            flex-wrap: wrap;
+        }
+    }
+}
+
+form {
+    .form-footer {
+        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+
+        &.right {
+            justify-content: right;
+        }
+        &.left {
+            justify-content: left;
+        }
     }
 }

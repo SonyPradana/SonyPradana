@@ -20,13 +20,6 @@
       display: flex;
       gap: 12px;
     }
-    section {
-      flex-basis: 100%;
-      display: flex;
-      flex-direction: column;
-      margin-bottom: 12px;
-      gap: 4px;
-    }
     section textarea {
       resize: vertical;
     }
@@ -67,17 +60,17 @@
           <h1>Buat Pertanyaan Baru</h1>
           <form action="" method="post" enctype="multipart/form-data">
             <div class="group-input">
-              <section>
+              <section class="v-group-input">
                 <label for="input-author">Author</label>
-                <input class="textbox outline black rounded small" type="text" name="author" id="input-author" required placeholder="Author">
+                <input class="textbox outline blue rounded small" type="text" name="author" id="input-author" required placeholder="Author">
                 <?php if (isset($portal['error']['author'])): ?>
                   <p  class="input-error"><?= $portal['error']['author'] ?? ''?></p>
                 <?php endif; ?>
               </section>
-              <section>
+              <section class="v-group-input">
                 <label for="input-level">Level</label>
                 <!-- <input class="textbox outline black rounded small" type="number" name="level" id="input-level" required placeholder="Level" value="1"> -->
-                <select class="textbox outline black rounded small" name="level" id="input-level">
+                <select class="textbox outline blue rounded small" name="level" id="input-level">
                   <option value="1" selected>level 1 - umum</option>
                   <option value="2">level 2 - umum</option>
                   <option value="3">level 3 - profesi</option>
@@ -87,37 +80,37 @@
                 <?php endif; ?>
               </section>
             </div>
-            <section>
+            <section class="v-group-input">
               <label for="input-quest">Quest</label>
-              <input class="textbox outline black rounded small" type="text" name="quest" id="input-quest" required placeholder="Pertanyaan">
+              <input class="textbox outline blue rounded small" type="text" name="quest" id="input-quest" required placeholder="Pertanyaan">
               <?php if (isset($portal['error']['quest'])): ?>
                 <p  class="input-error"><?= $portal['error']['quest'] ?? ''?></p>
               <?php endif; ?>
             </section>
-            <section>
+            <section class="v-group-input">
               <label for="input-quest-img">Quest Image (< 500kb)</label>
               <input type="file" name="quest_img" id="input-quest-img" accept=".jpg, .png, .jpeg">
             </section>
-            <section>
+            <section class="v-group-input">
               <label for="input-answer-1">Jawaban benar</label>
-              <input class="textbox outline black rounded small" type="text" name="answer_1" id="input-answer-1" required placeholder="jawaban benar">
+              <input class="textbox outline blue rounded small" type="text" name="answer_1" id="input-answer-1" required placeholder="jawaban benar">
             </section>
-            <section>
+            <section class="v-group-input">
               <label for="input-answer-2">Jawaban kedua</label>
-              <input class="textbox outline black rounded small" type="text" name="answer_2" id="input-answer-2" required placeholder="Opsi jawaban">
+              <input class="textbox outline blue rounded small" type="text" name="answer_2" id="input-answer-2" required placeholder="Opsi jawaban">
             </section>
-            <section>
+            <section class="v-group-input">
               <label for="input-answer-3">Jawaban ketiga</label>
-              <input class="textbox outline black rounded small" type="text" name="answer_3" id="input-answer-3" required placeholder="Opsi jawaban">
+              <input class="textbox outline blue rounded small" type="text" name="answer_3" id="input-answer-3" required placeholder="Opsi jawaban">
             </section>
-            <section>
+            <section class="v-group-input">
               <label for="input-answer-4">Jawaban keempat</label>
-              <input class="textbox outline black rounded small" type="text" name="answer_4" id="input-answer-4" required placeholder="Opsi jawaban">
+              <input class="textbox outline blue rounded small" type="text" name="answer_4" id="input-answer-4" required placeholder="Opsi jawaban">
             </section>
-            <section>
+            <section class="v-group-input">
               <label for="input-explanation">Penjelasan</label>
               <textarea name="explanation" id="input-explanation" cols="30" rows="10" class="textbox outline blue rounded small" placeholder="optional"></textarea>
-            </section>
+            </section class="v-group-input">
 
 
             <button type="submit" name="sumbit" class="btn rounded small blue fill">Send</button>
