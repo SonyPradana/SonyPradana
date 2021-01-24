@@ -6,6 +6,7 @@ mix
   .sass('resources/sass/full.style.scss', 'public/lib/css/ui/v1.1/full.style.css')
   .sass('resources/sass/style.scss', 'public/lib/css/ui/v1.1/style.css')
   .sass('resources/sass/widgets.scss', 'public/lib/css/ui/v1.1/widgets.css')
+  .sass('resources/sass/tailwind-colors.scss', 'public/lib/css/ui/v1.1/tailwind-colors.css')
 
   .options({ autoprefixer: false });
 

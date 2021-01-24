@@ -2,605 +2,416 @@
 
 namespace Model\Simpus;
 
-use System\Database\MyPDO;
 use Simpus\Helper\StringValidation;
+use System\Database\MyModel;
+use System\Database\MyPDO;
 
-/**
- * class ini befungsi untuk mengambil data rekam medis dari data base
- * dengan parameter tertentu, seperti nama, tanggal lahir alamat, dan nama kepala keluarga
- * (mengumpulkan data berdasarkan filter yg ada)
- *
- * @author sonypradana@gmail.com
- */
-class MedicalRecords
+class MedicalRecords extends MyModel
 {
-    /** @var MyPDO MyPDO */
-    protected $PDO = null;
-    # filert by
-    /** @var string 6 digit */
-    private $_filter_nomor_rm;
-    private $_filter_nama;
-    private $_filter_tanggal_lahir;
-    private $_filter_alamat;
-    private $_filter_rt;
-    private $_filter_rw;
-    private $_filter_nama_kk;
-    private $_filter_noRm_kk;
+  // setup
+  /**
+   * where option dengan like or equal
+   */
+  private $_options = Array (
+    'equal' => array (
+      "imperssion" => [":", ""],
+      "operator"   => "="
+    ),
+    'like' => array (
+      "imperssion" => [":", ""],
+      "operator"   => "LIKE"
+    )
+  );
 
-    # filter add
-    private $_filters_alamat = [];
+  private $_addresses = [
+    "addresses" => [
+      "filters" => [],
+      "strict" => false
+    ]
+  ];
+  private $_dataPerPage = 10;
+  private $_orderUsing = MyModel::ORDER_ASC;
+  private $_orderColumn = 'id';
 
-    #costume filter
-    private $_filter_range_min_tgl;
-    private $_filter_range_max_tgl;
-    private $_filter_status_kk = false;
+  // property
 
-    #konfigurasi
-    private $_current_pos = 1;  # set oleh user
-    private $_limit = 10;
-    private $_sort = 'id';
-    /** @var string order by ACD | DEC */
-    private $_order = "ASC";
+  /**
+   * filter/seacrh dengan nomor rm
+   * @param int $val Nomor RM
+   */
+  public function filterByNomorRm(string $val)
+  {
+    $verify = StringValidation::NumberValidation($val, 1, 6);
+    if ($verify) {
+      $len = strlen($val);
+      $max = 6 - $len;
+      for ($i=0; $i < $max; $i++) {
+        $val = 0 . $val;
+      }
+      $this->_FILTERS[] = array (
+        'id'      => rand(1, 10),
+        'param'  => 'nomor_rm',
+        'value'  => $val,
+        'option' => $this->_options['equal'],
+        'type'   => \PDO::PARAM_STR
+      );
+    }
+    return $this;
+  }
 
-    #property
-    public function filterByNomorRm($val)
+  /**
+   * filter/seacrh dengan nama
+   * @param string $val Nama
+   */
+  public function filterByNama(string $val)
+  {
+    $verify = StringValidation::NoHtmlTagValidation($val);
+    if ($verify && ! empty($val)) {
+      $this->_FILTERS[] = array (
+        'id'      => rand(1, 10),
+        'param'   => 'nama',
+        'value'   => strtolower("%$val%"),
+        'option'  => array (
+          "imperssion" => [':', ''],
+          "operator"   => "LIKE"
+        ),
+        'type'    => \PDO::PARAM_STR
+      );
+    }
+    return $this;
+  }
+
+  /**
+   * filter/seacrh dengan tanggal lahir
+   * @param string $val tanggal lahir
+   */
+  public function filterByTanggalLahir(string $val)
+  {
+    $this->_FILTERS[] = array (
+      'id'      => rand(1, 10),
+      'param'   => 'tanggal_lahir',
+      'value'   => strtolower($val),
+      'option'  => $this->_options,
+      'type'    => \PDO::PARAM_STR
+    );
+    return $this;
+  }
+
+  /**
+   * filter/seacrh dengan alamat
+   * @param string $val Alamat
+   */
+  public function filterByAlamat(string $val)
+  {
+    $verify = StringValidation::NoHtmlTagValidation($val);
+    if ($verify && $val != '') {
+      $this->_FILTERS[] = array (
+        'id'      => rand(1, 10),
+        'param'   => 'alamat',
+        'value'   => strtolower("%$val%"),
+        'option'  => $this->_options['like'],
+        'type'    => \PDO::PARAM_STR
+      );
+    }
+    return $this;
+  }
+
+  /**
+   * filter/seacrh dengan Nomor Rt
+   * @param string $val Nomor Rt
+   */
+  public function filterByRt(string $val)
+  {
+    if (is_numeric($val)) {
+      $this->_FILTERS[] = array (
+        'id'      => rand(1, 10),
+        'param'   => 'nomor_rt',
+        'value'   => $val,
+        'option'  => $this->_options['equal'],
+        'type'    => \PDO::PARAM_STR
+      );
+    }
+    return $this;
+  }
+
+  /**
+   * filter/seacrh dengan Nomor Rt
+   * @param string $val Nomor Rt
+   */
+  public function filterByRw(string $val)
+  {
+    if (is_numeric($val)) {
+      $this->_FILTERS[] = array (
+        'id'      => rand(1, 10),
+        'param'   => 'nomor_rw',
+        'value'   => $val,
+        'option'  => $this->_options['equal'],
+        'type'    => \PDO::PARAM_STR
+      );
+    }
+    return $this;
+  }
+
+  /**
+   * filter/seacrh dengan nama kk
+   * @param string $val Nama kk
+   */
+  public function filterByNamaKK(string $val)
+  {
+    $verify = StringValidation::NoHtmlTagValidation($val);
+    if ($verify && ! empty($val)) {
+      $this->_FILTERS[] = array (
+        'id'      => rand(1, 10),
+        'param'   => 'nama_kk',
+        'value'   => strtolower("%$val%"),
+        'option'  => $this->_options['like'],
+        'type'    => \PDO::PARAM_STR
+      );
+    }
+    return $this;
+  }
+
+  /**
+   * filter/seacrh dengan nomor rm kk
+   * @param int $val Nomor RM kk
+   */
+  public function filterByNomorRmKK(string $val)
+  {
+    $verify = StringValidation::NumberValidation($val, 1, 6);
+    if ($verify) {
+      $len = strlen($val);
+      $max = 6 - $len;
+      for ($i=0; $i < $max; $i++) {
+        $val = 0 . $val;
+      }
+      $this->_FILTERS[] = array (
+        'id'      => rand(1, 10),
+        'param'   => 'nomor_rm',
+        'value'   => $val,
+        'option'  => $this->_options['equal'],
+        'type'    => \PDO::PARAM_STR
+      );
+    }
+    return $this;
+  }
+
+  /**
+   * filter tanggal berdasarkan selisih tahun
+   * @param int $minVal tahun termuda
+   * @param int $maxVal tahun tertua
+   */
+  public function filterRangeTanggalLahir($minVal, $maxVal)
+  {
+    $this->costumeWhere(
+      "`tanggal_lahir` BETWEEN DATE(:maxVal) AND DATE(:minVal)",
+      array([':maxVal', $maxVal], [':minVal', $minVal])
+    );
+    return $this;
+  }
+
+  /**
+   * filter berdasarkan alamat-alamat
+   *
+   * fungsi ini bisa ditulis berulang
+   * @param string $val filter alamat tanpa rt / rw
+   */
+  public function filtersAddAlamat(string $val)
+  {
+    $this->_addresses['addresses']['filters'][] = array (
+      'id'      => rand(1, 10),
+      'param'   => 'alamat',
+      'value'   => strtolower($val),
+      'option'  => $this->_options['equal'],
+      'type'    => \PDO::PARAM_STR
+    );
+
+    $this->_GROUP_FILTER = $this->_addresses;
+    return $this;
+  }
+
+  /**
+   * filter data berdasarkan kk (kepala keluarga)
+   * @param bool $val True jika ingin memfilter KK
+   */
+  public function filterStatusKK(bool $val = true)
+  {
+    $this->costumeWhere(
+      "`nomor_rm` = `nomor_rm_kk`",
+      array()
+    );
+    return $this;
+  }
+
+  public function filterDupliate($duplicate)
     {
-        $verify = StringValidation::NumberValidation($val, 1,6);
-        if ($verify) {
-            $len = strlen($val);
-            $max = 6 - $len;
-            for ($i=0; $i < $max ; $i++) {
-                $val = 0 . $val;
-            }
-            $this->_filter_nomor_rm = $val;
-        }
-        return $this;
-    }
-    /**
-     * @param string $val filter berdasarkan nama
-     * */
-    public function filterByNama($val)
-    {
-        $verify = StringValidation::NoHtmlTagValidation($val);
-        if ($verify) {
-            $val = strtolower($val);
-            $this->_filter_nama = $val;
-        }
-        return $this;
-    }
-    /**
-     * @param string $val filter menurut tanggal lahir
-     */
-    public function filterByTgl($val)
-    {
-        $this->_filter_tanggal_lahir = $val;
-        return $this;
-    }
-    /**
-     * @param string $val filter alamat tanpa rt / rw
-     */
-    public function filterByAlamat($val)
-    {
-        $verify = StringValidation::NoHtmlTagValidation($val);
-        if ($verify) {
-            $val = strtolower($val);
-            $this->_filter_alamat = $val;
-        }
-        return $this;
-    }
-    /**
-     * @param string $val filter berdasarkan rt
-     */
-    public function filterByRt($val)
-    {
-        if (is_numeric($val)) {
-            $this->_filter_rt = (int) $val;
-        }
-        return $this;
-    }
-    /**
-     * @param string $val filter nama
-     */
-    public function filterByRw($val)
-    {
-        if (is_numeric($val)) {
-            $this->_filter_rw = (int) $val;
-        }
-        return $this;
-    }
-    /**
-      * @param string $val filter nama kepala keluarga
-      */
-    public function filterByNamaKK($val)
-    {
-        $verify = StringValidation::NoHtmlTagValidation($val);
-        if ($verify) {
-            $val = strtolower($val);
-            $this->_filter_nama_kk = $val;
-        }
-        return $this;
-    }
-    /**
-     * @param string $val filter nomor rm kepala keluarga
-     */
-    public function filterByNomorRmKK($val)
-    {
-        $verify = StringValidation::NumberValidation($val, 1,6);
-        if ($verify) {
-            $len = strlen($val);
-            $max = 6 - $len;
-            for ($i=0; $i < $max ; $i++) {
-                $val = 0 . $val;
-            }
-            $this->_filter_noRm_kk = $val;
-        }
-        return $this;
-    }
-    /**
-     * filter tanggal berdasarkan selisih tahun
-     * @param date $minVal tahun termuda
-     * @param date $maxVal tahun tertua
-     */
-    public function filterRangeTanggalLahir($minVal, $maxVal)
-    {
-        //handle int
-        // if (is_numeric($minVal) && is_numeric($maxVal)) {
-            #min max handle
-            // $minVal = $minVal > 0 ? $minVal : 0;
-            // $maxVal = $maxVal < $minVal ? $minVal : $maxVal;
+      $where = $this->getWhere();
+      $this->PDO->query(
+        "SELECT
+          y.*
+        FROM
+          data_rm y
+        INNER JOIN
+          (
+            SELECT
+              *,
+              COUNT(*) AS CountOf
+            FROM
+                data_rm
+              GROUP BY
+                nama, $duplicate
+              HAVING
+                COUNT(*) > 1
+              AND
+                ($where)
+          )
+        dt ON y.nama = dt.nama AND y.$duplicate = dt.$duplicate
+        ORDER BY
+          y.nama, y.$duplicate"
+      );
+      $this->bindingFilters();
 
-            $this->_filter_range_min_tgl = $minVal;
-            $this->_filter_range_max_tgl = $maxVal;
-        // }
+      return $this->PDO->resultset();
     }
 
-    /**
-     * filter berdasarkan alamat-alamat
-     *
-     * fungsi ini bisa ditulis berulang
-     * @param string $val filter alamat tanpa rt / rw
-     */
-    public function filtersAddAlamat($val)
-    {
-        $verify = StringValidation::NoHtmlTagValidation($val);
-        if ( $verify) {
-            $val = strtolower($val);
-            $this->_filters_alamat[] = $val;
-        }
-        return $this;
+  // settup
+  /**
+   * Memilih kolomn yang akan di tampilkan
+   */
+  public function selectColumn(array $columns_name)
+  {
+    $this->_COLUMNS = $columns_name;
+    return $this;
+  }
+
+
+  /**
+   * @param MyPDO $PDO DataBase class Dependency Injection
+   */
+  public function __construct(MyPDO $PDO = null)
+  {
+    $this->_TABELS[]  = 'data_rm';
+    $this->PDO = $PDO ?? new MyPDO();
+  }
+
+  // costume function
+  /**
+   * Mendapatkan jumlah seluruh data yang tersedia mengguna filter yang ditentukan
+   * @return int Jumlah data yang tersedia
+   */
+  public function maxData(): int
+  {
+    $whereStantment = $this->grupQueryFilters( $this->mergeFilters() );
+    $whereStantment = $whereStantment == '' ? '' : "WHERE $whereStantment";
+    $this->PDO->query(
+      "SELECT
+        COUNT(id) as total
+      FROM
+        `data_rm`
+      $whereStantment
+    ");
+    $this->bindingFilters();
+    // var_dump($whereStantment);
+    // exit;
+
+    return $this->PDO->single()['total'] ?? 0;
+  }
+
+  /**
+   * Mengambil jumlah page tersedia berdasarkan jumlah data yg ditampilkan
+   * @return int Jumlah page tersedia
+   */
+  public function maxPage(): int
+  {
+    $page = $this->_limit_end - $this->_limit_start;
+    $return = ceil($this->maxData() / $page);
+    return $return < 1 ? 1 : $return;
+  }
+
+  /**
+   * Mengurutkan berdasarkan column yang ditentukan,
+   * list column dapat dilihat menggunkan getColumnSupport()
+   * @param string $column_name Nama column yang akan diurutkan
+   */
+  public function sortUsing(string $column_name)
+  {
+    $this->_orderColumn = $column_name;
+    $this->order($this->_orderColumn, $this->_orderUsing);
+    return $this;
+  }
+
+  /**
+   * Mengurutkan data berdasarkan ASC atau DESC
+   * @param string $order_using ASC || DESC
+   */
+  public function orderUsing(string $order_using)
+  {
+    $this->_orderUsing = $order_using == "ASC" ? MyModel::ORDER_ASC : MyModel::ORDER_DESC;
+    $this->order($this->_orderColumn, $this->_orderUsing);
+    return $this;
+  }
+
+  /**
+   * Jumlah data yang ditampilkan dalam sekali panggil,
+   * min: 10, maks: 100
+   * @param string $val Jumlah data yang ditampilkan
+   */
+  public function limitView($val)
+  {
+    $verify = StringValidation::NumberValidation($val, 1, 3);
+    if ($verify) {
+      $val = $val < 10 ? 10 : $val;
+      $val = $val > 100 ? 100 : $val;
+      $this->_dataPerPage = $val;
+      $this->_limit_end = $this->_limit_start + $val;
     }
+    return $this;
+  }
 
-    /**
-     * filter berdasarkan satus kepala keluarga
-     * @param boolean $val Staus kepala keluarga
-     */
-    public function filterStatusKK($val = true)
-    {
-        if ($val ===true) {
-            $this->_filter_status_kk = true;
-        } else {
-            $this->_filter_status_kk = false;
-        }
-        return $this;
+  /**
+   * Jumlah data yang ditampilkan dalam sekali panggil,
+   * tanpa minum atau maksimum
+   * @param string $val Jumlah data yang ditampilkan
+   */
+  public function forceLimitView($val)
+  {
+    $verify = StringValidation::NumberValidation($val, 1, 3);
+    if ($verify) {
+      $this->_dataPerPage = $val;
+      $this->_limit_end = $this->_limit_start + $val;
     }
+    return $this;
+  }
 
-    /**
-     * Mengambil hasil full query dari query yang dibuat (query yang digunakan di result).
-     * rekomendasi:
-     * - filter = true,  strict = true
-     * - filter = false, strict = false
-     * @param  bool   $filters query menggunakan multi search atau tidak
-     * @param  bool   $strict  true, query menggunakan logica AND
-     * @return string query string (sebelum di esekusi / dipanggil)
-     */
-    public function getQuery(bool $filters = false, bool $strict = false):string{
-        $filter_type = $filters ? $this->filters( $strict ) : $this->filter( $strict );
+  /**
+   * Meset posisi page (limit satart, end)
+   * @param int $page_pos Page postion defult = 0
+   */
+  public function currentPage(int $page_pos)
+  {
+    $page_pos = $page_pos < 1 ? 1 : $page_pos;
+    $page_pos = $page_pos > 100 ? 100 : $page_pos;
+    $page_pos = floor($page_pos);
 
-        return $this->query( $filter_type );
-    }
+    $this->_limit_start = ($page_pos * $this->_dataPerPage) - $this->_dataPerPage;
+    return $this;
+  }
 
-    /**
-     * Mengambil hasil 'where condition' dari query yang dibuat.
-     * rekomendasi:
-     * - filter = true,  strict = true
-     * - filter = false, strict = false
-     * @param  bool   $filters query menggunakan multi search atau tidak
-     * @param  bool   $strict  true, query menggunakan logica AND
-     * @return string filter string (raw dari query)
-     */
-    public function getQueryStatment(bool $filters = false, bool $strict = false):string{
-        return $filters ? $this->filters( $strict ) : $this->filter( $strict );
-    }
-
-    /**
-     * jumlah data yang ditampilkan per halaman
-     * min 10, maks 100
-     */
-    public function limitView($val)
-    {
-        $verify = StringValidation::NumberValidation($val, 1, 3);
-        if ($verify) {
-            $val = $val < 10 ? 10 : $val;
-            $val = $val > 100 ? 100 : $val;
-            $this->_limit =  $val;
-        }
-        return $this;
-    }
-    /**
-     * jumlah data yang ditampilkan per halaman
-     * paksa sesaui angak yg dikehendaki
-     */
-    public function forceLimitView($val)
-    {
-        $verify = StringValidation::NumberValidation($val, 1, 3);
-        if ($verify) {
-            $this->_limit =  $val;
-        }
-        return $this;
-    }
-
-    private $_sortSupport = ['id', 'nomor_rm', 'nama', 'tanggal_lahir', 'alamat', 'nomor_rw', 'nama_kk', 'nomor_rm_kk'];
-    /**
-     * Mengurutkan data berdasarkan kategory
-     *
-     * 'id', 'nomor_rm', 'nama', 'tanggal_lahir', 'alamat', 'nomor_rw', 'nama_kk', 'nomor_rm_kk'
-     * @param string $val mengurutkan berdasarkan category
-     */
-    public function sortUsing($val)
-    {
-        $val = strtolower($val);
-        $this->_sort = in_array($val, $this->_sortSupport) ? $val : 'id';
-        return $this;
-    }
-
-    /**
-     * Mengurutkan data secara Ascending (Membesar) / Descending (Mengecil)
-     * @param string $val ASC|DESC
-     */
-    public function orderUsing($val = "ASC")
-    {
-        $val = strtoupper($val);
-        if ($val == "ASC") {
-            $this->_order = "ASC";
-        } else {
-            $this->_order = "DESC";
-        }
-        return $this;
-    }
-
-    /**
-     * me-set posisi halaman, posisi halaman tergantung dengan jumalah data dan data yg ditampilkan setiap halam.
-     *
-     * bila posisi halman tidak disetting halman akan menunjuk pada halaman awal
-     * @param interger $val posisi halaman
-     */
-    public function currentPage($val)
-    {
-        $val = is_numeric( $val ) ? $val : 1;
-        $val = $val < 1 ? 1 : $val;
-        $val = $val > 100 ? 100 : $val;
-        $val = floor($val);
-
-        $this->_current_pos = $val;
-    }
-
-    /**
-     * menampilkan jumlah data yg disajikan setalah filter di atur
-     *
-     * @return int jumlah data
-     */
-    public function maxData(): int
-    {
-        $query_filter = $this->filter();
-        $query_filters = $this->filters(false);
-
-        $merge_filter = $query_filter . $query_filters;
-        $merge_filter = $merge_filter != '' ? "WHERE " . $merge_filter : "";
-
-        $query = "SELECT COUNT(id) FROM data_rm $merge_filter";
-
-        $link = mysqli_connect(DB_HOST, DB_USER, DB_PASS, "simpusle_simpus_lerep");
-        $result = mysqli_query($link, $query);
-        $feedback = mysqli_fetch_assoc( $result );
-
-        return (int) $feedback['COUNT(id)'] ?? 0;
-    }
-
-    /**
-     * jumlah halaman maksimum yang dapat di tampilkan
-     *
-     * @return interger jumlah halaman
-     */
-    public function maxPage()
-    {
-        return (int) ceil($this->maxData() / $this->_limit);
-    }
-
-    /**
-     * mengambil column data base yang dapat di sort/diorder
-     * @return array nama column
-     */
-    public function getColumnSupport():array{
-        return $this->_sortSupport;
-    }
-
-    public function __construct(MyPDO $PDO = null)
-    {
-      $this->PDO = $PDO ?? new MyPDO();
-    }
-
-    private function query(string $query_filter)
-    {
-        $sort  = $this->_sort;
-        $order = $this->_order;
-        $start_data = ($this->_current_pos * $this->_limit) - $this->_limit;
-        $limit = $this->_limit;
-        $sort_order = ', tanggal_lahir';
-        return "SELECT * FROM data_rm WHERE $query_filter ORDER BY $sort $order $sort_order LIMIT $start_data, $limit";
-    }
-
-    /**
-     * filter hasil query data base berdasarkan proprty yg telah ditentukan sebeeelumnya
-     * filter dapat dikombinasikan atau di filter tunggal
-     *
-     * @param boolean $stirich
-     * - ***true*** = menggnakan logia **"and"** (hasil harus sesui dengan property)
-     * - ***false*** = menggukan logika **"or"** (hasil query lebih fleksibel)
-     * @return string string query
-     */
-    private function filter($stirich = true)
-    {
-        # buat string query
-        $q = [];
-        $q[] = $this->queryBuilder( 'nomor_rm', $this->_filter_nomor_rm);
-        $q[] = $this->queryBuilder( 'nama', $this->_filter_nama);
-        $q[] = $this->queryBuilder( 'tanggal_lahir', $this->_filter_tanggal_lahir);
-        $q[] = $this->queryBuilder( 'alamat', $this->_filter_alamat);
-        $q[] = $this->queryBuilder( 'nomor_rt', $this->_filter_rt, false);
-        $q[] = $this->queryBuilder( 'nomor_rw', $this->_filter_rw, false);
-        $q[] = $this->queryBuilder( 'nama_kk', $this->_filter_nama_kk);
-        $q[] = $this->queryBuilder( 'nomor_rm_kk', $this->_filter_noRm_kk, false);
-
-        $query = '';
-        if ($stirich) {
-            #oprasi and (harus ada)
-            foreach ($q as $res) {
-                if ($res == '') continue;
-                $query .= ($res) ?  $res . ' AND ': '' ;
-            }
-
-            $strLen = strlen ($query) ;
-            $query = substr_replace($query, '', $strLen - 5, -1);
-        }else{
-            #oprasi or (salah satu harus ada)
-            foreach ($q as $res) {
-                if ($res == '' ) continue;
-                $query .= ($res) ?  $res . ' OR ': '' ;
-            }
-
-            $strLen = strlen ($query) ;
-            $query = substr_replace($query, '', $strLen - 4, -1);
-        }
-        return $query;
-
-    }
-    /** helper untuk menkonvert proprty ke string query
-     * @param string $parameter nama kolom data base
-     * @param string $obj isi kolom data base
-     * @param boolean $use_persent
-     * - true : mencari value / string daintara text yg ada
-     * - false " mecari data sesuai value mutlak sama
-     */
-    private function queryBuilder($parameter, $obj, $use_persent = true)
-    {
-        if (isset( $obj ) AND $obj != '') {
-            if ($use_persent) {
-                return "($parameter LIKE '%$obj%')";
-            } else {
-                return "($parameter LIKE '$obj')";
-            }
-        }
-        return '';
-    }
-    /**
-     * filter hasil query data base berdasarkan proprty yg telah ditentukan sebeeelumnya.
-     * filter dapat dikombinasikan atau di filter tunggal.
-     *
-     * Dalam satu property bisa memiliki nilai/value lebih dari satu
-     *
-     * @param boolean $stirich
-     * - ***true*** = menggnakan logia **"and"** (hasil harus sesui dengan property)
-     * - ***false*** = menggukan logika **"or"** (hasil query lebih fleksibel)
-     * @return string string query     *
-     */
-    private function filters($stirich = true)
-    {
-        $q = []; // query builder
-
-        $filters_alamat = $this->_filters_alamat;
-        foreach ($filters_alamat as $f) {
-            $q[] = $this->queryBuilder( 'alamat', $f);
-        }
-
-        $query = '';
-        if ($stirich) {
-            #oprasi and (harus ada)
-            foreach ($q as $res) {
-                if ($res == '') continue;
-                $query .= ($res) ?  $res . ' AND ': '' ;
-            }
-
-            $strLen = strlen ($query) ;
-            $query = substr_replace($query, '', $strLen - 5, -1);
-        } else {
-            #oprasi or (salah satu harus ada)
-            foreach ($q as $res) {
-                if ( $res == '') continue;
-                $query .= ($res) ?  $res . ' OR ': '' ;
-            }
-
-            $strLen = strlen ($query) ;
-            $query = substr_replace($query, '', $strLen - 4, -1);
-        }
-        // enkapsulasi query
-        $query = $query == '' ? $query : '( ' . $query . ') ';
-        # menambah query lain
-        # query range
-        $min = $this->_filter_range_min_tgl;
-        $max = $this->_filter_range_max_tgl;
-        if (isset($min) && isset($max)) {
-            $AND = $query != "" ? "AND " : "";
-            $query .=  "$AND(tanggal_lahir BETWEEN DATE('$max') AND DATE('$min'))";
-        }
-        # query status kk
-        if ($this->_filter_status_kk) {
-            $AND = $query != "" ? "AND " : "";
-            $query .=  "$AND(nomor_rm = nomor_rm_kk)";
-        }
-
-        return $query;
-    }
-
-    /** Mereset semua parameter menjadi null */
-    public function reset()
-    {
-       $this->_filter_nomor_rm = '';
-       $this->_filter_nama = '';
-       $this->_filter_tanggal_lahir = '';
-       $this->_filter_alamat = '';
-       $this->_filter_rt = '';
-       $this->_filter_rw = '';
-       $this->_filter_nama_kk = '';
-       $this->_filter_noRm_kk = '';
-        # other
-        $this->_filters_alamat = [];
-    }
-
-    /**
-     * Hasil dari view berupa array data/ json
-     * Hasil dapat diatur menggunkan filter
-     *
-     * @param boolean $strict
-     * - true = menggunkan logica AND, semua paremeter harus terpenuhi
-     * - false = menggunakan logica Or, salah parameter terpenuhi
-     * @param boolean $convert_To_Json
-     * - true = mengmbalilkan data berbentuk json
-     * - false = mengembalikan data berbentuk array data
-     * @return array or json
-     */
-    public function result($strict = true, $convert_To_Json = false)
-    {
-        # koneksi data base
-        $link = mysqli_connect(DB_HOST, DB_USER, DB_PASS, "simpusle_simpus_lerep");
-        # query data
-        $queryFilter = $this->filter($strict);
-        if ($queryFilter == '') {
-            # mencegah (query kosong) ketika filter tidak di setting
-            return [];
-        } else {
-            $query = $this->query( $queryFilter );
-        }
-        # mengambil dari table
-        $result = mysqli_query($link, $query);
-        # menampung hasil dari result
-        $data = [];
-        while ($feedback = mysqli_fetch_assoc( $result )) {
-            // # convert ke MedicalRecord class
-            // $data[] = MedicalRecord::withData( $feedback );
-            $data[] = $feedback;
-        }
-        # konfert ke json jika di butuhkan
-         if ($convert_To_Json) {
-             return json_encode($data);
-         }
-         return $data;
-    }
-
-    /**
-     * Hasil dari view berupa array data/ json
-     *
-     * Mengengmbalikan semua data yg ada di databe tanpa ada filter
-     *
-     * @return array or json
-     */
-    public function resultAll(string $where = "")
-    {
-        $limit = $this->_limit; #limited views
-        $sort = $this->_sort;
-        $order = $this->_order;
-        $start_data = ($this->_current_pos * $this->_limit) - $this->_limit;
-        $sort_order = ', tanggal_lahir';
-
-        $this->PDO->query(
-          "SELECT *
-          FROM data_rm
-          $where
-          ORDER BY
-            $sort $order $sort_order
-          LIMIT
-            $start_data, $limit"
-        );
-        $this->PDO->execute();
-
-        return $this->PDO->resultset();
-    }
-
-    /**
-     * Hasil berupa array data/ json.
-     * Hasil dapat diatur menggunkan filter-filter
-     *
-     * Dalam satu peoperty bisa ada beberapa Value
-     *
-     * Request Property: filtersAdd()
-     *
-     * @param boolean $strict
-     * - true = menggunkan logica AND, semua paremeter harus terpenuhi
-     * - false = menggunakan logica Or, salah parameter terpenuhi
-     * @param boolean $convert_To_Json
-     * - true = mengmbalilkan data berbentuk json
-     * - false = mengembalikan data berbentuk array data
-     * @return array or json
-     */
-    public function results($strict = false, $convert_To_Json = false)
-    {
-       # koneksi data base
-       $link = mysqli_connect(DB_HOST, DB_USER, DB_PASS, "simpusle_simpus_lerep");
-       # query data
-       $queryFilter = $this->filters($strict);
-       if ($queryFilter == '') {
-           # mencegah (query kosong) ketika filter tidak di setting
-           return [];
-       } else{
-           $query = $this->query( $queryFilter );
-       }
-       # mengambil dari table
-       $result = mysqli_query($link, $query);
-       # menampung hasil dari result
-       $data = [];
-       while ($feedback = mysqli_fetch_assoc( $result )) {
-           // # convert ke MedicalRecord class
-           // $data[] = MedicalRecord::withData( $feedback );
-           $data[] = $feedback;
-       }
-       # konfert ke json jika di butuhkan
-        if ($convert_To_Json) {
-            return json_encode($data);
-        }
-        return $data;
-    }
-
-    /**
-     * Shorthand untuk mengambil data di data base data_rm
-     * @param string $statement String query setelah where condition
-     * @param array  $params Parameter dalam array untuk mengisi bind pada query
-     * @return array Array assosiatif hasil pencarian
-     */
-    public function where(string $statement, array $params)
-    {
-        $this->PDO->query("SELECT * FROM `data_rm` WHERE $statement");
-        foreach ($params as $param_key => $param_val) {
-            $this->PDO->bind($param_key, $param_val);
-        }
-        return $this->PDO->resultset();
-    }
+  /**
+   * @return array List column pada table
+   */
+  public function getColumnSupport()
+  {
+    $this->PDO->query(
+      "SELECT
+        COLUMN_NAME
+      FROM
+        INFORMATION_SCHEMA.COLUMNS
+      WHERE
+        TABLE_SCHEMA = :dbs AND TABLE_NAME = :table"
+    );
+    $this->PDO->bind(':table', 'data_rm');
+    $this->PDO->bind(':dbs', DB_NAME);
+    $result = $this->PDO->resultset();
+    return array_column($result, 'COLUMN_NAME') ?? array();
+  }
 }

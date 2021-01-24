@@ -10,7 +10,7 @@ use System\Database\MyPDO;
 //  b. buat function khusu untuk mangambil flag
 class CLI
 {
-  public const CLI_VERSION = '0.2.0';
+  public const CLI_VERSION = '0.2.1';
   private $BASE_DIR;
   private const MAKE_CONTROLLER = array (
     'template_location' => '/app/core/template/controller',
@@ -228,8 +228,9 @@ class CLI
     echo "\tmake:controller [controller_name]\teasy way make controller and view\n";
     echo "\tmake:view [view_name]\t\t\teasy way make view\n";
     echo "\tmake:service [service_name]\t\teasy way make service\n";
-    echo "\tmake:model [service_name] [flag]\teasy way make service\n";
-    echo "\t\t\noptional:\n";
+    echo "\tmake:model [model_name] [flag]\teasy way make model\n";
+    echo "\tmake:models [models_name] [flag]\teasy way make models\n";
+    echo "\t\t\noptional: [flag]\n";
     echo "\t--table-name=[table_name]\tget table column when creating model\n";
   }
 }

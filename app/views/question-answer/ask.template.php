@@ -3,7 +3,8 @@
 <head>
   <?php include($_SERVER['DOCUMENT_ROOT'] . '/resources/components/meta/metatag.php') ?>
 
-  <link rel="stylesheet" href="/lib/css/ui/v1.1/full.style.css">
+  <link rel="stylesheet" href="/lib/css/ui/v1.1/style.css">
+  <link rel="stylesheet" href="/lib/css/ui/v1.1/tailwind-colors.css">
   <script src="/lib/js/index.min.js"></script>
   <script src="/lib/js/bundles/message.js"></script>
   <script src="/lib/js/bundles/keepalive.min.js"></script>
@@ -214,6 +215,7 @@
       submitData() {
         this.onSubmit = true;
         let success = false;
+        let new_id = 0
 
         $json('/api/ver1.0/QuestionAnswer/submit-post.json', {
           method: 'PUT',
@@ -226,9 +228,11 @@
           body: JSON.stringify(this.data)
         })
         .then(json => {
+          console.log(json);
           if (json.status == 'ok') {
             console.log('Form sucessfully submitted!');
             success = true;
+            new_id = json.data.new_id;
           } else {
             this.error.name.msg = json.error.name;
             this.error.name.err = true;
@@ -247,10 +251,11 @@
           this.onSubmit = false;
           if (success) {
             if (this.data.perent_id == '') {
-              window.location = '/QnA';
+              window.location = `/question/${new_id}/qna`;
+            } else {
+              window.location = `/question/${this.data.perent_id}/qna`
             }
 
-            window.location = `/question/${this.data.perent_id}/jump`
           }
         })
       },

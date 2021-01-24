@@ -20,10 +20,12 @@ class asks extends MyModel
 
   public function fillterPerentID($val)
   {
-    $this->_FILTERS['perent_id'] = [
-      'value'     => $val,
-      'option'    => $this->_options,
-      'type'      => \PDO::PARAM_STR
+    $this->_FILTERS[] = [
+      'id'      => 1,
+      'param'   => 'perent_id',
+      'value'   => $val,
+      'option'  => $this->_options,
+      'type'    => \PDO::PARAM_STR
     ];
 
     return $this;

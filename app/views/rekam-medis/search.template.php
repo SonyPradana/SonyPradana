@@ -110,7 +110,6 @@
                             <tbody>
                             </tbody>
                         </table>
-                        <p class="info">Data tidak ditemukan</p>
                         <div class="box-pagination">
                             <div class="pagination">
                                 <!-- pagination -->
@@ -169,6 +168,18 @@
         if( query != '&'){
             getData(_sort, _order, _cure_page, query)
             _search_query = query
+        } else {
+          const tr =  document.createElement('tr');
+          const td =  document.createElement('td');
+          const desc = document.createElement('h3');
+          desc.innerText = 'Mencari sesuatu?';
+          td.setAttribute('colspan', 9);
+          td.appendChild(desc)
+          tr.appendChild(td)
+
+          $query('.data-rm tbody').appendChild(tr)
+
+
         }
     })
 

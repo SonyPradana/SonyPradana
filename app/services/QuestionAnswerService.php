@@ -54,6 +54,8 @@ class QuestionAnswerService extends Middleware
 
       $child['date_creat'] = date('d M Y', $child['date_creat']);
       $child['slug'] = Manipulation::slugify($child['title']);
+      $vote = $child['like_post'] - $child['dislike_post'];
+      $child['vote'] = $vote < 0 ? 0 : $vote;
       $thisThread['perent'] = $child;
 
       $thisThread['childs_id'] = array_column (
@@ -66,11 +68,11 @@ class QuestionAnswerService extends Middleware
       );
 
       $thisThread['best_child'] = $db
-      ->select('public_quest')
-      ->column( array('*') )
-      ->equal('perent_id', $child['id'])
-      ->order('like_post', MyQuery::ORDER_DESC)
-      ->single();
+        ->select('public_quest')
+        ->column( array('*') )
+        ->equal('perent_id', $child['id'])
+        ->order('like_post', MyQuery::ORDER_DESC)
+        ->single();
 
       if ($child['perent_id'] == null) {
         $thread[] = $thisThread;
@@ -182,7 +184,10 @@ class QuestionAnswerService extends Middleware
     return array (
       'status'  => $save ? 'ok' : 'not saved',
       'code'    => 200,
-      'data'    => $request,
+      'data'    => [
+        $request,
+        'new_id'  => $this->PDO->lastInsertId()
+      ],
       'error'   => $error ?? false,
       'headers' => array('HTTP/1.1 200 Oke')
     );

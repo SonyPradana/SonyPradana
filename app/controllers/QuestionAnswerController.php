@@ -27,9 +27,9 @@ class QuestionAnswerController extends Controller
             "DNT"           => $this->getMiddleware()['DNT'],
             "redirect_to"   => $_GET['redirect_to'] ?? '/',
             "meta"          => array (
-                "title"         => "Documnet Title",
-                "discription"   => "Sistem Informasi Manajemen Puskesmas SIMPUS Lerep",
-                "keywords"      => "simpus lerep, puskesmas lerep, puskesmas, ungaran, kabupaten semarang"
+              "title"         => "Forum Tanya Jawab - Simpus Lerep",
+              "discription"   => "Forum diskusi, Diskusi pelayanan keseahatan di puskesmas lerep",
+              "keywords"      => "QnA, Q&A, Question Answer, Tanya Jawab, Forum, Diskusi"
             ),
             "header"        => array (
                 "active_menu"   => 'null',
@@ -61,6 +61,8 @@ class QuestionAnswerController extends Controller
 
       $quest = $ask->getAll();
       $quest['date_creat'] = date('d M Y', $quest['date_creat']);
+      $vote = $quest['like_post'] - $quest['dislike_post'];
+      $quest['vote'] = $vote < 0 ? 0 : $vote;
 
       $answer = new asks($this->PDO);
       $answerAll = $answer
@@ -105,8 +107,8 @@ class QuestionAnswerController extends Controller
         "redirect_to"   => $_GET['redirect_to'] ?? '/',
         "meta"          => array (
           "title"         => $quest['title'] . " - QnA simpus lerep",
-          "discription"   => "Sistem Informasi Manajemen Puskesmas SIMPUS Lerep",
-          "keywords"      => "simpus lerep, puskesmas lerep, puskesmas, ungaran, kabupaten semarang"
+          "discription"   => "Forum diskusi, Diskusi pelayanan keseahatan di puskesmas lerep",
+          "keywords"      => "QnA, Q&A, Question Answer, Tanya Jawab, Forum, Diskusi"
         ),
         "header"        => array (
           "active_menu"   => 'null',

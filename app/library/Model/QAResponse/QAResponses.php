@@ -10,10 +10,12 @@ class QAResponses extends MyModel
 
   public function filterEventID(string $eventID)
   {
-    $this->_FILTERS['event_id'] = [
-      'value'     => $eventID,
-      'option'    => $this->_options,
-      'type'      => \PDO::PARAM_STR
+    $this->_FILTERS[] = [
+      'id'      => 1,
+      'param'   => 'event_id',
+      'value'   => $eventID,
+      'option'  => $this->_options,
+      'type'    => \PDO::PARAM_STR
     ];
 
     return $this;

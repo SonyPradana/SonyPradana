@@ -105,7 +105,6 @@
                             <?php endforeach ; ?>
                         </tbody>
                     </table>
-                    <p class="info">Data tidak ditemukan</p>
                     <div class="box-pagination">
                         <div class="pagination">
                         </div>

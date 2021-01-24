@@ -6,7 +6,8 @@ use Helper\String\Manipulation;
 <head>
   <?php include($_SERVER['DOCUMENT_ROOT'] . '/resources/components/meta/metatag.php') ?>
 
-  <link rel="stylesheet" href="/lib/css/ui/v1.1/full.style.css">
+  <link rel="stylesheet" href="/lib/css/ui/v1.1/style.css">
+  <link rel="stylesheet" href="/lib/css/ui/v1.1/tailwind-colors.css">
   <script src="/lib/js/index.min.js"></script>
   <script src="/lib/js/bundles/message.js"></script>
   <script src="/lib/js/bundles/keepalive.min.js"></script>
@@ -26,13 +27,20 @@ use Helper\String\Manipulation;
       }
     }
 
-    .question-title h1 {
-      color: #1F2937;
+    h2 {
+      font-size: 24px;
+    }
+
+    h1 {
       font-size: 32px;
     }
 
+    h4 {
+      margin: 0;
+      font-size: 20px;
+    }
+
     .info p {
-      color: #6B7280;
       font-size: 16px;
     }
 
@@ -70,20 +78,9 @@ use Helper\String\Manipulation;
       border-top: 16px solid #4B5563;
     }
 
-    .vote-count {
-      color: #6B7280;
-    }
-
     .question-box p {
-      color: #1F2937;
       font-size: 20px;
       margin: 0;
-    }
-
-    .sub-header h2,
-    .form-header h3 {
-      color: #374151;
-      font-size: 24px;
     }
 
     .answers {
@@ -100,12 +97,6 @@ use Helper\String\Manipulation;
 
     .answer:not(:first-child) {
       border-top: 1px solid #ddd;
-    }
-
-    .answer h4 {
-      margin: 0;
-      font-size: 20px;
-      color: #1F2937;
     }
 
     .answer-respone {
@@ -145,38 +136,38 @@ use Helper\String\Manipulation;
         </ul>
       </div>
       <div class="header-content">
-        <div class="question-title">
-          <h1><?= $content->perent['title'] ?></h1>
+        <div>
+          <h1 class="text-color-800"><?= $content->perent['title'] ?></h1>
         </div>
         <div class="info">
-          <p>Ditanyakan <?= $content->perent['date_creat'] ?> oleh <?= $content->perent['author'] ?></p>
+          <p class="text-gray-500">Ditanyakan <?= $content->perent['date_creat'] ?> oleh <?= $content->perent['author'] ?></p>
         </div>
       </div>
       <div class="question-content" x-data="vote()">
         <div class="vote-box">
           <div class="like-btn vote-btn" x-on:click="perentLike()"></div>
-          <div class="vote-count" x-text="perent.like"></div>
+          <div class="text-gray-500" x-text="perent.like"></div>
           <div class="dislike-btn vote-btn" x-on:click="perentDislike()"></div>
         </div>
         <div class="question-box">
-          <p><?= $content->perent['content'] ?></p>
+          <p class="text-gray-800"><?= $content->perent['content'] ?></p>
         </div>
       </div>
       <div class="answers-content">
         <div class="sub-header">
-          <h2>Answer</h2>
+          <h2 class="text-gray-700">Answer</h2>
         </div>
         <div class="answers">
           <?php foreach ($content->answers as $answer): ?>
             <div class="answer">
               <div class="vote-box">
                 <div class="like-btn vote-btn" onclick="vote().childLike(<?= $answer['id'] ?>)"></div>
-                <div id="child-vote-<?= $answer['id'] ?>" class="vote-count"><?= $answer['like_post'] ?></div>
+                <div id="child-vote-<?= $answer['id'] ?>" class="text-gray-500"><?= $answer['like_post'] ?></div>
                 <div class="dislike-btn vote-btn" onclick="vote().childDislike(<?= $answer['id'] ?>)"></div>
               </div>
               <div class="answer-box">
-                <div class="answer-title">
-                  <h4><?= $answer['title'] ?></h4>
+                <div>
+                  <h4 class="text-gray-800"><?= $answer['title'] ?></h4>
                 </div>
                 <div class="answer-discription">
                   <p><?= $answer['content'] ?></p>
@@ -192,7 +183,7 @@ use Helper\String\Manipulation;
       </div>
       <div class="new-post">
         <div class="form-header">
-          <h3>Jawaban kamu</h3>
+          <h2 class="text-gray-700">Jawaban kamu</h2>
         </div>
         <div class="form-box">
             <form  id="new-post" x-data="newPost()" x-on:submit.prevent="submitData">
@@ -328,7 +319,7 @@ use Helper\String\Manipulation;
   function vote() {
     return {
       perent: {
-        like: <?= $content->perent['like_post'] ?>
+        like: <?= $content->perent['vote'] ?>,
       },
 
       perentLike() {

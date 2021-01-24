@@ -3,7 +3,7 @@ a.card{
 }
 
 // plan card
-.card{
+.card {
     // global - radius
     &.radius-light{
         border-radius: 4px;
@@ -59,7 +59,7 @@ a.card{
 }
 
 // box box
-.cards-box{
+.cards-box {
     &.blue{
         padding: 16px;
         background-color: #55b9f3;
@@ -88,6 +88,8 @@ a.card{
     box-shadow: 2px 2px 8px 0px rgba(217,217,217,1);
     border-radius: 8px;            
     margin: 0 16px;
+    user-select: none;
+
     .card{
         &.image{
             width: 200px; height: 200px;
@@ -123,6 +125,7 @@ a.card{
     min-width: 150px;
     color: #fff;    
     position: relative;
+    user-select: none;
 
     .card{
         &.title{
@@ -170,7 +173,7 @@ a.card{
 }
 
 // response card
-.respone-card{
+.respone-card {
     cursor: default;
     padding: 16px;
     border-radius: 12px;
@@ -178,6 +181,8 @@ a.card{
     height: 72px;
     color: #fff;    
     position: relative;
+    user-select: none;
+
     .card{
         &.title{
             font-size: 1.3rem;
@@ -196,6 +201,8 @@ a.card{
     padding: 16px;
     display: grid;
     grid-template-columns: 68px 16px 200px;
+    user-select: none;
+
     .card-time{
         height: 68px;
         background-color: #2626fd;

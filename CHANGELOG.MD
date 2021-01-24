@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.3.3] - 2021-01-25
+
+### Added 
+- Steal Tailwind-color (gray, blue)
+- MyModel more mudular and complex filter
+
+### Changed 
+- MedicalRecords now extends MyModel
+- Search rm defult search now is strict mode
+- Some ui improvement
+
+### Fixed
+- New Post QnA redirect to wrong url when sumbited new post/question
+- CLI simpus help command not updated
+- Meta html qna not relevant
+- Add no caching to some api in new rm
+- Search rm showing minus number of index
+- Sort order view and search rm not sorted correctly
+- Result not found display not work correctly in search and view rm
+
 ## [2.3.2] - 2021-01-22
 
 ### Added 

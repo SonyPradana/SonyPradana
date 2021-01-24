@@ -49,7 +49,7 @@
       width: 100%;
       min-width: 320px;
       display: grid;
-      grid-template-columns: 32px 32px 1fr 200px;
+      grid-template-columns: 32px 32px minmax(320px, 1fr) minmax(48px, 92px);
       gap: 16px;
     }
 
@@ -126,11 +126,6 @@
       outline: none;
     }
 
-    .detail.tag {
-      background-color: #4a92b7;
-      color: #eee;
-    }
-
     @media screen and (max-width: 767px) {
       .container.width-view {
         grid-template-columns: 1fr
@@ -154,7 +149,7 @@
       </div>
       <div class="mainbar">
         <div class="header-content">
-          <div class="title">
+          <div class="title text-gray-800">
             <h1>Forum Simpus Lerep</h1>
           </div >
           <div class="nav-bar">
@@ -165,7 +160,7 @@
           <div class="qna-card" v-for="ask in asks">
             <div class="perent-card">
               <div class="counter-box">
-                <div class="count-rating" v-text="ask.perent.like_post"></div>
+                <div class="count-rating" v-text="ask.perent.vote"></div>
                 <div class="count-text">Like</div>
               </div>
               <div class="avatar-box">
@@ -186,16 +181,16 @@
                   </div>
                 </div>
                 <div class="details-box">
-                  <div
-                    class="detail author"
-                    v-text="`oleh ${ask.perent.author}`"></div>
+                  <div class="detail author">
+                    oleh <span class="text-blue-400" v-text="ask.perent.author"></span>
+                  </div>
                   <div class="detail comment-count">
                     <a href="#"
                       v-text="`${ask.childs_id.length} commnets`"
                       v-bind:href="`/question/${ask.perent.id}/${ask.perent.slug}`"></a>
                   </div>
                   <div
-                    class="detail tag"
+                    class="detail tag text-blue-400"
                     v-text="ask.perent.tag">
                   </div>
                 </div>

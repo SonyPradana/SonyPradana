@@ -1,6 +1,6 @@
 let table_type = "search"
 let _sort = 'nomor_rm'
-let _order = 'ASC'
+let _order = 'DESC'
 let _cure_page = 1
 let _maks_page = 1
 
@@ -12,33 +12,23 @@ let ucwords = str => (str + '').replace( /^([a-z])|\s+([a-z])/g, $1 => $1.toUppe
 let addTag = (str, find) => str.replace(find, `<span style="color:blue">${find}</span>`)
 let new_date = date => date.replace(/(\d{4})\-(\d{2})\-(\d{2})/, '$3-$2-$1')
 
-async function fetchJSON(url){
-  const response = await fetch(url, {
-      header: {        
-        'Content-Type': 'application/json'
-      }
-  });
-  return response.json();
-}
-
-function getData(sort, order, cure_page, search_query){    
+function getData(sort, order, cure_page, search_query) {
     const url_search = `/api/ver1.0/RekamMedis/search.json?sort=${sort}&order=${order}&page=${cure_page}${search_query}`
     const url_view = `/api/ver1.0/RekamMedis/filter.json?sort=${sort}&order=${order}&page=${cure_page}${search_query}`
     const url = table_type === "search" ? url_search : url_view
-    fetchJSON(url)
+    $json(url)
     .then(json => {
-        if( json['status'] == 'ok'){
-            _maks_page = json['maks_page']
-            _cure_page = json['cure_page']
-            render_table(json['data'], table_type)
-                       
+        if (json.status == 'ok') {
+            _maks_page = json.maks_page
+            _cure_page = json.cure_page
+            render_table(json.data, table_type)
+            render_pagination()
+        } else if (json.status == 'no content') {                 
             let dom_not_found = document.querySelector('.box-right p.info')
             dom_not_found.style.display = "none"
-            if( json['data'].length == 0){
+            if (json.data.length == 0) {
                 dom_not_found.style.display = "block"
-            }
-
-            render_pagination()
+            }   
         }
     })
 }

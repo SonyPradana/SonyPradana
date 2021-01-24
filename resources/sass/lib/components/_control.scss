@@ -45,10 +45,11 @@ input{
     }
 }
 
-.btn{
+.btn {
     // global
     cursor: pointer;
     text-decoration: none;
+    user-select: none;
     
     // style
     &.text{
