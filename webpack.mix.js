@@ -19,3 +19,6 @@ mix.combine([
   'resources/js/bundles/keepalive.js',
   'resources/js/bundles/message.js',
 ], 'public/lib/js/bundles.js');
+
+// vue
+mix.js('resources/vue/app.js', 'public/vue')
