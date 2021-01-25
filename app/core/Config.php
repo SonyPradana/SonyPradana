@@ -30,6 +30,21 @@ class Config
   {
       define('BASEURL', $config['BASEURL']);
       date_default_timezone_set($config['time_zone']);
+      define('APP_PATH', [
+        'model'       => $config['MODEL_PATH'],
+        'view'        => $config['VIEW_PATH'],
+        'controllers' => $config['CONTROLLER_PATH'],
+        'services'    => $config['SERVICES_PATH'],
+        'component'   => $config['COMPONENT_PATH']
+      ]);
+
+      define('APP_FULLPATH', [
+        'model'       => $config['BASEURL'] . $config['MODEL_PATH'],
+        'view'        => $config['BASEURL'] . $config['VIEW_PATH'],
+        'controllers' => $config['BASEURL'] . $config['CONTROLLER_PATH'],
+        'services'    => $config['BASEURL'] . $config['SERVICES_PATH'],
+        'component'   => $config['BASEURL'] . $config['COMPONENT_PATH']
+      ]);
   }
 
   private function databeseConfig(array $config)

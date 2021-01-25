@@ -10,12 +10,15 @@ use MessageService;
 use Model\Stories\Story;
 use NewsFeederService;
 use PHPUnit\Framework\TestCase;
+use QAResponseService;
+use QuestionAnswerService;
 use RekamMedisService;
 use System\Database\MyPDO;
 use TriviaService;
 use WilayahKabSemarangService;
 use Simpus\Apps\Middleware;
 use StoriesService;
+use System\Database\MyQuery;
 
 final class ServicesTest extends TestCase
 {
@@ -33,7 +36,7 @@ final class ServicesTest extends TestCase
       "display_picture_small" => 'unitTest'
     ),
     'DNT' => false
-);
+  );
 
   public function testServiceAntrian(): void
   {
@@ -454,5 +457,53 @@ final class ServicesTest extends TestCase
     );
     // skip test conditon couse file distenation cant be rich
     // $this->assertEquals('ok', $respone['status']);
+  }
+
+  public function testResponeUser(): void
+  {
+    $test = new QAResponseService($this->getPDO());
+
+    // Like test respone
+    $res = $test->Like(['thread_id' => 1]);
+    $this->assertIsInt($res['data']['vote']);
+
+    // Dislike test respone
+    $res = $test->Dislike(['thread_id' => 1]);
+    $this->assertIsInt($res['data']['vote']);
+  }
+
+  public function testQuestionAndAnswer(): void
+  {
+    $PDO = $this->getPDO();
+    $test = new QuestionAnswerService($PDO);
+
+    $res = $test->get_post(array());
+    $this->assertNotEmpty($res['data']);
+
+    // creating scrf to pass the scrf protactin
+    $scrfKey = 'key';
+    $scrfSecret = 'secret';
+    $db = new MyQuery($PDO);
+    $db
+      ->insert('scrf_protection')
+      ->value('id', '')
+      ->value('scrf_key', $scrfKey)
+      ->value('secret', $scrfSecret)
+      ->value('hit', 10)
+      ->execute();
+
+    $request = array (
+      'x-method' => 'PUT',
+      'scrf_key'    => $scrfKey,
+      'scrf_secret' => $scrfSecret,
+      'name'        => 'Lorem ipsum dolor',
+      'perent_id'   => 1,
+      'title'       => 'Lorem ipsum dolor sit amet',
+      'content'     => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum, eveniet',
+      'tag'         => 'Lorem, ipsum'
+    );
+    $res = $test->submit_post($request);
+    $this->assertNotEmpty($res['data']);
+    $this->assertEquals($res['status'], 'ok');
   }
 }

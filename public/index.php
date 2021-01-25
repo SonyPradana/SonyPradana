@@ -1,7 +1,8 @@
 <?php
+session_name('simpus');
+session_set_cookie_params(['secure' => true, 'httponly' => true,]);
 session_start();
 
-use Gregwar\Captcha\CaptchaBuilder;
 use Simpus\Apps\{Route, Controller, Middleware};
 use Simpus\Auth\{Auth, User};
 
@@ -9,7 +10,7 @@ require_once dirname(__DIR__) . '/vendor/autoload.php';
 
 $app   = new Route();
 $token = $_SESSION['token'] ?? '';
-$auth  = new Auth($token, Auth::USER_AGENT_OR_IP);
+$auth  = new Auth($token, Auth::USER_NAME_AND_USER_AGENT_IP);
 $user  = new User($auth->getUserName());
 Middleware::setMiddleware( array (
   "auth" => array (
@@ -155,6 +156,20 @@ $app->get('/question/ask', function() {
 });
 $app->get('/question/answer/(:id)', function($id) {
   return (new QuestionAnswerController)->answer($id);
+});
+
+// sitemap generator
+$app::get('/sitemap.(:text)', function($ext) {
+  $ext = strtolower($ext);
+  $respone = new SiteMapController();
+
+  if ($ext === "html" || $ext === "txt") {
+    $respone->html();
+  } elseif ($ext === "xml") {
+    $respone->index();
+  } else {
+    (new DefaultController)->page_404([]);
+  }
 });
 
 // default path 404, 405

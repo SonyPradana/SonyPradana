@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.3.4] - 2021-01-25
+
+### ADDED
+- robot.txt and sitemap
+- Aplication path APP_PATH['url'], (models, view, controller, services, component)
+
+### Changed
+- Auth login default change to lavel 3
+
+### Security  
+- Naming session
+- Auth login level incress to 3 Must match IP, user agen and user
+
 ## [2.3.3] - 2021-01-25
 
 ### Added 

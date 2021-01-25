@@ -47,7 +47,7 @@ class ApiController extends Controller
     $service_nama   = str_replace('-', '', $service_nama);
     $method_nama    = str_replace('-', '_', $method_nama);
 
-    if (file_exists( BASEURL . "/app/services/" . $service_nama . '.php')) {
+    if (file_exists(APP_FULLPATH['services'] . $service_nama . '.php')) {
       $service = new $service_nama;
       if (method_exists($service, $method_nama)) {
         return call_user_func_array([$service, $method_nama], $args);

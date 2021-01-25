@@ -35,7 +35,7 @@ class DefaultController extends Controller{
         }
 
         // render template
-        require_once BASEURL . '/app/views/default/error.template.php';
+        require_once APP_FULLPATH['view'] . 'default/error.template.php';
         exit();
     }
 

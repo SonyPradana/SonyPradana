@@ -3,10 +3,10 @@
 use System\Database\MyPDO;
 
 /**
- * class ini berfungsi untuk menferifikasi 
+ * class ini berfungsi untuk menferifikasi
  * token user yg tersimpan, ke data server
- * satu token hanya bisa diugunakan satu browser/ip * 
- * 
+ * satu token hanya bisa diugunakan satu browser/ip *
+ *
  * @author sonypradana@gmail.com
  */
 class Auth
@@ -14,7 +14,7 @@ class Auth
     const IP_OLNY = 0;
     const USER_AGENT_OR_IP = 1;
     const USER_AGENT_AND_IP = 2;
-    const USER_NAME_AND_USER_AGENT_OR_IP = 3;
+    const USER_NAME_AND_USER_AGENT_IP = 3;
     /** @var MyPDO Instant PDO */
     private $PDO;
     /** @var boolean  */
@@ -44,48 +44,48 @@ class Auth
 
     /**
      * verifikasi token menggunakan token yang setalah diberikan  seetalah login
-     * token akan otomatis kadaluarsa jika 
+     * token akan otomatis kadaluarsa jika
      * - masa berlaku token habis 4 jam
      * - isi token sudah berubah
      * - di nonaktifkan oleh admin
      * - atau, ip dan user agent tidak sesuai
-     * 
+     *
      * security level detai:
      * - 0 defult
      * - 1 ip atau user name
-     * - 2 ip dan user name 
+     * - 2 ip dan user name
      * - 3 user name dan ip/user agent
-     * 
-     * @param string $token jwt token 
+     *
+     * @param string $token jwt token
      * @param int $securityLevel
      */
-    public function __construct(string $token, int $securityLevel = AUTH::IP_OLNY)
+    public function __construct(string $token, int $securityLevel = AUTH::USER_NAME_AND_USER_AGENT_IP)
     {
-        if( $token == "" ) return;
+        if ($token == "") return;
         # koneksi database
-        $this->PDO = new MyPDO();
-        $new_jwt = new DecodeJWT($token);
-        $JWT = $new_jwt->JWT();
+        $this->PDO  = new MyPDO();
+        $new_jwt    = new DecodeJWT($token);
+        $JWT        = $new_jwt->JWT();
         $this->_jwt = $JWT;
         # cek database
         $this->PDO->query('SELECT * FROM auths WHERE id=:id');
         $this->PDO->bind(':id', $JWT->User_ID);
-        if ($this->PDO->single())  {
-            # jika id terdafatar 
-            $row = $this->PDO->single();  
-            
-            # Cek jika secretKey benar 
+        $row = $this->PDO->single() ?? array();
+
+        # jika id terdafatar
+        if (! empty($row))  {
+            # Cek jika secretKey benar
             # CeK Token aktif enggak
             # Cek masa expired udah lewat blm
-            if ($new_jwt->validate( $row['secret_key'])
-             && $row['stat'] == 1
-             && $JWT->expired > time()) {
-                 
+            if ($new_jwt->validate($row['secret_key'])
+            && $row['stat'] == 1
+            && $JWT->expired > time()) {
+
                 # cek ip dan user agent
-                $ip = $_SERVER['REMOTE_ADDR'];             
-                $userAgent = $_SERVER['HTTP_USER_AGENT'];   
-                # securty level 1=match ip, 2 = match ip AND user agent, defult ip or useragent               
-                
+                $ip         = $_SERVER['REMOTE_ADDR'];
+                $userAgent  = $_SERVER['HTTP_USER_AGENT'];
+                # securty level 1=match ip, 2 = match ip AND user agent, defult ip or useragent
+
                 switch ($securityLevel) {
                     case 1:
                         # salah satu user agent dan ip sama
@@ -93,36 +93,39 @@ class Auth
                             $this->_trushClinet = true;
                         }
                         break;
+
                     case 2:
                         # user agent dan ip sama
                         if ($JWT->IP == $ip AND $JWT->User_Agent == $userAgent) {
                             $this->_trushClinet = true;
                         }
                         break;
+
                     case 3:
                         # user name hrs ada dan ip/user-agnet hrs sama
-                        if ($JWT->User_Agent == $row['user'] AND ($JWT->IP == $ip OR $JWT->User_Agent == $userAgent)) {
+                        if ($JWT->User_Name == $row['user'] AND $JWT->IP == $ip AND $JWT->User_Agent == $userAgent) {
                             $this->_trushClinet = true;
                         }
                         break;
+
                     default:
-                        # ip sama
-                        if ($JWT->IP == $ip) {
+                        # user name hrs ada dan ip/user-agnet hrs sama
+                        if ($JWT->User_Name == $row['user'] AND $JWT->IP == $ip AND $JWT->User_Agent == $userAgent) {
                             $this->_trushClinet = true;
-                        }                        
+                        }
                 }
-            } 
-        }            
+            }
+        }
     }
 
     /**
-     * Mengecek privilege user sudah memenuhi syarat privilege Auth. 
+     * Mengecek privilege user sudah memenuhi syarat privilege Auth.
      * Meng-compare privilege user dengan privilage auth page.
-     * 
+     *
      * Warning: case-sensitive, harus lengkap
-     * @param string $target 
+     * @param string $target
      * target auth privilage (eg: med-rec, admin)
-     * @return boolean 
+     * @return boolean
      * sudah memnuhi atau belum
      */
     public function privilege($target): bool
@@ -153,7 +156,7 @@ class Auth
     public function authing($redirect = '/login/')
     {
         if (! $this->_trushClinet) {
-            header("Location: " . $redirect);   
+            header("Location: " . $redirect);
             exit();
         }
     }
