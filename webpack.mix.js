@@ -22,3 +22,6 @@ mix.combine([
 
 // vue
 mix.js('resources/vue/app.js', 'public/vue')
+.postCss("resources/vue/css/app.css", "public/vue/css", [
+  require("tailwindcss"),
+ ])
