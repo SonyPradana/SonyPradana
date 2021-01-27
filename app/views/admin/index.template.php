@@ -1,27 +1,25 @@
-<?php
-#import modul
-use Simpus\Auth\Auth;
-require_once $_SERVER['DOCUMENT_ROOT'] . '/bootstrap/init.php';
-?>
-<?php
-#Aunt cek
-$token = (isset($_SESSION['token']) ) ? $_SESSION['token'] : '';
-$auth = new Auth($token, 2);
-$auth->authing();
-if( !$auth->privilege('admin') ){
-    echo 'You don’t have permission to access this page!';
-    header('HTTP/1.1 403 Forbidden');
-    exit();
-}
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="vue/css/app.css">
 </head>
-<body>
-    <h1>Halaman Admin!!!</h1>
+<body class="antilaliased font-sans bg-gray-50 dark:bg-gray-800">
+
+  <main id="app" class="md:container md:mx-auto h-screen w-screen p-4 grid grid-rows-dashbord grid-cols-dashbord gap-4">
+    <navbar class="row-start-1 row-end-1 col-start-2 col-end-2"></navbar>
+
+    <navigation class="row-start-1 row-end-2 col-start-1 col-end-1"></navigation>
+
+    <div class="bg-gray-50 dark:bg-gray-800 row-start-2 row-end-2 col-start-2 col-end-2 m-12">
+      <div class="py-5">
+        <router-view></router-view>
+      </div>
+    </div>
+  </main>
+
+  <script src="/vue/app.js"></script>
 </body>
 </html>

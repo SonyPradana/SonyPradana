@@ -57,7 +57,13 @@ $app->match(['get', 'post'], '/forgot/(:text)', function(string $action) {
 });
 
 $app->get('/admin', function() {
-  (new AdminController())->index  ();
+  return (new AdminController())->index();
+});
+$app->get('/admin/(:any)', function($any) {
+  return (new AdminController())->index();
+});
+$app->get('/admin/(:any)/(:any)', function($any, $second_any) {
+  return (new AdminController())->index();
 });
 
 // message

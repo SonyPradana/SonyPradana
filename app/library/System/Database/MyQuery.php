@@ -64,6 +64,25 @@ class MyQuery
     return $this;
   }
 
+  /**
+   * reset all property
+   */
+  public function reset()
+  {
+    $this->_operator      = 'select';
+    $this->_table         = null;
+    $this->_column        = array('*');
+    $this->_binder        = array();
+    $this->_limit_start   = 0;
+    $this->_limit_end     = 0;
+    $this->_where         = null;
+    $this->_group_filters = array();
+    $this->_filters       = array();
+    $this->_strict_mode   = true;
+
+    return $this;
+  }
+
   public function distroy()
   {
     $this->_binder = Array();

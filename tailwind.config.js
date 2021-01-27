@@ -1,3 +1,5 @@
+const colors = require('tailwindcss/colors')
+
 module.exports = {
   purge: [
 
@@ -5,10 +7,26 @@ module.exports = {
 
     './resources/vue/**/*.vue',
 
+    './app/views/admin/*.template.php',
+
   ],
-  darkMode: false, // or 'media' or 'class'
+  darkMode: 'media', // or 'media' or 'class'
   theme: {
-    extend: {},
+    extend: {
+      gridTemplateColumns: {
+        'dashbord': '180px 1fr'
+      },
+      gridTemplateRows: {
+        'dashbord': '56px 1fr'
+      },
+    },    
+    colors: {
+      // Build your palette here
+      gray: colors.trueGray,
+      blue: colors.fuchsia,
+      lime: colors.lime,
+      rose: colors.rose,
+    }
   },
   variants: {
     extend: {},

@@ -17,8 +17,10 @@ use System\Database\MyPDO;
 use TriviaService;
 use WilayahKabSemarangService;
 use Simpus\Apps\Middleware;
+use Simpus\Auth\Login;
 use StoriesService;
 use System\Database\MyQuery;
+use UserRegisterService;
 
 final class ServicesTest extends TestCase
 {
@@ -505,5 +507,10 @@ final class ServicesTest extends TestCase
     $res = $test->submit_post($request);
     $this->assertNotEmpty($res['data']);
     $this->assertEquals($res['status'], 'ok');
+  }
+
+  public function testAdminUserResgister():void
+  {
+    // panding
   }
 }
