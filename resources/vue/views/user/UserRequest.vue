@@ -39,7 +39,7 @@ export default {
   },
   methods: {
     loadData: function() {
-      fetch('/api/ver1.1/user-register/request.json')
+      fetch('/api/ver1.1/User-Request/request.json')
       .then(response => response.json())
       .then(json => {
         this.users = json.data
@@ -47,7 +47,7 @@ export default {
       });
     },
     accept: function(id) {
-      fetch(`/api/ver1.1/user-register/acceptUser.json?user_id=${id}`)
+      fetch(`/api/ver1.1/User-Request/acceptUser.json?user_id=${id}`)
       .then(response => response.json())
       .then(json => {
         if (json.status == 'ok') {
@@ -57,7 +57,7 @@ export default {
       });
     },
     delice: function(id) {
-      fetch(`/api/ver1.1/user-register/declineUser.json?user_id=${id}`)
+      fetch(`/api/ver1.1/User-Request/declineUser.json?user_id=${id}`)
       .then(response => response.json())
       .then(json => {
         if (json.status == 'ok') {

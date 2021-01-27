@@ -509,8 +509,8 @@ final class ServicesTest extends TestCase
     $this->assertEquals($res['status'], 'ok');
   }
 
-  public function testAdminUserResgister():void
-  {
-    // panding
-  }
+  // public function testAdminUserResgister():void
+  // {
+  //   // panding
+  // }
 }

@@ -1,10 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="vue/css/app.css">
+  <?php include($_SERVER['DOCUMENT_ROOT'] . '/resources/components/meta/metatag.php') ?>
+  <link rel="stylesheet" href="vue/css/app.css">
 </head>
 <body class="antilaliased font-sans bg-gray-50 dark:bg-gray-800">
 
