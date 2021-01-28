@@ -1,6 +1,6 @@
 <?php
 
-namespace Model\__model__;
+namespace Model\@__model__;
 
 use System\Database\MyCRUD;
 use System\Database\MyPDO;

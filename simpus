@@ -1,17 +1,7 @@
 <?php
-// to get code excute if needed
 define("APP_START", microtime(true));
 
-// require Core of CLI
-require_once __DIR__ . '/app/core/CLI.php';
-
-// require all library this project
-spl_autoload_register(function( $class ){
-  $className = str_replace("\\", DIRECTORY_SEPARATOR, $class);
-  if (file_exists( __DIR__ . '/app/library/' . $className . '.php')){
-      require_once  __DIR__ . '/app/library/' . $className . '.php';
-  }
-});
+require_once './vendor/autoload.php';
 
 // call CLI
 $new_cli = new \Simpus\Apps\CLI($argv, __DIR__);

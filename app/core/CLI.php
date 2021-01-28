@@ -14,42 +14,41 @@ class CLI
   private $BASE_DIR;
   private const MAKE_CONTROLLER = array (
     'template_location' => '/app/core/template/controller',
-    'save_location' => '/app/controllers/',
+    'save_location' => APP_PATH['controllers'],
     'pattern' => '__controller__',
     'surfix' => 'Controller.php'
   );
   private const MAKE_VIEW = array (
     'template_location' => '/app/core/template/view',
-    'save_location' => '/app/views/',
+    'save_location' => APP_PATH['view'],
     'pattern' => '__view__',
     'surfix' => '.template.php'
   );
   private const MAKE_SERVICE = array (
     'template_location' => '/app/core/template/service',
-    'save_location' => '/app/services/',
+    'save_location' => APP_PATH['services'],
     'pattern' => '__service__',
     'surfix' => 'Service.php'
   );
   private const MAKE_MODEL = array (
     'template_location' => '/app/core/template/model',
-    'save_location' => '/app/library/Model/',
+    'save_location' => APP_PATH['model'],
     'pattern' => '__model__',
     'surfix' => '.php'
   );
   private const MAKE_MODELS = array (
     'template_location' => '/app/core/template/models',
-    'save_location' => '/app/library/Model/',
+    'save_location' => APP_PATH['model'],
     'pattern' => '__models__',
     'surfix' => 's.php'
   );
 
+  protected $PDO = null;
   public function __construct(array $arguments, string $base_directory = __DIR__)
   {
-    define('DB_HOST', 'localhost');
-    define('DB_USER', 'root');
-    define('DB_PASS', '');
-
+    $this->PDO = new MyPDO();
     $this->BASE_DIR = $base_directory;
+
     // throw to cli routing
     if (isset($arguments[1])) {
       $this->Routing($arguments[1], array($arguments[2] ?? '', $arguments[3] ?? ''));
@@ -71,7 +70,7 @@ class CLI
           break;
 
         case 'version':
-          echo 'cli vervion ' . self::CLI_VERSION;
+          echo 'cli vervion ' . $_ENV['APP_CLI_VERSION'];
           break;
 
         default:
@@ -127,11 +126,13 @@ class CLI
         case 'model':
           echo "making model...\n";
           $makeModel = $this->makeTemplate($option[0], self::MAKE_MODEL, $option[0] . '/');
+
           if ($makeModel) {
             echo "\nfinish created model ". round(microtime(true) - APP_START, 4) . ' second';
           } else {
             echo "\nfailed to creat model";
           }
+
           if (substr($option[1], 0, 12) == '--table-name') {
             $table_name = explode('=', $option[1])[1];
             $this->FillModelDatabase($this->BASE_DIR . '/app/library/Model/' . $option[0] . '/' . $option[0] . '.php', $table_name);
@@ -164,15 +165,20 @@ class CLI
 
   private function makeTemplate(string $argument, array $make_option, string $folder = ''): bool
   {
+    $folder = ucfirst($folder);
     if (file_exists($this->BASE_DIR . $make_option['save_location'] . $folder . $argument . $make_option['surfix'])) {
       echo "file alredy exis\n";
       return false;
     } elseif (! file_exists($this->BASE_DIR . $make_option['save_location'] . $folder)) {
-        mkdir($this->BASE_DIR . $make_option['save_location'] . $folder);
+      mkdir($this->BASE_DIR . $make_option['save_location'] . $folder);
     }
 
     $get_template = file_get_contents($this->BASE_DIR . $make_option['template_location']);
+    // frist replace ucfrist pattern by at @
+    $get_template = str_replace("@" . $make_option['pattern'], ucfirst($argument),  $get_template);
+    // replace patternt
     $get_template = str_replace($make_option['pattern'], $argument,  $get_template);
+    // saving
     $isCopied = file_put_contents($this->BASE_DIR . $make_option['save_location'] . $folder . $argument . $make_option['surfix'], $get_template);
 
     return $isCopied === false ? false : true;
@@ -180,8 +186,7 @@ class CLI
 
   private function FillModelDatabase(string $model_location, string $table_name)
   {
-    $pdo = new MyPDO('simpusle_simpus_lerep');
-    $pdo->query(
+    $this->PDO->query(
       "SELECT
         *
       FROM
@@ -189,11 +194,11 @@ class CLI
       WHERE
         TABLE_SCHEMA = :dbs AND TABLE_NAME = :table
     ");
-    $pdo->bind(':dbs', 'simpusle_simpus_lerep');
-    $pdo->bind(':table', $table_name);
-    $pdo->execute();
+    $this->PDO->bind(':dbs', DB_NAME);
+    $this->PDO->bind(':table', $table_name);
+    $this->PDO->execute();
 
-    $table_column = $pdo->resultset() ?? exit;
+    $table_column = $this->PDO->resultset() ?? exit;
     $to_string = '';
     foreach ($table_column as $column) {
       $to_string .= "'" . $column['COLUMN_NAME'] . "' => null,\n\t\t\t";
