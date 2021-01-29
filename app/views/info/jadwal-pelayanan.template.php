@@ -90,9 +90,15 @@
                 <div class="article body">
                     <div class="form-box">
                         <label for="input-pilih-bulan">Lihat Imunisasi Bulan Lainnya: </label>
-                        <select name="pilih-bulan" id="input-pilih-bulan" v-on:change="onChange($event)">
+                        <select name="pilih-bulan" id="input-pilih-bulan"
+                          v-on:change="onChange($event)">
                             <option hidden selected>Pilih Bulan</option>
-                            <option v-for="date in month" v-bind:value="date" :key="date" v-text="months[ Number( date ) - 1 ]"></option>
+                            <option
+                              v-for="date in month"
+                              v-bind:value="`${date.date_mont} ${date.date_year}`"
+                              :key="date.id"
+                              v-text="`${date.date_mont_string} ${date.date_year}`">
+                            </option>
                         </select>
                     </div>
                     <h2>Jadwal Pelayanan</h2>
@@ -157,17 +163,22 @@
     let table = new Vue({
         el: '#app',
         data: {
-            first   : true,
-            raw     : <?= json_encode( $content->raw_data ) ?>,
-            month   : <?= json_encode( $content->avilable_month ) ?>,
-            months  : [ 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Augustus', 'September', 'Oktober', 'November', 'Desember' ]
+          first   : true,
+          raw     : <?= json_encode( $content->raw_data ) ?>,
+          month   : <?= json_encode( $content->avilable_month ) ?>
         },
         methods: {
-            onChange(event) {
-                this.first = false;
-                $json(`/api/ver1.0/Jadwal-Pelayanan/Imunisasi.json?month=${event.target.value}`)
-                    .then( json => this.raw = json )
-            }
+          onChange(event) {
+            const dates = event.target.value;
+            const date  = dates.split(' ');
+            this.first = false;
+            $json(`/api/ver1.0/Jadwal-Pelayanan/Imunisasi.json?month=${date[0]}&year=${date[1]}`)
+            .then( json => {
+              if (json.status = 'oke') {
+                this.raw = json.data;
+              }
+            })
+          }
         }
     });
 </script>

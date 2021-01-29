@@ -78,7 +78,7 @@ class InfoController extends Controller
       "meta"     => [
         "title"         => "Jadwal Pelayanan di Poli KIA - Simpus Lerep",
         "discription"   => "Jadwal pelayanan imunisasi anak di Poli KIA",
-        "keywords"      => "simpus lerep, puskesmas lerep,jadwal imunisasi, imunusasi, kia anak, jadwal, BCG, Campak, Rubella (MR), Hib, HB, DPT, IPV"
+        "keywords"      => "simpus lerep, puskesmas lerep, jadwal imunisasi, imunisasi, kia anak, jadwal, BCG, Campak, Rubella (MR), Hib, HB, DPT, IPV"
       ],
       "header"   => [
         "active_menu"   => 'home',
@@ -86,9 +86,9 @@ class InfoController extends Controller
       ],
       "contents" => [
         "article"    => [
-            "display_name"          => $author->getDisplayName(),
-            "display_picture_small" => $author->getSmallDisplayPicture()
-        ],
+          "display_name"          => $author->getDisplayName(),
+          "display_picture_small" => $author->getSmallDisplayPicture()
+      ],
         "raw_data"          => $imun->getData(date('m'), date('Y')),
         "avilable_month"    => $imun->getAvilabeMonth()
       ]

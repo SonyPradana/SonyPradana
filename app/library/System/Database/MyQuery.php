@@ -37,6 +37,8 @@ class MyQuery
 
   // final where statmnet
   protected $_where = null;
+  // Grouping
+  protected $_group_by = null;
 
   // multy filter with strict mode
   protected $_group_filters = array();
@@ -224,6 +226,15 @@ class MyQuery
     return $this;
   }
 
+  /**
+   * Menambahkan groupby di query
+   * @param string $column_name Column name
+   */
+  public function groupBy(string $column_name)
+  {
+    $this->_group_by = "GROUP BY `$column_name`";
+    return $this;
+  }
 
   // short hand comparation
 
@@ -420,8 +431,9 @@ class MyQuery
     $where = $this->getWhere();
     $limit = $this->_limit_start < 0 ? "LIMIT $this->_limit_end" : "LIMIT $this->_limit_start, $this->_limit_end";
     $limit = $this->_limit_end < 1 ? '' : $limit;
+    $groupBy = $this->_group_by ?? '';
 
-    return "SELECT $column FROM `$this->_table` $where $this->_sort_order $limit";
+    return "SELECT $column FROM `$this->_table` $where $this->_sort_order $limit $groupBy";
   }
 
   /**
@@ -482,6 +494,7 @@ class MyQuery
   {
     $query = array();
     foreach ($filters['filters'] as $fieldName => $fieldValue) {
+      // TODO: fileldname diambil dari value
       $value        = $fieldValue['value'];
       $comparation  = $fieldValue['comparation'];
       if ($value != null || $value != '') {

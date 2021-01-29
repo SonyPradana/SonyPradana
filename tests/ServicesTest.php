@@ -220,7 +220,7 @@ final class ServicesTest extends TestCase
         'year' => 1994
       )
     );
-    $this->assertEmpty($data['data']);
+    $this->assertEmpty($data['data']['data']);
     $this->assertEquals(['HTTP/1.1 200 Oke'], $data['headers']);
   }
 
