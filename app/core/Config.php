@@ -2,21 +2,23 @@
 
 namespace Simpus\Apps;
 
-use Dotenv;
-
 class Config
 {
-  public function __construct()
+  /**
+   * Load config from config folder/file
+   * @param string $path Config path location
+   */
+  public function __construct(string $path)
   {
     // setup dotenv
-    $dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__, 2));
+    $dotenv = \Dotenv\Dotenv::createImmutable(dirname(__DIR__, 2));
     $dotenv->load();
 
     // load config
-    $app_config = include(dirname(__DIR__, 2) . '/app/config/app.config.php');
-    $dbs_config = include(dirname(__DIR__, 2) . '/app/config/database.config.php');
-    $pusher_config = include(dirname(__DIR__, 2) . '/app/config/pusher.config.php');
-    $headerMenu_config = include(dirname(__DIR__, 2) . '/app/config/headermenu.config.php');
+    $app_config = include($path . 'app.config.php');
+    $dbs_config = include($path . 'database.config.php');
+    $pusher_config = include($path . 'pusher.config.php');
+    $headerMenu_config = include($path . 'headermenu.config.php');
 
     // excute config
     $this->appConfig($app_config);

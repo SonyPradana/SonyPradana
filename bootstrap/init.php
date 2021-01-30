@@ -12,4 +12,4 @@ require_once dirname(__DIR__) . '/app/core/Controller.php';
 require_once dirname(__DIR__) . '/app/core/CLI.php';
 
 // Declare Config Class
-$config = new Config();
+return (new Config(dirname(__DIR__) . '/app/config/'));
