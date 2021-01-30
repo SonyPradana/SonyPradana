@@ -60,7 +60,7 @@ class SiteMapController extends Controller
       $dateformat = date('Y-m-d', $article['update_time']);
 
       $url = [];
-      $url['loc']         = '/' . $article['slug'];
+      $url['loc']         = '/read/' . $article['slug'];
       $url['lastmod']     = $dateformat;
       $url['changefreq']  = 'monthly';
       $url['priority']    = '0.85';
