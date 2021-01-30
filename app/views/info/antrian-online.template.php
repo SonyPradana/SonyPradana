@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <?php include($_SERVER['DOCUMENT_ROOT'] . '/resources/components/meta/metatag.php') ?>
+    <?php include(APP_FULLPATH['component'] . 'meta/metatag.php') ?>
 
     <link rel="stylesheet" href="/lib/css/pages/v1.1/antrian.css">
     <link rel="stylesheet" href="/lib/css/ui/v1.1/full.style.css">
@@ -13,7 +13,7 @@
 
 <body>
     <header>
-        <?php include(BASEURL . '/resources/components/header/header.php'); ?>
+        <?php include(APP_FULLPATH['component'] . 'header/header.php'); ?>
     </header>
 
     <div class="container width-view">
@@ -203,19 +203,19 @@
         </main>
 
         <aside class="right-side">
-          <?php include($_SERVER['DOCUMENT_ROOT'] . '/resources/components/widget/stories.html') ?>
-            <?php include($_SERVER['DOCUMENT_ROOT'] . '/resources/components/widget/trivia.html') ?>
+          <?php include(APP_FULLPATH['component'] . 'widget/stories.html') ?>
+            <?php include(APP_FULLPATH['component'] . 'widget/trivia.html') ?>
         </aside>
     </div>
 
     <div class="gotop" onclick="gTop()"></div>
     <footer>
-        <?php include($_SERVER['DOCUMENT_ROOT'] . '/resources/components/footer/footer.html') ?>
+        <?php include(APP_FULLPATH['component'] . 'footer/footer.html') ?>
     </footer>
 
     <!-- hidden -->
     <div id="modal">
-        <?php include($_SERVER['DOCUMENT_ROOT'] . '/resources/components/control/modal.html') ?>
+        <?php include(APP_FULLPATH['component'] . 'control/modal.html') ?>
     </div>
 
     <?php if( $portal['message']['show'] ) :?>

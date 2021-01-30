@@ -4,7 +4,7 @@ use Helper\String\Manipulation;
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <?php include($_SERVER['DOCUMENT_ROOT'] . '/resources/components/meta/metatag.php') ?>
+  <?php include(APP_FULLPATH['component'] . 'meta/metatag.php') ?>
 
   <link rel="stylesheet" href="/lib/css/ui/v1.1/style.css">
   <link rel="stylesheet" href="/lib/css/ui/v1.1/tailwind-colors.css">
@@ -123,7 +123,7 @@ use Helper\String\Manipulation;
 </head>
 <body>
   <header>
-    <?php include(BASEURL . '/resources/components/header/header.php'); ?>
+    <?php include(APP_FULLPATH['component'] . 'header/header.php'); ?>
   </header>
 
   <div class="container width-view">
@@ -226,12 +226,12 @@ use Helper\String\Manipulation;
 
   <div class="gotop" onclick="gTop()"></div>
   <footer>
-    <?php include($_SERVER['DOCUMENT_ROOT'] . '/resources/components/footer/footer.html') ?>
+    <?php include(APP_FULLPATH['component'] . 'footer/footer.html') ?>
   </footer>
 
   <!-- hidden -->
   <div id="modal">
-    <?php include($_SERVER['DOCUMENT_ROOT'] . '/resources/components/control/modal.html') ?>
+    <?php include(APP_FULLPATH['component'] . 'control/modal.html') ?>
 </div>
 </body>
 <script src="/lib/js/index.end.js"></script>

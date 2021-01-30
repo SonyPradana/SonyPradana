@@ -10,7 +10,7 @@
     <meta name="description" content="daftar akun baru sistem informasi kesehatan puskesmas Lerep">
     <meta name="keywords" content="simpus lerep, pkm lerep, register">
     <meta name="author" content="amp">
-<?php include($_SERVER['DOCUMENT_ROOT'] . '/resources/components/meta/metatag.html') ?>
+<?php include(APP_FULLPATH['component'] . 'meta/metatag.html') ?>
 
 <style>
         html, body {

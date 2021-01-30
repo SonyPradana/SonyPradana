@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <?php include($_SERVER['DOCUMENT_ROOT'] . '/resources/components/meta/metatag.php') ?>
+  <?php include(APP_FULLPATH['component'] . 'meta/metatag.php') ?>
   <style>
     body {
       background-color: #121212;

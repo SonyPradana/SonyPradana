@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta content="id" name="language">
-    <?php include($_SERVER['DOCUMENT_ROOT'] . '/resources/components/meta/metatag.php') ?>
+    <?php include(APP_FULLPATH['component'] . 'meta/metatag.php') ?>
 
     <link rel="stylesheet" href="/lib/css/ui/v1.1/style.css">
     <link rel="stylesheet" href="/lib/css/ui/v1/table.css">
@@ -41,7 +41,7 @@
 </head>
 <body>
     <header>
-        <?php include(BASEURL . '/resources/components/header/header.php'); ?>
+        <?php include(APP_FULLPATH['component'] . 'header/header.php'); ?>
     </header>
 
     <div class="container">
@@ -116,12 +116,12 @@
 
     <div class="gotop" onclick="gTop()"></div>
     <footer>
-        <?php include($_SERVER['DOCUMENT_ROOT'] . '/resources/components/footer/footer.html') ?>
+        <?php include(APP_FULLPATH['component'] . 'footer/footer.html') ?>
     </footer>
 
     <!-- hidden -->
     <div id="modal">
-        <?php include($_SERVER['DOCUMENT_ROOT'] . '/resources/components/control/modal.html') ?>
+        <?php include(APP_FULLPATH['component'] . 'control/modal.html') ?>
     </div>
     <?php if( $portal['message']['show'] ) :?>
         <div class="snackbar <?= $portal['message']['type'] ?>">

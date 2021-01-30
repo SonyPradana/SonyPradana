@@ -10,7 +10,7 @@
     <meta name="description" content="sisteminformasi kesehatan puskesmas Lerep">
     <meta name="keywords" content="simpus lerep, pkm lerep">
     <meta name="author" content="amp">
-<?php include($_SERVER['DOCUMENT_ROOT'] . '/resources/components/meta/metatag.html') ?>
+<?php include(APP_FULLPATH['component'] . 'meta/metatag.html') ?>
 
     <style>
         .gg-dialpad{transform:scale(var(--ggs,1));}.gg-dialpad,.gg-dialpad::before{box-shadow:-5px 0 0,5px 0 0}.gg-dialpad,.gg-dialpad::after,.gg-dialpad::before{box-sizing:border-box;position:relative;display:block;width:3px;height:3px;background:currentColor}.gg-dialpad::after,.gg-dialpad::before{content:"";position:absolute;left:0;}.gg-dialpad::before{bottom:5px}.gg-dialpad::after{box-shadow:-5px 0 0,5px 0 0,0 5px 0;top:5px}.gg-lastpass{box-sizing:border-box;position:relative;display:block;transform:scale(var(--ggs,1));width:20px;height:12px}.gg-lastpass::after,.gg-lastpass::before{content:"";display:block;box-sizing:border-box;position:absolute;background:currentColor;border-radius:22px}.gg-lastpass::before{width:4px;height:4px;box-shadow:6px 0 0,12px 0 0;top:4px}.gg-lastpass::after{width:2px;height:12px;right:0}

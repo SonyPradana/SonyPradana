@@ -10,7 +10,7 @@
     <meta name="description" content="Edit Profile, Sistem informasi manajeman puskesmas, lerep">
     <meta name="keywords" content="simpus lerep, puskesmas lerep, puskesmas, ungaran, kabupaten semarang, edit profile">
     <meta name="author" content="amp">
-<?php include($_SERVER['DOCUMENT_ROOT'] . '/resources/components/meta/metatag.html') ?>
+<?php include(APP_FULLPATH['component'] . 'meta/metatag.html') ?>
 
     <style>
         html, body {

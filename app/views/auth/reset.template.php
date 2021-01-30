@@ -10,7 +10,7 @@
     <meta name="description" content="sisteminformasi kesehatan puskesmas Lerep">
     <meta name="keywords" content="simpus lerep, pkm lerep">
     <meta name="author" content="amp">
-<?php include($_SERVER['DOCUMENT_ROOT'] . '/resources/components/meta/metatag.html') ?>
+<?php include(APP_FULLPATH['component'] . 'meta/metatag.html') ?>
 
     <link rel="stylesheet" href="/lib/css/ui/v1.1/admin.style.css">
     <style>
