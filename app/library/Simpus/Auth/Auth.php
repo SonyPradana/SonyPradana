@@ -130,23 +130,11 @@ class Auth
      */
     public function privilege($target): bool
     {
-        #login cek
-        if (! $this->_trushClinet) return false;
-        # tampilkan privilege
-        $privilege = new Privilege($this->getUserName());
-        # privilage user
-        $privil = $privilege->ReadAcces($target);
-        #privilage auth
-        $allow_privilege =  $privilege->MasterPrivilage($target);
-
-        $privil_arr = str_split($privil);
-        $privil_arr_allow = str_split($allow_privilege);
-        foreach ($privil_arr_allow as $value) {
-            if (!in_array($value, $privil_arr)) {
-                return false;
-            }
-        }
-        return true;
+      #login cek
+      if (! $this->_trushClinet) return false;
+      # get privilage
+      $privilege = new Privilege($this->getUserName(), $this->PDO);
+      return $privilege->getAccess($target);
     }
 
     /**
