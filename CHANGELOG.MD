@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.3.5] - 2021-02-05
+
+## ADDED
+- Support VUE Router
+- Support Tailwind-CSS (partial)
+- Add admin dashbord page
+- Add services for ganerate new jadwal imun
+- Add Site Map generator services
+- Unit test for Router
+
+### Changed
+- CLI now using bootstrap autoload
+- Config location now able to change path location
+- All template page now referance resource base on config location setting
+- Refactory MyQuery
+
+### Fixed
+- Jadawl pelayan page jadwal 2020 not display currently
+- Auto generate tahun support for swict 'bulan' and 'tahun'
+
 ## [2.3.4] - 2021-01-25
 
 ### ADDED
