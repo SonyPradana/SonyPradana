@@ -71,8 +71,8 @@ class QAResponse extends MyCRUD
   public function findEnventID(string $event_id)
   {
     $db = new MyQuery($this->PDO);
-    return $db
-      ->select($this->TABLE_NAME)
+    return $db($this->TABLE_NAME)
+      ->select()
       ->equal('event_name', 'respone_qna')
       ->equal('event_id', $event_id)
       ->single();

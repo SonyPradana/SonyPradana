@@ -78,7 +78,8 @@ class JadwalKia
     // Koneksi data base
     $db = new MyQuery($this->PDO);
     $result = $db
-      ->select('list_of_services')
+      ->table('list_of_services')
+      ->select()
       ->equal('event', 'imunisasi anak');
 
     $alreadyIndex = [];

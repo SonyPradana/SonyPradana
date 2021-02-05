@@ -59,17 +59,16 @@ class QuestionAnswerService extends Middleware
       $thisThread['perent'] = $child;
 
       $thisThread['childs_id'] = array_column (
-        $db
-        ->select('public_quest')
-        ->column( array('id') )
+        $db('public_quest')
+        ->select(array('id'))
         ->equal('perent_id', $child['id'])
         ->order('date_creat', MyQuery::ORDER_ASC)
         ->all(), 'id'
       );
 
       $thisThread['best_child'] = $db
-        ->select('public_quest')
-        ->column( array('*') )
+        ->table('public_quest')
+        ->select(array('*'))
         ->equal('perent_id', $child['id'])
         ->order('like_post', MyQuery::ORDER_DESC)
         ->single();
@@ -131,7 +130,8 @@ class QuestionAnswerService extends Middleware
     // sample scrf protection (resiver)
     $db = new MyQuery($this->PDO);
     $getScrf = $db
-      ->select('scrf_protection')
+      ->table('scrf_protection')
+      ->select()
       ->equal('scrf_key', $request['scrf_key'])
       ->single();
 
@@ -145,18 +145,17 @@ class QuestionAnswerService extends Middleware
 
     // reomove scrf access if success
     $scrfHit -= 1;
-    $db->distroy();
     if ($scrfHit < 1) {
-      $db
-      ->delete('scrf_protection')
-      ->equal('scrf_key', $request['scrf_key'])
-      ->execute();
+      $db('scrf_protection')
+        ->delete()
+        ->equal('scrf_key', $request['scrf_key'])
+        ->execute();
     } else {
-      $db
-      ->update('scrf_protection')
-      ->value('hit', $scrfHit)
-      ->equal('scrf_key', $request['scrf_key'])
-      ->execute();
+      $db('scrf_protection')
+        ->update()
+        ->value('hit', $scrfHit)
+        ->equal('scrf_key', $request['scrf_key'])
+        ->execute();
     }
 
     if (empty($error)) {
@@ -202,8 +201,8 @@ class QuestionAnswerService extends Middleware
 
     do {
       $post = $db
-        ->select('public_quest')
-        ->column( array('*') )
+        ->table('public_quest')
+        ->select(['*'])
         ->equal('perent_id', $id)
         ->order('date_creat', MyQuery::ORDER_ASC)
         ->single();

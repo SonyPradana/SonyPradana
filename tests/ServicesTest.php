@@ -486,8 +486,8 @@ final class ServicesTest extends TestCase
     $scrfKey = 'key';
     $scrfSecret = 'secret';
     $db = new MyQuery($PDO);
-    $db
-      ->insert('scrf_protection')
+    $db('scrf_protection')
+      ->insert()
       ->value('id', '')
       ->value('scrf_key', $scrfKey)
       ->value('secret', $scrfSecret)

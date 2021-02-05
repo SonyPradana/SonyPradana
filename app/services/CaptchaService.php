@@ -47,7 +47,8 @@ class CaptchaService extends Middleware
     // scrf builder
     $scrfKey = ConvertCode::RandomCode(5);
     $db = new MyQuery();
-    $db->insert('scrf_protection')
+    $db('scrf_protection')
+      ->insert()
       ->value('id', '')
       ->value('scrf_key', $scrfKey)
       ->value('secret', $captcha->getPhrase())

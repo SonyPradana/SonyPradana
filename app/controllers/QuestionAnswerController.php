@@ -73,7 +73,8 @@ class QuestionAnswerController extends Controller
       $db = new MyQuery($this->PDO);
       foreach ($answerAll as $key => $val) {
         $childs = $db
-          ->select('public_quest')
+          ->table('public_quest')
+          ->select()
           ->equal('perent_id', $val['id'])
           ->all();
         $childsCount = count($childs);
@@ -94,7 +95,8 @@ class QuestionAnswerController extends Controller
 
       // storege captcha to db
       $db = new MyQuery($this->PDO);
-      $db->insert('scrf_protection')
+      $db('scrf_protection')
+        ->insert()
         ->value('id', '')
         ->value('scrf_key', $scrfKey)
         ->value('secret', $captcha->getPhrase())
@@ -148,7 +150,8 @@ class QuestionAnswerController extends Controller
 
       // storege captcha to db
       $db = new MyQuery($this->PDO);
-      $db->insert('scrf_protection')
+      $db('scrf_protection')
+        ->insert()
         ->value('id', '')
         ->value('scrf_key', $scrfKey)
         ->value('secret', $captcha->getPhrase())
@@ -212,7 +215,8 @@ class QuestionAnswerController extends Controller
 
       // storege captcha to db
       $db = new MyQuery($this->PDO);
-      $db->insert('scrf_protection')
+      $db('scrf_protection')
+        ->insert('scrf_protection')
         ->value('id', '')
         ->value('scrf_key', $scrfKey)
         ->value('secret', $captcha->getPhrase())

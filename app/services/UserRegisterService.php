@@ -84,8 +84,8 @@ class UserRegisterService extends Middleware
       if (empty($error)) {
         $this->PDO->beginTransaction();
         // pindah ke table user
-        $db
-          ->insert('users')
+        $db('users')
+          ->insert()
           ->value('user', $data['user'])
           ->value('pwd', $data['pwd'])
           ->value('stat', '25')
@@ -94,9 +94,8 @@ class UserRegisterService extends Middleware
         $tanferToUserTables = $this->PDO->rowCount();
 
         // pindah ke table profile
-        $db->reset();
-        $db
-          ->insert('profiles')
+        $db('profiles')
+          ->insert()
           ->value('user', $data['user'])
           ->value('email', $data['email'])
           ->value('display_name', $data['disp_name'])
