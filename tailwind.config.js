@@ -14,7 +14,7 @@ module.exports = {
   theme: {
     extend: {
       gridTemplateColumns: {
-        'dashbord': '180px 1fr'
+        'dashbord': '240px 1fr'
       },
       gridTemplateRows: {
         'dashbord': '56px 1fr'
@@ -26,6 +26,8 @@ module.exports = {
       blue: colors.fuchsia,
       lime: colors.lime,
       rose: colors.rose,
+      red: colors.red,
+      cyan: colors.cyan
     }
   },
   variants: {

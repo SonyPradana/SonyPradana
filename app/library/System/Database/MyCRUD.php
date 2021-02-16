@@ -1,7 +1,5 @@
 <?php namespace System\Database;
 
-use PDO;
-use phpDocumentor\Reflection\Types\This;
 use System\Database\CrudInterface;
 use System\Database\MyPDO;
 
