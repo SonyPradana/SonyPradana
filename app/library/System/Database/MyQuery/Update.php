@@ -52,6 +52,37 @@ class Update extends Execute implements ConditionInterface
     return $this;
   }
 
+  public function between(string $column_name, string $val_1, string $val_2)
+  {
+    $this->where(
+      "(`$column_name` BETWEEN :val_1 AND :val_2)",
+      array(
+        [':val_1', $val_1],
+        [':val_2', $val_2]
+      )
+    );
+    return $this;
+  }
+
+  public function in(string $column_name, array $val)
+  {
+    $binds = [];
+    $binder = [];
+    foreach ($val as $key => $bind) {
+      $binds[] = ":val_$key";
+      $binder[] = [":val_$key", $bind];
+    }
+    $bindString = implode(', ', $binds);
+
+    $this->where(
+      "(`$column_name` IN ($bindString))",
+      $binder
+    );
+
+    return $this;
+  }
+
+
   protected function builder(): string
   {
     $where = $this->getWhere();
