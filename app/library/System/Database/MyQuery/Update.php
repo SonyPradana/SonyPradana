@@ -23,27 +23,21 @@ class Update extends Execute implements ConditionInterface
     return $this;
   }
 
-  public function compare(string $bind, string $comparation, string $value)
-  {
-    $this->comparation($bind, $comparation, $value, false);
-    return $this;
-  }
-
   public function equal(string $bind, string $value)
   {
-    $this->comparation($bind, '=', $value, false);
+    $this->compare($bind, '=', $value, false);
     return $this;
   }
 
   public function like(string $bind, string $value)
   {
-    $this->comparation($bind, 'LIKE', $value, false);
+    $this->compare($bind, 'LIKE', $value, false);
     return $this;
   }
 
   public function where(string $where_condition, ?array $binder = null)
   {
-    $this->_where = $where_condition;
+    $this->_where[] = $where_condition;
 
     if ($binder != null) {
       $this->_binder = array_merge($this->_binder, $binder);
@@ -55,10 +49,10 @@ class Update extends Execute implements ConditionInterface
   public function between(string $column_name, string $val_1, string $val_2)
   {
     $this->where(
-      "(`$column_name` BETWEEN :val_1 AND :val_2)",
+      "(`$this->_table`.`$column_name` BETWEEN :b_start AND :b_end)",
       array(
-        [':val_1', $val_1],
-        [':val_2', $val_2]
+        [':b_start', $val_1],
+        [':b_end', $val_2]
       )
     );
     return $this;
@@ -69,19 +63,18 @@ class Update extends Execute implements ConditionInterface
     $binds = [];
     $binder = [];
     foreach ($val as $key => $bind) {
-      $binds[] = ":val_$key";
-      $binder[] = [":val_$key", $bind];
+      $binds[] = ":in_$key";
+      $binder[] = [":in_$key", $bind];
     }
     $bindString = implode(', ', $binds);
 
     $this->where(
-      "(`$column_name` IN ($bindString))",
+      "(`$this->_table`.`$column_name` IN ($bindString))",
       $binder
     );
 
     return $this;
   }
-
 
   protected function builder(): string
   {
