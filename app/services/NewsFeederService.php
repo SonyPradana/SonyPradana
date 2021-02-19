@@ -33,7 +33,7 @@ class NewsFeederService extends Middleware
     $feeds->selectColomn(
       array (
         'id', 'discription', 'update_time', 'image_url',
-        'image_alt', 'slug', 'title', 'raw_content', 'status'
+        'image_alt', 'slug', 'title', 'status'
       )
     );
     $feeds->filterStatus($request['status'] ?? 'publish');
@@ -44,8 +44,8 @@ class NewsFeederService extends Middleware
       $format_tanggal = $selisih_waktu < 86400 ? date('h:i:s a',  $article['update_time'])
         : date('d M Y',  $article['update_time']);
 
-      $img_loc = pathinfo($article['image_url']);
-      $img_loc = str_replace($img_loc['basename'], 'small-' . $img_loc['basename']
+      $arr_img = explode('/', $article['image_url']);
+      $img_loc = str_replace(end($arr_img), 'small-' . end($arr_img)
         , $article['image_url']);
 
       $result[] = [
@@ -59,7 +59,7 @@ class NewsFeederService extends Middleware
       ];
     }
 
-    return array (
+    return array(
       'status'    => empty($result) ? 'no content' : 'ok',
       'code'      => 200,
       'data'      => $result,
@@ -75,7 +75,7 @@ class NewsFeederService extends Middleware
     $feeds->selectColomn(
       array (
         'id', 'discription', 'update_time', 'image_url',
-        'image_alt', 'slug', 'title', 'raw_content', 'status'
+        'image_alt', 'slug', 'title', 'status'
       )
     );
 
@@ -85,8 +85,8 @@ class NewsFeederService extends Middleware
       $format_tanggal = $selisih_waktu < 86400 ? date('h:i:s a',  $article['update_time'])
         : date('d M Y',  $article['update_time']);
 
-      $img_loc = pathinfo($article['image_url']);
-      $img_loc = str_replace($img_loc['basename'], 'small-' . $img_loc['basename']
+      $arr_img = explode('/', $article['image_url']);
+      $img_loc = str_replace(end($arr_img), 'small-' . end($arr_img)
         , $article['image_url']);
 
       $result[] = [
@@ -101,7 +101,7 @@ class NewsFeederService extends Middleware
       ];
     }
 
-    return array (
+    return array(
       'status'    => empty($result) ? 'no content' : 'ok',
       'code'      => 200,
       'data'      => $result,
