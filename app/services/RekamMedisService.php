@@ -26,13 +26,14 @@ class RekamMedisService extends Middleware
     }
   }
 
-  private function errorhandler(){
-      HttpHeader::printJson(['status' => 'bad request'], 500, [
-          "headers" => [
-              'HTTP/1.1 400 Bad Request',
-              'Content-Type: application/json'
-          ]
-      ]);
+  private function errorhandler()
+  {
+    HttpHeader::printJson(['status' => 'bad request'], 500, [
+      "headers" => [
+        'HTTP/1.1 400 Bad Request',
+        'Content-Type: application/json'
+      ]
+    ]);
   }
 
   /**
@@ -111,18 +112,27 @@ class RekamMedisService extends Middleware
     ];
   }
 
-  public function nomor_rm_terahir(array $pramas): array
+  public function nomor_rm_terahir(array $request): array
   {
-    $upper_limit = $pramas['limit'] ?? 14000;
+    $upper_limit = $request['limit'] ?? '014000';
+    // force nomor rm 6 digit
+    for ($i = 0; $i < 6 - strlen($upper_limit); $i++) {
+      $upper_limit = 0 . $upper_limit;
+    }
     // ambil nomor rm terakhir
     $data = new MedicalRecords($this->PDO);
     $data
+      ->selectColumn(['nomor_rm'])
       ->forceLimitView(1)
       ->orderUsing("DESC")
       ->sortUsing('nomor_rm');
 
-    $last_nomor_rm  = $data->resultAll("WHERE `nomor_rm` < $upper_limit");
-    $upper_nomor_rm = $data->resultAll();
+    // last nomor rm by index
+    $last_nomor_rm  = $data->result();
+
+    $data->costumeWhere("`nomor_rm` < :nrm", [[':nrm', $upper_limit]]);
+    // lat nomotr rm by upper limit
+    $upper_nomor_rm = $data->result();
 
     return array (
       'code'    => 200,

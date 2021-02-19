@@ -55,13 +55,19 @@ class ArticlesService extends Middleware
     // validate article contents
     $validate = new GUMP();
     $validate->validation_rules(
-      array (
+      array(
         'title'       => 'required|between_len,20;200|alpha_numeric_space',
-        'discription' => 'required|between_len,30;250|alpha_numeric_space',
+        'discription' => 'required|between_len,30;250',
         'keywords'    => 'required|between_len,4;100',
         'image_alt'   => 'required|between_len,4;32|alpha_numeric_space',
         'media_note'  => 'required|between_len,4;100|alpha_numeric_space',
         'content'     => 'required',    // main content
+      )
+    );
+    $validate->filter_rules(
+      array(
+        'title'       => 'trim',
+        'discription' => 'sanitize_string'
       )
     );
     $validate->run($request);
@@ -157,12 +163,17 @@ class ArticlesService extends Middleware
     // validate article contents
     $validate = new GUMP();
     $validate->validation_rules(
-      array (
-        'discription' => 'required|between_len,30;250|alpha_numeric_space',
+      array(
+        'discription' => 'required|between_len,30;250',
         'keywords'    => 'required|between_len,4;100',
         'image_alt'   => 'required|between_len,4;32|alpha_numeric_space',
         'media_note'  => 'required|between_len,4;100|alpha_numeric_space',
         'content'     => 'required',    // main content
+      )
+    );
+    $validate->filter_rules(
+      array(
+        'discription' => 'sanitize_string'
       )
     );
     $validate->run($request);

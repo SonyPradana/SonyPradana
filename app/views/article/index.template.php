@@ -56,7 +56,7 @@
                             <img src="<?= $content->article['display_picture_small'] ?>" alt="@<?= $content->article['display_name'] ?>">
                             <div class="author-name"><a href="/Ourteam"><?= $content->article['display_name'] ?></a></div>
                         </div>
-                        <div class="time"><?= $content->article['article_create'] ?></div>
+                        <div class="time"><?= $content->article['article_date'] ?></div>
                     </div>
                 </div>
                 <div class="article-media">

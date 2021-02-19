@@ -21,7 +21,7 @@ class NewsFeederService extends Middleware
       ]);
     }
   }
-  
+
   public function __construct(MyPDO $PDO = null)
   {
     $this->PDO = $PDO ?? new MyPDO();
@@ -32,7 +32,7 @@ class NewsFeederService extends Middleware
     $feeds   = new articleModel($this->PDO);
     $feeds->selectColomn(
       array (
-        'id', 'discription', 'create_time', 'image_url',
+        'id', 'discription', 'update_time', 'image_url',
         'image_alt', 'slug', 'title', 'raw_content', 'status'
       )
     );
@@ -40,9 +40,9 @@ class NewsFeederService extends Middleware
 
     $result = [];
     foreach ($feeds->result() as $article) {
-      $selisih_waktu = time() - $article['create_time'];
-      $format_tanggal = $selisih_waktu < 86400 ? date('h:i:s a',  $article['create_time'])
-        : date('d M Y',  $article['create_time']);
+      $selisih_waktu = time() - $article['update_time'];
+      $format_tanggal = $selisih_waktu < 86400 ? date('h:i:s a',  $article['update_time'])
+        : date('d M Y',  $article['update_time']);
 
       $img_loc = pathinfo($article['image_url']);
       $img_loc = str_replace($img_loc['basename'], 'small-' . $img_loc['basename']
@@ -74,16 +74,16 @@ class NewsFeederService extends Middleware
     $feeds   = new articleModel($this->PDO);
     $feeds->selectColomn(
       array (
-        'id', 'discription', 'create_time', 'image_url',
+        'id', 'discription', 'update_time', 'image_url',
         'image_alt', 'slug', 'title', 'raw_content', 'status'
       )
     );
 
     $result = [];
     foreach ($feeds->resultAll() as $article) {
-      $selisih_waktu = time() - $article['create_time'];
-      $format_tanggal = $selisih_waktu < 86400 ? date('h:i:s a',  $article['create_time'])
-        : date('d M Y',  $article['create_time']);
+      $selisih_waktu = time() - $article['update_time'];
+      $format_tanggal = $selisih_waktu < 86400 ? date('h:i:s a',  $article['update_time'])
+        : date('d M Y',  $article['update_time']);
 
       $img_loc = pathinfo($article['image_url']);
       $img_loc = str_replace($img_loc['basename'], 'small-' . $img_loc['basename']
