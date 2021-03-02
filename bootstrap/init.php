@@ -10,6 +10,7 @@ require_once dirname(__DIR__) . '/app/core/Middleware.php';
 require_once dirname(__DIR__) . '/app/core/Router.php';
 require_once dirname(__DIR__) . '/app/core/Controller.php';
 require_once dirname(__DIR__) . '/app/core/CLI.php';
+require_once dirname(__DIR__) . '/app/core/Services.php';
 
 // Declare Config Class
 return (new Config(dirname(__DIR__) . '/app/config/'));
