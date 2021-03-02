@@ -6,7 +6,7 @@ use DefaultService;
 use Simpus\Apps\Middleware;
 use Simpus\Helper\HttpHeader;
 
-abstract class Services extends Middleware
+abstract class Service extends Middleware
 {
   const CODE_BAD_REQUEST            = 400;
   const CODE_BAD_UNAUTHORIZED       = 401;
