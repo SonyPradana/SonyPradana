@@ -1,7 +1,27 @@
 <?php
 
+/**
+ * TODO: costume error message
+ */
 class DefaultService
 {
+  /**
+   * No Content
+   *
+   * @return array No Content
+   */
+  public function code_204(): array
+  {
+    return array(
+      'status'  => 'No Content',
+      'code'    => 204,
+      'error'   => array(
+        'server' => 'No Content'
+      ),
+      'headers' => ['HTTP/1.1 400 No Content']
+    );
+  }
+
   /**
    * Bad Request
    *

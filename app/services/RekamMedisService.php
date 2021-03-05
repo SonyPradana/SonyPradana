@@ -1,11 +1,10 @@
 <?php
 
-use Simpus\Apps\Middleware;
 use Model\Simpus\MedicalRecords;
-use Simpus\Helper\HttpHeader;
+use Simpus\Apps\Service;
 use System\Database\MyPDO;
 
-class RekamMedisService extends Middleware
+class RekamMedisService extends Service
 {
   /** @var MyPDO */
   private $PDO;
@@ -14,26 +13,10 @@ class RekamMedisService extends Middleware
    */
   public function __construct(MyPDO $PDO = null)
   {
+    $this->error = new DefaultService();
     $this->PDO = $PDO ?? new MyPDO();
     // cek access
-    if ($this->getMiddleware()['auth']['login'] == false) {
-      HttpHeader::printJson(['status' => 'unauthorized'], 500, [
-        "headers" => [
-          'HTTP/1.0 401 Unauthorized',
-          'Content-Type: application/json'
-        ]
-      ]);
-    }
-  }
-
-  private function errorhandler()
-  {
-    HttpHeader::printJson(['status' => 'bad request'], 500, [
-      "headers" => [
-        'HTTP/1.1 400 Bad Request',
-        'Content-Type: application/json'
-      ]
-    ]);
+    $this->useAuth();
   }
 
   /**
@@ -43,10 +26,10 @@ class RekamMedisService extends Middleware
    */
   public function search_nomor_rm_kk(array $params): array
   {
-    $nama_kk    = $params['n'] ?? $this->errorhandler();
-    $alamat     = $params['a'] ?? $this->errorhandler();
-    $rt         = $params['r'] ?? $this->errorhandler();
-    $rw         = $params['w'] ?? $this->errorhandler();
+    $nama_kk    = $params['n'] ?? $this->errorHandler(400);
+    $alamat     = $params['a'] ?? $this->errorHandler(400);
+    $rt         = $params['r'] ?? $this->errorHandler(400);
+    $rw         = $params['w'] ?? $this->errorHandler(400);
 
     $data = new MedicalRecords( $this->PDO );
     $data
@@ -58,12 +41,12 @@ class RekamMedisService extends Middleware
 
     $result = $data->result()[0]['nomor_rm_kk'] ?? null;
 
-    return [
+    return array(
       'code'        => 200,
       'status'      => $result != null ? 'ok' : 'no content',
       'nomor_rm_kk' => $result ?? '',
       'headers'     => ['HTTP/1.1 200 Oke']
-    ];
+    );
   }
 
   /**
@@ -82,12 +65,12 @@ class RekamMedisService extends Middleware
 
     $result = $data->result()[0] ?? null;
 
-    return [
+    return array(
       'code'    => 200,
       'status'  => $result != null ? 'ok' : 'no content',
       'data'    => $result ?? [],
       'headers' => ['HTTP/1.1 200 Oke']
-    ];
+    );
   }
 
   /**
@@ -104,12 +87,12 @@ class RekamMedisService extends Middleware
 
     $result = $data->maxData() ?? null;
 
-    return [
+    return array(
       'code'    => 200,
       'status'  => $result != null ? 'ok' : 'no content',
       'found'   => $result ?? 0,
       'headers' => ['HTTP/1.1 200 Oke']
-    ];
+    );
   }
 
   public function nomor_rm_terahir(array $request): array
@@ -217,14 +200,14 @@ class RekamMedisService extends Middleware
     // excute query
     $result =  $data->result();
 
-    return [
+    return array(
       'code'      => '200',
       'status'    => $result != null ? 'ok' : 'no content',
       "maks_page" => (int) $max_page,
       "cure_page" => (int) $page,
       'data'      => $result ?? 0,
       'headers'   => ['HTTP/1.1 200 Oke']
-    ];
+    );
   }
 
   /**
@@ -262,20 +245,20 @@ class RekamMedisService extends Middleware
       $data->currentPage($page);
       $result     = $data->result();
 
-      return [
+      return array(
         'code'      => 200,
         'status'    => $result != null ? 'ok' : 'no content',
         "maks_page" => (int) $max_page,
         "cure_page" => (int) $page,
         'data'      => $result ?? 0,
         'headers'   => ['HTTP/1.1 200 Oke']
-      ];
+      );
     }
 
     // parse umur
     $min_max    = $this->parseRangeTime( $umur );
     if ($min_max == false) {
-      return ['status'  => 'Bad Request', 'message' => 'time format not support', 'headers' => ['HTTP/1.1 400 Bad Request'] ];
+      return $this->error(400);
     }
 
     $data = new MedicalRecords( $this->PDO );
@@ -319,14 +302,14 @@ class RekamMedisService extends Middleware
       $page       = 1;
     }
 
-    return [
+    return array(
       'code'      => 200,
       'status'    => $result != null ? 'ok' : 'no content',
       "maks_page" => (int) $max_page,
       "cure_page" => (int) $page,
       'data'      => $result ?? 0,
       'headers'   => ['HTTP/1.1 200 Oke']
-    ];
+    );
   }
 
   private function parseRangeTime(string $time)

@@ -3,49 +3,25 @@
 use Gumlet\ImageResize;
 use Helper\String\Manipulation;
 use Model\Article\article;
-use Simpus\Apps\Middleware;
-use Simpus\Helper\HttpHeader;
+use Simpus\Apps\Service;
 use System\Database\MyPDO;
 use System\File\UploadFile;
 
-class ArticlesService extends Middleware
+class ArticlesService extends Service
 {
   protected $PDO;
   public function __construct(MyPDO $PDO = null)
   {
+    $this->error = new DefaultService();
     $this->PDO = $PDO ?? new MyPDO();
     $this->useAuth();
-  }
-
-  // private function
-  private function useAuth()
-  {
-    // cek access
-    if ($this->getMiddleware()['auth']['login'] == false) {
-      HttpHeader::printJson(['status' => 'unauthorized'], 500, [
-        "headers" => array (
-          'HTTP/1.0 401 Unauthorized',
-          'Content-Type: application/json'
-        )
-      ]);
-    }
-  }
-
-  private function errorhandler()
-  {
-    HttpHeader::printJson(['status' => 'bad request'], 500, [
-      "headers" => array (
-        'HTTP/1.1 400 Bad Request',
-        'Content-Type: application/json'
-      )
-    ]);
   }
 
   public function Create_Article(array $request): array
   {
     // only accept put method
     if ($request['x-method'] != 'POST') {
-      $this->errorhandler();
+      return $this->error(parent::CODE_METHOD_NOT_ALLOWED);
     }
 
     // validate file to upload
@@ -157,7 +133,7 @@ class ArticlesService extends Middleware
   {
     // only accept put method
     if ($request['x-method'] != 'POST') {
-      $this->errorhandler();
+      return $this->error(parent::CODE_METHOD_NOT_ALLOWED);
     }
 
     // validate article contents

@@ -3,34 +3,14 @@
 use Convert\Converter\ConvertCode;
 use Gregwar\Captcha\CaptchaBuilder;
 use Gregwar\Captcha\PhraseBuilder;
-use Simpus\Apps\Middleware;
-use Simpus\Helper\HttpHeader;
+use Simpus\Apps\Service;
 use System\Database\MyQuery;
 
-class CaptchaService extends Middleware
+class CaptchaService extends Service
 {
-  // private function
-  private function useAuth()
-    {
-      // cek access
-      if( $this->getMiddleware()['auth']['login'] == false ){
-          HttpHeader::printJson(['status' => 'unauthorized'], 500, [
-            "headers" => [
-              'HTTP/1.0 401 Unauthorized',
-              'Content-Type: application/json'
-            ]
-          ]);
-      }
-    }
-
-  private function errorhandler()
+  public function __construct()
   {
-    HttpHeader::printJson(['status' => 'bad request'], 500, [
-        "headers" => [
-            'HTTP/1.1 400 Bad Request',
-            'Content-Type: application/json'
-        ]
-    ]);
+    $this->error = new DefaultService();
   }
 
   public function Generate(array $request): array
@@ -57,8 +37,9 @@ class CaptchaService extends Middleware
 
     return array(
       'status'  => 'ok',
+      'code'    => 200,
       'data'    => array (
-        'scrf_key' => $scrfKey,
+        'scrf_key'      => $scrfKey,
         'captcha_image' => $captcha->inline()
       ),
       'error'   => false,

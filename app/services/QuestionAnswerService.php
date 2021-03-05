@@ -1,44 +1,20 @@
 <?php
 
-use Convert\Converter\ConvertCode;
 use Helper\String\Manipulation;
 use Model\QuestionAnswer\ask;
 use Model\QuestionAnswer\asks;
-use Simpus\Apps\Middleware;
+use Simpus\Apps\Service;
 use Simpus\Helper\HttpHeader;
 use System\Database\MyPDO;
 use System\Database\MyQuery;
 
-class QuestionAnswerService extends Middleware
+class QuestionAnswerService extends Service
 {
-  // private function
-  private function useAuth()
-    {
-        // cek access
-        if( $this->getMiddleware()['auth']['login'] == false ){
-            HttpHeader::printJson(['status' => 'unauthorized'], 500, [
-                "headers" => [
-                    'HTTP/1.0 401 Unauthorized',
-                    'Content-Type: application/json'
-                ]
-            ]);
-        }
-    }
-
-  private function errorhandler()
-  {
-    HttpHeader::printJson(['status' => 'bad request'], 500, [
-        "headers" => [
-            'HTTP/1.1 400 Bad Request',
-            'Content-Type: application/json'
-        ]
-    ]);
-  }
-
   protected $PDO = null;
 
   public function __construct(MyPDO $pdo = null)
   {
+    $this->error = new DefaultService();
     $this->PDO = $pdo ?? new MyPDO();
   }
 

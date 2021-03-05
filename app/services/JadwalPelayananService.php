@@ -1,29 +1,15 @@
 <?php
 
-use Simpus\Apps\Middleware;
-use Simpus\Helper\HttpHeader;
+use Simpus\Apps\Service;
 use Simpus\Services\JadwalKia;
 use System\Database\MyPDO;
 
-class JadwalPelayananService extends Middleware
+class JadwalPelayananService extends Service
 {
-  // private function
-  private function useAuth()
-  {
-    // cek access
-    if( $this->getMiddleware()['auth']['login'] == false ){
-      HttpHeader::printJson(['status' => 'unauthorized'], 500, [
-        "headers" => [
-          'HTTP/1.0 401 Unauthorized',
-          'Content-Type: application/json'
-        ]
-      ]);
-    }
-  }
-
   protected $PDO = null;
   public function __construct(MyPDO $PDO = null)
   {
+    $this->error = new DefaultService();
     $this->PDO = $PDO ?? new MyPDO();
   }
 

@@ -3,40 +3,16 @@
 use Model\QAResponse\QAResponse;
 use Model\QAResponse\QAResponses;
 use Model\QuestionAnswer\ask;
-use Simpus\Apps\Middleware;
-use Simpus\Helper\HttpHeader;
+use Simpus\Apps\Service;
 use System\Database\MyPDO;
 
-class QAResponseService extends Middleware
+class QAResponseService extends Service
 {
-  // private function
-  private function useAuth()
-  {
-    // cek access
-    if ($this->getMiddleware()['auth']['login'] == false) {
-      HttpHeader::printJson(['status' => 'unauthorized'], 500, [
-        "headers" => array (
-          'HTTP/1.0 401 Unauthorized',
-          'Content-Type: application/json'
-        )
-      ]);
-    }
-  }
-
-  private function errorhandler()
-  {
-    HttpHeader::printJson(['status' => 'bad request'], 500, [
-      "headers" => array (
-        'HTTP/1.1 400 Bad Request',
-        'Content-Type: application/json'
-      )
-    ]);
-  }
-
   protected $PDO;
 
   public function __construct(MyPDO $PDO = null)
   {
+    $this->error = new DefaultService();
     $this->PDO = $PDO ?? new MyPDO();
   }
 
@@ -46,12 +22,12 @@ class QAResponseService extends Middleware
     // cek thread exis atau tidak
     $threadID = $request['thread_id'] ?? null;
     if ($threadID == null) {
-      return $this->errorhandler();
+      return $this->error(400);
     }
 
     $ask = new ask($this->PDO);
     if (! $ask->setID($threadID)->isExist()) {
-      return $this->errorhandler();
+      return $this->error(400);
     }
     $ask->read();
     $like_before = $ask->getLike() ?? 0;
@@ -123,12 +99,12 @@ class QAResponseService extends Middleware
     // cek thread exis atau tidak
     $threadID = $request['thread_id'] ?? null;
     if ($threadID == null) {
-      return $this->errorhandler();
+      return $this->error(400);
     }
 
     $ask = new ask($this->PDO);
     if (! $ask->setID($threadID)->isExist()) {
-      return $this->errorhandler();
+      return $this->error(400);
     }
     $ask->read();
     $dislike_before = $ask->getDislike() ?? 0;

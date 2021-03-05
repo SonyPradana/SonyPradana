@@ -2,53 +2,19 @@
 
 use Model\UserRegister\userRegister;
 use Model\UserRegister\userRegisters;
-use Simpus\Apps\Middleware;
-use Simpus\Helper\HttpHeader;
-use Simpus\Auth\Auth;
+use Simpus\Apps\Service;
 use System\Database\MyModel;
 use System\Database\MyPDO;
 use System\Database\MyQuery;
 
-class UserRegisterService extends Middleware
+class UserRegisterService extends Service
 {
-  // private function
-  private function useAuth()
-  {
-    // cek access
-    $token = Middleware::getMiddleware()['auth']['token'];
-    $auth = new Auth($token, Auth::USER_NAME_AND_USER_AGENT_IP);
-
-    if (! $auth->privilege('admin')) {
-      HttpHeader::printJson(['status' => 'unauthorized'], 500, [
-        "headers" => array (
-          'HTTP/1.0 401 Unauthorized',
-          'Content-Type: application/json'
-        )
-      ]);
-    }
-  }
-
-  private function errorhandler(array $error_provider)
-  {
-    $printed_data = array(
-      'status' => 'bad request',
-      'code'   => 400,
-      'error'  => $error_provider,
-    );
-
-    HttpHeader::printJson($printed_data, 500, [
-      "headers" => array (
-        'HTTP/1.1 400 Bad Request',
-        'Content-Type: application/json'
-      )
-    ]);
-  }
-
   protected $PDO = null;
   public function __construct(MyPDO $PDO = null)
   {
+    $this->error = new DefaultService();
     $this->PDO =$PDO ?? new MyPDO();
-    $this->useAuth();
+    $this->useUserRole('admin');
   }
 
   public function request(array $request): array
@@ -58,15 +24,17 @@ class UserRegisterService extends Middleware
 
     return array (
       'status'  => 'ok',
+      'code'    => 200,
       'data'    => $data->resultAll(),
       'error'   => false,
       'headers' => array('HTTP/1.1 200 Oke')
     );
   }
 
-  public function acceptUser(array $request)
+  public function acceptUser(array $request): array
   {
-    $id = $request['user_id'] ?? $this->errorhandler([]);
+    // TODO: error handle costume message
+    $id = $request['user_id'] ?? $this->errorHandler(400);
 
     $user = new userRegister($this->PDO);
     $user->setID($id);
@@ -134,12 +102,13 @@ class UserRegisterService extends Middleware
 
     }
 
-    $this->errorhandler([]);
+    return $this->error(400);
   }
 
   public function declineUser(array $request)
   {
-    $user_id = $request['user_id'] ?? $this->errorhandler(['error' => 'invalid params']);
+    // TODO: error handle costume message
+    $user_id = $request['user_id'] ?? $this->errorHandler(400);
     // cek user
     $user = new userRegister($this->PDO);
     $user->setID($user_id);
@@ -156,10 +125,10 @@ class UserRegisterService extends Middleware
       $error = array();
     }
     return array(
-      'status' => empty($error) ? 'ok' : 'invalid',
-      'code'  => 200,
-      'data' => $data,
-      'error' => array(
+      'status'  => empty($error) ? 'ok' : 'invalid',
+      'code'    => 200,
+      'data'    => $data,
+      'error'   => array(
         'user' => 'user not exist'
       ),
       'headers' => array('HTTP/1.1 200 Oke')

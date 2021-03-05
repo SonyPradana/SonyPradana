@@ -1,28 +1,15 @@
 <?php
 
 use Model\Trivia\Trivia;
-use Simpus\Apps\Middleware;
-use Simpus\Helper\HttpHeader;
+use Simpus\Apps\Service;
 use System\Database\MyPDO;
 
-class TriviaService extends Middleware
+class TriviaService extends Service
 {
-  private function UseAuth()
-  {
-    // cek access
-    if ($this->getMiddleware()['auth']['login'] == false) {
-      HttpHeader::printJson(['status' => 'unauthorized'], 500, [
-          "headers" => [
-              'HTTP/1.0 401 Unauthorized',
-              'Content-Type: application/json'
-          ]
-      ]);
-    }
-  }
-
   protected $PDO = null;
   public function __construct(MyPDO $PDO = null)
   {
+    $this->error = new DefaultService();
     $this->PDO = $PDO ?? new MyPDO();;
   }
 
@@ -127,5 +114,5 @@ class TriviaService extends Middleware
       ),
       'headers' => ['HTTP/1.1 200 Oke']
     );
-  }  
+  }
 }

@@ -1,35 +1,37 @@
 <?php
 
-use Simpus\Apps\Middleware;
-use Model\Simpus\KIAAnakRecords;
-use Simpus\Helper\HttpHeader;
-use Simpus\Auth\Auth;
-use Simpus\Auth\User;
+use Simpus\Apps\Service;
 
-class AuthService extends Middleware
+class AuthService extends Service
 {
-    public function login_status(array $params)
-    {
-        
-        if( $this->getMiddleware()['auth']['login'] ) {
-            return [
-                'status'    => 'ok',
-                'headers'   => ['HTTP/1.1 200 Oke']
-            ];
-        }elseif (! $this->getMiddleware()['auth']['login'] ) {
-            if( $this->getMiddleware()['auth']['token'] == ''){
-                return [
-                    'status'    => 'not login',
-                    'headers'   => ['HTTP/1.1 200 Oke']
-                ];
-            }
+  public function __construct()
+  {
+    $this->error = new DefaultService();
+  }
 
-            return [
-                'status'    => 'Session end',
-                'headers'   => ['HTTP/1.1 200 Oke']
-            ];
-        }
+  public function login_status(array $request)
+  {
+    $status = $this->getMiddleware()['auth'];
 
+    if ($status['login']) {
+      return array(
+        'status'    => 'ok',
+        'headers'   => ['HTTP/1.1 200 Oke']
+      );
+
+    } elseif (! $status['login']) {
+
+      if ($status['token'] == '') {
+        return array(
+          'status'    => 'not login',
+          'headers'   => ['HTTP/1.1 200 Oke']
+        );
+      }
+
+      return array(
+        'status'    => 'Session end',
+        'headers'   => ['HTTP/1.1 200 Oke']
+      );
     }
-
+  }
 }

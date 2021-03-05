@@ -6,44 +6,23 @@
  */
 
 use Model\Antrian\{antrianCRUD, antrianModel};
-use Simpus\Apps\Middleware;
-use Simpus\Helper\HttpHeader;
+use Simpus\Apps\Service;
 use System\Database\MyPDO;
 
-class AntrianPoliService extends Middleware
-{  
-  private function useAuth()
-    {
-      // cek access
-      if ($this->getMiddleware()['auth']['login'] == false ) {
-        HttpHeader::printJson(array('status' => 'unauthorized'), 500, array (
-          "headers" => array (
-              'HTTP/1.0 401 Unauthorized',
-              'Content-Type: application/json'
-          )
-        ));
-      }
-    }
-
-  private function errorhandler()
-  {
-    HttpHeader::printJson(array('status' => 'bad request'), 500, array (
-      "headers" => array (
-          'HTTP/1.1 400 Bad Request',
-          'Content-Type: application/json'
-      )
-    ));
-  }
+class AntrianPoliService extends Service
+{
   private function pusher($data)
   {
     $this->Pusher->trigger('my-channel', 'my-event', $data);
   }
+
   protected $PDO = null;
   protected $Pusher = null;
 
   public function __construct(MyPDo $PDO = null)
   {
-    $this->PDO = $PDO ?? new MyPDO();  
+    $this->error = new DefaultService();
+    $this->PDO = $PDO ?? new MyPDO();
     $this->Pusher = new Pusher\Pusher(
       PUSHER_APP_KEY,
       PUSHER_APP_SECRET,
@@ -59,18 +38,19 @@ class AntrianPoliService extends Middleware
   {
     $antrian = new antrianModel($this->PDO);
     $get_antrian = $antrian->resultAll();
-    
+
     $get_antrian = array_map(function($x) {
       $x['date_time'] = date('d F Y', $x['date_time']);
       $x['current_times'] = date('h:i a', $x['current_times']);
       return $x;
     }, $get_antrian);
-  
+
     $this->pusher($get_antrian);
     return array (
-      'status' => 'ok',
-      'last' => $antrian->lastUpdate(),
-      'date' => '15 Oct 2020',
+      'status'  => 'ok',
+      'code'    => 200,
+      'last'    => $antrian->lastUpdate(),
+      'date'    => '15 Oct 2020',
       'data'    => $get_antrian,
       'headers' => array('HTTP/1.1 200 Oke')
     );
@@ -98,7 +78,8 @@ class AntrianPoliService extends Middleware
 
     return array(
       'status'  => $status ? 'ok' : 'error',
-      'data' => $get_antrian,
+      'code'    => 200,
+      'data'    => $get_antrian,
       'headers' => array('HTTP/1.1 200 Oke')
     );
   }
@@ -106,11 +87,11 @@ class AntrianPoliService extends Middleware
   public function baru($params): array
   {
     $this->useAuth();
-    
+
     $update_poli = $this->validPoli($params);
     $update_antrian = $this->validInput($params);
 
-    $antrian_poli =  new antrianCRUD($this->PDO);      
+    $antrian_poli =  new antrianCRUD($this->PDO);
     $status = $antrian_poli
       ->setID($update_poli)
       ->setQueueing($update_antrian)
@@ -126,6 +107,7 @@ class AntrianPoliService extends Middleware
 
     return array (
       'status'  => $status ? 'ok' : 'error',
+      'code'    => 200,
       'data' => $get_antrian,
       'headers' => array('HTTP/1.1 200 Oke')
     );
@@ -136,9 +118,9 @@ class AntrianPoliService extends Middleware
   {
     $this->useAuth();
 
-    $poli = $params['poli'] ?? $this->errorhandler();
+    $poli = $params['poli'] ?? $this->errorHandler(405);
     $antrian = new antrianCRUD($this->PDO);
-    
+
     $data = array();
     $status = false;
 
@@ -178,9 +160,10 @@ class AntrianPoliService extends Middleware
     $this->pusher($data);
 
 
-    return array (
+    return array(
       'status'  => $status ? 'ok' : 'error',
-      'data' => $data,
+      'code'    => 200,
+      'data'    => $data,
       'headers' => array('HTTP/1.1 200 Oke')
     );
 
@@ -189,15 +172,18 @@ class AntrianPoliService extends Middleware
   // helper function
   private function validInput(array $params)
   {
-    $number = $params['antrian'] ?? $this->errorhandler();
+    $number = $params['antrian'] ?? null;
+    if (! is_int($number)) {
+      $this->errorHandler(405);
+    }
     return $number < 0 ? 0 : $number;
   }
 
   private function validPoli(array $params): string
   {
-    $poli = $params['poli'] ?? $this->errorhandler();
+    $poli = $params['poli'] ?? $this->errorHandler(405);
     $poli = strtoupper($poli);
-    return in_array($poli, ['A', 'B', 'C', 'D']) ? $poli : $this->errorhandler();
+    return in_array($poli, ['A', 'B', 'C', 'D']) ? $poli : $this->errorHandler(405);
   }
 }
 

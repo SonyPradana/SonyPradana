@@ -1,36 +1,20 @@
 <?php
 
-require BASEURL . '/vendor/autoload.php';
-
 use Convert\Converter\ConvertCode;
 use Gumlet\ImageResize;
 use Model\Stories\Stories;
 use Model\Stories\Story;
-use Simpus\Apps\Middleware;
-use Simpus\Helper\HttpHeader;
+use Simpus\Apps\Service;
 use System\Database\MyPDO;
 use System\File\UploadFile;
 
-class StoriesService extends Middleware
+class StoriesService extends Service
 {
-  // private function
-  private function useAuth()
-  {
-    // cek access
-    if( $this->getMiddleware()['auth']['login'] == false ){
-      HttpHeader::printJson(['status' => 'unauthorized'], 500, [
-        "headers" => [
-          'HTTP/1.0 401 Unauthorized',
-          'Content-Type: application/json'
-        ]
-      ]);
-    }
-  }
-
   protected $PDO = null;
 
   public function __construct(MyPDO $PDO = null)
   {
+    $this->error = new DefaultService();
     $this->PDO = $PDO ?? new MyPDO();
   }
 
@@ -98,6 +82,7 @@ class StoriesService extends Middleware
 
     return array(
       'status'  => $status,
+      'code'    => 200,
       'params'  => $request,
       'data'    => null,
       'error'   => $error,
@@ -121,6 +106,7 @@ class StoriesService extends Middleware
 
       return array (
         'status'  => 'ok',
+        'code'    => 200,
         'data'    => array (
           'viewer' => $lastViewer + 1
         ),
@@ -129,11 +115,11 @@ class StoriesService extends Middleware
       );
     }
 
-    return array (
+    return array(
       'status'  => 'bad request',
       'data'    => null,
       'error'   => array (
-        'stoties_id' => 'storie tidak valid'),
+        'story_id' => 'id tidak valid'),
       'headers' => array('HTTP/1.1 400 Bad Request')
     );
 
@@ -146,10 +132,7 @@ class StoriesService extends Middleware
     $storyID = $request['stories_id'] ?? 0;
     if ($storyID == 0)
     {
-      return array (
-        'status' => 'bad request',
-        'headers' => array('HTTP/1.1 400 Bad Request')
-      );
+      return $this->error(400);
     }
 
     // logic delete from database
@@ -175,8 +158,9 @@ class StoriesService extends Middleware
     $stories = new Stories($this->PDO);
 
     return array (
-      'status' => 'ok',
-      'data' => $stories->resultAll(),
+      'status'  => 'ok',
+      'code'    => 200,
+      'data'    => $stories->resultAll(),
       'headers' => array('HTTP/1.1 200 Oke')
     );
   }
@@ -188,8 +172,9 @@ class StoriesService extends Middleware
     $stories->filterByUploader($groupName);
 
     return array (
-      'status' => 'ok',
-      'data' => $stories->result(),
+      'status'  => 'ok',
+      'code'    => 200,
+      'data'    => $stories->result(),
       'headers' => array('HTTP/1.1 200 Oke')
     );
   }
@@ -211,8 +196,9 @@ class StoriesService extends Middleware
     }
 
     return array (
-      'status' => 'ok',
-      'data' => $data,
+      'status'  => 'ok',
+      'code'    => 200,
+      'data'    => $data,
       'headers' => array('HTTP/1.1 200 Oke')
     );
   }

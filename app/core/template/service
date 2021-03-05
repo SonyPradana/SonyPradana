@@ -1,38 +1,20 @@
 <?php
 
-use Simpus\Apps\Middleware;
-use Simpus\Helper\HttpHeader;
+use Simpus\Apps\Service;
 
-class __service__Service extends Middleware
+class __service__Service extends Service
 {
-  // private function
-  private function useAuth()
+  public function __construct()
   {
-    // cek access
-    if ($this->getMiddleware()['auth']['login'] == false) {
-      HttpHeader::printJson(['status' => 'unauthorized'], 500, [
-        "headers" => array (
-          'HTTP/1.0 401 Unauthorized',
-          'Content-Type: application/json'
-        )
-      ]);
-    }
-  }
-
-  private function errorhandler()
-  {
-    HttpHeader::printJson(['status' => 'bad request'], 500, [
-      "headers" => array (
-        'HTTP/1.1 400 Bad Request',
-        'Content-Type: application/json'
-      )
-    ]);
+    parent::__construct();
+    // put your code here
   }
 
   public function Test(array $request): array
   {
-    return array (
+    return array(
       'status'  => 'ok',
+      'code'    => 200,
       'data'    => null,
       'error'   => false,
       'headers' => array('HTTP/1.1 200 Oke')

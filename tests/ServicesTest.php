@@ -166,7 +166,7 @@ final class ServicesTest extends TestCase
         'kecamatan' => 'unit-test'
       )
     );
-    $this->assertEquals('bad request', $data_fetch['status']);
+    $this->assertEquals('Bad Request', $data_fetch['status']);
     $this->assertEquals(['HTTP/1.1 400 Bad Request'], $data_fetch['headers']);
 
     // fail indexing [optional to test]
@@ -193,7 +193,7 @@ final class ServicesTest extends TestCase
         'range_waktu' => 0
       )
     );
-    $this->assertEquals('bad request', $data_tracker['status']);
+    $this->assertEquals('Bad Request', $data_tracker['status']);
 
     // faild track data
     $data_trackData = $api->tracker_data(
@@ -201,7 +201,7 @@ final class ServicesTest extends TestCase
         'range_waktu' => 0
       )
     );
-    $this->assertEquals('bad request', $data_trackData['status']);
+    $this->assertEquals('Bad Request', $data_trackData['status']);
     $this->assertEquals(['HTTP/1.1 400 Bad Request'], $data_trackData['headers']);
   }
 
