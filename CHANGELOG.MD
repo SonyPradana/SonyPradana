@@ -2,9 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.3.6] - 2021-03-05
+
+### ADDED
+- Add simple cms (dashbord admin)
+- Add Join table, between, multy costume where in MyQuery
+- Add abstarct class for Sservices
+- Default services respone (api)
+
+### Fixed
+- dashboard admin now can refresh anywhere (css not broken anymore)
+
 ## [2.3.5] - 2021-02-05
 
-## ADDED
+### ADDED
 - Support VUE Router
 - Support Tailwind-CSS (partial)
 - Add admin dashbord page
