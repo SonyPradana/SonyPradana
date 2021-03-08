@@ -110,6 +110,12 @@ class SiteMapController extends Controller
         'changefreq'  => 'hourly',
         'priority'    => '0.8'
       ],
+      [
+        'loc'         => '/info/vaksin',
+        'lastmod'     => '2021-03-08',
+        'changefreq'  => 'weekly',
+        'priority'    => '0.8'
+      ],
     );
   }
 

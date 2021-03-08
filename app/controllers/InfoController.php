@@ -8,7 +8,7 @@ class InfoController extends Controller
   public function show(string $view_file)
   {
     // replace - to _
-    $view_file =str_replace('-', '_', $view_file);
+    $view_file = str_replace('-', '_', $view_file);
     call_user_func([$this, $view_file]);
   }
 
@@ -92,6 +92,30 @@ class InfoController extends Controller
         "raw_data"          => $imun->getData(date('m'), date('Y')),
         "avilable_month"    => $imun->getAvilabeMonth()
       ]
+    ]);
+  }
+
+  public function Vaksin()
+  {
+    $author = new User("angger");
+
+    return $this->view('/info/vaksin', [
+      "auth"    => $this->getMiddleware()['auth'],
+      "meta"     => [
+        "title"         => "Info Vaksin - Simpus Lerep",
+        "discription"   => "Info Vakin Terbaru",
+        "keywords"      => "simpus lerep, puskesmas lerep, Info vaksin, jadwal vaksin"
+      ],
+      "header"   => [
+        "active_menu"   => 'home',
+        "header_menu"   => $_SESSION['active_menu'] ?? MENU_MEDREC
+      ],
+      "contents" => array(
+        "article"    => [
+          "display_name"          => $author->getDisplayName(),
+          "display_picture_small" => $author->getSmallDisplayPicture()
+        ],
+      )
     ]);
   }
 }
