@@ -2,6 +2,7 @@
 
 namespace System\Database;
 
+use GuzzleHttp\Psr7\Query;
 use System\Database\MyQuery\Table;
 
 /**
@@ -32,5 +33,11 @@ class MyQuery
   public function table(string $table_name)
   {
     return new Table($table_name, $this->PDO);
+  }
+
+  public static function conn(string $table_name, MyPDO $PDO = null)
+  {
+    $conn = new MyQuery($PDO);
+    return $conn->table($table_name);
   }
 }

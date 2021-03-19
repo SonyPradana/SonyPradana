@@ -26,13 +26,14 @@ class CaptchaService extends Service
 
     // scrf builder
     $scrfKey = ConvertCode::RandomCode(5);
-    $db = new MyQuery();
-    $db('scrf_protection')
+    MyQuery::conn('scrf_protection')
       ->insert()
-      ->value('id', '')
-      ->value('scrf_key', $scrfKey)
-      ->value('secret', $captcha->getPhrase())
-      ->value('hit', 1)
+      ->values([
+        'id'        => '',
+        'scrf_key'  => $scrfKey,
+        'secret'    => $captcha->getPhrase(),
+        'hit'       => 1
+      ])
       ->execute();
 
     return array(
