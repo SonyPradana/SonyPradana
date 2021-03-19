@@ -19,16 +19,15 @@ module.exports = {
       gridTemplateRows: {
         'dashbord': '56px 1fr'
       },
+      colors: {
+        // Build your palette here
+        gray: colors.trueGray,
+        blue: colors.fuchsia,
+        lime: colors.lime,
+        rose: colors.rose,
+        cyan: colors.cyan,
+      }
     },    
-    colors: {
-      // Build your palette here
-      gray: colors.trueGray,
-      blue: colors.fuchsia,
-      lime: colors.lime,
-      rose: colors.rose,
-      red: colors.red,
-      cyan: colors.cyan
-    }
   },
   variants: {
     extend: {},
