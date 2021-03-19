@@ -107,6 +107,9 @@ class StoriesController extends Controller
 
   public function roll(string $groupUploader)
   {
+    // handle space in url
+    $groupUploader = str_replace('+', ' ', $groupUploader);
+
     $msg = array('show' => false, 'type' => 'info', 'content' => 'oke');
     $error = array();
     $strories = new Stories();

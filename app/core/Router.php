@@ -10,12 +10,12 @@ class Route
   private static $methodNotAllowed = null;
 
   public static $patterns = Array (
-    '(:id)' => '(\d+)',
-    '(:num)' => '([0-9]*)',
+    '(:id)'   => '(\d+)',
+    '(:num)'  => '([0-9]*)',
     '(:text)' => '([a-zA-Z]*)',
-    '(:any)' => '([0-9a-zA-Z_-]*)',
+    '(:any)'  => '([0-9a-zA-Z_+-]*)',
     '(:slug)' => '([0-9a-zA-Z_-]*)',
-    '(:all)' => '(.*)',
+    '(:all)'  => '(.*)',
   );
 
   public static function match($method, $uri, $callback)

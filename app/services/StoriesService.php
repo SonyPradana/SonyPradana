@@ -193,6 +193,10 @@ class StoriesService extends Service
       $this->PDO->bind(':uploader', $uploader);
 
       $data[$uploader] = $this->PDO->single();
+
+      // add slug story roll
+      $slug = str_replace(' ', '+', $uploader);
+      $data[$uploader]['slug'] = "/stories/roll/$slug";
     }
 
     return array (

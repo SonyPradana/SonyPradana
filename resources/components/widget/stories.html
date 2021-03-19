@@ -16,14 +16,14 @@
 
         <div 
           class="story-preview"
-          v-for="story in stories"
-          :key="story.id"
-          v-on:click="roll(story.uploader)">
+            v-for="story in stories"
+            :key="story.id"
+            v-on:click="roll(story.slug)">
 
           <div class="story-image">
             <img 
-            v-bind:src="`/data/img/stories/small/${story.image_id}`"
-            v-bind:alt="story.uploader">
+              v-bind:src="`/data/img/stories/small/${story.image_id}`"
+              v-bind:alt="story.uploader">
           </div>
           <div class="story-title">
             <p 
@@ -51,8 +51,8 @@
             }
           })
       },
-      roll: function(groupName) {        
-        window.location.href = `/stories/roll/${groupName}`;
+      roll: function(groupName) {
+        window.location.href = groupName;
       }
     },
     mounted() {
