@@ -12,6 +12,7 @@ return array (
    * CONTROLLER_PATH container controller
    * SERVICES_PATH container Services
    * COMPONENT container html component (widget, cards, etc)
+   * COMMAND_PATH contain command class folder
    *
    */
   'MODEL_PATH'      => '/app/library/model/',
@@ -19,4 +20,5 @@ return array (
   'CONTROLLER_PATH' => '/app/controllers/',
   'SERVICES_PATH'   => '/app/services/',
   'COMPONENT_PATH'  => '/resources/components/',
+  'COMMNAD_PATH'    => '/app/commands/',
 );

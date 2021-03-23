@@ -1,8 +1,7 @@
 <?php
-define("APP_START", microtime(true));
 
 require_once './vendor/autoload.php';
 
 // call CLI
-$new_cli = new \Simpus\Apps\CLI($argv, __DIR__);
+$new_cli = new \Simpus\Apps\CLI($argv);
 
