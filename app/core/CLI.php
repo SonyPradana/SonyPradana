@@ -8,6 +8,9 @@ class CLI
 {
   public function __construct(array $arguments)
   {
+    // handle commad empty
+    $baseArgs = $arguments[1] ?? '--help';
+
     // load register command
     $commands = COMMAND_CONFIG;
 
@@ -16,13 +19,13 @@ class CLI
       $use = $cmd['cmd'];
       if (is_array($use)) {
         foreach ($use as $alias) {
-          $valid = $this->cekAlias($alias, $arguments[1], $cmd['mode']);
+          $valid = $this->cekAlias($alias, $baseArgs, $cmd['mode']);
           if ($valid) {
             break;
           }
         }
       } else {
-        $valid = $this->cekAlias($use, $arguments[1], $cmd['mode']);
+        $valid = $this->cekAlias($use, $baseArgs, $cmd['mode']);
       }
 
       if ($valid) {
