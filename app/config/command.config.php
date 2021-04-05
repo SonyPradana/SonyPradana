@@ -1,6 +1,5 @@
 <?Php
 // regiter costume command
-// TODO: alias for cmd
 return array(
   [
     "cmd"       => ["-h", "--help"],
@@ -8,12 +7,21 @@ return array(
     "class"     => "HelpCommand",
     "fn"        => "println",
   ],
+
   [
     "cmd"       => ["-v", "--version"],
     'mode'      => "full",
     "class"     => "HelpCommand",
     "fn"        => "versionCek",
   ],
+
+  [
+    "cmd"       => "--list",
+    'mode'      => "full",
+    "class"     => "HelpCommand",
+    "fn"        => "commandList",
+  ],
+
   [
     "cmd"       => "make",
     "mode"      => "start",

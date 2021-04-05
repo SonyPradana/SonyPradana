@@ -1,20 +1,35 @@
 # Changelog
-
 All notable changes to this project will be documented in this file.
 
-## [2.3.6] - 2021-03-05
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### ADDED
+- Add page info vaksin (indonesia)
+- MyQuery support static function
+- Costumeable CLI command (registered command function)
+- Styling CLI (color)
+- Splint CLI code to some funtion
+
+### Fixed
+- Fix story url not found because space in url
+
+### Changed
+- MyQuery insert now using associative array
+- Refactory CLI base code
+
+## [2.3.6] - 2021-03-05
 ### ADDED
 - Add simple cms (dashbord admin)
 - Add Join table, between, multy costume where in MyQuery
-- Add abstarct class for Sservices
+- Add abstarct class for Services
 - Default services respone (api)
 
 ### Fixed
 - dashboard admin now can refresh anywhere (css not broken anymore)
 
 ## [2.3.5] - 2021-02-05
-
 ### ADDED
 - Support VUE Router
 - Support Tailwind-CSS (partial)
@@ -34,7 +49,6 @@ All notable changes to this project will be documented in this file.
 - Auto generate tahun support for swict 'bulan' and 'tahun'
 
 ## [2.3.4] - 2021-01-25
-
 ### ADDED
 - robot.txt and sitemap
 - Aplication path APP_PATH['url'], (models, view, controller, services, component)
@@ -47,7 +61,6 @@ All notable changes to this project will be documented in this file.
 - Auth login level incress to 3 Must match IP, user agen and user
 
 ## [2.3.3] - 2021-01-25
-
 ### Added 
 - Steal Tailwind-color (gray, blue)
 - MyModel more mudular and complex filter
@@ -67,7 +80,6 @@ All notable changes to this project will be documented in this file.
 - Result not found display not work correctly in search and view rm
 
 ## [2.3.2] - 2021-01-22
-
 ### Added 
 - Add new CLI command to add models and model (ver 0.2)
 - Add new feature QNA (system forum tanya jawab)
@@ -75,7 +87,6 @@ All notable changes to this project will be documented in this file.
 - Menambah library Alpine.js
 
 ## [2.3.1] - 2021-01-08
-
 ### Added
 - Support Cache Controll
 - Add Request and Respone class, to handle header (reqest and respone)
@@ -88,7 +99,6 @@ All notable changes to this project will be documented in this file.
 - ConvertCode (localy), ConvertCode vendor is keeped
 
 ## [2.3.0] - 2021-01-05
-
 ### Added
 - Support structural file config (individual)
 
@@ -103,7 +113,6 @@ All notable changes to this project will be documented in this file.
 - Folder structur app/library/Simpus/Helper to app/library/Helper
 
 ## [2.2.0] - 2020-11-27
-
 ### Added
 - Private folder / single entry point
 - Support Nodejs Modules
@@ -112,7 +121,6 @@ All notable changes to this project will be documented in this file.
 - Support CLI (make controller, view, models)
 
 ## [2.1.0] - 2020-06-30
-
 ### Added
 - MVC Supported
 - Config File
@@ -121,13 +129,11 @@ All notable changes to this project will be documented in this file.
 - Suopport Sass
 
 ## [2.0.0] - 2020-03-21
-
 ### Added
 - Support pretty url
 - Support mini mvc
 
 ## [1.0.0] - 2020-03-21
-
 ### Added
 - This poject start by [Angger Pradana](https://github.com/SonyPradana)
 
