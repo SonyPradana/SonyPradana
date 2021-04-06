@@ -1,6 +1,7 @@
 <?php
 
 use Simpus\Apps\Command;
+use System\Database\MyPDO;
 use System\Database\MyQuery;
 
 class MakerCommand extends Command
@@ -31,7 +32,7 @@ class MakerCommand extends Command
         $this->make_view();
         break;
 
-      case 'services':
+      case 'service':
         $this->make_servises();
         break;
 
@@ -129,6 +130,14 @@ class MakerCommand extends Command
       'surfix'            => '.php'
     ), $this->OPTION[0] . '/');
 
+    // fill table name
+    if (substr($this->OPTION[1], 0, 12) == '--table-name') {
+      $table_name = explode('=', $this->OPTION[1])[1];
+      $this->FillModelDatabase(
+        APP_FULLPATH['model'] . $this->OPTION[0] . '/' . $this->OPTION[0] . ".php",
+        $table_name);
+    }
+
     // the result
     if ($success) {
       echo $this->textGreen("\nFinish created model file");
@@ -148,8 +157,15 @@ class MakerCommand extends Command
       'save_location'     => APP_PATH['model'],
       'pattern'           => '__models__',
       'surfix'            => 's.php'
-
     ), $this->OPTION[0] . '/');
+
+    // fill table name
+    if (substr($this->OPTION[1], 0, 12) == '--table-name') {
+      $table_name = explode('=', $this->OPTION[1])[1];
+      $this->FillModelsDatabase(
+        APP_FULLPATH['model'] . $this->OPTION[0] . '/' . $this->OPTION[0] . "s.php",
+        $table_name);
+    }
 
     // the result
     if ($success) {
@@ -184,12 +200,11 @@ class MakerCommand extends Command
 
   private function FillModelDatabase(string $model_location, string $table_name)
   {
-    $table_column =
-      MyQuery::conn("INFORMATION_SCHEMA.COLUMNS")
-        ->select()
-        ->equal("TABLE_SCHEMA", DB_NAME)
-        ->equal("TABLE_NAME", $table_name)
-        ->all() ?? exit;
+    $table_column = MyQuery::conn("COLUMNS", MyPDO::conn("INFORMATION_SCHEMA"))
+      ->select()
+      ->equal("TABLE_SCHEMA", DB_NAME)
+      ->equal("TABLE_NAME", $table_name)
+      ->all() ?? [];
 
     $toString = '';
     foreach ($table_column as $column) {
