@@ -1,7 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <?php include($_SERVER['DOCUMENT_ROOT'] . '/resources/components/meta/metatag.php') ?>
+  <?php
+
+use Model\JadwalVaksin\JadwalVaksins;
+
+include($_SERVER['DOCUMENT_ROOT'] . '/resources/components/meta/metatag.php') ?>
 
   <link rel="stylesheet" href="/lib/css/ui/v1.1/full.style.css">
   <link rel="stylesheet" href="/lib/css/ui/v1/table.css">
@@ -15,6 +19,49 @@
     }
     main {
       overflow-x: auto;
+    }
+
+    /* media style */
+    .box-card .box-title {
+      color: rgb(55, 65, 81);
+      font-size: 1.25rem;
+      font-weight: 700;
+      line-height: 2.5rem;
+    }
+
+    .box-card  .box-body {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .box-body .card {
+      border-radius: 12px;
+      border: solid 1px aqua;
+      padding: 8px;
+    }
+
+    .box-body .card .title {
+      font-size: 1rem;
+      line-height: 2rem;
+      font-weight: 600;
+    }
+
+    .box-body .card .data .title {
+      color: rgb(75, 85, 99);
+    }
+
+    .box-body .card .data.text {
+      font-size: 1.25rem;
+      line-height: 2.5rem;
+      font-weight: 700;
+      color: #121FCF;
+    }
+
+    /* article */
+    .article.body p {
+      font-size: 1rem;
+      line-height: 2rem;
     }
 
     @media screen and (max-width: 767px) {
@@ -42,7 +89,7 @@
 
       <article>
         <div class="article-header">
-          <h1 class="text-gray-900">Info Vaksin Jumlah dan Sasaran - Indonesia</h1>
+          <h1 class="text-gray-900">Info Vaksin Jumlah dan Sasaran</h1>
           <div class="article breadcrumb">
             <div class="author">
               <img src="<?= $content->article['display_picture_small'] ?>" alt="@<?= $content->article['display_name'] ?>" srcset="">
@@ -54,57 +101,31 @@
 
         <div id="media-app" class="media-article">
           <div class="vaksin-card">
-            <div class="box-card sasaran">
-              <div class="box-title">Sasaran Vaksin</div>
-              <div class="box-body">
-                <div class="card sasaran-lansia">
-                  <div class="title">lansia</div>
-                  <div class="data">
-                    {{ lastest.sasaran_vaksinasi_lansia }}
-                  </div>
-                </div>
-                <div class="card sasaran-petugas-publik">
-                  <div class="title">petugas publik</div>
-                  <div class="data">
-                    {{ lastest.sasaran_vaksinasi_petugas_publik }}
-                  </div>
-                </div>
-                <div class="card sasaran-sdmk">
-                  <div class="title">petugas sdmk</div>
-                  <div class="data">
-                    {{ lastest.sasaran_vaksinasi_sdmk }}
-                  </div>
-                </div>
-                <div class="card sasaran-total">
-                  <div class="title">total</div>
-                  <div class="data">
-                    {{ lastest.total_sasaran_vaksinasi }}
-                  </div>
-                </div>
-              </div>
-            </div>
-
             <div class="box-card progress">
-              <div class="box-title">Progres Vaksin</div>
+              <div class="box-title">Progres Vaksin - Nasional</div>
               <div class="box-body">
                 <!-- lansia -->
                 <div class="card progress progress-lansia">
-                  <div class="title">lasia</div>
+                  <div class="title">Lansia</div>
                   <div class="data">
-                    <div class="sub-data tahap-1">
-                      <div class="title">tahap pertama</div>
-                      <div class="data">
-                        {{ lastest.tahapan_vaksinasi.lansia.sudah_vaksin1 }} +
-                        {{ lastest.tahapan_vaksinasi.lansia.tertunda_vaksin1 }} =
-                        {{ lastest.tahapan_vaksinasi.lansia.total_vaksinasi1 }}
+                    <div class="sub-data sasaran">
+                      <div class="title">Sasaran</div>
+                      <div class="data text">
+                        {{ lastest.sasaran_vaksinasi_lansia }}
                       </div>
                     </div>
                     <div class="sub-data tahap-1">
-                      <div class="title">tahap kedua</div>
-                      <div class="data">
-                        {{ lastest.tahapan_vaksinasi.lansia.sudah_vaksin2 }} +
-                        {{ lastest.tahapan_vaksinasi.lansia.tertunda_vaksin2 }} =
-                        {{ lastest.tahapan_vaksinasi.lansia.total_vaksinasi2 }}
+                      <div class="title">Tahap Pertama</div>
+                      <div class="data text">
+                        {{ lastest.tahapan_vaksinasi.lansia.sudah_vaksin1 }}
+                        ({{ lastest.cakupan.lansia_vaksinasi1 }})
+                      </div>
+                    </div>
+                    <div class="sub-data tahap-1">
+                      <div class="title">Tahap Kedua</div>
+                      <div class="data text">
+                        {{ lastest.tahapan_vaksinasi.lansia.sudah_vaksin2 }}
+                        ({{ lastest.cakupan.lansia_vaksinasi2 }})
                       </div>
                     </div>
                   </div>
@@ -112,45 +133,80 @@
 
                 <!-- petugas publik  -->
                 <div class="card progress progress-petugas-publik">
-                  <div class="title">petugas publik</div>
+                  <div class="title">Petugas Publik</div>
                   <div class="data">
-                    <div class="sub-data tahap-1">
-                      <div class="title">tahap pertama</div>
-                      <div class="data">
-                        {{ lastest.tahapan_vaksinasi.petugas_publik.sudah_vaksin1 }} +
-                        {{ lastest.tahapan_vaksinasi.petugas_publik.tertunda_vaksin1 }} =
-                        {{ lastest.tahapan_vaksinasi.petugas_publik.total_vaksinasi1 }}
+                    <div class="sub-data sasaran">
+                      <div class="title">Sasaran</div>
+                      <div class="data text">
+                        {{ lastest.sasaran_vaksinasi_petugas_publik }}
                       </div>
                     </div>
                     <div class="sub-data tahap-1">
-                      <div class="title">tahap kedua</div>
-                      <div class="data">
-                        {{ lastest.tahapan_vaksinasi.petugas_publik.sudah_vaksin2 }} +
-                        {{ lastest.tahapan_vaksinasi.petugas_publik.tertunda_vaksin2 }} =
-                        {{ lastest.tahapan_vaksinasi.petugas_publik.total_vaksinasi2 }}
+                      <div class="title">Tahap Pertama</div>
+                      <div class="data text">
+                        {{ lastest.tahapan_vaksinasi.petugas_publik.sudah_vaksin1 }}
+                        ({{ lastest.cakupan.petugas_publik_vaksinasi1 }})
+                      </div>
+                    </div>
+                    <div class="sub-data tahap-1">
+                      <div class="title">Tahap Kedua</div>
+                      <div class="data text">
+                        {{ lastest.tahapan_vaksinasi.petugas_publik.sudah_vaksin2 }}
+                        ({{ lastest.cakupan.petugas_publik_vaksinasi2 }})
                       </div>
                     </div>
                   </div>
                 </div>
 
                 <!-- petugas sdm kesehatan -->
-                <div class="card progress progress-sdm kesehatan">
-                  <div class="title">sdm Kesehatan</div>
+                <div class="card progress progress-sdm-kesehatan">
+                  <div class="title">SDM Kesehatan</div>
                   <div class="data">
-                    <div class="sub-data tahap-1">
-                      <div class="title">tahap pertama</div>
-                      <div class="data">
-                        {{ lastest.tahapan_vaksinasi.sdm_kesehatan.sudah_vaksin1 }} +
-                        {{ lastest.tahapan_vaksinasi.sdm_kesehatan.tertunda_vaksin1 }} =
-                        {{ lastest.tahapan_vaksinasi.sdm_kesehatan.total_vaksinasi1 }}
+                    <div class="sub-data sasaran">
+                      <div class="title">Sasaran</div>
+                      <div class="data text">
+                        {{ lastest.sasaran_vaksinasi_sdmk }}
                       </div>
                     </div>
                     <div class="sub-data tahap-1">
-                      <div class="title">tahap kedua</div>
-                      <div class="data">
-                        {{ lastest.tahapan_vaksinasi.sdm_kesehatan.sudah_vaksin2 }} +
-                        {{ lastest.tahapan_vaksinasi.sdm_kesehatan.tertunda_vaksin2 }} =
-                        {{ lastest.tahapan_vaksinasi.sdm_kesehatan.total_vaksinasi2 }}
+                      <div class="title">Tahap Pertama</div>
+                      <div class="data text">
+                        {{ lastest.tahapan_vaksinasi.sdm_kesehatan.sudah_vaksin1 }}
+                        ({{ lastest.cakupan.sdm_kesehatan_vaksinasi1 }})
+                      </div>
+                    </div>
+                    <div class="sub-data tahap-1">
+                      <div class="title">Tahap Kedua</div>
+                      <div class="data text">
+                        {{ lastest.tahapan_vaksinasi.sdm_kesehatan.sudah_vaksin2 }}
+                        ({{ lastest.cakupan.sdm_kesehatan_vaksinasi2 }})
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- total sasaran -->
+                <div class="card progress progress-total">
+                  <div class="title">Total</div>
+                  <div class="data">
+                    <div class="sub-data sasaran">
+                      <div class="title">Sasaran</div>
+                      <div class="data text">
+                        {{ lastest.total_sasaran_vaksinasi }}
+                      </div>
+                    </div>
+                    <div class="sub-data tahap-1">
+                      <div class="title">Tahap Pertama</div>
+                      <div class="data text">
+                        {{ lastest.vaksinasi1 }}
+                        ({{ lastest.cakupan.vaksinasi1 }})
+                      </div>
+                    </div>
+                    <div class="sub-data tahap-1">
+                      <div class="title">Tahap Kedua</div>
+                      <div class="data text">
+                        {{ lastest.vaksinasi2 }}
+                        ({{ lastest.cakupan.vaksinasi2 }})
                       </div>
                     </div>
                   </div>
@@ -166,9 +222,9 @@
         </div>
 
         <div class="article body">
-          <h2 class="text-gray-800">Sasaran vaksinasi wilayah puskesamas lerep</h2>
+          <h2 class="text-gray-800">Sasaran Vaksinasi Wilayah Puskesamas Lerep</h2>
           <h3 class="text-gray-700">Jadwal vaksiasi lansia</h3>
-          <table>
+          <table id="jadwal-lansia">
             <thead>
               <tr>
                 <td>No</td>
@@ -178,28 +234,39 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>1</td>
-                <td>6 Maret 2021</td>
-                <td>140</td>
-                <td>Lerep dan Keji</td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>8 Maret 2021</td>
-                <td>140</td>
-                <td>Bandarjo dan Branjang</td>
-              </tr>
-              <tr>
-                <td>3</td>
-                <td>9 Maret 2021</td>
-                <td>140</td>
-                <td>kalisidi dan Nyatnyono</td>
+              <tr v-for="(event, index) in events" :key="event.id">
+                <td v-text="index + 1"></td>
+                <td v-text="event.tanggal"></td>
+                <td v-text="event.jumlah"></td>
+                <td v-text="event.desa"></td>
               </tr>
             </tbody>
           </table>
 
           <p>Jadwal vaksin yang lain akan di infokan di halam ini</p>
+          <h3 class="text-gray-700">Jadwal vaksin kedua</h3>
+          <p>Untuk mengetahui Jadwal vaksin kedua (setelah mendapat vaksin pertama), ada beberapa cara anatara lain;</p>
+          <ol>
+            <li>
+              <p>
+                Menghitung manual, dengan menjumlahkan 28 hari sejak tanggal vaksin pertama. Bila vaksin jatuh pada hari jumat atau minggu vaksin dapat diundur pada hari berikutnya.
+                Tanggal vaksin pertama dapat dilihat pada kartu vaksin yang telah diperoleh sebelumnya.
+              </p>
+              <p>Contoh: pasien mendapat vakin pertama pada tanggal 1 Maret, maka pasien datang kembali pada tanggal 29 Maret</p>
+            </li>
+            <li>
+              <p>
+                Mengujungi situs resmi pemerintah <a href="https://pedulilindungi.id/" target="_blank" rel="noopener noreferrer">pedulilindungi.com</a>, kemudian masukan nama lengkap dan nik yang terdaftar. Secara otomatis akan muncul inforamsi vaksinasi Anda.
+              </p>
+              <img src="/data/img/article/contoh-pedulilindungi.png" alt="contoh pedulilindungi" width="470px">
+
+            </li>
+            <li>
+              <p>
+                Menghubungi petugas vaksinasi. Anda dapat bertanya secara langsung kepada kami di puskesmas Lerep atau menghubungi <a href="tel:+64">Petugas vaksin</a> atau bidan desa setempat.
+              </p>
+            </li>
+          </ol>
         </div>
       </article>
 
@@ -244,7 +311,51 @@
     el: '#media-app',
     data() {
       return {
-        lastest: {}
+        lastest: {
+          "cakupan": {
+            "lansia_vaksinasi1": "0%",
+            "lansia_vaksinasi2": "0%",
+            "petugas_publik_vaksinasi1": "0%",
+            "petugas_publik_vaksinasi2": "0%",
+            "sdm_kesehatan_vaksinasi1": "0%",
+            "sdm_kesehatan_vaksinasi2": "0%",
+            "vaksinasi1": "0%",
+            "vaksinasi2": "0%"
+          },
+          "date": "2021-04-07",
+          "sasaran_vaksinasi_lansia": 0,
+          "sasaran_vaksinasi_petugas_publik": 0,
+          "sasaran_vaksinasi_sdmk": 0,
+          "tahapan_vaksinasi": {
+            "lansia": {
+              "sudah_vaksin1": 0,
+              "sudah_vaksin2": 0,
+              "tertunda_vaksin1": 0,
+              "tertunda_vaksin2": 0,
+              "total_vaksinasi1": 0,
+              "total_vaksinasi2": 0
+            },
+            "petugas_publik": {
+              "sudah_vaksin1": 0,
+              "sudah_vaksin2": 0,
+              "tertunda_vaksin1": 0,
+              "tertunda_vaksin2": 0,
+              "total_vaksinasi1": 0,
+              "total_vaksinasi2": 0
+            },
+            "sdm_kesehatan": {
+              "sudah_vaksin1": 0,
+              "sudah_vaksin2": 0,
+              "tertunda_vaksin1": 0,
+              "tertunda_vaksin2": 0,
+              "total_vaksinasi1": 0,
+              "total_vaksinasi2": 0
+            }
+          },
+          "total_sasaran_vaksinasi": 0,
+          "vaksinasi1": 0,
+          "vaksinasi2": 0
+        }
       }
     },
     mounted() {
@@ -253,6 +364,21 @@
           let data = json.monitoring
           console.log(data.pop())
           this.lastest = data.pop()
+        })
+    },
+  })
+
+  new Vue({
+    el: '#jadwal-lansia',
+    data() {
+      return {
+        events: {}
+      }
+    },
+    mounted() {
+      $json('/api/ver1.1/JadwalVaksin/lansia.json')
+        .then(json => {
+          this.events = json.data
         })
     },
   })
