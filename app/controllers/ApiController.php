@@ -51,7 +51,7 @@ class ApiController extends Controller
       $service = new $service_nama;
       if (method_exists($service, $method_nama)) {
         // call target services
-        return call_user_func_array([$service, $method_nama], $args);
+        return call_user_func_array([$service, $method_nama], $args) ?? [];
       }
 
       // method not found
