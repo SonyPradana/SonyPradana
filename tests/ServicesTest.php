@@ -6,6 +6,7 @@ use AntrianPoliService;
 use AuthService;
 use CovidKabSemarangService;
 use JadwalPelayananService;
+use JadwalVaksinService;
 use MessageService;
 use Model\Stories\Story;
 use NewsFeederService;
@@ -513,4 +514,12 @@ final class ServicesTest extends TestCase
   // {
   //   // panding
   // }
+
+  public function testJadwalVaksin(): void
+  {
+    $test = new JadwalVaksinService();
+    $res = $test->lansia([]);
+    
+    $this->assertNotEmpty($res['data']);
+  }
 }
