@@ -9,6 +9,7 @@ use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Pool;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use Simpus\Apps\Controller;
 
 class RouterTest extends TestCase
 {
@@ -67,23 +68,29 @@ class RouterTest extends TestCase
 
   public function testSpeedRouter(): void
   {
-    $start = microtime(true);
-    $_SERVER['REQUEST_URI'] = '/router';
+    $watch_start = microtime(true);
+    $keepRun = true;
+    $routerCount = 0;
+    $_SERVER['REQUEST_URI'] = '/';
     $_SERVER['REQUEST_METHOD'] = 'GET';
 
-    for ($i=0; $i < 10_000; $i++) {
-      $app = new Route();
-      $app->get('/router', function() {
-        // estimate runing whole request 75ms
-        sleep(0.075);
+    while ($keepRun == true) {
+      $router = new Route();
+      $router->get('/', function() {
+        return "router test speed";
       });
+      $router->run('/');
 
-      $app->run('/');
-      $app = null;
+      $routerCount++;
+
+      if (microtime(true) - $watch_start > 1) {
+        $keepRun = false;
+      }
+
+      $router = null;
     }
-    $end = microtime(true);
 
-    $this->assertLessThan(0.7, $end - $start);
+    $this->assertGreaterThan(26_000, $routerCount);
   }
 
   public function testSpeedRouterWithRest(): void
@@ -98,7 +105,7 @@ class RouterTest extends TestCase
       }
     };
 
-    $pool = new Pool($client, $requests(1_000), [
+    $pool = new Pool($client, $requests(100), [
       'concurrency' => 5,
       'fulfilled' => function (Response $response, $index) {
         // this is delivered each successful response
@@ -112,6 +119,6 @@ class RouterTest extends TestCase
 
     $end = microtime(true);
 
-    $this->assertLessThan(16.00, $end - $start);
+    $this->assertLessThan(1.15, $end - $start);
   }
 }
