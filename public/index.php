@@ -12,45 +12,45 @@ $app   = new Route();
 $token = $_SESSION['token'] ?? '';
 $auth  = new Auth($token, Auth::USER_NAME_AND_USER_AGENT_IP);
 $user  = new User($auth->getUserName());
-Middleware::setMiddleware( array (
-  "auth" => array (
+Middleware::setMiddleware( array(
+  "auth" => array(
     "token"                 => $token,
     "login"                 => $auth->TrushClient(),
     "user_name"             => $auth->TrushClient() ? $auth->getUserName() : null,
     "display_name"          => $auth->TrushClient() ? $user->getDisplayName() : null,
     "display_picture_small" => $auth->TrushClient() ? $user->getSmallDisplayPicture() : null
   ),
-  "DNT"       => isset( $_SERVER['HTTP_DNT']) && $_SERVER['HTTP_DNT'] == 1 ? true : false
+  "DNT" => isset($_SERVER['HTTP_DNT']) && $_SERVER['HTTP_DNT'] == 1 ? true : false
 ));
 
 // home
 $app->get('/', function() {
-  (new HomeController())->index();
+  return (new HomeController())->index();
 });
 
 // auth
 $app->match(['get', 'post'], '/login', function() {
-  (new AuthController())->login();
+  return (new AuthController())->login();
 });
 $app->match(['get', 'post'], '/logout', function() {
-  (new AuthController())->logout();
+  return (new AuthController())->logout();
 });
 $app->match(['get', 'post'], '/profile', function() {
-  (new AuthController())->profile();
+  return (new AuthController())->profile();
 });
 $app->match(['get', 'post'], '/register', function() {
-  (new AuthController())->register();
+  return (new AuthController())->register();
 });
 $app->match(['get', 'post'], '/reset-password', function() {
-  (new AuthController())->reset();
+  return (new AuthController())->reset();
 });
 $app->match(['get', 'post'], '/forgot/(:text)', function(string $action) {
   if ($action == 'reset') {
-    (new AuthController())->hardReset();
+    return (new AuthController())->hardReset();
   } elseif ( $action == 'send') {
-    (new AuthController())->send();
+    return (new AuthController())->send();
   } else {
-    DefaultController::page_404(array (
+    return DefaultController::page_404(array(
       'path' => '/forgot/'.$action
     ));
   }
@@ -68,26 +68,26 @@ $app->get('/admin/(:any)/(:any)', function($any, $second_any) {
 
 // message
 $app->get('/messages/public', function() {
-  (new MessageController())->public();
+  return (new MessageController())->public();
 });
 
 // halaman standar
 $app->get('/About', function() {
-  (new HomeController())->about();
+  return (new HomeController())->about();
 });
 $app->get('/Ourteam', function() {
-  (new ContactController())->ourTeam();
+  return (new ContactController())->ourTeam();
 });
 $app->match(['get', 'post'], '/Contactus', function() {
-  (new ContactController())->contactUs();
+  return (new ContactController())->contactUs();
 });
 
 // info
 $app->get('/info/(:any)', function(string $page) {
   if (Controller::view_exists('info/' . $page)) {
-    (new InfoController())->show( $page );
+    return (new InfoController())->show( $page );
   } else {
-    DefaultController::page_404(array (
+    return DefaultController::page_404(array (
       'path' => '/info/'.$page
     ));
   }
@@ -96,27 +96,27 @@ $app->get('/info/(:any)', function(string $page) {
 // aricle
 $app->get('/read/(:any)', function(string $title) {
   // TODO: article exist cheacker before call index
-  (new ArticleController())->index($title);
+  return (new ArticleController())->index($title);
 });
 
 // unit kerja
 // rekam-medis
 $app->get('/rekam-medis', function() {
-  (new RekamMedisController())->index();
+  return (new RekamMedisController())->index();
 });
 $app->match(['get', 'post'], '/rekam-medis/(:text)', function(string $page) {
   if (Controller::view_exists('rekam-medis/' . $page)) {
-    (new RekamMedisController())->show( strtolower($page) );
+    return (new RekamMedisController())->show( strtolower($page) );
   } else {
-    (new RekamMedisController())->index();
+    return (new RekamMedisController())->index();
   }
 });
 // kia-anak biodata/posyandu
 $app->match(['get', 'post'], '/kia-anak/(:text)/(:text)', function(string $action, string $unit) {
   if (Controller::view_exists('kia-anak/'. $unit . '/'. $action)) {
-    (new KiaAnakController)->show($action, $unit);
+    return (new KiaAnakController)->show($action, $unit);
   } else {
-    DefaultController::page_404(array (
+    return DefaultController::page_404(array (
       'path' => '/kia-anak/'.$action.'/'.$unit
     ));
   }
@@ -128,15 +128,15 @@ $app->match(['get', 'put', 'post'], '/API/([0-9a-zA-Z.]*)/(:any)/(:any).json', f
 });
 // API - Mix
 $app->get('/css/mix.style.css', function() {
-  (new MixController())->mix_css();
+  return (new MixController())->mix_css();
 });
 $app->get('/js/mix.app.js', function() {
-  (new MixController())->mix_javascript();
+  return (new MixController())->mix_javascript();
 });
 
 // Trivia
 $app->match(array('get', 'post'), '/trivia/submit', function() {
-  (new TriviaController())->submit();
+  return (new TriviaController())->submit();
 });
 
 // Stories
@@ -170,22 +170,22 @@ $app::get('/sitemap.(:text)', function($ext) {
   $respone = new SiteMapController();
 
   if ($ext === "html" || $ext === "txt") {
-    $respone->html();
+    return $respone->html();
   } elseif ($ext === "xml") {
-    $respone->index();
+    return $respone->index();
   } else {
-    (new DefaultController)->page_404([]);
+    return (new DefaultController)->page_404([]);
   }
 });
 
 // default path 404, 405
 $app->pathNotFound(function($path) {
-  DefaultController::page_404(array(
+  return DefaultController::page_404(array(
     'path' => $path
   ));
 });
 $app->methodNotAllowed(function($path, $method) {
-  DefaultController::page_405(array (
+  return DefaultController::page_405(array (
     'path' => $path,
     'method' => $method
   ));
