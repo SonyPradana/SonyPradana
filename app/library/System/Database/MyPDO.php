@@ -34,6 +34,22 @@ class MyPDO
     return (new MyPDO($database_name));
   }
 
+  private static $MySelf = null;
+
+  /**
+   * Singleton pattern implemnt for Databese connation
+   *
+   * @param string $database_name string Database Name   *
+   * @return MyPDO MyPDO with singleton
+   */
+  public static function getInstance(string $database_name = DB_NAME)
+  {
+    if (self::$MySelf == null) {
+      return new MyPDO($database_name);
+    }
+    return self::$MySelf;
+  }
+
   /**
    *  mempersiapkan statement pada query
    */

@@ -2,7 +2,6 @@
 
 namespace System\Database;
 
-use GuzzleHttp\Psr7\Query;
 use System\Database\MyQuery\Table;
 
 /**
