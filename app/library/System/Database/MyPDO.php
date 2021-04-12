@@ -44,9 +44,8 @@ class MyPDO
    */
   public static function getInstance(string $database_name = DB_NAME)
   {
-    if (self::$MySelf == null) {
-      return new MyPDO($database_name);
-    }
+    self::$MySelf = self::$MySelf ?? new MyPDO($database_name);
+
     return self::$MySelf;
   }
 
