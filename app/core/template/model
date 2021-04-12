@@ -25,7 +25,7 @@ class __model__ extends MyCRUD
 
   public function __construct()
   {
-    $this->PDO = new MyPDO();
+    $this->PDO = MyPDO::getInstance();
     $this->TABLE_NAME = '__table__';
     $this->COLUMNS = array(
       __column__

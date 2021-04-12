@@ -38,7 +38,7 @@ class QAResponses extends MyModel
   public function __construct(MyPDO $PDO = null)
   {
     $this->_TABELS[]  = 'response_log';
-    $this->PDO = $PDO ?? new MyPDO();
+    $this->PDO = $PDO ?? MyPDO::getInstance();
 
     $this->_FILTERS['event_name'] = [
       'value'     => 'respone_qna',

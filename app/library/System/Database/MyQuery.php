@@ -21,7 +21,7 @@ class MyQuery
 
   public function __construct(MyPDO $PDO = null)
   {
-    $this->PDO = $PDO ?? new MyPDO();
+    $this->PDO = $PDO ?? MyPDO::getInstance();
   }
 
   public function __invoke(string $table_name)

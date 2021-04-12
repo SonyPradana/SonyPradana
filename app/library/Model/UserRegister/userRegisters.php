@@ -11,7 +11,7 @@ class userRegisters extends MyModel
   public function __construct(MyPDO $PDO = null)
   {
     $this->_TABELS[]  = 'registration';
-    $this->PDO = $PDO ?? new MyPDO();
+    $this->PDO = $PDO ?? MyPDO::getInstance();
     $this->_COLUMNS = array('id', 'user', 'email', 'disp_name', 'stat');
   }
 }

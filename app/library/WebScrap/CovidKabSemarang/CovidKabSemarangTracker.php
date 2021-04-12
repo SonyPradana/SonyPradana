@@ -32,7 +32,7 @@ class CovidKabSemarangTracker
      */
     public function __construct(MyPDO $PDO = null)
     {
-        $this->PDO              = $PDO ?? new MyPDO();
+        $this->PDO              = $PDO ?? MyPDO::getInstance();
         $this->list_kecamatan   = $this->getListKecamatanDesa();
     }
 

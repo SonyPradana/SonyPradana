@@ -10,7 +10,7 @@ class GroupsPosyandu
      */
     public static function getPosyanduAll(): array
     {
-        $db = new MyPDO();
+        $db = MyPDO::getInstance();
         $db->query("SELECT * FROM groups_posyandu");
         $res = [];
         if ($db->resultset() > 0) {
@@ -30,7 +30,7 @@ class GroupsPosyandu
      */
     public static function getPosyandu($desa): array
     {
-        $db = new MyPDO();
+        $db = MyPDO::getInstance();
         $db->query("SELECT  `id`, `posyandu` FROM groups_posyandu WHERE `desa` = :desa");
         $db->bind(':desa', $desa, PDO::PARAM_STR);
         if ($db->resultset() > 0) {
@@ -44,7 +44,7 @@ class GroupsPosyandu
      */
     public static function getPosyanduId($desa, $nama_posyandu): int
     {
-        $db = new MyPDO();
+        $db = MyPDO::getInstance();
         $db->query("SELECT * FROM groups_posyandu WHERE `desa` = :desa AND `posyandu` = :posyandu");
         $db->bind(':desa', $desa, PDO::PARAM_STR);
         $db->bind(':posyandu', $nama_posyandu, PDO::PARAM_STR);
@@ -60,7 +60,7 @@ class GroupsPosyandu
      */
     public static function getPosyanduName($id): string
     {
-        $db = new MyPDO();    
+        $db = MyPDO::getInstance();
         $db->query("SELECT  `posyandu` FROM groups_posyandu WHERE `id` = :id");
         $db->bind(':id', $id, PDO::PARAM_INT);
         // $res = $db->single();
@@ -71,11 +71,11 @@ class GroupsPosyandu
     }
 
     /**
-     * @return 
+     * @return
      */
     public static function getPosyanduDesa($id): string
     {
-        $db = new MyPDO();
+        $db = MyPDO::getInstance();
         $db->query("SELECT  `desa` FROM groups_posyandu WHERE `id` = :id");
         $db->bind(':id', $id, PDO::PARAM_INT);
         // $res = $db->single();

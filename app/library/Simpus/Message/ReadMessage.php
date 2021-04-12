@@ -6,10 +6,10 @@ use System\Database\MyPDO;
 
 /**
  * class ini digunakan untuk melihat pesan yg dikirim/diterima dan disimpan pada data base.
- * 
+ *
  * @author sonypradana@gmail.com
  */
-class ReadMessage{    
+class ReadMessage{
     /** @var MyPDO PDO proprety*/
     protected $PDO;
     /** @var string pengirim */
@@ -42,7 +42,7 @@ class ReadMessage{
     private $_view_meta = true;
 
     /** filter pencarian berdasarkan pengrim pesan
-     * 
+     *
      * @param string $val pengirim pesan
      */
     public function filterByPengirim($val){
@@ -53,7 +53,7 @@ class ReadMessage{
         return $this;
     }
     /** filter pencarian berdasarkan penerima pesan
-     * 
+     *
      * @param string $val penerima pesan
      */
     public function filterByPenerima($val){
@@ -64,7 +64,7 @@ class ReadMessage{
         return $this;
     }
     /** filter pencarian berdasarkan jenis/category pesan
-     * 
+     *
      * @param string $val jenis pesan
      */
     public function filterByType($val){
@@ -75,7 +75,7 @@ class ReadMessage{
         return $this;
     }
     /** filter pencarian berdasarkan isi pesan/content
-     * 
+     *
      * @param string $val content pesan
      */
     public function filterByMrssage($val){
@@ -86,7 +86,7 @@ class ReadMessage{
         return $this;
     }
     /** filter pencarian berdasarkan tanggal pengriman
-     * 
+     *
      * @param string $val tanggal pengriman pesan
      * @param string $sign tanggal lebih baru gunakan ">",
      * tanggal lebih lama gunakan "<"
@@ -99,9 +99,9 @@ class ReadMessage{
         $this->_sign = $sign;
         return $this;
     }
-    
+
     /** menampilkan hasil sebanyak
-     * 
+     *
      * bilangan bulat 1-100
      * @param integer $val batah data ditampilkan
      */
@@ -115,7 +115,7 @@ class ReadMessage{
         }
         return $this;
     }
-    
+
     public function currentPage($val){
         $val = is_numeric( $val ) ? $val : 1;
         $val = $val < 1 ? 1 : $val;
@@ -154,13 +154,13 @@ class ReadMessage{
     // contructor
     public function __construct(MyPDO $PDO = null)
     {
-        $this->PDO = $PDO ?? new MyPDO();
+        $this->PDO = $PDO ?? MyPDO::getInstance();
     }
 
 
     /**
      * membuat sebuah query string dari filter dan configurasi lainya, menjadi query yang dibaca mesin.
-     * 
+     *
      * @return string query pencarian sql database
      */
     private function query()
@@ -189,15 +189,15 @@ class ReadMessage{
         // replace end (, )
         $select = preg_replace('/(, )$/', '', $select);
         $select = $select == '' ? '*' : $select;
-        
+
         $start_data = ($this->_current_pos * $limit) - $limit;
         return "SELECT $select FROM public_message$all ORDER BY `date` DESC LIMIT $start_data, $limit ";
     }
 
     /**
-     * helper untuk mebuat sebuah parameter pada query, 
+     * helper untuk mebuat sebuah parameter pada query,
      * mengubah format input dari user ke input parameter query
-     * 
+     *
      * @param string $key nama colom pada data base
      * @param string $val isi data dari colom yg akan digunakan
      * @return string format parameter query (eg: AND table_name = 'value')
@@ -212,11 +212,11 @@ class ReadMessage{
     }
 
     /**
-     * helper untuk mebuat sebuah parameter pada query, 
+     * helper untuk mebuat sebuah parameter pada query,
      * mengubah format input dari user ke input parameter query
-     * 
+     *
      * dengan mmaksud mengambil selisih dari parameter yang dicari.
-     * 
+     *
      * @param string $key nama colom pada data base
      * @param string $val isi data dari colom yg akan digunakan
      * @param string $sign tanda baca ntuk mencari data diatas atau dibawah parameter
@@ -235,7 +235,7 @@ class ReadMessage{
     /**
      * helper untuk mebuatt sebuah parameter pada query,
      * menampilkan data berdasarkan coloumn database yang dipilih
-     * 
+     *
      * @param string $key nama column data base
      * @param boolean $val opsi untuk nenampilkan column pada result
      */
@@ -249,9 +249,9 @@ class ReadMessage{
     }
 
     /**
-     * menampilkan hasil pencarian setalah di filter terlebih dahulu, 
+     * menampilkan hasil pencarian setalah di filter terlebih dahulu,
      * apabila blm di tentukan filter sebelumnya makan tidak ada hasil yang ditampilkan
-     * 
+     *
      * @param boolean convert data dalam bentuk json
      * @return array hasil dari table data base
      */
@@ -263,7 +263,7 @@ class ReadMessage{
     }
     /**
      * menampilkan semua hasil yang ada di data base
-     * 
+     *
      * @return array hasil dari table data base
      */
     public function bacaSemua(): array

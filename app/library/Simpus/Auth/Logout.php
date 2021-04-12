@@ -3,9 +3,9 @@
 use System\Database\MyPDO;
 
 /**
- * class logout adalah kelas untuk menghilangakn hak akser user 
+ * class logout adalah kelas untuk menghilangakn hak akser user
  * dan mendisable / mematikan jwt
- * 
+ *
  * @author sonypradana@gmail.com
  */
 class Logout
@@ -24,13 +24,13 @@ class Logout
 
     /**
      * logut dengan token
-     * 
+     *
      * @param sting $token valid token
      * token yang di kirim harus token aktif dan memliliki token tersebut
      */
     public function __construct(string $token)
     {
-        $this->PDO = new MyPDO();
+        $this->PDO = MyPDO::getInstance();
         #veifikasi token
         $verify = new Auth($token, 2);
         if ($verify->TrushClient()) {
@@ -48,7 +48,7 @@ class Logout
                 $log = new Log( $verify->getUserName() );
                 $log->set_event_type('auth');
                 $log->save('success logout');
-                
+
                 $this->_success = true;
             }
 

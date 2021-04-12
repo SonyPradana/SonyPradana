@@ -4,10 +4,10 @@ use System\Database\MyPDO;
 
 /**
  * class login fungsinya untuk meniram permintaan logindari user
- * bila user name dan pasword ccok maka maka user dibeikan akses dan 
+ * bila user name dan pasword ccok maka maka user dibeikan akses dan
  * user akan meniram token, token ini akan digunakn untuk login kembali
  * di kesempatan berikutnya
- * 
+ *
  * @author Angger Pradana sonypradana@gmail.com
  */
 class Login
@@ -25,16 +25,16 @@ class Login
     /**
      * @var string Hasil dr JWT
      */
-    private $_JWTResult = ''; 
+    private $_JWTResult = '';
     /**
      * @var boolean ke aslian jwt
      */
-    private $_verifyJWT = false;  
-    
+    private $_verifyJWT = false;
+
     /**
-     * secretKey adalah secreat key sebagai kunci diJWT signature. 
+     * secretKey adalah secreat key sebagai kunci diJWT signature.
      * secretkey sudah tersedikan untuk membatasi dan mengontrol key
-     * 
+     *
      * @var Array secret key
     */
     private $_secretKey = ['ungaran', 'sumbing', 'semeru', 'lawu', 'sindoro',
@@ -42,14 +42,14 @@ class Login
 
     /**
      * Diperoleh jika logiin berhasil
-     * 
+     *
      * @return string Hasil dr JWT
      */
     public function JWTResult()
     {
         return $this->_JWTResult;
     }
-    
+
     /**
      * @var boolean user login status
      */
@@ -63,8 +63,8 @@ class Login
      * JWT hanya dibuat jika user dan password sesuai
      * batas kesalahan login ke sever sebanyak 25 X
      * jika lebih dari itu di bane selama 4 jam
-     * 
-     * @param string $user_name user name 
+     *
+     * @param string $user_name user name
      * @param string $password password
      * @return JWT Untuk Verifikasi login berikutnya
      */
@@ -77,13 +77,13 @@ class Login
         $this->_userName = strtolower( $user_name );
         $this->_password = $password;
         #koneksi databse
-        $this->PDO = new MyPDO();
+        $this->PDO = MyPDO::getInstance();
         #query data base
         $this->PDO->query('SELECT `pwd`, `stat` FROM `users` WHERE `user`=:user');
         $this->PDO->bind(':user', $user_name);
         if ($this->PDO->single()) {
             $row = $this->PDO->single();
-            #cek password 
+            #cek password
             if (password_verify($this->_password, $row['pwd'])) {
                 #berhasil login
                 #jwt dibuat
@@ -114,11 +114,11 @@ class Login
         }
     }
 
-    /** 
+    /**
      * JWT hanya dibuat ketika user Valid,
      * jika tidak Token yg dikembalikan kosong
      *
-     * @return JWT 
+     * @return JWT
      */
     private function CreatJWT()
     {
@@ -128,26 +128,26 @@ class Login
         #header
         $JWT_Header = ['typ'=>'JWT','alg'=>'HS256'];
             #algoritma
-            
+
         #payload
         $userId = $this->SaveJWTInfo($secretKey);
         $expt = time() + (3600 * 8);
         $ip = $_SERVER['REMOTE_ADDR'];
-        $userAgent = $_SERVER['HTTP_USER_AGENT'];      
-        $JWT_PayLoad = ['uId'=> $userId, 
+        $userAgent = $_SERVER['HTTP_USER_AGENT'];
+        $JWT_PayLoad = ['uId'=> $userId,
                         'uName'=> $this->_userName,
                         'exp'=> $expt,
                         'ip'=> $ip,
                         'uAgent'=> $userAgent];
-        
+
         #buat JWT
         $JWT = new EncodeJWT($JWT_Header, $JWT_PayLoad);
-        #hasil dari jwt 
+        #hasil dari jwt
         $this->_JWTResult = $JWT->hashCode($secretKey);
     }
     /**
      * simpan keyJWT ke database server guna verivikasi token
-     * 
+     *
      * @param mixed $secrerKey secret kay yg akan digunakn dan disimpan
      */
     private function SaveJWTInfo($secretKey)
@@ -161,20 +161,20 @@ class Login
         #simpan ke databe 'auts'
         $this->PDO->execute();
         return $this->PDO->lastInsertId();
-    }    
+    }
 
     /**
      * cek user sedang dibane oleh service atau tidak
      * - true, user dan password sesuai
      * - false, user salah memasukan pwd > 8x, atau dlm masa tangguh ( 8jam )
-     * 
+     *
      * @param mixe $user_name user name
      * @return boolean user valid atau tidak
      */
     public static function BaneFase($user_name): bool
     {
         #koneksi data base
-        $db = new MyPDO();
+        $db = MyPDO::getInstance();
         $db->query('SELECT user, stat, bane FROM users WHERE user=:user');
         $db->bind(':user', $user_name);
         if ($db->single()) {
@@ -188,17 +188,17 @@ class Login
         #defult nya adalah dibane
         return true;
     }
-    
+
     /**
-     * RefreshBane, jika waktu bane sudah habis 
-     * dan stat/kesalah masih > 0    
-     * 
+     * RefreshBane, jika waktu bane sudah habis
+     * dan stat/kesalah masih > 0
+     *
      * @param string $user_name username
      */
     public static function RefreshBaneFase($user_name)
     {
         #koneksi data base
-        $db = new MyPDO();
+        $db = MyPDO::getInstance();
         $db->query('SELECT `user`, `stat`, `bane` FROM `users` WHERE `user`=:user');
         $db->bind(':user', $user_name);
         if ($db->single()) {
@@ -217,20 +217,20 @@ class Login
     /**
      * cek login tanda menyimpan kesalahan data base
      * WARNING : proses pengecekan tidak terbatas, gunakan dengan hati-hati
-     * 
-     * @param string $user_name user name 
+     *
+     * @param string $user_name user name
      * @param string $password password
      * @return boolean user dan password banar atau tidak
      */
     public static function PasswordVerify(string $user_name, string $password)
     {
-        $db = new MyPDO();
+        $db = MyPDO::getInstance();
         #query data base
         $db->query('SELECT `pwd`, `stat` FROM `users` WHERE `user`=:user');
         $db->bind(':user', $user_name);
         if ($db->single()) {
             $row = $db->single();
-            #cek password 
+            #cek password
             if (password_verify($password, $row['pwd'])) {
                 return true;
             }

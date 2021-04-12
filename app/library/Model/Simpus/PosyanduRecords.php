@@ -46,7 +46,7 @@ class PosyanduRecords extends MyModel{
                         "option" => $this->_options,
                         "type" => null
                     ],
-                    "tenaga_pemeriksaan" => [                        
+                    "tenaga_pemeriksaan" => [
                         "value" => "angger",
                         "option" => $this->_options,
                         "type" => null
@@ -56,7 +56,7 @@ class PosyanduRecords extends MyModel{
             ]
         ];
 
-        $this->PDO = $PDO ?? new MyPDO();
+        $this->PDO = $PDO ?? MyPDO::getInstance();
     }
 
     public function CountID()
@@ -66,10 +66,10 @@ class PosyanduRecords extends MyModel{
 
         $this->PDO->query(
             "SELECT
-                COUNT(`id`) AS jumlah_kunjungan, `id_hash` 
+                COUNT(`id`) AS jumlah_kunjungan, `id_hash`
             FROM
                 `data_posyandu`
-            GROUP BY 
+            GROUP BY
                 `id_hash`"
         );
 

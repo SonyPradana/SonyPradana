@@ -7,7 +7,7 @@ class KIAAnakRecord
 {
     /** @var MyPDO Instant PDO */
     private $PDO;
-    
+
     private $_id_hash = null;
     // tambah id ibu
     private $_jenis_kelamin = 0;
@@ -100,7 +100,7 @@ class KIAAnakRecord
     // constructor
     public function __construct(MyPDO $PDO = null)
     {
-        $this->PDO = $PDO ?? new MyPDO();
+        $this->PDO = $PDO ?? MyPDO::getInstance();
     }
     public function loadWithID($id_hash, bool $refresh = true)
     {
@@ -110,7 +110,7 @@ class KIAAnakRecord
         }
     }
     // function
-    /** 
+    /**
      * Memuat ulang data berdasarkan id yang telah dibuat sebelumnya
      * @return bool True ketika data berhasil di muat ulang
      */
@@ -145,7 +145,7 @@ class KIAAnakRecord
                          `imd`,
                          `asi_eks`,
                          `grups_posyandu`
-                    )                        
+                    )
                     VALUES (
                         :id,
                         :id_hash,
@@ -186,7 +186,7 @@ class KIAAnakRecord
         // prpare update biodata
         $this->PDO->query("UPDATE
                         `data_kia_anak`
-                    SET 
+                    SET
                         `last_update` = :last_update,
                         `jenis_kelamin` = :jk,
                         `bbl` = :bbl,
@@ -254,5 +254,5 @@ class KIAAnakRecord
 
         return $data;
     }
-    
+
 }

@@ -8,8 +8,8 @@ use System\Database\MyPDO;
  * user telah mendapatkan code untuk reset password
  * dari verifikasi email sebelumnya.
  * kode yg dinputkan user akan di cek kedatabase, jika sesuai user dapat membuat password baru
- * 
- * @author sonypradana@gmail.com 
+ *
+ * @author sonypradana@gmail.com
  */
 class ForgotPassword
 {
@@ -33,19 +33,19 @@ class ForgotPassword
     {
         return (boolean) $this->_verifyKey;
     }
-    
+
     /**
      * mengecek kombinasi key dan code sudah sesuai atau belum.
-     * 
+     *
      * code akan di cek langsung ke database
-     * 
+     *
      * @param string $key long kay foramat
-     * @param string $code code 
+     * @param string $code code
      * 6 digit angka
      */
     public function __construct(string $key, int $code)
     {
-        $this->PDO = new MyPDO();
+        $this->PDO = MyPDO::getInstance();
         #decode from 64 base url
         $decodeKey = base64_decode($key);
         $decodeKey = json_decode($decodeKey, true);
@@ -68,7 +68,7 @@ class ForgotPassword
                     # get id untuk self distruction
                     $this->_idKey = $row['id'];
                 }
-                
+
             }
         }
     }
@@ -76,7 +76,7 @@ class ForgotPassword
     /**
      * buat baru password, kemudian
      * logout semua user yg akttif
-     * 
+     *
      * @param string $new_password new password
      * @return boolean password baru tersimpan atau tidak
      */
@@ -97,9 +97,9 @@ class ForgotPassword
             $this->PDO->bind(':user', $user_name);
             $this->PDO->execute();
 
-            #logout all user 
+            #logout all user
             $this->PDO->query('UPDATE `auths` SET `stat`=:stat WHERE `user`=:user');
-            $this->PDO->bind(':stat', 0);            
+            $this->PDO->bind(':stat', 0);
             $this->PDO->bind(':user', $user_name);
             $this->PDO->execute();
 
@@ -107,7 +107,7 @@ class ForgotPassword
             $log = new Log($user_name);
             $log->set_event_type('auth');
             $log->save('forgot password');
-            
+
             return true;
         }
         return false;
@@ -116,7 +116,7 @@ class ForgotPassword
     /**
      * mengahapus link dan code dari data base
      * setelah dihapus link dan kode verifikasi sudah tidak berlaku
-     * 
+     *
      * pastikan mengahpus setelah mengganti password baru
      */
     public function deleteSection()

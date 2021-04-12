@@ -55,7 +55,7 @@ class QAResponse extends MyCRUD
 
   public function __construct()
   {
-    $this->PDO = new MyPDO();
+    $this->PDO = MyPDO::getInstance();
     $this->TABLE_NAME = 'response_log';
     $this->COLUMNS = array(
       'id' => null,

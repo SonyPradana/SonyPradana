@@ -4,7 +4,7 @@ use System\Database\MyPDO;
 
 /**
  * class ini berfungsi untuk mendaptakan informsai akun / profil dari user
- * 
+ *
  * @author sonypradana@gmail.com
  */
 class User
@@ -59,18 +59,18 @@ class User
         return $return;
     }
     // setter
-    /** 
-     * menggati display name baru     * 
+    /**
+     * menggati display name baru     *
      * @param string $val nama tampilan baru
      */
     public function setDisplayName($val)
     {
         // senitazer
         $val = htmlspecialchars($val);
-        
+
         $this->_displayName = $val;
     }
-    /** 
+    /**
      * menggati unit kerja / bagian
      * @param string unit kerja baru
      */
@@ -92,7 +92,7 @@ class User
 
     /**
      * mencari data denagn user name yang sesaui
-     * 
+     *
      * @param string $user_name User Name yang digunakna
      */
     public function __construct($user_name)
@@ -103,7 +103,7 @@ class User
         $this->_user = $user_name;
 
         # koneksi data base
-        $this->PDO = new MyPDO();
+        $this->PDO = MyPDO::getInstance();
         $this->PDO->query('SELECT * FROM `profiles` WHERE `user`=:user');
         $this->PDO->bind(':user', $user_name);
         if ($this->PDO->single()) {
@@ -137,6 +137,6 @@ class User
         $log = new Log( $user_name );
         $log->set_event_type('auth');
         $log->save('success profile changes');
-        
+
     }
 }

@@ -8,11 +8,11 @@ class Relation
 {
     public static function creat(string $id_hash, int $time_stamp, MyPDO $PDO = null)
     {
-        $PDO = $PDO ?? new MyPDO();
+        $PDO = $PDO ?? MyPDO::getInstance();
         $PDO->query(
-            "INSERT INTO 
-                table_relation(`id_hash`, `time_stamp`) 
-            VALUES 
+            "INSERT INTO
+                table_relation(`id_hash`, `time_stamp`)
+            VALUES
                 (:id_hash, :time_stamp)
         ");
         $PDO->bind(':id_hash', $id_hash, \PDO::PARAM_STR);
@@ -27,7 +27,7 @@ class Relation
 
     public static function where(string $param, $val, MyPDO $PDO = null): array
     {
-        $PDO = $PDO ?? new MyPDO();
+        $PDO = $PDO ?? MyPDO::getInstance();
         $PDO->query(
             "SELECT
                 *
@@ -37,7 +37,7 @@ class Relation
                 $param = :val"
             );
         $PDO->bind(":val", $val);
-        
+
         return  $PDO->resultset();
     }
 }

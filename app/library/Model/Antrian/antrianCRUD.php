@@ -45,7 +45,7 @@ class antrianCRUD extends MyCRUD
   public function getAll(): array
   {
     $this->PDO->query(
-      "SELECT 
+      "SELECT
         *
       FROM
         `antrian`
@@ -79,7 +79,7 @@ class antrianCRUD extends MyCRUD
    */
   public function __construct(MyPDO $PDO = null)
   {
-    $this->PDO = $PDO ?? new MyPDO();
+    $this->PDO = $PDO ?? MyPDO::getInstance();
     $this->TABLE_NAME = 'antrian';
     $this->COLUMNS = [
       'date_time' => null,

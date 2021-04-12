@@ -15,7 +15,7 @@ class QuestionAnswerService extends Service
   public function __construct(MyPDO $pdo = null)
   {
     $this->error = new DefaultService();
-    $this->PDO = $pdo ?? new MyPDO();
+    $this->PDO = $pdo ?? MyPDO::getInstance();
   }
 
   public function get_post(array $request): array

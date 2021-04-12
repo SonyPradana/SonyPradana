@@ -26,7 +26,7 @@ class Privilege
    */
   public function __construct(string $user_auth, MyPDO $PDO = null)
   {
-    $this->PDO = $PDO ?? new MyPDO();
+    $this->PDO = $PDO ?? MyPDO::getInstance();
     $this->_userName = $user_auth;
   }
 

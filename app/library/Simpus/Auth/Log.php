@@ -5,7 +5,7 @@ use System\Database\MyPDO;
 /**
  * class ini berfungsi untuk membuat log atifity user,
  * tidak semua aktifitas di simpan, informasi penting yang bersifat umum.
- * 
+ *
  * @author sonypradana@gmail.com
  */
 class Log
@@ -30,7 +30,7 @@ class Log
      */
     public function __construct(string $user)
     {
-        $this->PDO = new MyPDO();
+        $this->PDO = MyPDO::getInstance();
         $this->_user = $user;
     }
 

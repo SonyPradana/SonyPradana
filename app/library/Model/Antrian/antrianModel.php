@@ -11,7 +11,7 @@ class antrianModel extends MyModel
     public function __construct(MyPDO $PDO = null)
     {
         $this->_TABELS[]  = 'antrian';
-        $this->PDO = $PDO ?? new MyPDO();
+        $this->PDO = $PDO ?? MyPDO::getInstance();
     }
 
     public function lastUpdate()
@@ -29,5 +29,5 @@ class antrianModel extends MyModel
         return $this->PDO->single();
     }
 
-    
+
 }

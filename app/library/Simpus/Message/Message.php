@@ -4,7 +4,7 @@ use System\Database\MyPDO;
 
 /**
  * perent class untuk pengiriman pesan
- * 
+ *
  * @author sonypradana@gmail.com
  */
 abstract class Message
@@ -24,11 +24,11 @@ abstract class Message
 
     public function __construct()
     {
-        
+
     }
 
-    /** kirim pesan dengan foramt yang telah di buat saat conntruction 
-     * 
+    /** kirim pesan dengan foramt yang telah di buat saat conntruction
+     *
      * @return boolean
      * -true jika pesan berhaisl disimpan
      * -false jika pesan gagal disimpan
@@ -36,12 +36,12 @@ abstract class Message
     public function kirimPesan(MyPDO $PDO = null)
     {
         // koneksi data base
-        $db = $PDO ?? new MyPDO();
+        $db = $PDO ?? MyPDO::getInstance();
 
         $sender = $this->_sender; $resiver = $this->_resiver;
         $type = $this->_type; $date = $this->_date;
         $msg = $this->_message; $meta = $this->_meta;
-        // query      
+        // query
         $db->query(
             "INSERT INTO `public_message`
                 (`id`, `sender`, `resiver`, `type`, `date`, `message`, `meta`)
@@ -65,8 +65,8 @@ abstract class Message
         return false; // true jika pesan berhasil dikirim
     }
 
-    /** mendeteksi pesan ini termasuk spam atau tidak 
-     * 
+    /** mendeteksi pesan ini termasuk spam atau tidak
+     *
      * @return boolean
      * -true artinya pesan termasuk spam
      * -false artinya pesan tidak termasuk spam
@@ -79,7 +79,7 @@ abstract class Message
         // step 2:  cek sender dan resiver yang sama dari request
         // step 3:  jika sama -> cek selisihnya -> selisih waktu < 12 jam => spamer
         // scope kedua (resiver):
-        // berlaku hal yang sama       
+        // berlaku hal yang sama
         $get_msg = new ReadMessage();
         $msg = $get_msg
             ->filterByPengirim($this->_sender)
@@ -99,7 +99,7 @@ abstract class Message
         // begitu juga untuk resiver
         // metode 2:
         // menggunakn content weight, dan compare dari databse spamer
-        
+
         return false; // true jika pesan berupa spam
     }
 }

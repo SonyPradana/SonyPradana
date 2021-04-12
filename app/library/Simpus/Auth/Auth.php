@@ -62,8 +62,8 @@ class Auth
     public function __construct(string $token, int $securityLevel = AUTH::USER_NAME_AND_USER_AGENT_IP)
     {
         if ($token == "") return;
+        $this->PDO  = MyPDO::getInstance();
         # koneksi database
-        $this->PDO  = new MyPDO();
         $new_jwt    = new DecodeJWT($token);
         $JWT        = $new_jwt->JWT();
         $this->_jwt = $JWT;

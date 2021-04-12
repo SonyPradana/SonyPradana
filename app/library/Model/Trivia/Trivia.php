@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Model\Trivia;
 
@@ -103,7 +103,7 @@ class Trivia extends MyCRUD
         ->setter('summary', $params['summary'])
         ->setter('correct_answer', $params['correct_answer'])
         ->setter('explanation', $params['explanation']);
-      
+
       return $this->cread();
     }
 
@@ -113,7 +113,7 @@ class Trivia extends MyCRUD
   // MARKED
   public function __construct(MyPDO $PDO = null)
   {
-    $this->PDO = $PDO ?? new MyPDO();
+    $this->PDO = $PDO ?? MyPDO::getInstance();
 
     $this->TABLE_NAME = 'trivia_quest';
     $this->ID = array('id' => '');
@@ -148,7 +148,7 @@ class Trivia extends MyCRUD
   private function getRandom(int $rev = 0): int
   {
     // TODO: random quest menurut kategory
-    
+
     $this->PDO->query(
       "SELECT
         `id`

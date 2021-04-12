@@ -84,7 +84,7 @@ class Story extends MyCRUD
 
   public function __construct(MyPDO $PDO = null)
   {
-    $this->PDO = $PDO ?? new MyPDO();
+    $this->PDO = $PDO ?? MyPDO::getInstance();
     $this->TABLE_NAME = 'stories';
     $this->COLUMNS = array(
       'id' => '',

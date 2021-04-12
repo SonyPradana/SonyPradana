@@ -12,7 +12,7 @@ class ContactController extends Controller
         $msg = ["show" => false, "type" => 'info', "content" => 'oke'];
         // previews captcha
         $cek_captcha = $_SESSION['MathCaptcha_ContactUs'] ?? null;
-        
+
         $sender      = $_POST['mail'] ?? null;
         $message     = $_POST['message'] ?? null;
         $regarding   = $_POST['regarding'] ?? null;
@@ -26,7 +26,7 @@ class ContactController extends Controller
             'regarding' => 'required',
             'ampcaptcha' => 'required|numeric'
         ));
-        $validation->set_fields_error_messages(array (            
+        $validation->set_fields_error_messages(array (
             'mail' => array (
                 'required' => 'Email tidak boleh kosong',
                 'valid_email' => 'Format email tidak tepat'
@@ -66,8 +66,8 @@ class ContactController extends Controller
         $new_captcha = new MathCaptcha();
         $_SESSION['MathCaptcha_ContactUs'] = $new_captcha->ChaptaResult();
 
-        // result        
-        return $this->view('contact/contactUs', [            
+        // result
+        return $this->view('contact/contactUs', [
             "auth"    => $this->getMiddleware()['auth'],
             "meta"     => [
                 "title"         => "Hubungi Kami",
@@ -94,9 +94,9 @@ class ContactController extends Controller
     }
     public function ourTeam()
     {
-        $db = new MyPDO();
+        $db = MyPDO::getInstance();
         $db->query('SELECT `display_name`, `section`, `display_picture` FROM `profiles`');
-        
+
         // result
         return $this->view('contact/ourTeam', [
             "auth"    => $this->getMiddleware()['auth'],

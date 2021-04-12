@@ -10,7 +10,7 @@ class TriviaService extends Service
   public function __construct(MyPDO $PDO = null)
   {
     $this->error = new DefaultService();
-    $this->PDO = $PDO ?? new MyPDO();;
+    $this->PDO = $PDO ?? MyPDO::getInstance();;
   }
 
   public function Delete_Ques(array $params)

@@ -18,12 +18,12 @@ class AuthController extends Controller
                 )
             ));
         }
-    }   
+    }
 
     private function useGuest()
     {
         if ($this->getMiddleware()['auth']['login']) {
-            header("Location: /");  
+            header("Location: /");
             exit();
         }
     }
@@ -38,7 +38,7 @@ class AuthController extends Controller
         if( $req_unset ){
             unset($_SESSION["token"]);
         }
-        # cek session bane 
+        # cek session bane
         $session_bane_fase = true;
         # melihat sisa bane di session max: 5. 0 atrinya sedang dibane
         $stat_bane = $_SESSION['na'] ?? 5;
@@ -56,30 +56,30 @@ class AuthController extends Controller
             $session_bane_fase = true;
         }else{
             # no in bane fase
-            $session_bane_fase = false;    
+            $session_bane_fase = false;
         }
         # login
         $Verify_jwt = false; # default status login
 
-        # form di isi    
+        # form di isi
         $user_name = $_POST['userName'] ?? '';
-        $password  = $_POST['password'] ?? '';   
+        $password  = $_POST['password'] ?? '';
 
-        if( isset( $_POST['login'] ) 
-        && $user_name != '' 
-        && $password != '' 
+        if( isset( $_POST['login'] )
+        && $user_name != ''
+        && $password != ''
         ) {
             # verrifikasi user input
             // cek login menggunakan email atau user name
             if( sv::EmailValidation( $user_name ) ){
-                $db = new MyPDO();
+                $db = MyPDO::getInstance();
                 $db->query('SELECT `user` FROM `profiles` WHERE `email`=:email');
                 $db->bind(':email', $user_name);
                 if( $db->single() ){
                     $user_name = $db->single()['user'];
                 }
             }
-            # 1. format username benar 
+            # 1. format username benar
             $validate_user_name = sv::UserValidation($user_name, 2, 32);
 
             #cek dalam session bane tidak
@@ -93,12 +93,12 @@ class AuthController extends Controller
                     $Verify_jwt = $newLogin->VerifyLogin();
                 }
             }
-            
+
             # session bane logic
             if( $Verify_jwt ){
                 #reset before closing
                 $stat_bane = 5;
-                $exp_bane = time();        
+                $exp_bane = time();
                 #simpan session bane
                 $_SESSION['na'] = $stat_bane;
                 $_SESSION['to'] = $exp_bane;
@@ -135,8 +135,8 @@ class AuthController extends Controller
     {
         $url = $_GET['url'] ?? '/';
         header("Location: " . $url );
-        // logout dari server    
-        new Logout( $_SESSION['token'] ?? '' );   
+        // logout dari server
+        new Logout( $_SESSION['token'] ?? '' );
         #logout seesion
         unset( $_SESSION["token"] );
         exit;
@@ -148,11 +148,11 @@ class AuthController extends Controller
         $this->useAuth();
 
         // logic:
-        
+
         // mengambil data untuk input value(form)
         $user_name  = $this->getMiddleware()['auth']["user_name"];
         $user       = new User( $user_name );
-        
+
         // valdiaation
         $validation = new GUMP('id');
         $validation->validation_rules(array (
@@ -174,7 +174,7 @@ class AuthController extends Controller
         ));
         $validation->run($_POST);
         $error = $validation->get_errors_array();
-        
+
         # cek form
         if (! $validation->errors()) {
             $url_picture    = $_POST['url-display-picture'] ?? '/public/data/img/display-picture/no-image.png';
@@ -270,9 +270,9 @@ class AuthController extends Controller
                     'required' => 'Password harus diisi',
                     'equalsfield' => 'Konfirmasi password salah'
                 ),
-                'dispName' => array (                    
+                'dispName' => array (
                     'required' => 'Display Name harus diisi',
-                    'alpha_space' => 'Nama tidak boleh mengandung karakter selain huruf',                    
+                    'alpha_space' => 'Nama tidak boleh mengandung karakter selain huruf',
                     'min_len' => 'Display name terlalu pendek',
                     'max_len' => 'Display Name terlalu panjang'
                 )
@@ -288,8 +288,8 @@ class AuthController extends Controller
             $veryNewUser = $newUser->Verify($user_name, $email);
             // cek dan simpan (4 = username & email blm digunakan)
             if( $veryNewUser ==  4 ){
-                if( $newUser->AddToArchive() ) { 
-                    // file disimpan dipenampungan semntara 
+                if( $newUser->AddToArchive() ) {
+                    // file disimpan dipenampungan semntara
                     echo 'data berhasil disimpan, hubungi administator untuk melakukan validasi<br>';
                     // reset data
                     $_POST = [];
@@ -352,27 +352,27 @@ class AuthController extends Controller
                 )
             )
         );
-        $validation->run($_POST);        
+        $validation->run($_POST);
         $error = $validation->get_errors_array();
 
         $msg = '';
-        
+
         if (! $validation->errors()) {
             $p1 = $_POST['password'];
             $p2 = $_POST['password2'];
             $new_pass = new ResetPassword($user_name, $p1);
 
-            if ($new_pass->passwordVerify()) { 
-                $new_pass->newPassword($p2);    
+            if ($new_pass->passwordVerify()) {
+                $new_pass->newPassword($p2);
 
-                header("Location: /logout?url=/login");    
+                header("Location: /logout?url=/login");
                 exit() ;
             } else {
                 # password salah
                 $msg = 'masukan kembali password Anda';
                 $error = array('password' => 'Password Anda salah');
             }
-        } elseif (empty($_POST)) {     
+        } elseif (empty($_POST)) {
             $error = array();
         } else {
             # konfirmasi password salah
@@ -422,7 +422,7 @@ class AuthController extends Controller
         $error = $validation->get_errors_array();
 
         if (isset($_GET['id'])) {
-            if (! $validation->errors()) {                
+            if (! $validation->errors()) {
                 $key = $_GET['id'];
                 $code = $_POST['validate'];
 
@@ -431,15 +431,15 @@ class AuthController extends Controller
 
                 # self distruction link dan code
                 $newPassword->deleteSection();
-    
+
                 #header ke login
-                header("Location: /login");   
+                header("Location: /login");
                 exit();
             } elseif (empty($_POST)) {
                 $error = array();
             }
         } else {
-            # hanya yg punya id yg bisa masuk          
+            # hanya yg punya id yg bisa masuk
             header('HTTP/1.1 400 Bad Request');
             echo '<h1>Halaman tidak diizinkan</h1>';
             exit();
@@ -469,7 +469,7 @@ class AuthController extends Controller
             if ($verify->UserVerify()) {
                 #header ke lokasi
                 $link = $verify->KeyResult();
-                header("Location: /forgot/reset?id=" . $link);   
+                header("Location: /forgot/reset?id=" . $link);
                 exit();
             }
         } elseif (empty($_POST)) {

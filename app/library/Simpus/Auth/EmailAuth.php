@@ -4,7 +4,7 @@ use System\Database\MyPDO;
 
 /**
  * class ini berfung untuk membuat verifikasi ganti password
- * via email, bila terdafat code ferifikasi akan dikir ke email atau 
+ * via email, bila terdafat code ferifikasi akan dikir ke email atau
  * di kirim ke Admin
  */
 class EmailAuth
@@ -14,7 +14,7 @@ class EmailAuth
     /** @var string user name */
     private $_userName;
     /** @var string hasil key / link */
-    private $_keyResult;    
+    private $_keyResult;
     /** @var boolean user tedaftar atau tidak */
     private $_userVerify = false;
 
@@ -27,16 +27,16 @@ class EmailAuth
         return $this->_keyResult;
     }
 
-    /** 
+    /**
      * ***verifikasi email***
      * simpan permintaan ganti password ke database
      * result nya --> link gati password
-     * 
+     *
      * @param string $email email pemulih
      */
     public function __construct($email)
     {
-        $this->PDO = new MyPDO();
+        $this->PDO = MyPDO::getInstance();
         $this->PDO->query('SELECT `user` FROM `profiles` WHERE email=:email');
         $this->PDO->bind(':email', $email);
         if ($this->PDO->single()) {
@@ -47,21 +47,21 @@ class EmailAuth
 
             #creat key
             $this->CreatKey();
-        }   
+        }
     }
-    
+
     /**
      * buat key / link dengan format base 64 code
      * agar terbaca oleh url
-     * berisi username, dan time expt    * 
-     * 
+     * berisi username, dan time expt    *
+     *
      */
     private function CreatKey()
     {
         # property
         $user = $this->_userName;
         $expt = time() + 1800; #30 menit
-        # menyusun key        
+        # menyusun key
         $key = ['user'=>$user,
                 'exp'=>$expt];
         $key = json_encode($key);
@@ -74,6 +74,6 @@ class EmailAuth
         mysqli_query($link, $query);
         # hasil key
         # key adalah alamat link untuk dikonfirmsi user menggukan kode yg telah dibuat
-        $this->_keyResult = $key;        
+        $this->_keyResult = $key;
     }
 }

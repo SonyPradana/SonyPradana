@@ -25,7 +25,7 @@ class UserRegister extends MyCRUD
 
   public function __construct()
   {
-    $this->PDO = new MyPDO();
+    $this->PDO = MyPDO::getInstance();
     $this->TABLE_NAME = 'registration';
     $this->COLUMNS = array(
       'id' => null,
@@ -34,7 +34,7 @@ class UserRegister extends MyCRUD
 			'pwd' => null,
 			'disp_name' => null,
 			'stat' => null,
-			
+
     );
   }
 

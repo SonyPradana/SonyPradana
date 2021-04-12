@@ -12,7 +12,7 @@ class Select extends Fetch implements ConditionInterface
   {
     $this->_table = $table_name;
     $this->_column = $columns_name;
-    $this->PDO = $PDO ?? new MyPDO();
+    $this->PDO = $PDO ?? MyPDO::getInstance();
 
     // defaul query
     if (count($this->_column) > 1) {

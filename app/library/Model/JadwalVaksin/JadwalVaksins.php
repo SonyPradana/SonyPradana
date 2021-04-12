@@ -25,6 +25,6 @@ class JadwalVaksins extends MyModel
   public function __construct(MyPDO $PDO = null)
   {
     $this->_TABELS[]  = 'jadwal_vaksin';
-    $this->PDO = $PDO ?? new MyPDO();
+    $this->PDO = $PDO ?? MyPDO::getInstance();
   }
 }

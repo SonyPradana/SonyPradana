@@ -24,7 +24,7 @@ class JadwalVaksin extends MyCRUD
 
   public function __construct()
   {
-    $this->PDO = new MyPDO();
+    $this->PDO = MyPDO::getInstance();
     $this->TABLE_NAME = 'jadwal_vaksin';
     $this->COLUMNS = array(
       'id' => null,

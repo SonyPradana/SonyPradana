@@ -6,7 +6,7 @@ use System\Database\MyPDO;
  * class ini berfungsi untuk merest passawod / ganti password
  * untuk dapat mengaksesanya harus sudah login
  * user dan password lama hrs hafal
- * 
+ *
  * @author sonypradana@gamail.com
  */
 class ResetPassword
@@ -26,22 +26,22 @@ class ResetPassword
 
     /**
      * cek user dan password banar atau tidak
-     * 
+     *
      * @param string $user_name user name
      * @param string $password password
-     * 
+     *
      * @return boolean password baru
     */
     public function __construct($user_name, $password)
     {
-        $this->PDO = new MyPDO();
-        $this->password_veryfy = Login::PasswordVerify($user_name, $password);        
+        $this->PDO = MyPDO::getInstance();
+        $this->password_veryfy = Login::PasswordVerify($user_name, $password);
         $this->userName = $user_name;
     }
 
     /**
      * buat password baru
-     * 
+     *
      * @param string password baru
      * @return boolean berhasil atau tidak
      */

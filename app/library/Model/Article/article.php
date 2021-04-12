@@ -25,7 +25,7 @@ class article extends MyCRUD
 
   public function __construct()
   {
-    $this->PDO = new MyPDO();
+    $this->PDO = MyPDO::getInstance();
     $this->TABLE_NAME = 'articles';
     $this->COLUMNS = array(
       'id' => null,

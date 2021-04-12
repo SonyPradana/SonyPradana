@@ -48,6 +48,6 @@ class asks extends MyModel
   public function __construct(MyPDO $PDO = null)
   {
     $this->_TABELS[]  = 'public_quest';
-    $this->PDO = $PDO ?? new MyPDO();
+    $this->PDO = $PDO ?? MyPDO::getInstance();
   }
 }

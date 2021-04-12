@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Costumeable CLI command (registered command function)
 - Styling CLI (color)
 - Splint CLI code to some funtion
+- Singleton MyPDO (database connation)
 
 ### Fixed
 - Fix story url not found because space in url

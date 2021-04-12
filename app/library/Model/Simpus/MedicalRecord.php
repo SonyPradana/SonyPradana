@@ -9,12 +9,12 @@ class MedicalRecord
     /** @var MyPDO Instant PDO */
     private $PDO;
 
-    /** @var int id record */ 
+    /** @var int id record */
     protected $_id;
     /** @var string No Rekam Medis */
     protected $_nomorRM;
     /** tanggal data dibuat */
-    protected $_dataDibuat;   
+    protected $_dataDibuat;
     /** @var string Nama lengkap */
     protected $_nama;
     /** @var string tanggal lahir 30-12-1990*/
@@ -24,7 +24,7 @@ class MedicalRecord
     /** @var int Nomor Rt */
     protected $_nomorRt;
     /** @var int Nomor RW */
-    protected $_nomorRw;    
+    protected $_nomorRw;
     /** @var string Nama Kepla Keluarga*/
     protected $_namaKK;
     /** @var string No Rekam Medis Kepala Keluarga*/
@@ -54,10 +54,10 @@ class MedicalRecord
     /**
      * get nama lengkap
      * @return string Nama lengkap pasien
-     */    
+     */
     public function getNama(){
         return $this->_nama;
-    }    
+    }
     /**
      * get tanggal lahir
      * @return string tanggal lahir
@@ -71,7 +71,7 @@ class MedicalRecord
      */
     public function getAlamat(){
         return $this->_alamat;
-    }    
+    }
     /**  @return string Alamat Lengkap  */
     public function getAlamatLengkap(){
         return $this->_alamat . ' Rt '. $this->_nomorRt . '/ Rw ' . $this->_nomorRw;
@@ -82,7 +82,7 @@ class MedicalRecord
      */
     public function getNomorRt(){
         return $this->_nomorRt;
-    }    
+    }
     /**
      * get nomor rw alamat dalam wilayah
      * @return int nomor rw
@@ -129,16 +129,16 @@ class MedicalRecord
 
     /**
      * set nomor rekam medis
-     * 
+     *
      * data hanya disimpan jika format benar (nomor rm)
      * @param string $val 6 digit nomor rekam medis
-     * 
+     *
      */
     public function setNomorRM($val)
     {
         $len = strlen($val);
         $max = 6 - $len;
-        for ($i=0; $i < $max ; $i++) { 
+        for ($i=0; $i < $max ; $i++) {
             $val = 0 . $val;
         }
         $this->_nomorRM = (string) $val;
@@ -146,7 +146,7 @@ class MedicalRecord
     }
     /**
      * set data dibuat dalam time span
-     * @param string $val data dibuat 
+     * @param string $val data dibuat
      */
     public function setDataDibuat($val)
     {
@@ -160,7 +160,7 @@ class MedicalRecord
     public function setNama($val)
     {
         $val = strtolower($val);
-        $this->_nama = $val; 
+        $this->_nama = $val;
         return $this;
     }
     /**
@@ -218,7 +218,7 @@ class MedicalRecord
     {
         $len = strlen($val);
         $max = 6 - $len;
-        for ($i=0; $i < $max ; $i++) { 
+        for ($i=0; $i < $max ; $i++) {
             $val = 0 . $val;
         }
         $this->_nomorRM_KK = $val;
@@ -250,12 +250,12 @@ class MedicalRecord
      * */
     public function __construct(MyPDO $PDO = null)
     {
-        $this->PDO = $PDO ?? new MyPDO();
-    }    
-    
+        $this->PDO = $PDO ?? MyPDO::getInstance();
+    }
+
     /**
      * buat kelas baru menggunkan id
-     * 
+     *
      * **multy contruct dost support by php**
      * @param int $id
      * @param MyPDO $PDO Intial PDO
@@ -270,7 +270,7 @@ class MedicalRecord
 
     /**
      * buat kelas baru menggunkan data
-     * 
+     *
      * **multy contruct dost support by php**
      * @param array $data
      * @param MyPDO $PDO Intial PDO
@@ -284,11 +284,11 @@ class MedicalRecord
 
     /**
      * fungsi untuk menkonfersi data bentuk array menjadi properti kelas
-     * 
+     *
      * @param array $data
      * merubah data array ke property class
      * - id             -> id
-     * - nomorRM        -> nomor_rm     * 
+     * - nomorRM        -> nomor_rm     *
      * - dataDibuat     -> data_dibuat
      * - nama           -> nama
      * - tanggalLahir   -> tanggal_lahir
@@ -298,7 +298,7 @@ class MedicalRecord
      * - namaKK         -> nama_kk
      * - nomorRM_KK     -> nomor_rm_kk
      * - status         -> status
-     * 
+     *
      */
     private function convertFromData($data){
         $this->_id           = $data['id'] ?? $this->_id;;
@@ -335,7 +335,7 @@ class MedicalRecord
 
     /**
      * refresh/ambil/pull semua data dari database, munggunakn id
-     * @return boolean 
+     * @return boolean
      * bila berhasil di refresh nilainya true
      */
     public function refresh(){
@@ -351,7 +351,7 @@ class MedicalRecord
 
     /**
      * refresh/ambil/pull semua data dari database, munggunakn hash_id
-     * @return boolean 
+     * @return boolean
      * True jika data berhasil diambil
      */
     public function refreshUsingIdHash($Id_hash){
@@ -369,7 +369,7 @@ class MedicalRecord
                             `staging_rm`
                         ) AS U
                     WHERE
-                        U.data_dibuat = :tmstamp                        
+                        U.data_dibuat = :tmstamp
                     ");
         $this->PDO->bind(":tmstamp", $Id_hash);
         if( $this->PDO->single() ){
@@ -382,7 +382,7 @@ class MedicalRecord
     // method
     /**
      *  update / simpan data ke data base
-     * @return boolean 
+     * @return boolean
      * bila berhasil disimpan nilaninya true
      */
     public function save($table_nama = "data_rm"){
@@ -399,12 +399,12 @@ class MedicalRecord
         $nama_kk = $this->_namaKK;
         $nomor_rm_kk = $this->_nomorRM_KK;
         $status = $this->_status;
-        
+
         # jika nama dan no rm kosong tidak disimpan
-        if( $nomor_rm == '' && $nama == '') return false;  
+        if( $nomor_rm == '' && $nama == '') return false;
 
         $link  = mysqli_connect(DB_HOST, DB_USER, DB_PASS, "simpusle_simpus_lerep");
-        $query = "UPDATE `$table_nama` SET 
+        $query = "UPDATE `$table_nama` SET
                                     `nomor_rm` = '$nomor_rm',
                                     `data_dibuat` = '$data_dibuat',
                                     `nama` = '$nama',
@@ -429,7 +429,7 @@ class MedicalRecord
 
     /**
      * delet rm ini dari data base
-     * @return boolean 
+     * @return boolean
      * bila berhasil dihapus nilainya true
      */
     public function delete(){
@@ -441,7 +441,7 @@ class MedicalRecord
         #esekusi query /delet
         mysqli_query($link, $query);
         # bila berhasil return true
-        if( mysqli_affected_rows($link) > 0){            
+        if( mysqli_affected_rows($link) > 0){
             $this->_last_query = $query;
             return true;
         }
@@ -452,7 +452,7 @@ class MedicalRecord
     /**
      * pre validasi semua isi form sebelum di esekusi perintah berikutnya
      * berisis warning jika ada fileld yg salah
-     * 
+     *
      * @return array list
      * - [0] => true / false
      * - [1] => nomor rm format tidak didukung
@@ -468,10 +468,10 @@ class MedicalRecord
 
     /**
      * membuat data rm baru kedata base
-     * 
+     *
      * @param int $id
      * opsonal bila kosong maka akan diteruskan dari id terakhir
-     * @return boolean 
+     * @return boolean
      * bila berhasil disimpan nilainya true
      */
     public function insertNewOne($id = '', $table_name = 'data_rm'){
@@ -486,12 +486,12 @@ class MedicalRecord
         $nama_kk = $this->_namaKK;
         $nomor_rm_kk = $this->_nomorRM_KK;
         $status = $this->_status;
-        
+
         # jika nama dan no rm kosong tidak disimpan
-        if( $nomor_rm == '' && $nama == '') return false;        
-        
+        if( $nomor_rm == '' && $nama == '') return false;
+
         $link  = mysqli_connect(DB_HOST, DB_USER, DB_PASS, "simpusle_simpus_lerep");
-        $query = "INSERT INTO `$table_name` VALUES ('$id', 
+        $query = "INSERT INTO `$table_name` VALUES ('$id',
                                        '$nomor_rm',
                                        '$data_dibuat',
                                        '$nama',
@@ -503,7 +503,7 @@ class MedicalRecord
                                        '$nomor_rm_kk',
                                        '$status'
                                        )";
-            
+
         #esekusi query
         mysqli_query($link, $query);
         # bila berhasil return true

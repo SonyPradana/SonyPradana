@@ -63,7 +63,7 @@ class Scheduler
      */
     public function __construct(MyPDO $PDO = null)
     {
-        $this->db = $PDO ?? new MyPDO();
+        $this->db = $PDO ?? MyPDO::getInstance();
     }
 
     /**
@@ -80,7 +80,7 @@ class Scheduler
     public function create(): bool
     {
         if ($this->id != '') return false;
-        
+
         $this->db->query("INSERT INTO `task_secheduler`
                             (
                                 `id`, `project_name`, `last`, `interval`, `looping`
@@ -139,7 +139,7 @@ class Scheduler
         $this->db->bind(':interval', $this->interval);
         $this->db->bind(':looping', $this->looping);
         $this->db->bind(':id', $this->id);
-        
+
         $this->db->execute();
         if( $this->db->rowCount() > 0) return true;
 

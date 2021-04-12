@@ -44,7 +44,7 @@ class articleModel extends MyModel
   public function __construct(MyPDO $PDO = null)
   {
     $this->_TABELS[]  = 'articles';
-    $this->PDO = $PDO ?? new MyPDO();
+    $this->PDO = $PDO ?? MyPDO::getInstance();
     $this->_SORT_ORDER = "`create_time` DESC";
   }
 

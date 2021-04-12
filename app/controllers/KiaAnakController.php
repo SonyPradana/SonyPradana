@@ -13,16 +13,16 @@ class KiaAnakController extends Controller
     public function __construct()
     {
         //  WARNING:    fungsi ini adalah funsi authrization, wajib ada
-        
+
         // call_user_func_array($this->getMiddleware()['before'], []);
-        if( $this->getMiddleware()['auth']['login'] == false ){            
+        if( $this->getMiddleware()['auth']['login'] == false ){
             DefaultController::page_401(array (
                 'links' => array (
                     array('Home Page', '/'),
                     array('Login',  '/login?url=' . $_SERVER['REQUEST_URI'])
                 )
             ));
-        }        
+        }
     }
 
     public function show($action, $unit)
@@ -43,8 +43,8 @@ class KiaAnakController extends Controller
         echo '<p>' . $message . '</p>';
         exit();
     }
-    
-    // biodata 
+
+    // biodata
 
     private function edit_biodata()
     {
@@ -76,7 +76,7 @@ class KiaAnakController extends Controller
 
         $data_kia = new KIAAnakRecord();                            // data kia
         $data_kia->loadWithID( $code_hash );
-        if( $data_kia->cekExist() == false ) $this->deny_access('documnet tidak terdaftar');    
+        if( $data_kia->cekExist() == false ) $this->deny_access('documnet tidak terdaftar');
 
         // update data
         if (! $validation->errors()) {
@@ -92,7 +92,7 @@ class KiaAnakController extends Controller
             $data_rm->convertFromArray($_POST);
             $status           = (array) json_decode( $data_rm->getStatus() );
             $status["update"] = time();
-            $data_rm->setStatus( json_encode($status) );              
+            $data_rm->setStatus( json_encode($status) );
 
             if( $success ){
                 // switch data disimpan dimana                      TODO cek asal table, langsung dr database-nya menggunakn id
@@ -104,7 +104,7 @@ class KiaAnakController extends Controller
                 $msg = ["show" => true, "type" => 'success', "content" => 'Berhasil disimpan'];
             }
             if( !$success ){
-                // mengembalikan data apabila data tidak berhasil disimpan 
+                // mengembalikan data apabila data tidak berhasil disimpan
                 $data_kia->convertFromArray($undo_change);
                 $data_kia->update();                                // [database-kia]
                 $data_rm->convertFromArray($undo_change);           // [user input]
@@ -127,7 +127,7 @@ class KiaAnakController extends Controller
                 "header_menu"   => MENU_KIA_ANAK
             ],
             "contents" => [
-                "success"           => $success,       
+                "success"           => $success,
                 "nama"              => $data_rm->getNama(),
                 "tanggal_lahir"     => $data_rm->getTangalLahir(),
                 "alamat"            => $data_rm->getAlamat(),
@@ -225,7 +225,7 @@ class KiaAnakController extends Controller
         } elseif (empty($_POST)) {
             $error = array();
         } else {
-            $msg = ["show" => true, "type" => 'success', "content" => 'Gagal disimpan'];            
+            $msg = ["show" => true, "type" => 'success', "content" => 'Gagal disimpan'];
         }
 
         return $this->view('kia-anak/biodata/new',[
@@ -254,7 +254,7 @@ class KiaAnakController extends Controller
     private function search_biodata()
     {
         $msg = ["show" => false, "type" => 'info', "content" => 'oke'];
-        
+
         # ambil parameter dari url
         $main_search     = $_GET['main-search'] ?? '';
         $alamat_search   = $_GET['alamat-search'] ?? '';
@@ -265,12 +265,12 @@ class KiaAnakController extends Controller
         $desa            = $_GET['desa'] ?? null;
         $id_posyandu     = $_GET['tempat_pemeriksaan'] ?? null;
 
-        if( $desa != null){            
+        if( $desa != null){
             $groups_posyandu = GroupsPosyandu::getPosyandu($desa);
         }
 
         if( $id_posyandu != null && is_numeric($id_posyandu)){
-            $posyandu = GroupsPosyandu::getPosyanduName($id_posyandu);        
+            $posyandu = GroupsPosyandu::getPosyanduName($id_posyandu);
         }
 
         // result
@@ -310,11 +310,11 @@ class KiaAnakController extends Controller
     private function view_biodata()
     {
         $msg = ["show" => false, "type" => 'info', "content" => 'oke'];
-        
+
         // load data rm dan staging yang terdaftar kia anak
         $data_kia = new KIAAnakRecords();
         $datas = $data_kia->resultAll();
-        
+
         // result
         return $this->view('kia-anak/biodata/view',[
             "auth"    => $this->getMiddleware()['auth'],
@@ -357,15 +357,15 @@ class KiaAnakController extends Controller
         $error = $validation->get_errors_array();
 
         $document_id = $_GET['document_id'] ?? $this->deny_access();
-        $params      = explode('-', $document_id);                                // [0]: code_hash, [1]: id 
-        //  
+        $params      = explode('-', $document_id);                                // [0]: code_hash, [1]: id
+        //
         $code_hash  = $params[0];                                                // validasi document id type, harus angka
         $id         = $params[1] ?? $this->deny_access();
-        // 
+        //
         $posyandu   = new PosyanduRecord();
         $isValided  = $posyandu->validate($code_hash)->IsValided();
         $read       = $posyandu->read( $id );
-        
+
         if (! $validation->errors() && $isValided && $read) {
             // setter dari user inputkz
             $posyandu->setTempatPemeriksaan( $_POST['tempat_pemeriksaan'] ?? $posyandu->getTempatPemeriksaan() )
@@ -376,7 +376,7 @@ class KiaAnakController extends Controller
             $update = $posyandu->update( $id );
             // message
             if( $update ){
-                $msg = ["show" => true, "type" => 'success', "content" => 'Berhasil di ubah'];       
+                $msg = ["show" => true, "type" => 'success', "content" => 'Berhasil di ubah'];
             }
         } elseif ($isValided == false || $read == false) {
             $error = array('valid_id' => "id tidak valid atau tidak berlaku");
@@ -385,13 +385,13 @@ class KiaAnakController extends Controller
             $error = array();
         }
 
-        //  isi form dari data base, 
+        //  isi form dari data base,
         $desa_posyandu          = GroupsPosyandu::getPosyanduDesa( $posyandu->getTempatPemeriksaan() );
         $groups_posyandu        = GroupsPosyandu::getPosyandu( $desa_posyandu );
         $tanggal_pemeriksaan    = $posyandu->getTanggalPemeriksaan();
         $tinggi_pemeriksaan     = $posyandu->getTinggiBadan();
         $berat_pemeriksaan      = $posyandu->getBeratBadan();
-        
+
         return $this->view('kia-anak/posyandu/edit', [
             "auth"    => $this->getMiddleware()['auth'],
             "meta"     => [
@@ -422,7 +422,7 @@ class KiaAnakController extends Controller
     private function new_posyandu()
     {
         $msg = ["show" => false, "type" => 'info', "content" => 'oke'];
-        
+
         // validation
         $validation = new GUMP('id');
         $validation->validation_rules(array (
@@ -436,7 +436,7 @@ class KiaAnakController extends Controller
         $validation->run($_POST);
         $error = $validation->get_errors_array();
 
-        if (! $validation->errors()) {    
+        if (! $validation->errors()) {
             $posyandu = new PosyanduRecord();
             $posyandu
                 ->validate($_POST['code_hash'])
@@ -475,7 +475,7 @@ class KiaAnakController extends Controller
 
     private function search_posyandu()
     {
-        $msg = ["show" => false, "type" => 'info', "content" => 'oke'];   
+        $msg = ["show" => false, "type" => 'info', "content" => 'oke'];
 
         # ambil parameter dari url
         $main_search     = $_GET['main-search'] ?? '';
@@ -487,12 +487,12 @@ class KiaAnakController extends Controller
         $desa            = $_GET['desa'] ?? null;
         $id_posyandu     = $_GET['tempat_pemeriksaan'] ?? null;
 
-        if( $desa != null){            
+        if( $desa != null){
             $groups_posyandu = GroupsPosyandu::getPosyandu($desa);
         }
 
         if( $id_posyandu != null && is_numeric($id_posyandu)){
-            $posyandu = GroupsPosyandu::getPosyanduName($id_posyandu);        
+            $posyandu = GroupsPosyandu::getPosyanduName($id_posyandu);
         }
 
         // result
@@ -532,8 +532,8 @@ class KiaAnakController extends Controller
     private function view_posyandu()
     {
         $msg = ["show" => false, "type" => 'info', "content" => 'oke'];
-        
-        $pdo = new MyPDO();
+
+        $pdo = MyPDO::getInstance();
         // data posyandu raw
         $posyandu = new PosyanduRecords( $pdo );
         // filter data
@@ -541,7 +541,7 @@ class KiaAnakController extends Controller
                 ->filtterByAlamat(10);
         // hasil filter
         $raw = $posyandu->result();
-        
+
         // generate id_hash
         $count = $posyandu->CountID();
         // ambil count by hash_id
@@ -549,9 +549,9 @@ class KiaAnakController extends Controller
 
 
         // cari data rm dan alamat
-        $medrec = new MedicalRecord();    
-        
-        for ($i=0; $i < count($count); $i++) {      
+        $medrec = new MedicalRecord();
+
+        for ($i=0; $i < count($count); $i++) {
             $filrer_by = $count[$i]['id_hash'];
             $count[$i]['data'] = array_filter($raw, function($e) use ($filrer_by){
                 return $e['id_hash'] == $filrer_by;

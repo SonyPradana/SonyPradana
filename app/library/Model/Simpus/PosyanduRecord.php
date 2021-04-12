@@ -4,7 +4,7 @@ use System\Database\MyPDO;
 use \PDO;
 
 class PosyanduRecord
-{    
+{
     /** @var MyPDO Instant PDO */
     private $PDO;
     private $_code_hash;
@@ -14,7 +14,7 @@ class PosyanduRecord
     private $_tenagaPemeriksaan;
     private $_jenisPemeriksaan;
     private $_tempatPemeriksaan;
-    
+
     // data kes
     private $_tinggiBadan;
     private $_beratBadan;
@@ -80,16 +80,16 @@ class PosyanduRecord
 
     /**
      * Constructer
-     * 
+     *
      * After make new instant you MUST validate before you can make CRUD
      * @param MyPDO $PDO DataBase class Dependency Injection
      */
     public function __construct(MyPDO $PDO = null)
     {
-        $this->PDO = $PDO ?? new MyPDO();
+        $this->PDO = $PDO ?? MyPDO::getInstance();
         $this->_isValid = false;
     }
-    
+
     public function validate(string $code_hash)
     {
         $this->_isValid = $this->isValid($code_hash);      //  TODO data pertama selalu bernilai true
@@ -103,7 +103,7 @@ class PosyanduRecord
         if( $code_hash == 0) return false;
         $this->PDO->query("SELECT `id_hash` FROM `data_kia_anak` WHERE `id_hash` = :id_hash LIMIT 1");
         $this->PDO->bind(":id_hash", $code_hash, PDO::PARAM_STR);
-        if( $this->PDO->single() ){    
+        if( $this->PDO->single() ){
             return true;
         }
         return false;
@@ -112,7 +112,7 @@ class PosyanduRecord
     public function isIDExist($id){
          $this->PDO->query("SELECT `id_hash` FROM `data_posyandu` WHERE `id` = :id LIMIT 1");
          $this->PDO->bind(":id_hash", $id, PDO::PARAM_INT);
-        if(  $this->PDO->single() ){    
+        if(  $this->PDO->single() ){
             return true;
         }
         return false;

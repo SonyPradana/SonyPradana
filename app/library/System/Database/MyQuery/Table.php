@@ -14,7 +14,7 @@ class Table
   public function __construct(string $table_name, MyPDO $PDO = null)
   {
     $this->table_name = $table_name;
-    $this->PDO = $PDO ?? new MyPDO();
+    $this->PDO = $PDO ?? MyPDO::getInstance();
   }
 
   public function insert()

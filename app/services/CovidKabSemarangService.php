@@ -17,7 +17,7 @@ class CovidKabSemarangService extends Service
   public function __construct(Mypdo $PDO = null)
   {
     $this->error = new DefaultService();
-    $this->PDO = $PDO ?? new MyPDO();
+    $this->PDO = $PDO ?? MyPDO::getInstance();
   }
 
   private function versionControl(): array

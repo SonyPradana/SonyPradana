@@ -22,7 +22,7 @@ class AntrianPoliService extends Service
   public function __construct(MyPDo $PDO = null)
   {
     $this->error = new DefaultService();
-    $this->PDO = $PDO ?? new MyPDO();
+    $this->PDO = $PDO ?? MyPDO::getInstance();
     $this->Pusher = new Pusher\Pusher(
       PUSHER_APP_KEY,
       PUSHER_APP_SECRET,

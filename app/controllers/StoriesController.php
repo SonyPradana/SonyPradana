@@ -39,7 +39,7 @@ class StoriesController extends Controller
 
   public function preview(string $storyID)
   {
-    $PDO = new MyPDO();
+    $PDO = MyPDO::getInstance();
     $msg = array('show' => false, 'type' => 'info', 'content' => 'oke');
     $error = array();
 
