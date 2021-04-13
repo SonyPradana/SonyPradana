@@ -16,9 +16,9 @@ Middleware::setMiddleware( array(
   "auth" => array(
     "token"                 => $token,
     "login"                 => $auth->TrushClient(),
-    "user_name"             => $auth->TrushClient() ? $auth->getUserName() : null,
-    "display_name"          => $auth->TrushClient() ? $user->getDisplayName() : null,
-    "display_picture_small" => $auth->TrushClient() ? $user->getSmallDisplayPicture() : null
+    "user_name"             => $auth->getUserName(),
+    "display_name"          => $user->getDisplayName(),
+    "display_picture_small" => $user->getSmallDisplayPicture()
   ),
   "DNT" => isset($_SERVER['HTTP_DNT']) && $_SERVER['HTTP_DNT'] == 1 ? true : false
 ));
