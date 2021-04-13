@@ -9,20 +9,22 @@ final class BasicTest extends TestCase
   public function testFrameworkStrucktur(): void
   {
     $this->assertFileExists('./bootstrap/init.php');
-
-    $this->assertFileExists('./app/core/Config.php');
     $this->assertFileExists('./bootstrap/autoload.php');
 
     $this->assertFileExists('./app/controllers/HomeController.php');
     $this->assertFileExists('./app/controllers/ApiController.php');
 
     $this->assertFileExists('./app/core/CLI.php');
+    $this->assertFileExists('./app/core/Command.php');
+    $this->assertFileExists('./app/core/Config.php');
     $this->assertFileExists('./app/core/Controller.php');
     $this->assertFileExists('./app/core/Middleware.php');
     $this->assertFileExists('./app/core/Router.php');
+    $this->assertFileExists('./app/core/Service.php');
 
     $this->assertFileExists('./app/core/template/controller');
     $this->assertFileExists('./app/core/template/model');
+    $this->assertFileExists('./app/core/template/models');
     $this->assertFileExists('./app/core/template/service');
     $this->assertFileExists('./app/core/template/view');
 
@@ -38,13 +40,14 @@ final class BasicTest extends TestCase
     $this->assertFileExists('./public/index.php');
 
     $this->assertFileExists('./.env.example');
+    $this->assertFileExists('./CHANGELOG.MD');
     $this->assertFileExists('./composer.json');
     $this->assertFileExists('./composer.lock');
     $this->assertFileExists('./package-lock.json');
     $this->assertFileExists('./package.json');
     $this->assertFileExists('./simpus');
+    $this->assertFileExists('./tailwind.config.js');
     $this->assertFileExists('./webpack.mix.js');
-    $this->assertFileExists('./CHANGELOG.MD');
   }
 
   public function testAssetStrucktur(): void

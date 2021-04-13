@@ -18,16 +18,14 @@ use System\Database\MyPDO;
 use TriviaService;
 use WilayahKabSemarangService;
 use Simpus\Apps\Middleware;
-use Simpus\Auth\Login;
 use StoriesService;
 use System\Database\MyQuery;
-use UserRegisterService;
 
 final class ServicesTest extends TestCase
 {
-  private function getPDO(): MyPDO
+  private function PDO(): MyPDO
   {
-    return new MyPDO("test_simpus_lerep");
+    return MyPDO::getInstance('test_simpus_lerep');
   }
 
   protected array $middleware = array (
@@ -41,10 +39,15 @@ final class ServicesTest extends TestCase
     'DNT' => false
   );
 
+  public function testMypdo(): void
+  {
+    $this->assertEquals($this->PDO(), MyPDO::getInstance('test_simpus_lerep'));
+  }
+
   public function testServiceAntrian(): void
   {
     Middleware::setMiddleware($this->middleware);
-    $api = new AntrianPoliService($this->getPDO());
+    $api = new AntrianPoliService($this->PDO());
 
     // success
 
@@ -102,7 +105,7 @@ final class ServicesTest extends TestCase
 
   public function testServiceCovidKabSemarang(): void
   {
-    $api = new CovidKabSemarangService($this->getPDO());
+    $api = new CovidKabSemarangService($this->PDO());
 
     // success
 
@@ -208,7 +211,7 @@ final class ServicesTest extends TestCase
 
   public function testServiceJadwalPelayanan(): void
   {
-    $api = new JadwalPelayananService($this->getPDO());
+    $api = new JadwalPelayananService($this->PDO());
 
     // success
     $data = $api->Imunisasi(array());
@@ -229,7 +232,7 @@ final class ServicesTest extends TestCase
   {
     // setup midleware for simulation login
     Middleware::setMiddleware($this->middleware);
-    $api = new MessageService($this->getPDO());
+    $api = new MessageService($this->PDO());
 
     // success
     $data = $api->read(array());
@@ -239,7 +242,7 @@ final class ServicesTest extends TestCase
 
   public function testServiceNewsReader(): void
   {
-    $api = new NewsFeederService($this->getPDO());
+    $api = new NewsFeederService($this->PDO());
 
     // success
     $data = $api->ResendNews(array());
@@ -251,7 +254,7 @@ final class ServicesTest extends TestCase
   {
     // setup midleware for simulation login
     Middleware::setMiddleware($this->middleware);
-    $api = new TriviaService($this->getPDO());
+    $api = new TriviaService($this->PDO());
 
     // success assert test
 
@@ -310,7 +313,7 @@ final class ServicesTest extends TestCase
   {
     // setup midleware for simulation login
     Middleware::setMiddleware($this->middleware);
-    $api = new RekamMedisService($this->getPDO());
+    $api = new RekamMedisService($this->PDO());
 
     // success feact API
 
@@ -403,7 +406,7 @@ final class ServicesTest extends TestCase
 
   public function testServiceWilayahKabupatenSemarang(): void
   {
-    $api  = new WilayahKabSemarangService($this->getPDO());
+    $api  = new WilayahKabSemarangService($this->PDO());
 
     $data_kabupaten = $api->Data_Kabupaten();
     $this->assertEquals('ok', $data_kabupaten['status']);
@@ -420,8 +423,9 @@ final class ServicesTest extends TestCase
 
   public function testServiceStories(): void
   {
-    $api = new StoriesService($this->getPDO());
-    $story = new Story($this->getPDO());
+    $pdo = new MyPDO('test_simpus_lerep');
+    $api = new StoriesService($pdo);
+    $story = new Story($pdo);
     $story->setID(0)->read();
     $viewerBefore = $story->getViewer();
 
@@ -464,7 +468,7 @@ final class ServicesTest extends TestCase
 
   public function testResponeUser(): void
   {
-    $test = new QAResponseService($this->getPDO());
+    $test = new QAResponseService($this->PDO());
 
     // Like test respone
     $res = $test->Like(['thread_id' => 1]);
@@ -477,8 +481,7 @@ final class ServicesTest extends TestCase
 
   public function testQuestionAndAnswer(): void
   {
-    $PDO = $this->getPDO();
-    $test = new QuestionAnswerService($PDO);
+    $test = new QuestionAnswerService($this->PDO());
 
     $res = $test->get_post(array());
     $this->assertNotEmpty($res['data']);
@@ -486,7 +489,7 @@ final class ServicesTest extends TestCase
     // creating scrf to pass the scrf protactin
     $scrfKey = 'key';
     $scrfSecret = 'secret';
-    $db = new MyQuery($PDO);
+    $db = new MyQuery($this->PDO());
     $db('scrf_protection')
       ->insert()
       ->value('id', '')
@@ -517,9 +520,9 @@ final class ServicesTest extends TestCase
 
   public function testJadwalVaksin(): void
   {
-    $test = new JadwalVaksinService();
+    $test = new JadwalVaksinService($this->PDO());
     $res = $test->lansia([]);
-    
+
     $this->assertNotEmpty($res['data']);
   }
 }
