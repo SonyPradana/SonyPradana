@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Fix story url not found because space in url
+- Rename robot.txt to robots.txt
 
 ### Changed
 - MyQuery insert now using associative array

@@ -2,8 +2,4 @@
 User-agent: *
 Disallow:
 
-# Group 2
-User-agent: *
-Disallow: /question/ask
-
 Sitemap: http://www.simpuslerep.com/sitemap.xml
