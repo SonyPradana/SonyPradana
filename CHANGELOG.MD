@@ -5,7 +5,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
-### ADDED
+
+## [2.3.7] - 2021-03-05
+### Added
 - Add page info vaksin (indonesia)
 - MyQuery support static function
 - Costumeable CLI command (registered command function)
@@ -22,7 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Refactory CLI base code
 
 ## [2.3.6] - 2021-03-05
-### ADDED
+### Added
 - Add simple cms (dashbord admin)
 - Add Join table, between, multy costume where in MyQuery
 - Add abstarct class for Services
@@ -32,7 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - dashboard admin now can refresh anywhere (css not broken anymore)
 
 ## [2.3.5] - 2021-02-05
-### ADDED
+### Added
 - Support VUE Router
 - Support Tailwind-CSS (partial)
 - Add admin dashbord page
@@ -51,7 +53,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Auto generate tahun support for swict 'bulan' and 'tahun'
 
 ## [2.3.4] - 2021-01-25
-### ADDED
+### Added
 - robot.txt and sitemap
 - Aplication path APP_PATH['url'], (models, view, controller, services, component)
 
