@@ -6,6 +6,16 @@ use System\Database\MyQuery;
 
 class MakerCommand extends Command
 {
+
+  public static array $command = array(
+    [
+      "cmd"       => "make",
+      "mode"      => "start",
+      "class"     => MakerCommand::class,
+      "fn"        => "switcher",
+    ],
+  );
+
   public function switcher()
   {
     // get category command

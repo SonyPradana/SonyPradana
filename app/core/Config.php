@@ -19,14 +19,11 @@ class Config
     $dbs_config = include($path . 'database.config.php');
     $pusher_config = include($path . 'pusher.config.php');
     $headerMenu_config = include($path . 'headermenu.config.php');
-    $command_config = include($path . 'command.config.php');
-
     // excute config
     $this->appConfig($app_config);
     $this->databeseConfig($dbs_config);
     $this->pusherConfig($pusher_config);
     $this->headerMenuConfig($headerMenu_config);
-    $this->commandConfig($command_config);
 
   }
 
@@ -80,10 +77,5 @@ class Config
     // poasayndu header menu
     define('MENU_POSYANDU', $config['MENU_POSYANDU']);
 
-  }
-
-  private function commandConfig(array $config)
-  {
-    define('COMMAND_CONFIG', $config);
   }
 }

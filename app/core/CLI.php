@@ -2,24 +2,35 @@
 
 namespace Simpus\Apps;
 
+use HelpCommand;
 use Helper\String\Str;
+use MakerCommand;
 
 class CLI
 {
+  public static $command = [];
+
   public function __construct(array $arguments)
   {
     // handle commad empty
     $baseArgs = $arguments[1] ?? '--help';
 
     // load register command
-    $commands = COMMAND_CONFIG;
+    self::$command = array_merge(
+      // help command
+      HelpCommand::$command,
+      // make somthink command
+      MakerCommand::$command,
+      // more command here
 
-    foreach ($commands as $cmd) {
+    );
+
+    foreach (self::$command ?? [] as $cmd) {
       // matching alias
       $use = $cmd['cmd'];
       if (is_array($use)) {
-        foreach ($use as $alias) {
-          $valid = $this->cekAlias($alias, $baseArgs, $cmd['mode']);
+        foreach ($use as $cmd_alias) {
+          $valid = $this->cekAlias($cmd_alias, $baseArgs, $cmd['mode']);
           if ($valid) {
             break;
           }
@@ -47,13 +58,13 @@ class CLI
     echo "\n\e[33mPHP\e[0m simpus \e[2m--help\e[0m";
   }
 
-  private function cekAlias(string $alias, string $match, string $mode): bool
+  private function cekAlias(string $cmd_alias, string $match, string $mode): bool
   {
     $valid = false;
     if ($mode == 'full') {
-      $valid = $alias == $match;
+      $valid = $cmd_alias == $match;
     } else {
-      $valid = Str::startWith($alias, $match);
+      $valid = Str::startWith($cmd_alias, $match);
     }
 
     return $valid;
