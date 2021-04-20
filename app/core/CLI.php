@@ -2,6 +2,7 @@
 
 namespace Simpus\Apps;
 
+use CronCommand;
 use HelpCommand;
 use Helper\String\Str;
 use MakerCommand;
@@ -21,6 +22,8 @@ class CLI
       HelpCommand::$command,
       // make somthink command
       MakerCommand::$command,
+      // cron
+      CronCommand::$command,
       // more command here
 
     );
