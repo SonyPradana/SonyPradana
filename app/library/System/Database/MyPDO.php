@@ -31,7 +31,7 @@ class MyPDO
 
   public static function conn(string $database_name = DB_NAME)
   {
-    return (new MyPDO($database_name));
+    return new self($database_name);
   }
 
   private static $MySelf = null;
@@ -44,7 +44,7 @@ class MyPDO
    */
   public static function getInstance(string $database_name = DB_NAME)
   {
-    self::$MySelf = self::$MySelf ?? new MyPDO($database_name);
+    self::$MySelf = self::$MySelf ?? new self($database_name);
 
     return self::$MySelf;
   }
