@@ -5,7 +5,6 @@ namespace WebScrap\CovidKabSemarang;
 use WebScrap\CovidKabSemarang\CovidKabSemarang;
 use System\Database\MyPDO;
 use Convert\Converter\ConvertCode;
-use Simpus\Helper\Scheduler;
 
 /** class untuk minyimpan data kedalam data base */
 class CovidKabSemarangTracker
@@ -41,9 +40,6 @@ class CovidKabSemarangTracker
      */
     public function createIndex(): bool
     {
-        $schadule       = new Scheduler($this->PDO);
-        $schadule(1)->read();
-
         $new_request    = new CovidKabSemarang();
         $daftar         = $new_request->Daftar_Kecamatan;
 
@@ -68,8 +64,6 @@ class CovidKabSemarangTracker
             }
         }
 
-        $schadule->setLastModife((int) time());
-        $schadule->update();
         return true;
     }
 
@@ -116,8 +110,6 @@ class CovidKabSemarangTracker
 
         // compire new data dan old data
         if (array_values($new_data) != $old_data) {
-            $schadule   = new Scheduler($this->PDO);
-            $schadule(1)->read();
             // simpan data
             foreach ($data_covid as $key => $value) {
                 $data_section = $value['data'];
@@ -137,9 +129,6 @@ class CovidKabSemarangTracker
                 }
             }
 
-            // ketika berhasil
-            $schadule->setLastModife((int) time());
-            $schadule->update();
             return true;
         }
 

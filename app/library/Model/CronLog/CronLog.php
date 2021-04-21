@@ -4,6 +4,7 @@ namespace Model\CronLog;
 
 use System\Database\MyCRUD;
 use System\Database\MyPDO;
+use System\Database\MyQuery;
 
 class CronLog extends MyCRUD
 {
@@ -81,6 +82,7 @@ class CronLog extends MyCRUD
     $this->PDO = MyPDO::getInstance();
     $this->TABLE_NAME = 'cron_log';
     $this->COLUMNS = array(
+      'id'  => null,
       'schedule_time' => null,
 			'execution_time' => null,
 			'event_name' => null,

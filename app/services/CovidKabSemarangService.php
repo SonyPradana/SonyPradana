@@ -1,11 +1,6 @@
 <?php
-/**
- * TODO:
- * 1. tracker data - ifo data kecamatan tidak cocok
- */
-
+use Model\CovidTracker\CovidTracker;
 use Simpus\Apps\Service;
-use Simpus\Helper\Scheduler;
 use System\Database\MyPDO;
 use WebScrap\CovidKabSemarang\CovidKabSemarang;
 use WebScrap\CovidKabSemarang\CovidKabSemarangTracker;
@@ -33,10 +28,16 @@ class CovidKabSemarangService extends Service
     );
   }
 
-  public function tracker(array $params)
+  /**
+   * Get data (short), costume location
+   *
+   * @param array $request http header request
+   * @return array Index covid data status
+   */
+  public function tracker(array $request)
   {
     // option
-    $date_format    = $params['date_format'] ?? 'd/m h:i';
+    $date_format    = $request['date_format'] ?? 'd/m h:i';
     if ($date_format != 'd/m h:i') {
       // force format
       $date_format = 'Y-m-d h:i:sa';
@@ -48,15 +49,15 @@ class CovidKabSemarangService extends Service
     $list_date      = $covid_tracker->listOfDate();
     $list_date      = array_column($list_date, 'date');
 
-    $date           = $params['range_waktu'] ?? $list_date[0];
+    $date           = $request['range_waktu'] ?? $list_date[0];
     $date = explode('-', $date);
     foreach ($date as $date_cek) {
-      if (! in_array($date_cek, $list_date) ) {
+      if (! in_array($date_cek, $list_date)) {
         return $this->error(400);
       }
     }
 
-    $lokasi = $params['lokasi'] ?? [''];
+    $lokasi = $request['lokasi'] ?? [''];
 
     $covid_tracker->setFiltersDate( $date )->setFiltersLocation( $lokasi );
     // var_dump($date);exit;
@@ -83,57 +84,69 @@ class CovidKabSemarangService extends Service
     return $end_point;
   }
 
-  public function tracker_all(array $params)
-  {
-      // option
-      $date_format = $params['date_format'] ?? 'd/m h:i';
-      if ($date_format != 'd/m h:i') {
-        // force format
-        $date_format = 'Y-m-d h:i:sa';
-      }
-
-      $covid_tracker  = new CovidKabSemarangTracker();
-
-      // configurasi - date
-      $list_date      = $covid_tracker->listOfDate();
-      $list_date      = array_column($list_date, 'date');
-
-      $date           = $params['range_waktu'] ?? $list_date[0];
-      $date = explode('-', $date);
-      $covid_tracker->setFiltersDate($date);
-
-      $result = [];
-      foreach ($covid_tracker->result_count() as $covid_data) {
-        $result[] = array(
-          "location"          => "kab. semarang",
-          "time"              => date($date_format, $covid_data['date_create']),
-          "kasus_posi"        => $covid_data['konfirmasi_symptomatik'],
-          "kasus_isol"        => $covid_data['konfirmasi_asymptomatik'],
-          "kasus_semb"        => $covid_data['konfirmasi_sembuh'],
-          "kasus_meni"        => $covid_data['konfirmasi_meninggal'],
-          "suspek"            => $covid_data['suspek'],
-          "suspek_discharded" => $covid_data['suspek_discharded'],
-          "suspek_meninggal"  => $covid_data['suspek_meninggal']
-        );
-      }
-
-      $end_point['data']      = count($result) == 1 ? $result[0] : $result;
-      $end_point['status']    = 'ok';
-      $end_point['headers']   = ['HTTP/1.1 200 Oke'];
-
-      return $end_point;
-  }
-
-  public function tracker_data(array $params)
+  /**
+   * Get data (short), all location
+   *
+   * @param array $request http header request
+   * @return array Index covid data status
+   */
+  public function tracker_all(array $request)
   {
     // option
-    $date_format = $params['date_format'] ?? 'd/m h:i';
+    $date_format = $request['date_format'] ?? 'd/m h:i';
     if ($date_format != 'd/m h:i') {
       // force format
       $date_format = 'Y-m-d h:i:sa';
     }
-    // TODO:
-    // 1. support filter berdasarkan wilayah
+
+    $covid_tracker  = new CovidKabSemarangTracker();
+
+    // configurasi - date
+    $list_date      = $covid_tracker->listOfDate();
+    $list_date      = array_column($list_date, 'date');
+
+    $date           = $request['range_waktu'] ?? $list_date[0];
+    $date = explode('-', $date);
+    $covid_tracker->setFiltersDate($date);
+
+    $result = [];
+    foreach ($covid_tracker->result_count() as $covid_data) {
+      $result[] = array(
+        "location"          => "kab. semarang",
+        "time"              => date($date_format, $covid_data['date_create']),
+        "kasus_posi"        => $covid_data['konfirmasi_symptomatik'],
+        "kasus_isol"        => $covid_data['konfirmasi_asymptomatik'],
+        "kasus_semb"        => $covid_data['konfirmasi_sembuh'],
+        "kasus_meni"        => $covid_data['konfirmasi_meninggal'],
+        "suspek"            => $covid_data['suspek'],
+        "suspek_discharded" => $covid_data['suspek_discharded'],
+        "suspek_meninggal"  => $covid_data['suspek_meninggal']
+      );
+    }
+
+    $end_point['data']      = count($result) == 1 ? $result[0] : $result;
+    $end_point['status']    = 'ok';
+    $end_point['code']      = 200;
+    $end_point['headers']   = ['HTTP/1.1 200 Oke'];
+
+    return $end_point;
+  }
+
+  /**
+   * Get costume complate data (kecamatan)
+   *
+   * @param array $request http header request
+   * @return array Index covid data status
+   */
+  public function tracker_data(array $request)
+  {
+    // option
+    $date_format = $request['date_format'] ?? 'd/m h:i';
+    if ($date_format != 'd/m h:i') {
+      // force format
+      $date_format = 'Y-m-d h:i:sa';
+    }
+    
     $covid_tracker  = new CovidKabSemarangTracker();
 
     // configurasi
@@ -142,7 +155,7 @@ class CovidKabSemarangService extends Service
     $list_date      = $covid_tracker->listOfDate();
     $list_date      = array_column($list_date, 'date');
 
-    $date           = $params['range_waktu'] ?? $list_date[0];
+    $date           = $request['range_waktu'] ?? $list_date[0];
     $date = explode('-', $date);
     foreach ($date as $date_cek) {
       if (! in_array($date_cek, $list_date)) {
@@ -151,8 +164,8 @@ class CovidKabSemarangService extends Service
     }
 
     // configurasi - lokasi
-    if (isset($params['kecamatan'])) {
-      $location = explode('--', $params['kecamatan']);
+    if (isset($request['kecamatan'])) {
+      $location = explode('--', $request['kecamatan']);
     } else {
       $list_kecamatan = (new CovidKabSemarang())->Daftar_Kecamatan;
       $location = array_keys($list_kecamatan);
@@ -263,9 +276,9 @@ class CovidKabSemarangService extends Service
     return $end_point;
   }
 
-  public function fetch(array $params)
+  public function fetch(array $request)
   {
-    $id     = $params['kecamatan'] ?? null;
+    $id     = $request['kecamatan'] ?? null;
     $data   = new CovidKabSemarang();
     $daftar = $data->Daftar_Kecamatan;
 
@@ -322,25 +335,29 @@ class CovidKabSemarangService extends Service
     return $this->error(204);
   }
 
-  public function indexing(array $params)
+  /**
+   * Force indexing (1 hour a time),
+   * what ever if data same or not
+   *
+   * @param array $request http header request
+   * @return array Index covid data status
+   */
+  public function indexing(array $request)
   {
-    $version =  $params['x-version'] ?? 'ver1.0';
+    $version =  $request['x-version'] ?? 'ver1.0';
     if ($version == 'ver1.0') {
       return $this->versionControl();
     }
 
-    $schadule   = new Scheduler($this->PDO);
-    $schadule(1)->read();
-
-    $next_index     = $schadule->getLastModife() + $schadule->getInterval();
+    $last_index     = CovidTracker::getLastIndex();
+    $next_index     = $last_index + 3600;
     $allow_index    = $next_index > (int) time() ? false : true;
     $index_status   = 'no index';
 
+    // allow index only 1 hour a time
     if ($allow_index) {
       $new_reqeust = new CovidKabSemarangTracker($this->PDO);
       if ($new_reqeust->createIndex()) {
-        $schadule->setLastModife(time());
-        $schadule->update();
         // done
         $index_status = 'sussessful';
       }
@@ -349,16 +366,22 @@ class CovidKabSemarangService extends Service
     return array(
       'status'        => 'ok',
       'code'          => 200,
-      'last_index'    => date("Y/m/d h:i:sa", $schadule->getLastModife()),
-      'next_index'    => date("Y/m/d h:i:sa", $schadule->getLastModife() + $schadule->getInterval()),
+      'last_index'    => date("Y/m/d h:i:sa", $last_index),
+      'next_index'    => date("Y/m/d h:i:sa", $next_index),
       'index_status'  => $index_status,
       'headers'       => ['HTTP/1.1 200 Oke']
     );
   }
 
-  public function indexing_compiere(array $params)
+  /**
+   * Indexing data, compare data with previus data
+   *
+   * @param array $request http header request
+   * @return array Index covid data status
+   */
+  public function indexing_compiere(array $request)
   {
-    $version =  $params['x-version'] ?? 'ver1.0';
+    $version =  $request['x-version'] ?? 'ver1.0';
     if ($version == 'ver1.0') {
       return $this->versionControl();
     }
@@ -376,8 +399,8 @@ class CovidKabSemarangService extends Service
     );
 
     // get last time data modife
-    $schadule   = new Scheduler($this->PDO);
-    $schadule(1)->read();
+    $last_index     = CovidTracker::getLastIndex();
+    $next_index     = $last_index + 3600;
 
     // indexing data
     $index = new CovidKabSemarangTracker();
@@ -386,24 +409,25 @@ class CovidKabSemarangService extends Service
     return array(
       'status'        => 'ok',
       'code'          => 200,
-      'last_index'    => date("Y/m/d h:i:sa", $schadule->getLastModife()),
-      'next_index'    => date("Y/m/d h:i:sa", $schadule->getLastModife() + $schadule->getInterval()),
+      'last_index'    => date("Y/m/d h:i:sa", $last_index),
+      'next_index'    => date("Y/m/d h:i:sa", $next_index),
       'index_status'  => $isNewData ? 'sussessful' : 'no index',
       'headers'       => ['HTTP/1.1 200 Oke']
     );
   }
 
-  public function info(array $params): array
+  public function info(array $request): array
   {
-    $schadule   = new Scheduler($this->PDO);
-    $status     = $schadule(1)->read();
+    $last_index     = CovidTracker::getLastIndex();
+    $next_index     = $last_index + 3600;
 
-    $last_index     = date("Y/m/d h:i:sa", $schadule->getLastModife());
-    $next_index     = date("Y/m/d h:i:sa", $schadule->getLastModife() + $schadule->getInterval());
-    $allow_index    = $schadule->getLastModife() + $schadule->getInterval() > (int) time() ? false : true;
+    $last_index     = date("Y/m/d h:i:sa", $last_index);
+    $next_index     = date("Y/m/d h:i:sa", $next_index);
+    $allow_index    = $next_index > (int) time() ? false : true;
 
     return array(
-      'status'        => $status ? 'ok' : 'error',
+      'status'        => 'ok',
+      'code'          => 200,
       'last_index'    => $last_index,
       'next_index'    => $next_index,
       'allow_index'   => $allow_index,
@@ -411,11 +435,11 @@ class CovidKabSemarangService extends Service
     );
   }
 
-  public function track_record(array $params): array
+  public function track_record(array $request): array
   {
     $covid_tracker  = new CovidKabSemarangTracker();
-    $to_string      = $params['toString'] ?? false;
-    $filter         = $params['day'] ?? null;
+    $to_string      = $request['toString'] ?? false;
+    $filter         = $request['day'] ?? null;
 
     if ($filter != null) {
       // $filter = $filter < 1 ? 1 : $filter;
