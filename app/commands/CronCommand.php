@@ -58,11 +58,88 @@ class CronCommand extends Command
 
   public function schaduler(Schadule $schadule): void
   {
-    $schadule->call(function() {
-      return (new CovidKabSemarangService())->indexing_compiere([
-        "x-version" => "ver1.1"
-      ]);
-    }, [])->eventName('info covid')->hourly();
+    $pdo = new System\Database\MyPDO();
 
+    // covid web scrab
+    $schadule
+      ->call(function() use ($pdo) {
+        return (new CovidKabSemarangService($pdo))->indexing_compiere([
+          "x-version" => "ver1.1"
+        ]);
+      })
+      ->eventName('info covid')
+      ->hourly();
+
+    // delete old database rows
+    $schadule
+      ->call(function() use ($pdo) {
+        System\Database\MyQuery::conn('scrf_protection', $pdo)
+          ->delete()
+          ->execute();
+
+          return [];
+      })
+      ->eventName('scrf_protection')
+      ->weekly();
+
+    // delete old story
+    $schadule
+      ->call(function() use ($pdo) {
+        $all = Model\Stories\Stories::call($pdo)->resultAll() ?? [];
+        $delete = [];
+
+        foreach ($all as $story) {
+          if (time() > $story['date_end']) {
+            // delete file (keep save small image)
+            unlink(BASEURL . '/public/data/img/stories/original/' . $story['image_id']);
+            unlink(BASEURL . '/public/data/img/stories/thumbnail/' . $story['image_id']);
+
+            // delete database
+            System\Database\MyQuery::conn('stories', $pdo)
+              ->delete()
+              ->equal('id', $story['id'])
+              ->execute();
+
+            $delete[] = $story;
+          }
+        }
+
+        return ['deleted' => $delete];
+      })
+      ->eventName('story cleaner')
+      ->daily();
+
+    // create jadwal
+    $schadule
+      ->call(function() use ($pdo) {
+        $create = new Simpus\Services\JadwalKia($pdo);
+        $success = $create->autoCreatJadwal(date('m'), date('Y'));
+
+        $error = false;
+        if (! $success) {
+          $error['server'] = 'gagal menyimpan data / data sudah tersedia';
+        }
+
+        return array (
+          'status'  => $success ? 'ok' : 'not save',
+          'code'    => 200,
+          'data'    => array(),
+          'error'   => $error
+        );
+      })
+      ->eventName('jadwal imunisasi')
+      ->mountly();
+    // cron log maintance
+    $schadule
+      ->call(function() use ($pdo) {
+        System\Database\MyQuery::conn('cron_log', $pdo)
+          ->delete()
+          ->equal('output', '[]')
+          ->execute();
+      })
+      ->eventName('cron log maintance')
+      ->mountly();
+
+    // others schadule
   }
 }

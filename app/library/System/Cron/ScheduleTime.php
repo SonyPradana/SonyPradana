@@ -13,7 +13,7 @@ class ScheduleTime
   private $event_name = 'animus';
 
 
-  public function __construct($call_back, array $params, $time)
+  public function __construct($call_back, $params, $time)
   {
     $this->call_back = $call_back;
     $this->params = $params;
@@ -46,6 +46,7 @@ class ScheduleTime
         // stopwatch
         $watch_start = microtime(true);
 
+        // TODO: more call back support
         $out_put = call_user_func($this->call_back, $this->params) ?? [];
 
         // stopwatch
@@ -59,9 +60,22 @@ class ScheduleTime
           'status'          => $out_put['code'] ?? 200,
           'output'          => json_encode($out_put),
         ]);
+
         $this->log->cread();
       }
     }
+  }
+
+  public function justInTime()
+  {
+    return $this->exect([
+      [
+        'D' => date('D', $this->time),
+        'd' => date('d', $this->time),
+        'h' => date('H', $this->time),
+        'm' => date('i', $this->time)
+      ]
+    ]);
   }
 
   public function everyTenMinute()
@@ -100,7 +114,7 @@ class ScheduleTime
   public function everyTwoHour()
   {
 
-    $thisDay = date("d");
+    $thisDay = date("d", $this->time);
     $hourly = []; // from 00.00 to 23.00 (12 time)
     for ($i=0; $i < 24; $i++) {
       if ($i % 2 == 0) {
@@ -119,12 +133,12 @@ class ScheduleTime
   {
     return $this->exect([
       [
-        'd' => date('d'),
+        'd' => date('d', $this->time),
         'h' => 0,
         'm' => 0,
       ],
       [
-        'd' => date('d'),
+        'd' => date('d', $this->time),
         'h' => 12,
         'm' => 0,
       ]
@@ -133,11 +147,10 @@ class ScheduleTime
 
   public function hourly()
   {
-    $thisDay = date("d");
     $hourly = []; // from 00.00 to 23.00 (24 time)
     for ($i=0; $i < 24; $i++) {
       $hourly[] = [
-        'd' => $thisDay,
+        'd' => date("d", $this->time),
         'h' => $i,
         'm' => 0
       ];
@@ -150,7 +163,7 @@ class ScheduleTime
   {
     return $this->exect([
       [
-        'd' => date('d'),
+        'd' => date('d', $this->time),
         'h' => $hour24,
         'm' => 0
       ]
@@ -181,7 +194,7 @@ class ScheduleTime
     return $this->exect([
       [
         'D' => "Sun",
-        'd' => date('d'),
+        'd' => date('d', $this->time),
         'h' => 0,
         'm' => 0
       ],

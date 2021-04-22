@@ -11,8 +11,9 @@ class Schadule
     $this->time = $time ?? time();
   }
 
-  public function call($call_back, array $params = [])
+  public function call($call_back, $params = [])
   {
+    // TODO: collact all funtion, and run in the end
     return new ScheduleTime($call_back, $params, $this->time);
   }
 }
