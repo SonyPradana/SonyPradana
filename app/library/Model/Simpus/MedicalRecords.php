@@ -5,6 +5,7 @@ namespace Model\Simpus;
 use Simpus\Helper\StringValidation;
 use System\Database\MyModel;
 use System\Database\MyPDO;
+use System\Database\MyQuery;
 
 class MedicalRecords extends MyModel
 {
@@ -401,17 +402,12 @@ class MedicalRecords extends MyModel
    */
   public function getColumnSupport()
   {
-    $this->PDO->query(
-      "SELECT
-        COLUMN_NAME
-      FROM
-        INFORMATION_SCHEMA.COLUMNS
-      WHERE
-        TABLE_SCHEMA = :dbs AND TABLE_NAME = :table"
-    );
-    $this->PDO->bind(':table', 'data_rm');
-    $this->PDO->bind(':dbs', DB_NAME);
-    $result = $this->PDO->resultset();
+    $result = MyQuery::conn("COLUMNS", MyPDO::conn("INFORMATION_SCHEMA"))
+      ->select()
+      ->equal("TABLE_SCHEMA", DB_NAME)
+      ->equal("TABLE_NAME", 'data_rm')
+      ->all();
+
     return array_column($result, 'COLUMN_NAME') ?? array();
   }
 }
