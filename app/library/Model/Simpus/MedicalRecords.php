@@ -218,7 +218,7 @@ class MedicalRecords extends MyModel
    */
   public function filtersAddAlamat(string $val)
   {
-    $this->_addresses['addresses']['filters'][] = array (
+    $this->_FILTERS[] = array (
       'id'      => rand(1, 10),
       'param'   => 'alamat',
       'value'   => strtolower($val),
@@ -226,7 +226,36 @@ class MedicalRecords extends MyModel
       'type'    => \PDO::PARAM_STR
     );
 
-    $this->_GROUP_FILTER = $this->_addresses;
+    return $this;
+  }
+
+  public function filtersByNik(string $nik)
+  {
+    if ($nik != '') {
+      $this->_FILTERS[] = array (
+        'id'      => rand(1, 10),
+        'param'   => 'nik',
+        'value'   => $nik,
+        'option'  => $this->_options['equal'],
+        'type'    => \PDO::PARAM_STR
+      );
+    }
+
+    return $this;
+  }
+
+  public function filtersByJaminan(string $nomor_jaminan)
+  {
+    if ($nomor_jaminan != '') {
+      $this->_FILTERS[] = array (
+        'id'      => rand(1, 10),
+        'param'   => 'nomor_jaminan',
+        'value'   => $nomor_jaminan,
+        'option'  => $this->_options['equal'],
+        'type'    => \PDO::PARAM_STR
+      );
+    }
+
     return $this;
   }
 
@@ -291,6 +320,27 @@ class MedicalRecords extends MyModel
   public function __construct(MyPDO $PDO = null)
   {
     $this->_TABELS[]  = 'data_rm';
+    $this->_COLUMNS = [
+      'data_rm.id as id',
+      'data_rm.nomor_rm',
+			'data_rm.data_dibuat',
+			'data_rm.nama',
+			'data_rm.tanggal_lahir',
+			'data_rm.alamat',
+			'data_rm.nomor_rt',
+			'data_rm.nomor_rw',
+			'data_rm.nama_kk',
+			'data_rm.nomor_rm_kk',
+			'data_rm.status',
+      'data_personal.id as personal_id',
+      'data_personal.nik as nik',
+      'data_personal.nomor_jaminan as nomor_jaminan',
+    ];
+    $this->_COSTUME_JOIN = "
+        LEFT JOIN table_relation ON table_relation.time_stamp = data_rm.data_dibuat
+        LEFT JOIN data_personal ON data_personal.hash_id = table_relation.id_hash
+      ";
+
     $this->PDO = $PDO ?? MyPDO::getInstance();
   }
 
@@ -303,16 +353,16 @@ class MedicalRecords extends MyModel
   {
     $whereStantment = $this->grupQueryFilters( $this->mergeFilters() );
     $whereStantment = $whereStantment == '' ? '' : "WHERE $whereStantment";
+    $join =  $this->_COSTUME_JOIN;
     $this->PDO->query(
       "SELECT
-        COUNT(id) as total
+        COUNT(data_rm.id) as total
       FROM
         `data_rm`
+      $join
       $whereStantment
     ");
     $this->bindingFilters();
-    // var_dump($whereStantment);
-    // exit;
 
     return $this->PDO->single()['total'] ?? 0;
   }
