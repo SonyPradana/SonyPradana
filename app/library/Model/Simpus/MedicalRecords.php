@@ -353,13 +353,11 @@ class MedicalRecords extends MyModel
   {
     $whereStantment = $this->grupQueryFilters( $this->mergeFilters() );
     $whereStantment = $whereStantment == '' ? '' : "WHERE $whereStantment";
-    $join =  $this->_COSTUME_JOIN;
     $this->PDO->query(
       "SELECT
-        COUNT(data_rm.id) as total
+        COUNT(id) as total
       FROM
         `data_rm`
-      $join
       $whereStantment
     ");
     $this->bindingFilters();
