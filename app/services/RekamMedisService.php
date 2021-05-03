@@ -133,8 +133,9 @@ class RekamMedisService extends Service
    * @param array $param search querys
    * @return array list data rm yang sesuai query pencarian
    */
-  public function search(array $param): array
+  public function search(array $request): array
   {
+    // TODO: singgle searach nomor_rm and (nik and bpjs)
     // vallidation
     $validation = new GUMP('id');
     $validation->validation_rules(array (
@@ -145,8 +146,11 @@ class RekamMedisService extends Service
       'no-rw-search' => 'numeric|max_len,2',
       'nama-kk-search' => 'alpha_space|max_len,50',
       'nomor-rm-kk-search' => 'numeric|max_len,6',
+      // personal data
+      'nik' => 'numeric|min_len,16|max_len,16',
+      'nomor_jaminan' => 'numeric|min_len,8|max_len,13',
     ));
-    $validation->run($param);
+    $validation->run($request);
     if ($validation->errors()) {
       return array (
         'code'    => 200,
@@ -157,21 +161,24 @@ class RekamMedisService extends Service
     }
 
     // ambil configurasi
-    $sort       = $param['sort'] ?? 'nomor_rm';
-    $order      = $param['order'] ?? 'DESC';
-    $page       = $param['page'] ?? 1;
+    $sort       = $request['sort'] ?? 'nomor_rm';
+    $order      = $request['order'] ?? 'DESC';
+    $page       = $request['page'] ?? 1;
     $max_page   = 1;
     $limit      = 10;
 
     // ambil search parameter
-    $main_search        = $param['main-search'] ?? '';
-    $nomor_rm_search    = $param['nomor-rm-search'] ?? '';
-    $alamat_search      = $param['alamat-search'] ?? '';
-    $no_rt_search       = $param['no-rt-search'] ?? '';
-    $no_rw_search       = $param['no-rw-search'] ?? '';
-    $nama_kk_search     = $param['nama-kk-search'] ?? '';
-    $no_rm_kk_search    = $param['no-rm-kk-search'] ?? '';
-    $strict_search      = isset( $param['strict-search'] ) ? true : false;
+    $main_search        = $request['main-search'] ?? '';
+    $nomor_rm_search    = $request['nomor-rm-search'] ?? '';
+    $alamat_search      = $request['alamat-search'] ?? '';
+    $no_rt_search       = $request['no-rt-search'] ?? '';
+    $no_rw_search       = $request['no-rw-search'] ?? '';
+    $nama_kk_search     = $request['nama-kk-search'] ?? '';
+    $no_rm_kk_search    = $request['no-rm-kk-search'] ?? '';
+    $strict_search      = isset( $request['strict-search'] ) ? true : false;
+    // search in personal data
+    $nik                = $request['nik'] ?? '';
+    $nomor_jaminan      = $request['nomor-jaminan'] ?? '';
 
     // core
     $data = new MedicalRecords( $this->PDO );
@@ -181,7 +188,6 @@ class RekamMedisService extends Service
       ->sortUsing($sort)
       ->orderUsing($order)
       ->limitView($limit)
-
     // query data
       ->filterByNama($main_search)
       ->filterByNomorRm($nomor_rm_search)
@@ -190,7 +196,10 @@ class RekamMedisService extends Service
       ->filterByRw($no_rw_search)
       ->filterByNamaKK($nama_kk_search)
       ->filterByNomorRmKK($no_rm_kk_search)
-      ->setStrictSearch($strict_search);
+      ->setStrictSearch($strict_search)
+    // personal data
+      ->filtersByNik($nik)
+      ->filtersByJaminan($nomor_jaminan);
 
     // setup page
     $max_page = $data->maxPage();
@@ -198,7 +207,7 @@ class RekamMedisService extends Service
     $data->currentPage($page);
 
     // excute query
-    $result =  $data->result();
+    $result = $data->result();
 
     return array(
       'code'      => '200',
@@ -312,7 +321,7 @@ class RekamMedisService extends Service
     );
   }
 
-  private function parseRangeTime(string $time)
+   private function parseRangeTime(string $time)
   {
     $min_max = explode('-', $time);
 

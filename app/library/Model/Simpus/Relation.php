@@ -33,4 +33,20 @@ class Relation
       ->equal($param, $val)
       ->all();
   }
+
+  public static function has_hashId($hash_id)
+  {
+    return MyQuery::conn('table_relation')
+      ->select(['id_hash'])
+      ->equal('id_hash', $hash_id)
+      ->single();
+  }
+
+  public static function has_timestamp($time_stamp)
+  {
+    return MyQuery::conn('table_relation')
+      ->select(['time_stamp'])
+      ->equal('time_stamp', $time_stamp)
+      ->single();
+  }
 }

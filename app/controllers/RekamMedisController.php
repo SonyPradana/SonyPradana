@@ -1,17 +1,40 @@
 <?php
 
-use Model\Simpus\{MedicalRecord, MedicalRecords};
+use Convert\Converter\ConvertCode;
+use Model\Simpus\{MedicalRecord, MedicalRecords, PersonalRecord, Relation};
 use Simpus\Auth\Log;
 use Simpus\Apps\Controller;
+use System\Database\MyPDO;
 
 class RekamMedisController extends Controller
 {
+  private $PDO = null;
+  private $validation_rule = array (
+    'nomor_rm' => 'required|numeric|max_len,6',
+    'nama' => 'required|alpha_space|min_len,4|max_len,32',
+    'tgl_lahir' => 'date,Y-m-d',
+    'alamat' => 'alpha_space|max_len,20',
+    'nomor_rt' => 'numeric|max_len,2',
+    'nomor_rw' => 'numeric|max_len,2',
+    'nama_kk' => 'alpha_space|min_len,4|max_len,32',
+    'nomor_rm_kk' => 'numeric|max_len,6',
+    // personal data
+    'nik' => 'numeric|min_len,16|max_len,16',
+    'nomor_jaminan' => 'numeric|min_len,8|max_len,13',
+  );
+  private $filter_rule = array (
+    'nama' => 'trim|htmlencode',
+    'alamat' => 'trim|htmlencode',
+    'nama_kk' => 'trim|htmlencode'
+  );
 
   public function __construct()
   {
     if (isset($_GET['active_menu'])) {
       $_SESSION['active_menu'] = MENU_MEDREC;
     }
+
+    $this->PDO = MyPDO::getInstance();
     //  WARNING:    fungsi ini adalah funsi authrization, wajib ada
 
     // call_user_func_array($this->getMiddleware()['before'], []);
@@ -85,100 +108,105 @@ class RekamMedisController extends Controller
     $msg = ["show" => false, "type" => 'info', "content" => 'oke'];
     $error = array();
 
-    // ambil id dari url jika tidak ada akes ditolak
+    // validasi data
+    $validation = new GUMP('id');
+    $validation->validation_rules($this->validation_rule);
+    $validation->filter_rules($this->filter_rule);
+    $validation->run($_POST);
+    $error = $validation->get_errors_array();
+
+    // ambil data rm menggunakn  id
     if (isset($_GET['document_id'])) {
-      // ambil data rm menggunakn  id
       $id = $_GET['document_id'];
       // default property
       $status_kk = $status_double = false;
+      // load data
+      $edit_rm = MedicalRecord::withId($id, $this->PDO);
 
-      // validasi data
-      $validation = new GUMP('id');
-      $validation->validation_rules(array (
-          'nomor_rm' => 'required|numeric|max_len,6',
-          'nama' => 'required|alpha_space|min_len,4|max_len,32',
-          'tgl_lahir' => 'date,Y-m-d',
-          'alamat' => 'alpha_space|max_len,20',
-          'nomor_rt' => 'numeric|max_len,2',
-          'nomor_rw' => 'numeric|max_len,2',
-          'nama_kk' => 'alpha_space|min_len,4|max_len,32',
-          'nomor_rm_kk' => 'numeric|max_len,6',
-      ));
-      $validation->filter_rules(array (
-          'nama' => 'trim|htmlencode',
-          'alamat' => 'trim|htmlencode',
-          'nama_kk' => 'trim|htmlencode'
-      ));
-      $validation->run($_POST);
-      $error = $validation->get_errors_array();
+      //  menjegah duplikasi data saaat merefresh page
+      $last_data = $_SESSION['last_data'] ?? [];
 
-      if (! $validation->errors()) {
-        //  menjegah duplikasi data saaat merefresh page
-        $last_data = $_SESSION['last_data'] ?? [];
+      if (!$validation->errors() && $last_data != $_POST) {
 
-        // kita anggap semua field form sudah benar
-        $new_rm = MedicalRecord::withId($id);
-        $new_rm
-          ->setNomorRM( $_POST['nomor_rm'] )
-          ->setDataDibuat( time() )
-          ->setNama( $_POST['nama'] )
-          ->setTanggalLahir( $_POST['tgl_lahir'] )
-          ->setAlamat( $_POST['alamat'] )
-          ->setNomorRt( $_POST['nomor_rt'] )
-          ->setNomorRw( $_POST['nomor_rw'] )
-          // opsonal
-          ->setNamaKK( $_POST['nama_kk'] )
-          ->setNomorRM_KK( $_POST['nomor_rm_kk'] );
+        // update data rm
+        $edit_rm->convertFromArray($_POST);
 
         //simpan data
-        $simpan = $new_rm->save();
-        if ($simpan && $last_data != $_POST) {
+        if ($edit_rm->save()) {
+          $time = $edit_rm->getDataDibuat();
+          $hash_id = ConvertCode::ConvertToCode($time);
+
+          // cek punya table relation atau tidak
+          if (Relation::has_timestamp($time)) {
+            // update pernonal data
+            $update_bio = PersonalRecord::whereHashId($hash_id, $this->PDO)
+              ->convertFromArray($_POST)
+              ->setDataDiupdate(time());
+
+            if ($update_bio->isValid()) {
+              $update_bio->update();
+            }
+
+          } else {
+            // create new personal data
+            $new_bio = new PersonalRecord($this->PDO);
+            $new_bio
+              ->convertFromArray($_POST)
+              ->setHashId($hash_id)
+              ->setDataDibuat($time);
+
+            if ($new_bio->isValid()) {
+              Relation::creat($hash_id, $time);
+              $new_bio->create();
+            }
+          }
+
           $msg = ["show" => true, "type" => 'success', "content" => 'berhasil diupdate'];
           $_SESSION['last_data'] = $_POST;
+
+          // user log
+          $log = new Log( $this->getMiddleware()['auth']['user_name'] );
+          $log->set_event_type('med-rec');
+          $log->save( $edit_rm->getLastQuery() );
         } else {
           $msg = ["show" => true, "type" => 'danger', "content" => 'gagal disimpan'];
         }
-
-        // user log
-        $log = new Log( $this->getMiddleware()['auth']['user_name'] );
-        $log->set_event_type('med-rec');
-        $log->save( $new_rm->getLastQuery() );
-
       } elseif (empty($_POST)) {
         $error = array();
+      } elseif (isset($_POST['submit'])) {
+        $msg = ["show" => true, "type" => 'danger', "content" => 'tidak ada perubahan data'];
       }
 
       // memuat data dari data base
-      $load_rm = MedicalRecord::withId($id);
-      // persipan data untuk ditampilkan
-      $nomorRM      = $load_rm->getNomorRM();
-      $nama         = $load_rm->getNama();
-      $tanggalLahir = $load_rm->getTangalLahir();
-      $alamat       = $load_rm->getAlamat();
-      $nomorRt      = $load_rm->getNomorRt();
-      $nomorRw      = $load_rm->getNomorRw();
-      $namaKK       = $load_rm->getNamaKK();
-      $nomorRM_KK   = $load_rm->getNomorRM_KK();
-      // cek status kk
-      if ($nama === $namaKK) {
-        $status_kk = true;
-      }
-      // cari rm yang sama
-      $cari_rm = new MedicalRecords();
-      $cari_rm->filterByNomorRm($nomorRM);
-      $cari_rm->forceLimitView(2);
-      if ($cari_rm->maxData() > 1) {
-        $status_double = true;
-      }
+      $nomorRM      = $edit_rm->getNomorRM();
+      $nama         = $edit_rm->getNama();
+      $tanggalLahir = $edit_rm->getTangalLahir();
+      $alamat       = $edit_rm->getAlamat();
+      $nomorRt      = $edit_rm->getNomorRt();
+      $nomorRw      = $edit_rm->getNomorRw();
+      $namaKK       = $edit_rm->getNamaKK();
+      $nomorRM_KK   = $edit_rm->getNomorRM_KK();
+
       // cek data rm terdaftar atau tidak
-      if ($load_rm->cekAxis() == false) {
-        echo 'acces deny!!!';
-        header('HTTP/1.1 403 Forbidden');
-        exit;
+      if ($edit_rm->cekAxis() == false) {
+        DefaultController::page_403();
       }
+
+      // personal data
+      $hash_id      = ConvertCode::ConvertToCode($edit_rm->getDataDibuat());
+      $biodata      = PersonalRecord::whereHashId($hash_id, $this->PDO);
+
+      // cek status kk
+      $status_kk = $nama === $namaKK ? true : false;
+      // cari rm yang sama
+      $cari_rm = new MedicalRecords($this->PDO);
+      $cari_rm
+        ->filterByNomorRm($nomorRM)
+        ->forceLimitView(2);
+      $status_double = $cari_rm->maxData() > 1 ? true : false;
+
     } else {
-      echo 'acces deny!!!';
-      exit;
+      DefaultController::page_403();
     }
 
     return $this->view('rekam-medis/edit', [
@@ -204,7 +232,9 @@ class RekamMedisController extends Controller
         "nomor_rt"          => $nomorRt,
         "nomor_rw"          => $nomorRw,
         "nama_kk"           => $namaKK,
-        "nomor_rm_kk"       => $nomorRM_KK
+        "nomor_rm_kk"       => $nomorRM_KK,
+        "nik"               => $biodata->nik(),
+        "nomor_jaminan"     => $biodata->nomor_jaminan(),
       ],
       'error' => $error,
       "message" => [
@@ -218,61 +248,45 @@ class RekamMedisController extends Controller
   public function new()
   {
     $msg = ["show" => false, "type" => 'info', "content" => 'oke'];
-    // property
-    $nomor_rm    = $_POST['nomor_rm'] ?? '';
-    $nama        = $_POST['nama'] ?? '';
-    $tgl_lahir   = $_POST['tgl_lahir'] ?? '';
-    $alamat      = $_POST['alamat'] ?? '';
-    $nomor_rt    = $_POST['nomor_rt'] ?? '';
-    $nomor_rw    = $_POST['nomor_rw'] ?? '';
-    $nama_kk     = $_POST['nama_kk'] ?? '';
-    $nomor_rm_kk = $_POST['nomor_rm_kk'] ?? '';
-
     // validasi data
     $validation = new GUMP('id');
-    $validation->validation_rules(array (
-      'nomor_rm' => 'required|numeric',
-      'nama' => 'required|alpha_space|min_len,4|max_len,32',
-      'tgl_lahir' => 'date,Y-m-d',
-      'alamat' => 'alpha_space|max_len,20',
-      'nomor_rt' => 'numeric|max_len,2',
-      'nomor_rw' => 'numeric|max_len,2',
-      'nama_kk' => 'alpha_space|min_len,4|max_len,32',
-      'nomor_rm_kk' => 'numeric',
-    ));
-    $validation->filter_rules(array (
-      'nama' => 'trim|htmlencode',
-      'alamat' => 'trim|htmlencode',
-      'nama_kk' => 'trim|htmlencode'
-    ));
+    $validation->validation_rules($this->validation_rule);
+    $validation->filter_rules($this->filter_rule);
     $validation->run($_POST);
     $error = $validation->get_errors_array();
 
-    if (! $validation->errors()) {
-      // menjegah duplikasi data saat form direfresh
-      $last_data = $_SESSION['last_data'] ?? [];
+    // menjegah duplikasi data saat form direfresh
+    $last_data = $_SESSION['last_data'] ?? [];
 
-      // kita anggap semua field form sudah benar
-      $new_rm = new MedicalRecord();
+    if (!$validation->errors() && $last_data != $_POST) {
+
+      $time = time();
+      $hash_id = ConvertCode::ConvertToCode($time);
+
+      // simpan data_rm
+      $new_rm = new MedicalRecord($this->PDO);
       $new_rm
-        ->setNomorRM($nomor_rm)
-        ->setDataDibuat(time())
-        ->setNama($nama)
-        ->setTanggalLahir($tgl_lahir)
-        ->setAlamat($alamat)
-        ->setNomorRt($nomor_rt)
-        ->setNomorRw($nomor_rw)
-        ->setNamaKK($nama_kk)
-        ->setNomorRM_KK($nomor_rm_kk);
+        ->convertFromArray($_POST)
+        ->setDataDibuat($time);
 
       //simpan data
-      $simpan = $new_rm->insertNewOne();
-      if ($simpan && $last_data != $_POST) {
+      if ($new_rm->insertNewOne()) {
+
+        // simpan data_personal
+        $new_bio = new PersonalRecord($this->PDO);
+        $new_bio
+          ->convertFromArray($_POST)
+          ->setHashId($hash_id)
+          ->setDataDibuat($time);
+
+        if ($new_bio->isValid()) {
+          Relation::creat($hash_id, $time);
+          $new_bio->create();
+        }
+
         $msg = ["show" => true, "type" => 'success', "content" => 'berhasil disimpan'];
         $_SESSION['last_data'] = $_POST;
         $_POST = [];
-        $nomor_rm = $_POST['nomor_rm'] ?? '';
-        $nama = $tgl_lahir = $alamat = $nomor_rt = $nomor_rw = $nama_kk = $nomor_rm_kk = null;
       } else {
         $msg = ["show" => true, "type" => 'danger', "content" => 'Gagal disimpan'];
       }
@@ -294,14 +308,16 @@ class RekamMedisController extends Controller
         "header_menu"   => MENU_MEDREC
       ],
       "contents" => [
-        "nomor_rm"      => $nomor_rm,
-        "nama"          => $nama,
-        "tgl_lahir"     => $tgl_lahir,
-        "alamat"        => $alamat,
-        "nomor_rt"      => $nomor_rt,
-        "nomor_rw"      => $nomor_rw,
-        "nama_kk"       => $nama_kk,
-        "nomor_rm_kk"   => $nomor_rm_kk,
+        "nomor_rm"      => $_POST['nomor_rm'] ?? '',
+        "nama"          => $_POST['nama'] ?? '',
+        "tgl_lahir"     => $_POST['tgl_lahir'] ?? '',
+        "alamat"        => $_POST['alamat'] ?? '',
+        "nomor_rt"      => $_POST['nomor_rt'] ?? '',
+        "nomor_rw"      => $_POST['nomor_rw'] ?? '',
+        "nama_kk"       => $_POST['nama_kk'] ?? '',
+        "nomor_rm_kk"   => $_POST['nomor_rm_kk'] ?? '',
+        'nik'           => $_POST['nik'] ?? '',
+        'nomor_jaminan' => $_POST['nomor_jaminan'] ?? '',
       ],
       'error' => $error,
       "message" => [
@@ -325,6 +341,8 @@ class RekamMedisController extends Controller
     $no_rm_kk_search = $_GET['no-rm-kk-search'] ?? '';
     $strict_search   = isset( $_GET['strict-search'] ) ? true : false;
     $strict_search   = empty($_GET) ? true : $strict_search;
+    $nik             = $_GET['nik'] ?? '';
+    $nomor_jaminan  = $_GET['nomor_jaminan'] ?? '';
 
     return $this->view('rekam-medis/search', [
       "auth"     => $this->getMiddleware()['auth'],
@@ -346,7 +364,9 @@ class RekamMedisController extends Controller
         "nomor_rw"      => $no_rw_search,
         "nama_kk"       => $nama_kk_search,
         "nomor_rm_kk"   => $no_rm_kk_search,
-        "strict"        => $strict_search
+        "strict"        => $strict_search,
+        'nik'           => $nik,
+        'nomor_jaminan' => $nomor_jaminan,
       ],
       "message" => [
         "show"      => $msg['show'],
@@ -367,19 +387,17 @@ class RekamMedisController extends Controller
     $page = is_numeric($page) ? $page : 1;
 
     // ambil data
-    $show_data = new MedicalRecords();
-    $show_data
+    $data_rm = new MedicalRecords();
+    $data_rm
       ->sortUsing($sort)
       ->orderUsing($order)
       ->limitView(25);
 
-    $max_page = $show_data->maxPage();
+    $max_page = $data_rm->maxPage();
     $page = $page > $max_page ? $max_page : $page;
-    $show_data->currentPage($page);
+    $data_rm->currentPage($page);
 
-    $get_data = $show_data->result();
-
-    return $this->view('rekam-medis/view',[
+    return $this->view('rekam-medis/view', [
       "auth"      => $this->getMiddleware()['auth'],
       "DNT"       => $this->getMiddleware()['DNT'],
       "meta"      => [
@@ -394,7 +412,7 @@ class RekamMedisController extends Controller
       "contents"  => [
         "page"      => (int) $page,
         "max_page"  => (int) $max_page,
-        "data_rm"   => $get_data
+        "data_rm"   => $data_rm->result()
       ],
       "message"   => [
         "show"      => $msg['show'],

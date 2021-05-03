@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support cron schaduler command (one cron to all job schaduller)
 - MyModel support costume join
 - MyQuery insert class supoort multy value single function
+- Medical Record add NIK and Nomor jaminan (biodata)
+- Medical Record CRUD support biodata
 
 ### Changed
 - Register command now in CLI.php (class) not in command.config.php (array)

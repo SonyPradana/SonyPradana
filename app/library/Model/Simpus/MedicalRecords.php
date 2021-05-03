@@ -24,12 +24,6 @@ class MedicalRecords extends MyModel
     )
   );
 
-  private $_addresses = [
-    "addresses" => [
-      "filters" => [],
-      "strict" => false
-    ]
-  ];
   private $_dataPerPage = 10;
   private $_orderUsing = MyModel::ORDER_ASC;
   private $_orderColumn = 'id';
@@ -352,14 +346,18 @@ class MedicalRecords extends MyModel
   public function maxData(): int
   {
     $whereStantment = $this->grupQueryFilters( $this->mergeFilters() );
+    $join = $whereStantment == '' ? '' : $this->_COSTUME_JOIN;
     $whereStantment = $whereStantment == '' ? '' : "WHERE $whereStantment";
+
     $this->PDO->query(
       "SELECT
-        COUNT(id) as total
+        COUNT(`data_rm`.`id`) as total
       FROM
         `data_rm`
+      $join
       $whereStantment
     ");
+
     $this->bindingFilters();
 
     return $this->PDO->single()['total'] ?? 0;
