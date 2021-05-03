@@ -7,9 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Support cron schaduler command (one cron to all job schaduller)
+- MyModel support costume join
+- MyQuery insert, update class support multy value single function
 
 ### Changed
 - Register command now in CLI.php (class) not in command.config.php (array)
+
+### Fixed
+- var_dump in pruduction (Insert.php)
 
 ## [2.3.7] - 2021-03-05
 ### Added
