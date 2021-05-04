@@ -93,8 +93,7 @@
             <input class="textbox outline black rounded small block" type="text" name="no-rm-kk-search" id="input-no-rm-kk" placeholder="cari nomor rm kk" value="<?= $content->nomor_rm_kk ?>">
 
             <!-- biodata -->
-            <input class="textbox outline black rounded small block" type="text" name="nik" id="input-nik" placeholder="NIK" value="<?= $content->nik ?>" minlength="16" maxlength="16" inputmode="numeric" pattern="[0-9]*" >
-            <input class="textbox outline black rounded small block" type="text" name="nomor-jaminan" id="input-nomor-jaminan" placeholder="Nomor BPJS" value="<?= $content->nomor_jaminan ?>" minlength="8" maxlength="13" inputmode="numeric" pattern="[0-9]*" >
+            <input class="textbox outline black rounded small block" type="text" name="nik-jaminan" id="input-nik-jaminan" placeholder="NIK / BPJS" value="<?= $content->nik_jaminan ?>" minlength="8" maxlength="16" inputmode="numeric" pattern="[0-9]*" >
           </form>
         </div>
         <div class="box right">
@@ -148,7 +147,7 @@
       }
     })
 
-    //claer button
+    //clear button
     var btnBack = document.querySelector('#reset-btn');
     btnBack.onclick = function () {
       document.querySelector('#input-main-search').setAttribute('value', '');
@@ -159,6 +158,7 @@
       document.querySelector('#input-no-rw-search').setAttribute('value', '');
       document.querySelector('#input-nama-kk-search').setAttribute('value', '');
       document.querySelector('#input-no-rm-kk').setAttribute('value', '');
+      document.querySelector('#input-nik-jaminan').setAttribute('value', '');
     };
 
     window.addEventListener('load', () => {

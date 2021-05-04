@@ -1,5 +1,6 @@
 <?php
 
+use Helper\String\Str;
 use Model\Simpus\MedicalRecords;
 use Simpus\Apps\Service;
 use System\Database\MyPDO;
@@ -147,6 +148,7 @@ class RekamMedisService extends Service
       'nama-kk-search' => 'alpha_space|max_len,50',
       'nomor-rm-kk-search' => 'numeric|max_len,6',
       // personal data
+      'nik_jaminan' => 'numeric|min_len,8|max_len,16',
       'nik' => 'numeric|min_len,16|max_len,16',
       'nomor_jaminan' => 'numeric|min_len,8|max_len,13',
     ));
@@ -177,8 +179,19 @@ class RekamMedisService extends Service
     $no_rm_kk_search    = $request['no-rm-kk-search'] ?? '';
     $strict_search      = isset( $request['strict-search'] ) ? true : false;
     // search in personal data
+    $nik_jaminan        = $request['nik-jaminan'] ?? '';
     $nik                = $request['nik'] ?? '';
     $nomor_jaminan      = $request['nomor-jaminan'] ?? '';
+    // switcer
+    if ($nik == '' && $nomor_jaminan == '') {
+      if (strlen($nik_jaminan) == 16) {
+        $nik = $nik_jaminan;
+      } elseif(strlen($nomor_jaminan < 14)) {
+        $nomor_jaminan = $nik_jaminan;
+      }
+    }
+    // filter
+    $nomor_jaminan      = Str::fillText($nomor_jaminan, 13, 0);
 
     // core
     $data = new MedicalRecords( $this->PDO );

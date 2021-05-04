@@ -2,6 +2,7 @@
 
 namespace Model\Simpus;
 
+use Helper\String\Str;
 use System\Database\MyPDO;
 
 /**
@@ -160,12 +161,7 @@ class MedicalRecord
    */
   public function setNomorRM($val)
   {
-    $len = strlen($val);
-    $max = 6 - $len;
-    for ($i=0; $i < $max ; $i++) {
-      $val = 0 . $val;
-    }
-    $this->_nomorRM = (string) $val;
+    $this->_nomorRM = Str::fillText($val, 6, 0);
     return $this;
   }
 
@@ -248,12 +244,7 @@ class MedicalRecord
    */
   public function setNomorRM_KK($val)
   {
-    $len = strlen($val);
-    $max = 6 - $len;
-    for ($i=0; $i < $max ; $i++) {
-      $val = 0 . $val;
-    }
-    $this->_nomorRM_KK = $val;
+    $this->_nomorRM_KK = Str::fillText($val, 6, 0);
     return $this;
   }
 
@@ -372,6 +363,17 @@ class MedicalRecord
     );
   }
 
+  public function filter()
+  {
+    $this->_nomorRM     = Str::fillText($this->_nomorRM, 6, 0);
+    $this->_nomorRM_KK  = Str::fillText($this->_nomorRM_KK, 6, 0);
+    $this->_nama        = strtolower($this->_nama);
+    $this->_namaKK      = strtolower($this->_namaKK);
+    $this->_alamat      = strtolower($this->_alamat);
+
+    return $this;
+  }
+
   /**
    * refresh/ambil/pull semua data dari database, munggunakn id
    * @return boolean
@@ -461,7 +463,7 @@ class MedicalRecord
     // simpan query
     mysqli_query($link, $query);
     // bila berhasil return true
-    if (mysqli_affected_rows($link) > 0) {
+    if (mysqli_affected_rows($link) >= 0) {
       $this->_last_query = $query;
       return true;
     }

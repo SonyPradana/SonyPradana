@@ -124,7 +124,7 @@ class RekamMedisController extends Controller
       $edit_rm = MedicalRecord::withId($id, $this->PDO);
 
       //  menjegah duplikasi data saaat merefresh page
-      $last_data = $_SESSION['last_data'] ?? [];
+      $last_data = $_SESSION['last_data'] ?? ['fresh_array'];
 
       if (!$validation->errors() && $last_data != $_POST) {
 
@@ -141,7 +141,8 @@ class RekamMedisController extends Controller
             // update pernonal data
             $update_bio = PersonalRecord::whereHashId($hash_id, $this->PDO)
               ->convertFromArray($_POST)
-              ->setDataDiupdate(time());
+              ->setDataDiupdate(time())
+              ->filter();
 
             if ($update_bio->isValid()) {
               $update_bio->update();
@@ -153,7 +154,8 @@ class RekamMedisController extends Controller
             $new_bio
               ->convertFromArray($_POST)
               ->setHashId($hash_id)
-              ->setDataDibuat($time);
+              ->setDataDibuat($time)
+              ->filter();
 
             if ($new_bio->isValid()) {
               Relation::creat($hash_id, $time);
@@ -267,7 +269,8 @@ class RekamMedisController extends Controller
       $new_rm = new MedicalRecord($this->PDO);
       $new_rm
         ->convertFromArray($_POST)
-        ->setDataDibuat($time);
+        ->setDataDibuat($time)
+        ->filter();
 
       //simpan data
       if ($new_rm->insertNewOne()) {
@@ -277,7 +280,8 @@ class RekamMedisController extends Controller
         $new_bio
           ->convertFromArray($_POST)
           ->setHashId($hash_id)
-          ->setDataDibuat($time);
+          ->setDataDibuat($time)
+          ->filter();
 
         if ($new_bio->isValid()) {
           Relation::creat($hash_id, $time);
@@ -341,8 +345,7 @@ class RekamMedisController extends Controller
     $no_rm_kk_search = $_GET['no-rm-kk-search'] ?? '';
     $strict_search   = isset( $_GET['strict-search'] ) ? true : false;
     $strict_search   = empty($_GET) ? true : $strict_search;
-    $nik             = $_GET['nik'] ?? '';
-    $nomor_jaminan  = $_GET['nomor_jaminan'] ?? '';
+    $nik_jaminan     = $_GET['nik-jaminan'] ?? '';
 
     return $this->view('rekam-medis/search', [
       "auth"     => $this->getMiddleware()['auth'],
@@ -365,8 +368,7 @@ class RekamMedisController extends Controller
         "nama_kk"       => $nama_kk_search,
         "nomor_rm_kk"   => $no_rm_kk_search,
         "strict"        => $strict_search,
-        'nik'           => $nik,
-        'nomor_jaminan' => $nomor_jaminan,
+        'nik_jaminan'   => $nik_jaminan,
       ],
       "message" => [
         "show"      => $msg['show'],

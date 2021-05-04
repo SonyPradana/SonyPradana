@@ -2,6 +2,7 @@
 
 namespace Model\Simpus;
 
+use Helper\String\Str;
 use System\Database\MyPDO;
 use System\Database\MyQuery;
 
@@ -152,7 +153,6 @@ class PersonalRecord
     return $this;
   }
 
-
   public function convertFromArray(array $data)
   {
     $this->_id              = $data['id'] ?? '';
@@ -191,6 +191,12 @@ class PersonalRecord
   }
 
   // function
+
+  public function filter()
+  {
+    $this->_Nomor_jaminan = Str::fillText($this->_Nomor_jaminan, 13, 0);
+    return $this;
+  }
 
   public function create(): bool
   {

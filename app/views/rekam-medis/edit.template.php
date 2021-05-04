@@ -76,7 +76,7 @@
             </div>
 
             <input class="textbox outline black rounded small block" type="text" name="nama" id="input-nama" required placeholder="nama" value="<?= $content->nama ?>" maxlength="50" <?= $portal["DNT"] ? 'autocomplete="off"' : 'autocomplete="on"' ?>>
-            <input class="textbox outline black rounded small block" type="date" name="tgl_lahir" id="input-tgl-lahir" value="<?= $content->tanggal_lahir ?>">
+            <input class="textbox outline black rounded small block" type="date" name="tanggal_lahir" id="input-tgl-lahir" value="<?= $content->tanggal_lahir ?>">
             <input class="textbox outline black rounded small block" type="text" list="list-desa" name="alamat" id="input-alamat" placeholder="alamat tanpa rt/rw" value="<?= $content->alamat?>" <?= $portal["DNT"] ? 'autocomplete="off"' : 'autocomplete="on"' ?>>
             <div class="grub-control horizontal">
               <input class="textbox outline black rounded small" type="text" name="nomor_rt" id="input-nomor-rt" placeholder="nomor rt" max="2" value="<?= $content->nomor_rt ?>" inputmode="numeric" pattern="[0-9]*">
