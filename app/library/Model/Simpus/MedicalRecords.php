@@ -2,6 +2,7 @@
 
 namespace Model\Simpus;
 
+use Helper\String\Str;
 use Simpus\Helper\StringValidation;
 use System\Database\MyModel;
 use System\Database\MyPDO;
@@ -244,7 +245,7 @@ class MedicalRecords extends MyModel
       $this->_FILTERS[] = array (
         'id'      => rand(1, 10),
         'param'   => 'nomor_jaminan',
-        'value'   => $nomor_jaminan,
+        'value'   => Str::fillText($nomor_jaminan, 13, 0),
         'option'  => $this->_options['equal'],
         'type'    => \PDO::PARAM_STR
       );

@@ -1,6 +1,5 @@
 <?php
 
-use Helper\String\Str;
 use Model\Simpus\MedicalRecords;
 use Simpus\Apps\Service;
 use System\Database\MyPDO;
@@ -190,8 +189,6 @@ class RekamMedisService extends Service
         $nomor_jaminan = $nik_jaminan;
       }
     }
-    // filter
-    $nomor_jaminan      = Str::fillText($nomor_jaminan, 13, 0);
 
     // core
     $data = new MedicalRecords( $this->PDO );
