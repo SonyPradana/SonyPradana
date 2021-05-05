@@ -170,7 +170,9 @@ abstract class MyModel
     // var_dump($where_statment);exit;
     foreach ($grup_fillters as $filter) {
       $query = $this->queryfilters($filter['filters'], $filter['strict']);
-      $where_statment[] = '(' . $query . ')';
+      if (!empty($query)) {
+        $where_statment[] = '(' . $query . ')';
+      }
     }
     return implode(" AND ", $where_statment);
   }
@@ -180,7 +182,7 @@ abstract class MyModel
     $querys   = [];
     // identitas
     foreach ($filters as $key => $val) {
-      if (isset($val['value']) && $val['value'] != '') {
+      if (isset($val['value']) && $val['value'] !== '') {
         $param  = $val['param'] ?? $key;
         $id     = $val['id'] ?? '';
         $bind   = $param . $id;
@@ -210,7 +212,7 @@ abstract class MyModel
     // binding from filter
     foreach ($this->mergeFilters() as $filters) {
       foreach ($filters['filters'] as $key => $val) {
-        if (isset( $val['value']) && $val['value'] != '') {
+        if (isset( $val['value']) && $val['value'] !== '') {
           $param = $key;
           if (isset($val['param'])) {
             $id = $val['id'] ?? '';

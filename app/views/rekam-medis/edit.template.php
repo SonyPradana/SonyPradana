@@ -65,6 +65,19 @@
           <?php endif; ?>
           <h1>Edit data Rekam Medis</h1>
           <form action="" method="post">
+
+            <div class="grub-control horizontal">
+              <span>Kode Wilayah:</span>
+              <label>
+                <input type="radio" id="input-dalam-wilayah" name="alamat_luar" value="0" tabindex="10" <?= $content->alamat_luar == false ? "checked" : "" ?>>
+                Dalam
+              </label>
+              <label>
+                <input type="radio" id="input-luar-wilayah" name="alamat_luar" value="1" tabindex="11" <?= $content->alamat_luar ? "checked" : "" ?>>
+                Luar
+              </label>
+            </div>
+
             <input class="textbox outline black rounded small block" type="text" name="nomor_rm" id="input-nomor-rm" required placeholder="nomor rekam medis" value="<?= $content->nomor_rm ?>" maxlength="6" inputmode="numeric" pattern="[0-9]*">
             <div class="input-information warning">
               <?php if( $content->status_double ) : ?>
@@ -86,7 +99,7 @@
               <p class="dusun"></p>
             </div>
             <div class="grub-control horizontal">
-              <input type="checkbox" name="tandai_sebagai_kk" id="input-mark-as-kk" tabindex="11" <?= $content->status_kk == true ? "checked" : ""?>>
+              <input type="checkbox" name="tandai_sebagai_kk" id="input-mark-as-kk" tabindex="12" <?= $content->status_kk == true ? "checked" : ""?>>
               <label for="input-mark-as-kk">Tandai sebagai kk</label>
             </div>
 
@@ -101,7 +114,7 @@
               <a href="javascript:void(0)" id="toogle-panel">tampilkan</a>
             </div>
             <input class="textbox outline black rounded small block" type="text" name="nik" id="input-nik" placeholder="NIK" value="<?= $content->nik ?>" minlength="16" maxlength="16" inputmode="numeric" pattern="[0-9]*" >
-            <input class="textbox outline black rounded small block" type="text" name="nomor_jaminan" id="input-nomor-jaminan" placeholder="Nomor BPJS" value="<?= $content->nomor_jaminan ?>" minlength="8" maxlength="13" inputmode="numeric" pattern="[0-9]*" >
+            <input class="textbox outline black rounded small block" type="text" name="nomor_jaminan" id="input-nomor-jaminan" placeholder="Nomor BPJS" value="<?= $content->nomor_jaminan ?>" minlength="7" maxlength="13" inputmode="numeric" pattern="[0-9]*" >
 
             <div class="grub-control horizontal">
               <button class="btn rounded small blue outline" type="submit" name="submit">Edit Data RM</button>

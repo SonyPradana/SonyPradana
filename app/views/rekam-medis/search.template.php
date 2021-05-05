@@ -80,6 +80,21 @@
               <label for="input-strict-search">Pencarian Mendalam</label>
             </div>
 
+            <!-- biodata -->
+            <input class="textbox outline black rounded small block" type="text" name="nik-jaminan" id="input-nik-jaminan" placeholder="NIK / BPJS" value="<?= $content->nik_jaminan ?>" minlength="8" maxlength="16" inputmode="numeric" pattern="[0-9]*" >
+
+            <!-- data rm -->
+            <div class="grub-control horizontal">
+              <span>Kode Wilayah:</span>
+              <label>
+                <input type="radio" id="input-dalam-wilayah" name="alamat-luar" value="0" tabindex="10" <?= $content->alamat_luar == false ? "checked" : "" ?>>
+                Dalam
+              </label>
+              <label>
+                <input type="radio" id="input-luar-wilayah" name="alamat-luar" value="1" tabindex="11" <?= $content->alamat_luar ? "checked" : "" ?>>
+                Luar
+              </label>
+            </div>
             <input class="textbox outline black rounded small block" type="text" name="nomor-rm-search" id="input-nomor-rm-seacrh" placeholder="cari nomor rm" value="<?= $content->nomor_rm ?>">
             <input class="textbox outline black rounded small block" type="date" name="tgl-search" id="input-tgl-search" data-date-format="DD MMMM YYYY" value="<?= (isset($_GET['tgl-search'])) ? $_GET['tgl-search'] : '' ?>">
             <input class="textbox outline black rounded small block" type="text" name="alamat-search" id="input-alamat-seacrh" placeholder="cari alamat" value="<?= $content->alamat ?>" <?= $portal["DNT"] ? 'autocomplete="off"' : 'autocomplete="on"' ?>>
@@ -91,9 +106,6 @@
             </div>
             <input class="textbox outline black rounded small block" type="text" name="nama-kk-search" id="input-nama-kk-search" placeholder="cari nama kk" value="<?= $content->nama_kk ?>" <?= $portal["DNT"] ? 'autocomplete="off"' : 'autocomplete="on"' ?>>
             <input class="textbox outline black rounded small block" type="text" name="no-rm-kk-search" id="input-no-rm-kk" placeholder="cari nomor rm kk" value="<?= $content->nomor_rm_kk ?>">
-
-            <!-- biodata -->
-            <input class="textbox outline black rounded small block" type="text" name="nik-jaminan" id="input-nik-jaminan" placeholder="NIK / BPJS" value="<?= $content->nik_jaminan ?>" minlength="8" maxlength="16" inputmode="numeric" pattern="[0-9]*" >
           </form>
         </div>
         <div class="box right">

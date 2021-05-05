@@ -94,6 +94,23 @@ class MedicalRecords extends MyModel
   }
 
   /**
+   * filter/search data rm sesuai code wilayah,
+   * true jika luar wilayah, false jika dalam wilayah
+   * @param bool $alamat_luar true dalam wilayah
+   */
+  public function filterByAlamatLuar(bool $alamat_luar = false)
+  {
+    $this->_FILTERS[] = array (
+      'id'      => rand(1, 10),
+      'param'   => 'alamat_luar',
+      'value'   => $alamat_luar ? 1 : 0,
+      'option'  => $this->_options['equal'],
+      'type'    => \PDO::PARAM_STR
+    );
+    return $this;
+  }
+
+  /**
    * filter/seacrh dengan alamat
    * @param string $val Alamat
    */
@@ -321,6 +338,7 @@ class MedicalRecords extends MyModel
 			'data_rm.data_dibuat',
 			'data_rm.nama',
 			'data_rm.tanggal_lahir',
+      'data_rm.alamat_luar',
 			'data_rm.alamat',
 			'data_rm.nomor_rt',
 			'data_rm.nomor_rw',

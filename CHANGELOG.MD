@@ -14,9 +14,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Register command now in CLI.php (class) not in command.config.php (array)
+- Cek nomor terahir menggunakan id dan nomor rm tertinggi
 
 ### Fixed
-- var_dump in pruduction (Insert.php)
+- Var_dump in pruduction (Insert.php)
+- Fix MyModel skip value = 0 (zero), php detect 0 if null
+- Fix MyModel return where statment to '()', if where statment null MyModel will not return the query
 
 ## [2.3.7] - 2021-04-16
 ### Added

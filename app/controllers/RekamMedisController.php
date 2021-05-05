@@ -13,6 +13,7 @@ class RekamMedisController extends Controller
     'nomor_rm' => 'required|numeric|max_len,6',
     'nama' => 'required|alpha_space|min_len,4|max_len,32',
     'tgl_lahir' => 'date,Y-m-d',
+    'alamat_luar' => 'numeric|max_len,1',
     'alamat' => 'alpha_space|max_len,20',
     'nomor_rt' => 'numeric|max_len,2',
     'nomor_rw' => 'numeric|max_len,2',
@@ -20,7 +21,7 @@ class RekamMedisController extends Controller
     'nomor_rm_kk' => 'numeric|max_len,6',
     // personal data
     'nik' => 'numeric|min_len,16|max_len,16',
-    'nomor_jaminan' => 'numeric|min_len,8|max_len,13',
+    'nomor_jaminan' => 'numeric|min_len,7|max_len,13',
   );
   private $filter_rule = array (
     'nama' => 'trim|htmlencode',
@@ -183,6 +184,7 @@ class RekamMedisController extends Controller
       $nomorRM      = $edit_rm->getNomorRM();
       $nama         = $edit_rm->getNama();
       $tanggalLahir = $edit_rm->getTangalLahir();
+      $alamat_luar  = $edit_rm->getAlamatLuar();
       $alamat       = $edit_rm->getAlamat();
       $nomorRt      = $edit_rm->getNomorRt();
       $nomorRw      = $edit_rm->getNomorRw();
@@ -230,6 +232,7 @@ class RekamMedisController extends Controller
         "nomor_rm"          => $nomorRM,
         "nama"              => $nama,
         "tanggal_lahir"     => $tanggalLahir,
+        'alamat_luar'       => $alamat_luar,
         "alamat"            => $alamat,
         "nomor_rt"          => $nomorRt,
         "nomor_rw"          => $nomorRw,
@@ -338,6 +341,7 @@ class RekamMedisController extends Controller
     // ambil parameter dari url
     $main_search     = $_GET['main-search'] ?? '';
     $nomor_rm_search = $_GET['nomor-rm-search'] ?? '';
+    $alamat_luar     = $_GET['alamat-luar'] ?? 0;
     $alamat_search   = $_GET['alamat-search'] ?? '';
     $no_rt_search    = $_GET['no-rt-search'] ?? '';
     $no_rw_search    = $_GET['no-rw-search'] ?? '';
@@ -362,6 +366,7 @@ class RekamMedisController extends Controller
       "contents" => [
         "nama"          => $main_search,
         "nomor_rm"      => $nomor_rm_search,
+        'alamat_luar'   => $alamat_luar == 0 ? false : true,
         "alamat"        => $alamat_search,
         "nomor_rt"      => $no_rt_search,
         "nomor_rw"      => $no_rw_search,

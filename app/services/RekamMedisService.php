@@ -98,6 +98,8 @@ class RekamMedisService extends Service
   public function nomor_rm_terahir(array $request): array
   {
     $upper_limit = $request['limit'] ?? '014000';
+    $alamat_luar = $request['alamat_luar'] ?? 0;
+    $alamat_luar = $alamat_luar == 1 ? true : false;
     // force nomor rm 6 digit
     for ($i = 0; $i < 6 - strlen($upper_limit); $i++) {
       $upper_limit = 0 . $upper_limit;
@@ -105,15 +107,16 @@ class RekamMedisService extends Service
     // ambil nomor rm terakhir
     $data = new MedicalRecords($this->PDO);
     $data
-      ->selectColumn(['nomor_rm'])
+      ->selectColumn(['nomor_rm', 'data_rm.id'])
+      ->filterByAlamatLuar($alamat_luar)
       ->forceLimitView(1)
-      ->orderUsing("DESC")
-      ->sortUsing('nomor_rm');
+      ->orderUsing("DESC")   
+      ->sortUsing('id');
 
     // last nomor rm by index
     $last_nomor_rm  = $data->result();
 
-    $data->costumeWhere("`nomor_rm` < :nrm", [[':nrm', $upper_limit]]);
+    $data->sortUsing('nomor_rm');
     // lat nomotr rm by upper limit
     $upper_nomor_rm = $data->result();
 
@@ -171,6 +174,7 @@ class RekamMedisService extends Service
     // ambil search parameter
     $main_search        = $request['main-search'] ?? '';
     $nomor_rm_search    = $request['nomor-rm-search'] ?? '';
+    $alamat_luar        = $request['alamat-luar'] ?? 0;
     $alamat_search      = $request['alamat-search'] ?? '';
     $no_rt_search       = $request['no-rt-search'] ?? '';
     $no_rw_search       = $request['no-rw-search'] ?? '';
@@ -189,6 +193,7 @@ class RekamMedisService extends Service
         $nomor_jaminan = $nik_jaminan;
       }
     }
+    $alamat_luar = $alamat_luar == 1 ? true : false;
 
     // core
     $data = new MedicalRecords( $this->PDO );
@@ -201,6 +206,7 @@ class RekamMedisService extends Service
     // query data
       ->filterByNama($main_search)
       ->filterByNomorRm($nomor_rm_search)
+      ->filterByAlamatLuar($alamat_luar)
       ->filterByAlamat($alamat_search)
       ->filterByRt($no_rt_search)
       ->filterByRw($no_rw_search)

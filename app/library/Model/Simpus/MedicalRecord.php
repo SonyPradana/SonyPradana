@@ -23,6 +23,8 @@ class MedicalRecord
   protected $_nama;
   /** @var string tanggal lahir 30-12-1990*/
   protected $_tanggalLahir;
+  /** @var int $_alamat_luar 0=dalam, 1=luar*/
+  protected $_alamat_luar = 0;
   /** @var string Almat tanpa rt rw */
   protected $_alamat;
   /** @var int Nomor Rt */
@@ -74,6 +76,15 @@ class MedicalRecord
   public function getTangalLahir()
   {
     return $this->_tanggalLahir;
+  }
+
+  /**
+   * get info alamat luar
+   * @return bool True jika luar wilayah
+   */
+  public function getAlamatLuar(): bool
+  {
+    return $this->_alamat_luar == 0 ? false : true;
   }
 
   /**
@@ -193,6 +204,20 @@ class MedicalRecord
   public function setTanggalLahir($val)
   {
     $this->_tanggalLahir = $val;
+    return $this;
+  }
+
+  /**
+   * set alamat luar wilayah
+   * false jika dalam, true jika luar
+   */
+  public function setAlamatLuar(bool $value)
+  {
+    if ($value) {
+      $this->_alamat_luar = 1;
+    } else {
+      $this->_alamat_luar = 0;
+    }
     return $this;
   }
 
@@ -333,6 +358,7 @@ class MedicalRecord
     $this->_dataDibuat   = $data['data_dibuat'] ?? $this->_dataDibuat;
     $this->_nama         = $data['nama'] ?? $this->_nama;
     $this->_tanggalLahir = $data['tanggal_lahir'] ?? $this->_tanggalLahir;
+    $this->_alamat_luar  = $data['alamat_luar'] ?? $this->_alamat_luar;
     $this->_alamat       = $data['alamat'] ?? $this->_alamat;
     $this->_nomorRt      = $data['nomor_rt'] ?? $this->_nomorRt;
     $this->_nomorRw      = $data['nomor_rw'] ?? $this->_nomorRw;
@@ -354,6 +380,7 @@ class MedicalRecord
       'data_dibuat'   => $this->_dataDibuat,
       'nama'          => $this->_nama,
       'tanggal_lahir' => $this->_tanggalLahir,
+      'alamat_luar'   => $this->_alamat_luar,
       'alamat'        => $this->_alamat,
       'nomor_rt'      => $this->_nomorRt,
       'nomor_rm'      => $this->_nomorRw,
@@ -435,6 +462,7 @@ class MedicalRecord
     $nama           = $this->_nama;
     $data_dibuat    = $this->_dataDibuat;
     $tanggal_lahir  = $this->_tanggalLahir;
+    $alamat_luar     = $this->_alamat_luar;
     $alamat         = $this->_alamat;
     $nomor_rt       = $this->_nomorRt;
     $nomor_rw       = $this->_nomorRw;
@@ -453,6 +481,7 @@ class MedicalRecord
         `data_dibuat` = '$data_dibuat',
         `nama` = '$nama',
         `tanggal_lahir` = '$tanggal_lahir',
+        `alamat_luar` = '$alamat_luar',
         `alamat` = '$alamat',
         `nomor_rt` = '$nomor_rt',
         `nomor_rw` = '$nomor_rw',
@@ -509,6 +538,7 @@ class MedicalRecord
     $data_dibuat    = (int) $this->_dataDibuat;
     $nama           = $this->_nama;
     $tanggal_lahir  = $this->_tanggalLahir;
+    $alamat_luar    = $this->_alamat_luar;
     $alamat         = $this->_alamat;
     $nomor_rt       = (int) $this->_nomorRt;
     $nomor_rw       = (int) $this->_nomorRw;
@@ -526,7 +556,7 @@ class MedicalRecord
       VALUES (
         '$id', '$nomor_rm',
         '$data_dibuat', '$nama',
-        '$tanggal_lahir', '$alamat',
+        '$tanggal_lahir', '$alamat_luar', '$alamat',
         '$nomor_rt', '$nomor_rw',
         '$nama_kk', '$nomor_rm_kk',
         '$status'
