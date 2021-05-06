@@ -13,33 +13,39 @@
             grid-template-columns: 1fr minmax(250px, 280px);
             grid-column-gap: 24px; grid-row-gap: 24px;
         }
-        main{ margin: 24px}
+        main{ margin: 24px; overflow: hidden;}
         article .about p{
             line-height: 1.5;
             font-size: 1.3rem;
             margin: 4px 0;
         }
 
-        .team-boxs .box.header{
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%
+        .team-boxs {
+          max-width: 100%;
         }
-        .team-boxs .box.cards{
-            width: auto; height: auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .team-card{margin: 0 16px; background-color: #fff;}
 
-        @media screen and (max-width: 600px) {
-            .container{grid-template-columns: 1fr}
+        .team-boxs .box.header{
+          text-align: center;
         }
-        @media screen and (max-width: 347px) {
-            .team-boxs .box.cards{flex-direction: column}
-            .team-card{margin: 16px 0}
+
+        .team-boxs .box.cards{
+            height: auto;
+            display: grid;
+            grid-template-columns: repeat(10, 200px);
+            column-gap: 16px;
+            row-gap: 16px;
+            padding: 8px;
+            overflow-x: auto;
+        }
+
+        .team-card{background-color: #fff;}
+
+        @media screen and (max-width: 767px) {
+          .team-boxs .box.cards {
+            grid-template-columns: repeat(1, 200px);
+            place-items: end center;
+          }
+            .container{grid-template-columns: 1fr}
         }
     </style>
 </head>
