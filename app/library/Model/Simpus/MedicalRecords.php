@@ -230,7 +230,7 @@ class MedicalRecords extends MyModel
    */
   public function filtersAddAlamat(string $val)
   {
-    $this->_FILTERS[] = array (
+    $this->_GROUP_FILTER['group-alamat']['filters'][] = array (
       'id'      => rand(1, 10),
       'param'   => 'alamat',
       'value'   => strtolower($val),
@@ -353,6 +353,11 @@ class MedicalRecords extends MyModel
         LEFT JOIN table_relation ON table_relation.time_stamp = data_rm.data_dibuat
         LEFT JOIN data_personal ON data_personal.hash_id = table_relation.id_hash
       ";
+
+    $this->_GROUP_FILTER['group-alamat'] = [
+      "filters" => [],
+      "strict" => false
+    ];
 
     $this->PDO = $PDO ?? MyPDO::getInstance();
   }

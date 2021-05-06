@@ -95,6 +95,11 @@ class RekamMedisService extends Service
     );
   }
 
+  /**
+   * cek nomor rm terhari sesuai index dan nomor rm
+   * @param array $params nomor rm yang akan dicek
+   * @return array jumlah data yang ditemukan
+   */
   public function nomor_rm_terahir(array $request): array
   {
     $upper_limit = $request['limit'] ?? '014000';
@@ -110,7 +115,7 @@ class RekamMedisService extends Service
       ->selectColumn(['nomor_rm', 'data_rm.id'])
       ->filterByAlamatLuar($alamat_luar)
       ->forceLimitView(1)
-      ->orderUsing("DESC")   
+      ->orderUsing("DESC")
       ->sortUsing('id');
 
     // last nomor rm by index
