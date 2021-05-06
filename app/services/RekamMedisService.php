@@ -242,29 +242,32 @@ class RekamMedisService extends Service
 
   /**
    * View data rm with some filter
-   * @param array $param filters rule
+   * @param array $request filters rule
    * @return array list data rm
    */
-  public function filter(array $param): array
+  public function filter(array $request): array
   {
     // ambil configurasi
-    $sort       = $param['sort'] ?? 'nomor_rm';
-    $order      = $param['order'] ?? 'ASC';
-    $page       = $param['page'] ?? 1;
+    $sort       = $request['sort'] ?? 'nomor_rm';
+    $order      = $request['order'] ?? 'ASC';
+    $page       = $request['page'] ?? 1;
     $max_page   = 1;
     $limit      = 25;
 
     // ambil search parameter
-    $umur       = $param['umur'] ?? '0-100';
-    $desa       = $param['desa'] ?? "bandarjo-branjang-kalisidi-keji-lerep-nyatnyono";
-    $status_kk  = $param['status_kk'] ?? null;
-    $duplicate  = $param['duplicate'] ?? null;
+    $umur         = $request['umur'] ?? '0-100';
+    $desa         = $request['desa'] ?? "bandarjo-branjang-kalisidi-keji-lerep-nyatnyono";
+    $status_kk    = $request['status_kk'] ?? null;
+    $duplicate    = $request['duplicate'] ?? null;
+    $alamat_luar  = $request['alamat-luar'] ?? 0;
+    $alamat_luar  = $alamat_luar == 0 ? false : true;
 
-    if (isset($param['all'])) {
+    if (isset($request['all'])) {
       $data = new MedicalRecords( $this->PDO );
 
       // set-up data
       $data
+        ->filterByAlamatLuar($alamat_luar)
         ->sortUsing($sort)
         ->orderUsing($order)
         ->limitView($limit);
@@ -294,6 +297,7 @@ class RekamMedisService extends Service
     $data = new MedicalRecords( $this->PDO );
     // configurasi
     $data
+      ->filterByAlamatLuar($alamat_luar)
       ->sortUsing($sort)
       ->orderUsing($order)
       ->limitView($limit);
@@ -342,15 +346,20 @@ class RekamMedisService extends Service
     );
   }
 
-   private function parseRangeTime(string $time)
+  /**
+   * Convert string time (eg: 0-100),
+   * to array of time
+   * @param string $string_time String Time deliminete with - (min)
+   * @return bool|array Array of time format, or False if time string not support
+   */
+  private function parseRangeTime(string $string_time)
   {
-    $min_max = explode('-', $time);
+    $min_max = explode('-', $string_time);
 
     if (count($min_max) > 1) {
-      return array_map(function($time){
-        return date("Y-m-d", time() - ((int) $time * 31536000) );
-      }, $min_max);
+      return array_map(fn($time) => date("Y-m-d", time() - ((int) $time * 31536000) ), $min_max);
     }
+
     return false;
   }
 }
