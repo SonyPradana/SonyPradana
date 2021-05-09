@@ -2,6 +2,7 @@
 return array (
 
   'MENU_MEDREC' => array (
+    array('Pendaftaran', '/pendaftaran'),
     array('Lihat RM', '/rekam-medis/view'),
     array('Cari RM', '/rekam-medis/search'),
     array('Buat RM', '/rekam-medis/new')

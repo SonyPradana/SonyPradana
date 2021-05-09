@@ -142,11 +142,12 @@ class RekamMedisController extends Controller
             // update pernonal data
             $update_bio = PersonalRecord::whereHashId($hash_id, $this->PDO)
               ->convertFromArray($_POST)
-              ->setDataDiupdate(time())
-              ->filter();
+              ->setDataDiupdate(time());
 
             if ($update_bio->isValid()) {
-              $update_bio->update();
+              $update_bio
+                ->filter()
+                ->update();
             }
 
           } else {

@@ -4,6 +4,7 @@ namespace Model\Simpus;
 
 use Helper\String\Str;
 use System\Database\MyPDO;
+use System\Database\MyQuery;
 
 /**
  * Perent Class fungsinya untuk menampung semua filed Rekam Medis
@@ -281,6 +282,16 @@ class MedicalRecord
     $val = strtolower($val);
     $this->_status = $val;
     return $this;
+  }
+
+  public function isIdExis(string $table_nama = 'data_rm')
+  {
+    return !empty(
+      MyQuery::conn($table_nama, $this->PDO)
+        ->select(['id'])
+        ->equal('id', $this->_id)
+        ->single()
+    );
   }
 
   /**

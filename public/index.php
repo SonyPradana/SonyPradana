@@ -100,6 +100,10 @@ $app->get('/read/(:any)', function(string $title) {
 });
 
 // unit kerja
+// pendaftaran
+$app->get('/pendaftaran', function() {
+  return (new RegistrationMRController)->index();
+});
 // rekam-medis
 $app->get('/rekam-medis', function() {
   return (new RekamMedisController())->index();

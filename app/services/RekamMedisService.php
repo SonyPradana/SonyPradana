@@ -200,6 +200,20 @@ class RekamMedisService extends Service
     }
     $alamat_luar = $alamat_luar == 1 ? true : false;
 
+    // prevent empty field
+    if ($main_search == ''
+    && $nomor_rm_search == ''
+    && $alamat_search == ''
+    && $no_rt_search == ''
+    && $no_rw_search == ''
+    && $nama_kk_search == ''
+    && $no_rm_kk_search == ''
+    && $nik == ''
+    && $nomor_jaminan == '')
+    {
+      return $this->error(403);
+    }
+
     // core
     $data = new MedicalRecords( $this->PDO );
 
@@ -211,7 +225,6 @@ class RekamMedisService extends Service
     // query data
       ->filterByNama($main_search)
       ->filterByNomorRm($nomor_rm_search)
-      ->filterByAlamatLuar($alamat_luar)
       ->filterByAlamat($alamat_search)
       ->filterByRt($no_rt_search)
       ->filterByRw($no_rw_search)
@@ -221,6 +234,11 @@ class RekamMedisService extends Service
     // personal data
       ->filtersByNik($nik)
       ->filtersByJaminan($nomor_jaminan);
+
+    // flexible filter
+    if (isset($request['alamat-luar'])) {
+      $data->filterByAlamatLuar($alamat_luar);
+    }
 
     // setup page
     $max_page = $data->maxPage();
