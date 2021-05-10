@@ -2,9 +2,11 @@
 
 namespace Model\Simpus;
 
+use Helper\String\Str;
 use Simpus\Helper\StringValidation;
 use System\Database\MyModel;
 use System\Database\MyPDO;
+use System\Database\MyQuery;
 
 class MedicalRecords extends MyModel
 {
@@ -23,12 +25,6 @@ class MedicalRecords extends MyModel
     )
   );
 
-  private $_addresses = [
-    "addresses" => [
-      "filters" => [],
-      "strict" => false
-    ]
-  ];
   private $_dataPerPage = 10;
   private $_orderUsing = MyModel::ORDER_ASC;
   private $_orderColumn = 'id';
@@ -92,6 +88,23 @@ class MedicalRecords extends MyModel
       'param'   => 'tanggal_lahir',
       'value'   => strtolower($val),
       'option'  => $this->_options,
+      'type'    => \PDO::PARAM_STR
+    );
+    return $this;
+  }
+
+  /**
+   * filter/search data rm sesuai code wilayah,
+   * true jika luar wilayah, false jika dalam wilayah
+   * @param bool $alamat_luar true dalam wilayah
+   */
+  public function filterByAlamatLuar(bool $alamat_luar = false)
+  {
+    $this->_FILTERS[] = array (
+      'id'      => rand(1, 10),
+      'param'   => 'alamat_luar',
+      'value'   => $alamat_luar ? 1 : 0,
+      'option'  => $this->_options['equal'],
       'type'    => \PDO::PARAM_STR
     );
     return $this;
@@ -217,7 +230,7 @@ class MedicalRecords extends MyModel
    */
   public function filtersAddAlamat(string $val)
   {
-    $this->_addresses['addresses']['filters'][] = array (
+    $this->_GROUP_FILTER['group-alamat']['filters'][] = array (
       'id'      => rand(1, 10),
       'param'   => 'alamat',
       'value'   => strtolower($val),
@@ -225,7 +238,36 @@ class MedicalRecords extends MyModel
       'type'    => \PDO::PARAM_STR
     );
 
-    $this->_GROUP_FILTER = $this->_addresses;
+    return $this;
+  }
+
+  public function filtersByNik(string $nik)
+  {
+    if ($nik != '') {
+      $this->_FILTERS[] = array (
+        'id'      => rand(1, 10),
+        'param'   => 'nik',
+        'value'   => $nik,
+        'option'  => $this->_options['equal'],
+        'type'    => \PDO::PARAM_STR
+      );
+    }
+
+    return $this;
+  }
+
+  public function filtersByJaminan(string $nomor_jaminan)
+  {
+    if ($nomor_jaminan != '') {
+      $this->_FILTERS[] = array (
+        'id'      => rand(1, 10),
+        'param'   => 'nomor_jaminan',
+        'value'   => Str::fillText($nomor_jaminan, 13, 0),
+        'option'  => $this->_options['equal'],
+        'type'    => \PDO::PARAM_STR
+      );
+    }
+
     return $this;
   }
 
@@ -290,6 +332,33 @@ class MedicalRecords extends MyModel
   public function __construct(MyPDO $PDO = null)
   {
     $this->_TABELS[]  = 'data_rm';
+    $this->_COLUMNS = [
+      'data_rm.id as id',
+      'data_rm.nomor_rm',
+			'data_rm.data_dibuat',
+			'data_rm.nama',
+			'data_rm.tanggal_lahir',
+      'data_rm.alamat_luar',
+			'data_rm.alamat',
+			'data_rm.nomor_rt',
+			'data_rm.nomor_rw',
+			'data_rm.nama_kk',
+			'data_rm.nomor_rm_kk',
+			'data_rm.status',
+      'data_personal.id as personal_id',
+      'data_personal.nik as nik',
+      'data_personal.nomor_jaminan as nomor_jaminan',
+    ];
+    $this->_COSTUME_JOIN = "
+        LEFT JOIN table_relation ON table_relation.time_stamp = data_rm.data_dibuat
+        LEFT JOIN data_personal ON data_personal.hash_id = table_relation.id_hash
+      ";
+
+    $this->_GROUP_FILTER['group-alamat'] = [
+      "filters" => [],
+      "strict" => false
+    ];
+
     $this->PDO = $PDO ?? MyPDO::getInstance();
   }
 
@@ -301,17 +370,19 @@ class MedicalRecords extends MyModel
   public function maxData(): int
   {
     $whereStantment = $this->grupQueryFilters( $this->mergeFilters() );
+    $join = $whereStantment == '' ? '' : $this->_COSTUME_JOIN;
     $whereStantment = $whereStantment == '' ? '' : "WHERE $whereStantment";
+
     $this->PDO->query(
       "SELECT
-        COUNT(id) as total
+        COUNT(`data_rm`.`id`) as total
       FROM
         `data_rm`
+      $join
       $whereStantment
     ");
+
     $this->bindingFilters();
-    // var_dump($whereStantment);
-    // exit;
 
     return $this->PDO->single()['total'] ?? 0;
   }
@@ -401,17 +472,12 @@ class MedicalRecords extends MyModel
    */
   public function getColumnSupport()
   {
-    $this->PDO->query(
-      "SELECT
-        COLUMN_NAME
-      FROM
-        INFORMATION_SCHEMA.COLUMNS
-      WHERE
-        TABLE_SCHEMA = :dbs AND TABLE_NAME = :table"
-    );
-    $this->PDO->bind(':table', 'data_rm');
-    $this->PDO->bind(':dbs', DB_NAME);
-    $result = $this->PDO->resultset();
+    $result = MyQuery::conn("COLUMNS", MyPDO::conn("INFORMATION_SCHEMA"))
+      ->select()
+      ->equal("TABLE_SCHEMA", DB_NAME)
+      ->equal("TABLE_NAME", 'data_rm')
+      ->all();
+
     return array_column($result, 'COLUMN_NAME') ?? array();
   }
 }

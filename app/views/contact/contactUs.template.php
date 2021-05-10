@@ -100,8 +100,7 @@
         const regarding = $id('input-message').value.length;
         const captcha = $id('input-ampcaptcha').value;
 
-        if (regarding < 3 || regarding > 200 ||
-        ! Number.isInteger(captcha)) {
+        if (regarding < 3 || regarding > 200 || isNaN(captcha)) {
             e.preventDefault();
             return false;
         }

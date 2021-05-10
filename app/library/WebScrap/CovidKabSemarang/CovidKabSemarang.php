@@ -90,9 +90,9 @@ class CovidKabSemarang
 
         // mengkonvert nama wilayah kedalam id kecamatan
         $id = $this->Daftar_Kecamatan[$nama_kecamatan];
-        
+
         // memuat data mentah dari web dinkes
-        $ch = curl_init("https://corona.semarangkab.go.id/covid/data_desa?id_kecamatan=$id");
+        $ch = curl_init("https://corona.semarangkab.go.id/prona/covid/data_desa?id_kecamatan=$id");
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_HEADER, false);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -115,7 +115,7 @@ class CovidKabSemarang
             foreach( $tr as $row){ # satu desa
                 // mengambil data satu persatu dari setiap colomn di baris (desa)
                 $td = $row->getElementsByTagName('td');
-                
+
                 $data_pdp = []; # grub array untuk data pdp
                 $data_pdp["dirawat"]    = $this->removeDoubleSpace($td->item(2)->nodeValue);
                 $data_pdp["sembuh"]     = $this->removeDoubleSpace($td->item(3)->nodeValue);

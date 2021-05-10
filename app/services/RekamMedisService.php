@@ -95,9 +95,16 @@ class RekamMedisService extends Service
     );
   }
 
+  /**
+   * cek nomor rm terhari sesuai index dan nomor rm
+   * @param array $params nomor rm yang akan dicek
+   * @return array jumlah data yang ditemukan
+   */
   public function nomor_rm_terahir(array $request): array
   {
     $upper_limit = $request['limit'] ?? '014000';
+    $alamat_luar = $request['alamat_luar'] ?? 0;
+    $alamat_luar = $alamat_luar == 1 ? true : false;
     // force nomor rm 6 digit
     for ($i = 0; $i < 6 - strlen($upper_limit); $i++) {
       $upper_limit = 0 . $upper_limit;
@@ -105,15 +112,16 @@ class RekamMedisService extends Service
     // ambil nomor rm terakhir
     $data = new MedicalRecords($this->PDO);
     $data
-      ->selectColumn(['nomor_rm'])
+      ->selectColumn(['nomor_rm', 'data_rm.id'])
+      ->filterByAlamatLuar($alamat_luar)
       ->forceLimitView(1)
       ->orderUsing("DESC")
-      ->sortUsing('nomor_rm');
+      ->sortUsing('id');
 
     // last nomor rm by index
     $last_nomor_rm  = $data->result();
 
-    $data->costumeWhere("`nomor_rm` < :nrm", [[':nrm', $upper_limit]]);
+    $data->sortUsing('nomor_rm');
     // lat nomotr rm by upper limit
     $upper_nomor_rm = $data->result();
 
@@ -133,8 +141,9 @@ class RekamMedisService extends Service
    * @param array $param search querys
    * @return array list data rm yang sesuai query pencarian
    */
-  public function search(array $param): array
+  public function search(array $request): array
   {
+    // TODO: singgle searach nomor_rm and (nik and bpjs)
     // vallidation
     $validation = new GUMP('id');
     $validation->validation_rules(array (
@@ -145,8 +154,12 @@ class RekamMedisService extends Service
       'no-rw-search' => 'numeric|max_len,2',
       'nama-kk-search' => 'alpha_space|max_len,50',
       'nomor-rm-kk-search' => 'numeric|max_len,6',
+      // personal data
+      'nik_jaminan' => 'numeric|min_len,8|max_len,16',
+      'nik' => 'numeric|min_len,16|max_len,16',
+      'nomor_jaminan' => 'numeric|min_len,8|max_len,13',
     ));
-    $validation->run($param);
+    $validation->run($request);
     if ($validation->errors()) {
       return array (
         'code'    => 200,
@@ -157,21 +170,49 @@ class RekamMedisService extends Service
     }
 
     // ambil configurasi
-    $sort       = $param['sort'] ?? 'nomor_rm';
-    $order      = $param['order'] ?? 'DESC';
-    $page       = $param['page'] ?? 1;
+    $sort       = $request['sort'] ?? 'nomor_rm';
+    $order      = $request['order'] ?? 'DESC';
+    $page       = $request['page'] ?? 1;
     $max_page   = 1;
     $limit      = 10;
 
     // ambil search parameter
-    $main_search        = $param['main-search'] ?? '';
-    $nomor_rm_search    = $param['nomor-rm-search'] ?? '';
-    $alamat_search      = $param['alamat-search'] ?? '';
-    $no_rt_search       = $param['no-rt-search'] ?? '';
-    $no_rw_search       = $param['no-rw-search'] ?? '';
-    $nama_kk_search     = $param['nama-kk-search'] ?? '';
-    $no_rm_kk_search    = $param['no-rm-kk-search'] ?? '';
-    $strict_search      = isset( $param['strict-search'] ) ? true : false;
+    $main_search        = $request['main-search'] ?? '';
+    $nomor_rm_search    = $request['nomor-rm-search'] ?? '';
+    $alamat_luar        = $request['alamat-luar'] ?? 0;
+    $alamat_search      = $request['alamat-search'] ?? '';
+    $no_rt_search       = $request['no-rt-search'] ?? '';
+    $no_rw_search       = $request['no-rw-search'] ?? '';
+    $nama_kk_search     = $request['nama-kk-search'] ?? '';
+    $no_rm_kk_search    = $request['no-rm-kk-search'] ?? '';
+    $strict_search      = isset( $request['strict-search'] ) ? true : false;
+    // search in personal data
+    $nik_jaminan        = $request['nik-jaminan'] ?? '';
+    $nik                = $request['nik'] ?? '';
+    $nomor_jaminan      = $request['nomor-jaminan'] ?? '';
+    // switcer
+    if ($nik == '' && $nomor_jaminan == '') {
+      if (strlen($nik_jaminan) == 16) {
+        $nik = $nik_jaminan;
+      } elseif(strlen($nomor_jaminan < 14)) {
+        $nomor_jaminan = $nik_jaminan;
+      }
+    }
+    $alamat_luar = $alamat_luar == 1 ? true : false;
+
+    // prevent empty field
+    if ($main_search == ''
+    && $nomor_rm_search == ''
+    && $alamat_search == ''
+    && $no_rt_search == ''
+    && $no_rw_search == ''
+    && $nama_kk_search == ''
+    && $no_rm_kk_search == ''
+    && $nik == ''
+    && $nomor_jaminan == '')
+    {
+      return $this->error(403);
+    }
 
     // core
     $data = new MedicalRecords( $this->PDO );
@@ -181,7 +222,6 @@ class RekamMedisService extends Service
       ->sortUsing($sort)
       ->orderUsing($order)
       ->limitView($limit)
-
     // query data
       ->filterByNama($main_search)
       ->filterByNomorRm($nomor_rm_search)
@@ -190,7 +230,15 @@ class RekamMedisService extends Service
       ->filterByRw($no_rw_search)
       ->filterByNamaKK($nama_kk_search)
       ->filterByNomorRmKK($no_rm_kk_search)
-      ->setStrictSearch($strict_search);
+      ->setStrictSearch($strict_search)
+    // personal data
+      ->filtersByNik($nik)
+      ->filtersByJaminan($nomor_jaminan);
+
+    // flexible filter
+    if (isset($request['alamat-luar'])) {
+      $data->filterByAlamatLuar($alamat_luar);
+    }
 
     // setup page
     $max_page = $data->maxPage();
@@ -198,7 +246,7 @@ class RekamMedisService extends Service
     $data->currentPage($page);
 
     // excute query
-    $result =  $data->result();
+    $result = $data->result();
 
     return array(
       'code'      => '200',
@@ -212,29 +260,32 @@ class RekamMedisService extends Service
 
   /**
    * View data rm with some filter
-   * @param array $param filters rule
+   * @param array $request filters rule
    * @return array list data rm
    */
-  public function filter(array $param): array
+  public function filter(array $request): array
   {
     // ambil configurasi
-    $sort       = $param['sort'] ?? 'nomor_rm';
-    $order      = $param['order'] ?? 'ASC';
-    $page       = $param['page'] ?? 1;
+    $sort       = $request['sort'] ?? 'nomor_rm';
+    $order      = $request['order'] ?? 'ASC';
+    $page       = $request['page'] ?? 1;
     $max_page   = 1;
     $limit      = 25;
 
     // ambil search parameter
-    $umur       = $param['umur'] ?? '0-100';
-    $desa       = $param['desa'] ?? "bandarjo-branjang-kalisidi-keji-lerep-nyatnyono";
-    $status_kk  = $param['status_kk'] ?? null;
-    $duplicate  = $param['duplicate'] ?? null;
+    $umur         = $request['umur'] ?? '0-100';
+    $desa         = $request['desa'] ?? "bandarjo-branjang-kalisidi-keji-lerep-nyatnyono";
+    $status_kk    = $request['status_kk'] ?? null;
+    $duplicate    = $request['duplicate'] ?? null;
+    $alamat_luar  = $request['alamat-luar'] ?? 0;
+    $alamat_luar  = $alamat_luar == 0 ? false : true;
 
-    if (isset($param['all'])) {
+    if (isset($request['all'])) {
       $data = new MedicalRecords( $this->PDO );
 
       // set-up data
       $data
+        ->filterByAlamatLuar($alamat_luar)
         ->sortUsing($sort)
         ->orderUsing($order)
         ->limitView($limit);
@@ -264,6 +315,7 @@ class RekamMedisService extends Service
     $data = new MedicalRecords( $this->PDO );
     // configurasi
     $data
+      ->filterByAlamatLuar($alamat_luar)
       ->sortUsing($sort)
       ->orderUsing($order)
       ->limitView($limit);
@@ -312,15 +364,20 @@ class RekamMedisService extends Service
     );
   }
 
-  private function parseRangeTime(string $time)
+  /**
+   * Convert string time (eg: 0-100),
+   * to array of time
+   * @param string $string_time String Time deliminete with - (min)
+   * @return bool|array Array of time format, or False if time string not support
+   */
+  private function parseRangeTime(string $string_time)
   {
-    $min_max = explode('-', $time);
+    $min_max = explode('-', $string_time);
 
     if (count($min_max) > 1) {
-      return array_map(function($time){
-        return date("Y-m-d", time() - ((int) $time * 31536000) );
-      }, $min_max);
+      return array_map(fn($time) => date("Y-m-d", time() - ((int) $time * 31536000) ), $min_max);
     }
+
     return false;
   }
 }

@@ -1,16 +1,15 @@
 <?php
 
 use Simpus\Apps\Controller;
-use Model\Simpus\MedicalRecords;
-use System\Database\MyPDO;
 use System\Database\MyQuery;
 
 class HomeController extends Controller
 {
   public function index()
   {
-    $data_rm = new MedicalRecords();
-    $jumlah_rm = $data_rm->maxData();
+    $jumlah_rm = MyQuery::conn('data_rm')
+      ->select(['COUNT(id) as total'])
+      ->single();
 
     # jadwal pelayana
     $jadwal = [
@@ -43,7 +42,7 @@ class HomeController extends Controller
         "header_menu"   => $_SESSION['active_menu'] ?? MENU_MEDREC
       ],
       "contents" => [
-        "jumlah_rm"     => (int) $jumlah_rm,
+        "jumlah_rm"     => (int) $jumlah_rm['total'],
         "jadwal"        => $jadwal,
         "jadwal_sort"   => $sort_day
       ]
@@ -52,7 +51,7 @@ class HomeController extends Controller
 
   public function about()
   {
-    $res = MyQuery::conn('version', MyPDO::getInstance())
+    $res = MyQuery::conn('version')
       ->select(['id', 'date', 'note', 'ver'])
       ->order('id', MyQuery::ORDER_ASC)
       ->all();
