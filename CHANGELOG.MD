@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - MyQuery insert class supoort multy value single function
 - Medical Record add NIK and Nomor jaminan (biodata)
 - Medical Record CRUD support biodata
+- Add Regestration Medical record
 
 ### Changed
 - Register command now in CLI.php (class) not in command.config.php (array)
@@ -20,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Var_dump in pruduction (Insert.php)
 - Fix MyModel skip value = 0 (zero), php detect 0 if null
 - Fix MyModel return where statment to '()', if where statment null MyModel will not return the query
+- Fix MyModel prefix ambigus column name, support costume prefix
 
 ## [2.3.7] - 2021-04-16
 ### Added

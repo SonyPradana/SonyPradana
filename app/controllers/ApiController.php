@@ -10,14 +10,14 @@ class ApiController extends Controller
   {
     $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
     $params = $_GET;
-    if ($method == 'PUT') {
+    if ($method == 'PUT' || $method == 'DELETE') {
       $body   = file_get_contents('php://input');
       $params = json_decode($body, true);
     } elseif ($method == 'POST') {
       $params = $_POST;
     }
 
-    if (! empty($_FILES)) {
+    if (!empty($_FILES)) {
       $params['files'] = $_FILES;
     }
 

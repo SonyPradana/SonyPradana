@@ -121,11 +121,25 @@
           <form>
             <label class="v-group-input">
               Nomor RM
-              <input v-model="nomor_rm" type="number" class="textbox outline blue rounded small" placeholder="Nomor Rm">
+              <input
+                v-model="nomor_rm"
+                v-on:keyup.enter="getInfo"
+                @keypress="isNumber($event)"
+                type="search"
+                class="textbox outline blue rounded small"
+                placeholder="Nomor Rm"
+              >
             </label>
             <label class="v-group-input">
               Nomor BPJS / KTP
-              <input v-model="nomor_jaminan" type="number" class="textbox outline blue rounded small" placeholder="NIK atau BPJS">
+              <input
+                v-model="nomor_jaminan"
+                v-on:keyup.enter="getInfo"
+                @keypress="isNumber($event)"
+                type="search"
+                class="textbox outline blue rounded small"
+                placeholder="NIK atau BPJS"
+              >
             </label>
             <div class="grub-control horizontal right gap-12px">
               <button v-on:click="getInfo" type="button" class="btn rounded light blue outline">cari</button>
@@ -277,6 +291,9 @@
                 this.valid_rm = true;
                 this.info_rm = json.data[0]
               }
+            } else {
+              this.info_rm = []
+              this.valid_rm = false
             }
           })
       },
@@ -313,6 +330,8 @@
                 json.data.status = 'pendaftaran'
                 this.kunjungan.unshift(json.data)
               }
+            } else if (json.status == 'Bad Request') {
+              alert("tidak dapat menyimpan data")
             }
           })
         }
@@ -322,15 +341,34 @@
           const index = this.kunjungan.findIndex(e => e.id == id)
           this.kunjungan.splice(index, 1)
 
-          $json(`/api/ver2/RegistrationMR/hapuskunjungan.json?kunjungan_id=${id}`)
+          $json(`/api/ver2/RegistrationMR/hapuskunjungan.json`, {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            mode: 'cors',
+            cache: 'no-cache',
+            credentials: 'same-origin',
+            referrerPolicy: 'no-referrer',
+            body: JSON.stringify({
+              kunjungan_id:  id,
+            })
+          })
             .then(json => {
-              if (json.status == 'ok') {
+              if (json.status == 'Accepted') {
                 if (json.data[0] != null) {
                   this.valid_rm = true;
                   this.info_rm = json.data[0]
                 }
               }
             })
+        }
+      },
+      isNumber: function(evt) {
+        evt = evt ? evt : window.event;
+        const charCode = evt.which ? evt.which : evt.keyCode;
+        if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
+          evt.preventDefault();;
+        } else {
+          return true;
         }
       }
 

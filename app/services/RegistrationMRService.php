@@ -78,6 +78,7 @@ class RegistrationMRService extends Service
   /**
    * Menambahkan data kunjungan pendaftaran loket
    * Require:
+   * - method put
    * - tanggal_kunjungan -> mm/dd/yyy (string)
    * - rm_id -> id nomor rekam medis (int)
    * - poli_tujuan -> poli tujuan (string)
@@ -88,17 +89,16 @@ class RegistrationMRService extends Service
    */
   public function TambahKunjungan(array $request): array
   {
-    // TODO: prevent add in next day, prevent add same patien in same day
     // pre requests
     if ($request['x-method'] != 'put') {
       $this->error(400);
     }
-    // set tanggal ssesuai request
+    // set tanggal sesuai request
     if (isset($request['tanggal_kunjungan'])) {
       $time = date("H:i:s");
-      $time = strtotime($request['tanggal_kunjungan'] . ' ' . $time);
+      $current = strtotime($request['tanggal_kunjungan'] . ' ' . $time);
     } else {
-      $time = time();
+      $current = time();
     }
 
     // validasi id
@@ -108,6 +108,17 @@ class RegistrationMRService extends Service
       $this->errorHandler(400);
     }
     $crete_time = $medicalRecord->getDataDibuat();
+
+    // cek kujungan hari ini
+    $tanggal_kunjungan = strtotime($request['tanggal_kunjungan'] ?? 'today');
+    $cek_kunjungan = RegistrationRecords::call()
+      ->fillterNomorRm($medicalRecord->getNomorRM())
+      ->fillterTanggal($tanggal_kunjungan)
+      ->result();
+
+    if ($cek_kunjungan || $tanggal_kunjungan > time()) {
+      $this->errorHandler(400);
+    }
 
     // cek id hash
     if (Relation::has_timestamp($crete_time)) {
@@ -121,8 +132,8 @@ class RegistrationMRService extends Service
     $kunjungan = new RegistrationRecord();
     $kunjungan
       ->setId_hash($id_hash)
-      ->setTanggal_dibuat($time)
-      ->setLast_update($time)
+      ->setTanggal_dibuat($current)
+      ->setLast_update($current)
       ->setNomor_rm($medicalRecord->getNomorRM())
       ->setPoli($request['poli_tujuan'] ?? 'umum')
       ->setStatus(0)
@@ -158,6 +169,7 @@ class RegistrationMRService extends Service
   /**
    * Menhapus kunjungan pendaftaran sesuai dengan id-nya
    * Require:
+   * - method delete
    * - kunjungan_id -> nomor id kunjungan (int)
    *
    * @param array $request Http web request
@@ -165,6 +177,10 @@ class RegistrationMRService extends Service
    */
   public function HapusKunjungan(array $request): array
   {
+    if ($request['x-method'] != 'delete') {
+      $this->error(400);
+    }
+
     $id = $request['kunjungan_id'] ?? -1;
     $data = MyQuery::conn("data_kunjungan")
       ->select()
@@ -177,11 +193,11 @@ class RegistrationMRService extends Service
       ->execute();
 
     return array(
-      'status'  => $status ? 'oke' : 'error',
-      'code'    => 200,
+      'status'  => $status ? 'accepted' : 'error',
+      'code'    => 202,
       'data'    => $data,
       'error'   => false,
-      'headers' => array('HTTP/1.1 200 Oke')
+      'headers' => array('HTTP/1.1 202 Accepted')
     );
   }
 

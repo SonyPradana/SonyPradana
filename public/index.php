@@ -127,7 +127,7 @@ $app->match(['get', 'post'], '/kia-anak/(:text)/(:text)', function(string $actio
 });
 
 // API
-$app->match(['get', 'put', 'post'], '/API/([0-9a-zA-Z.]*)/(:any)/(:any).json', function($version, $unit, $action) {
+$app->match(['get', 'put', 'post', 'delete'], '/API/([0-9a-zA-Z.]*)/(:any)/(:any).json', function($version, $unit, $action) {
   return (new ApiController())->index($unit, $action, $version);
 });
 // API - Mix
