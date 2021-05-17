@@ -151,8 +151,8 @@
               >
             </label>
             <div class="grub-control horizontal right gap-12px">
-              <button v-on:click="getInfo" type="button" class="btn rounded light blue outline">cari</button>
-              <button v-on:click="reset" type="button" class="btn rounded light red outline">batal</button>
+              <button v-on:click="getInfo" type="button" class="btn rounded light blue outline">Cari</button>
+              <button v-on:click="reset" type="button" class="btn rounded light red outline">Batal</button>
             </div>
           </form>
         </div>
@@ -194,8 +194,8 @@
               <label class="v-group-input">
                 Status Kunjungan
                 <select v-model="status_kujungan" class="textbox outline blue rounded light">
-                  <option value="baru">Kunjungan Baru</option>
-                  <option value="lama">Kunjungan Lama</option>
+                  <option value="0">Kunjungan Lama</option>
+                  <option value="1">Kunjungan Baru</option>
                 </select>
               </label>
               <label class="v-group-input">
@@ -217,10 +217,10 @@
                 </select>
               </label>
               <div class="grub-control horizontal right gap-12px">
-                <button v-if="valid_rm" v-on:click="daftar" type="button" class="btn rounded light blue outline">daftar</button>
-                <button v-else v-on:click="getInfo" type="button" class="btn rounded light blue outline">baru</button>
+                <button v-if="valid_rm" v-on:click="daftar" type="button" class="btn rounded light blue outline">Daftar</button>
+                <button v-else v-on:click="getInfo" type="button" class="btn rounded light blue outline">Baru</button>
 
-                <button v-on:click="reset" type="button" class="btn rounded light red outline">batal</button>
+                <button v-on:click="reset" type="button" class="btn rounded light red outline">Batal</button>
               </div>
             </div>
           </div>
@@ -302,7 +302,7 @@
         valid_rm: false,
         kunjungan: [],
         // registration
-        status_kujungan: 'baru',
+        status_kujungan: 0,
         tanggal_kunjungan: new Date().toJSON().slice(0,10),
         poli_tujuan: 'umum',
         jenis_peserta: 0,
@@ -359,6 +359,7 @@
               rm_id: this.info_rm.id,
               poli_tujuan: this.poli_tujuan,
               jenis_peserta: this.jenis_peserta,
+              status_kunjungan: this.status_kujungan
             })
           }).then(json => {
             if (json.status == 'ok') {

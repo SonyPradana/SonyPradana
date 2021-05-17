@@ -83,6 +83,7 @@ class RegistrationMRService extends Service
    * - rm_id -> id nomor rekam medis (int)
    * - poli_tujuan -> poli tujuan (string)
    * - jenis_peserta -> code perserta (int)
+   * - status_kunjungan -> status kunjungan (int)
    *
    * @param array $request Http web request
    * @return array Data
@@ -138,7 +139,9 @@ class RegistrationMRService extends Service
       ->setPoli($request['poli_tujuan'] ?? 'umum')
       ->setStatus(0)
       ->setJenis_peserta($request['jenis_peserta'] ?? 0)
-      ->setPoli_id('');
+      ->setPoli_id('')
+      ->setStatus_kunjungan($request['status_kunjungan'] ?? 0)
+      ;
 
     $status = $kunjungan->cread();
 
@@ -171,6 +174,7 @@ class RegistrationMRService extends Service
    * Require:
    * - method delete
    * - kunjungan_id -> nomor id kunjungan (int)
+   * - status_kunjungan -> status kunjungan (int)
    *
    * @param array $request Http web request
    * @return array Data
@@ -227,7 +231,8 @@ class RegistrationMRService extends Service
         ->setPoli($request['poli_tujuan'] ?? null)
         ->setStatus($request['status'] ?? null)
         ->setJenis_peserta($request['jenis_peserta'] ?? null)
-        ->setPoli_id($request['poli-id'] ?? null);
+        ->setPoli_id($request['poli-id'] ?? null)
+        ->setStatus_kunjungan($request['status_kunjungan'] ?? null);
 
       $data_after = $kunjungan->convertToArray();
 

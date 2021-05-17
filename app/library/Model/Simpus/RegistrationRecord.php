@@ -54,6 +54,11 @@ class RegistrationRecord extends MyCRUD
 		return $this->COLUMNS['poli_id'];
 	}
 
+	public function status_kunjungan()
+	{
+		return $this->COLUMNS['status_kunjungan'];
+	}
+
 
   // setter
   public function setID($val)
@@ -121,6 +126,14 @@ class RegistrationRecord extends MyCRUD
 		return $this;
 	}
 
+	public function setStatus_kunjungan($val)
+	{
+    if ($val !== null) {
+      $this->COLUMNS['status_kunjungan'] = $val;
+    }
+		return $this;
+	}
+
   public function __construct()
   {
     $this->PDO = MyPDO::getInstance();
@@ -135,6 +148,7 @@ class RegistrationRecord extends MyCRUD
 			'status' => null,
 			'jenis_peserta' => null,
 			'poli_id' => null,
+      'status_kunjungan' => null,
     );
   }
 }

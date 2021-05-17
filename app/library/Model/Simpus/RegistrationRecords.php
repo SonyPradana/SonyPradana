@@ -46,6 +46,26 @@ class RegistrationRecords extends MyModel
   }
 
   /**
+   * Status kunjungan,
+   * - 0: lama
+   * - 1: baru
+   * @param int $status_kunjungan status kunjungan
+   */
+  public function fillterStatusKunjungan(int $status_kunjungan)
+  {
+    $this->_FILTERS['xkunjungan'] = array (
+      'param'   => 'status_kunjungan',
+      'value'   => $status_kunjungan,
+      'option'  => array(
+        "imperssion" => [":", ""],
+        "operator"   => "="
+      ),
+      'type'    => null
+    );
+    return $this;
+  }
+
+  /**
    * filter jenis peserta
    * @param int $jenis_peserta Jenis kepersertaan (umum; bpjs; bpjs non)
    */
