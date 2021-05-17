@@ -1,4 +1,6 @@
 // aside container (postion top)
+@import '../base/variables';
+
 aside {
     &.top {
         display: flex;
@@ -44,7 +46,7 @@ aside {
                         align-items: center;       
                     }
                     &.right {
-                        color: #fff;
+                        color: $gray-50;
                         display: flex;
                         align-items: center;
                     }
@@ -75,7 +77,8 @@ aside:not(.top) {
         /* style */
         background-color: #55b9f3;
         border-radius: 12px;
-        box-shadow: 5px 10px 19px -10px rgba(0,0,0,0.75);
+        box-shadow: 4px 12px 20px -12px rgba(0,0,0,0.75);        
+        overflow: hidden;
         display: flex;
         flex-direction: column;
         gap: 20px;
@@ -86,9 +89,8 @@ aside:not(.top) {
                 /* style */
                 font-family: Arial, Helvetica, sans-serif;
                 font-size: 1.875rem;
-                font-size: 1.875rem;
                 font-weight: 600;
-                color: #666;
+                color: $gray-600;
             }
 
             &.respones {
@@ -98,19 +100,19 @@ aside:not(.top) {
                 justify-content: center;
     
                 .respone {
-                    background-color: blue;
+                    background-color: $blue-700;
                     /* style */
                     border-radius: 16px;
                     background: linear-gradient(145deg, #4da7db, #5bc6ff);
-                    box-shadow:  19px 19px 38px #489dcf, 
-                                -19px -19px 38px #62d5ff;
+                    box-shadow:  20px 20px 36px #489dcf, 
+                                -20px -20px 36px #62d5ff;
                     height: 77.3334px;
                     
                     &:hover {
                         border-radius: 16px;
                         background: #55b9f3;
-                        box-shadow: inset 19px 19px 38px #489dcf, 
-                                    inset -19px -19px 38px #62d5ff;
+                        box-shadow: inset 20px 20px 36px #489dcf, 
+                                    inset -20px -20px 36px #62d5ff;
                     }
     
                     &.hig::after {
@@ -151,7 +153,7 @@ aside:not(.top) {
                 font-size: .97rem;
                 border: none;
                 background-color: #ffffff30;
-                color: #fff;
+                color: $gray-50;
                 padding: 8px 8px;
                 border-radius: 12px
             }
@@ -164,27 +166,27 @@ aside:not(.top) {
                 align-items: center;
     
                 .result.done {
-                    background-color: blue;
+                    background-color: $blue-700;
                     /* style */
                     border-radius: 16px;
                     background: linear-gradient(145deg, #4da7db, #5bc6ff);
-                    box-shadow:  19px 19px 38px #489dcf, 
-                                -19px -19px 38px #62d5ff;
+                    box-shadow:  20px 20px 36px #489dcf, 
+                                -20px -20px 36px #62d5ff;
                     width: 100px; height: 100px;
                     display: flex;
                     justify-content: center;        
                     align-items:flex-end;
                     cursor: pointer;
                     p {
-                        color: #fff; margin: 12px
+                        color: $gray-50; margin: 12px
                     }
     
                     &:hover {
                         /* style */
                         border-radius: 16px;
                         background: #55b9f3;
-                        box-shadow: inset 19px 19px 38px #489dcf, 
-                                    inset -19px -19px 38px #62d5ff;
+                        box-shadow: inset 20px 20px 36px #489dcf, 
+                                    inset -20px -20px 36px #62d5ff;
                     }
                     &::before {
                         content: "";
@@ -215,9 +217,9 @@ aside:not(.top) {
         width: 280px; 
         padding: 16px;
         /* style */
-        background-color: #f0c133;
+        background-color: $yellow-300;
         border-radius: 12px;
-        box-shadow: 5px 10px 19px -10px rgba(0,0,0,0.75);
+        box-shadow: 5px 10px 20px -10px rgba(0,0,0,0.75);
 
         .timetable {
             &.title h3 {
@@ -225,9 +227,8 @@ aside:not(.top) {
                 /* style */
                 font-family: Arial, Helvetica, sans-serif;
                 font-size: 1.875rem;
-                font-size: 1.875rem;
                 font-weight: 600;
-                color: #666;
+                color: $gray-600;
             }
             &.hours {
                 margin: 16px 0;
@@ -274,7 +275,7 @@ aside:not(.top) {
         /* style */
         background-color: #55b9f3;
         border-radius: 12px;
-        box-shadow: 5px 10px 19px -10px rgba(0,0,0,0.75);
+        box-shadow: 5px 10px 20px -10px rgba(0,0,0,0.75);
     }
     .box-header {
         display: flex;
@@ -284,7 +285,7 @@ aside:not(.top) {
 
         p {
             margin: 0;
-            color: #fff;
+            color: $gray-50;
             font-size: 16px;
         }
     }
@@ -305,7 +306,7 @@ aside:not(.top) {
         color: #1c1c1c;
     }
     .option-select {
-        border: 1px solid #fff;
+        border: 1px solid $gray-50;
         margin: 12px 0;
         border-radius: 4px;
         min-height: 24px;
@@ -328,7 +329,7 @@ aside:not(.top) {
         }
     }
     .option-selected {
-        background-color: #fff;
+        background-color: $gray-50;
     }
     .correct {
         background-color: #adf494;

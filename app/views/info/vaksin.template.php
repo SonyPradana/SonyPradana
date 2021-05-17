@@ -8,7 +8,6 @@ use Model\JadwalVaksin\JadwalVaksins;
 include($_SERVER['DOCUMENT_ROOT'] . '/resources/components/meta/metatag.php') ?>
 
   <link rel="stylesheet" href="/lib/css/ui/v1.1/full.style.css">
-  <link rel="stylesheet" href="/lib/css/ui/v1/table.css">
   <script src="/lib/js/index.min.js"></script>
   <script src="/lib/js/bundles/keepalive.min.js"></script>
   <script src="/lib/js/vendor/vue/vue.min.js"></script>

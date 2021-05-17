@@ -4,7 +4,7 @@ html{
         height: 100%;
         padding: 0;
         margin: 0;
-        background-color: #f0f0f0;
+        background-color: $gray-100;
         h1{
             margin: 12px 0;
         }
@@ -15,4 +15,5 @@ html{
 @import 'container';
 @import 'assets';
 @import 'footer';
+@import '../base/variables';
 

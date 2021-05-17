@@ -5,7 +5,7 @@
 
     <link rel="stylesheet" href="/lib/css/ui/v1.1/style.css">
     <link rel="stylesheet" href="/lib/css/ui/v1.1/cards.css">
-    <link rel="stylesheet" href="/lib/css/ui/v1/table.css">
+    <link rel="stylesheet" href="/lib/css/ui/v1.1/table.css">
     <script src="/lib/js/index.min.js"></script>
     <script src="/lib/js/bundles/keepalive.min.js"></script>
     <style>

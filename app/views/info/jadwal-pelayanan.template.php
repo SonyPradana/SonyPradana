@@ -4,7 +4,6 @@
     <?php include(APP_FULLPATH['component'] . 'meta/metatag.php') ?>
     <meta name="robots" content="all,index,follow">
 
-    <link rel="stylesheet" href="/lib/css/ui/v1/table.css">
     <link rel="stylesheet" href="/lib/css/pages/v1.1/jadwal-kia.css">
     <link rel="stylesheet" href="/lib/css/ui/v1.1/full.style.css">
     <script src="/lib/js/index.min.js"></script>

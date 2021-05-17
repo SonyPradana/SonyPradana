@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Register command now in CLI.php (class) not in command.config.php (array)
 - Cek nomor terahir menggunakan id dan nomor rm tertinggi
+- [Style] Menyamakan variable warna (css), merge table css ke full.style.css
 
 ### Fixed
 - Var_dump in pruduction (Insert.php)

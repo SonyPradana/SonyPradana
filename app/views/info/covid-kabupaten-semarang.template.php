@@ -5,7 +5,6 @@
 
   <link rel="preload" href="/lib/js/vendor/vue/vue.min.js" as="script">
 
-  <link rel="stylesheet" href="/lib/css/ui/v1/table.css">
   <link rel="stylesheet" href="/lib/css/pages/v1.1/covid.css">
   <link rel="stylesheet" href="/lib/css/ui/v1.1/full.style.css">
   <script src="/lib/js/index.min.js"></script>

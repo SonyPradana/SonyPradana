@@ -53,28 +53,28 @@ input{
     
     // style
     &.text{
-        color: #000;
+        color: $gray-800;
         background-color: #fff;
         border: 2px solid transparent;
         &.blue{
-            color: #2196F3;
+            color: $blue-500;
             &:hover{ 
-                background: #4c8ec4;
-                color: white; 
+                background: $blue-400;
+                color: #fff; 
             }
         }
         &.green{
-            color: #4CAF50;
+            color: $green-500;
             &.green:hover{ 
-                background: #51a554;
-                color: white; 
+                background: $green-400;
+                color: #fff; 
             }
         }
         &.red{
-            color: #f44336;
+            color: $red-500;
             &:hover{
-                background: #e4473c;
-                color: white; 
+                background: $red-400;
+                color: #fff; 
             }
         }
         &:active{
@@ -82,31 +82,31 @@ input{
         }
     }
     &.outline{
-        color: #000;
+        color: $gray-900;
         background-color: transparent;
-        border: 2px solid #000;
+        border: 2px solid $gray-900;
         &.blue{
-            border-color: #2196F3;
-            color: dodgerblue;
+            border-color: $blue-500;
+            color: $blue-600;
             &:hover{
-                background: #2196F3;
-                color: white;
+                background: $blue-500;
+                color: #fff;
             }
         }
         &.green{            
-            border-color: #4CAF50;
-            color: green;
+            border-color: $green-500;
+            color: $green-700;
             &:hover{    
-                background-color: #4CAF50;
+                background-color: $green-500;
                 color: #fff;
             }
         }
         &.red{
-            border-color: #f44336;
-            color: red;
+            border-color: $red-500;
+            color: $red-600;
             &:hover{    
-                background: #f44336;
-                color: white
+                background: $red-500;
+                color: #fff
             }
         }
         &:active{
@@ -116,24 +116,24 @@ input{
     &.fill{
         border: 2px solid transparent;
         &.blue{
-            background-color: #2196F3;
+            background-color: $blue-500;
             color: #fff;
             &:hover{
-                background-color: #469de3;
+                background-color: $blue-400;
             }
         }
         &.green{
-            background-color: #4CAF50;
+            background-color: $green-600;
             color: #fff;
             &:hover{
-                background-color: #51a554;
+                background-color: $green-500;
             }
         }
         &.red{
-            background-color: #4CAF50;
+            background-color: $red-600;
             color: #fff;
             &:hover{
-                background-color: #51a554;
+                background-color: $red-500;
             }
         }
         &:active{
@@ -153,12 +153,12 @@ input{
         box-sizing: border-box;
         background-color: #fff !important;
         &.blue{
-            border-color: #2196F3;
-            caret-color: #2196F3;
+            border-color: $blue-500;
+            caret-color: $blue-500;
         }
         &.black{
-            border-color: #333;
-            caret-color: #333;
+            border-color: $gray-900;
+            caret-color: $gray-900;
         }
     }
 }

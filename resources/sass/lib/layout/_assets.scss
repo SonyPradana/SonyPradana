@@ -1,4 +1,6 @@
 // breadcrumb
+@import '../base/variables';
+
 .coit{
     &.breadcrumb{
         margin: 12px 0;
@@ -14,7 +16,7 @@
 
             +li:before{
                 padding: 4px;
-                color: black;
+                color: $gray-900;
                 content: "/\00a0";                
             }
 
@@ -111,7 +113,7 @@
     3px 5px 5px 1px #937676ab;
     .message{
         text-align: center;
-        color: #fff;
+        color: $gray-50;
         font-size: 18px;
     }
     .icon{
@@ -127,25 +129,25 @@
 
     // style
     &.success {
-        background-color: #ff3c00;
+        background-color: $orange-500;
         .icon{
             background-image: url('/lib/css/ui/v1/asset/notif/success.svg')
         }
     }
     &.danger {
-        background-color: #ff0101;
+        background-color: $red-500;
         .icon{
             background-image: url('/lib/css/ui/v1/asset/notif/danger.svg')
         }
     }
     &.warning {
-        background-color: #ffe600;
+        background-color: $yellow-500;
         .icon{
             background-image: url('/lib/css/ui/v1/asset/notif/warning.svg')
         }
     }
     &.info {
-        background-color: #ae00ff;
+        background-color: $blue-500;
         .icon{
             background-image: url('/lib/css/ui/v1/asset/notif/info.svg')
         }
@@ -166,7 +168,7 @@
 
     .sparator-title{
         border-top-right-radius: 8px;
-        color: #fff;
+        color: $gray-50;
         padding: 8px;
         width: 100px;
         h3{
@@ -218,7 +220,7 @@
         margin: 12px auto;
         display: inline-block;
         a {
-            color: black;
+            color: $gray-900;
             float: left;
             padding: 8px 16px;
             text-decoration: none;

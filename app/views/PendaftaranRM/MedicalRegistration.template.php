@@ -4,7 +4,6 @@
   <?php include($_SERVER['DOCUMENT_ROOT'] . '/resources/components/meta/metatag.php') ?>
 
   <link rel="stylesheet" href="/lib/css/ui/v1.1/full.style.css">
-  <link rel="stylesheet" href="/lib/css/ui/v1/table.css">
   <script src="/lib/js/index.min.js"></script>
   <script src="/lib/js/bundles/message.js"></script>
   <script src="/lib/js/bundles/keepalive.min.js"></script>
@@ -15,11 +14,26 @@
       gap: 12px;
     }
 
+    .w-min-100px {
+      width: 100px;
+    }
+
+    .text-bold {
+      font-weight: 700;
+      text-transform: capitalize;
+    }
+
+    .box-grup-control > div {
+      margin-bottom: 12px;
+      font-size: 1rem;
+      line-height: 1.5rem;
+    }
+
     .box-border {
       border-radius: 4px;
       border: 1px solid #F3F4F6;
       border-top: 3px solid #2563EB;
-      padding: 4px;
+      padding: 8px;
     }
 
     .app-container {
@@ -43,15 +57,9 @@
 
     .container-left {
       display: grid;
-      grid-template-rows: repeat(2, auto);
+      grid-template-rows: min-content min-content;
       row-gap: 12px;
       column-gap: 12px;
-    }
-
-    .container-right {
-      display: grid;
-      grid-template-rows: 1fr;
-      row-gap: 12px;
     }
 
     .box-header {
@@ -67,6 +75,7 @@
     }
 
     .box-table table {
+      width: 100%;
       font-size: .95rem;
     }
 
@@ -84,7 +93,7 @@
 
       .app-container {
         grid-template-columns: 1fr;
-        grid-template-rows: auto auto 1fr;
+        grid-template-rows: min-content min-content min-content;
       }
 
       .container-left {
@@ -148,18 +157,46 @@
           </form>
         </div>
         <div class="box-border box-registration">
-          <div>
-            <p>Nomor Rm: {{ info_rm.nomor_rm }}</p>
-            <p>Nama: {{ info_rm.nama }}</p>
-            <p>Tanggal Lahir: {{ info_rm.tanggal_lahir }}</p>
-            <p>Alamat: {{ info_rm.alamat }}, {{ info_rm.nomor_rt ?? 0 }}/{{ info_rm.nomor_rw ?? 0 }}</p>
-            <p>Nama KK: {{ info_rm.nama_kk }}</p>
-            <p>No KTP: {{ info_rm.nik }}</p>
-            <p>No BPJS: {{ info_rm.nomor_jaminan }}</p>
+          <div class="box-grup-control">
+            <div class="grub-control horizontal gap-12px">
+              <div class="w-min-100px">Nomor Rm:</div>
+              <div class="text-bold">{{ info_rm.nomor_rm ?? '--' }}</div>
+            </div>
+            <div class="grub-control horizontal gap-12px">
+              <div class="w-min-100px">Nama:</div>
+              <div class="text-bold">{{ info_rm.nama ?? '--' }}</div>
+            </div>
+            <div class="grub-control horizontal gap-12px">
+              <div class="w-min-100px">Tanggal Lahir:</div>
+              <div class="text-bold">{{ info_rm.tanggal_lahir ?? '--' }}</div>
+            </div>
+            <div class="grub-control horizontal gap-12px">
+              <div class="w-min-100px">Alamat:</div>
+              <div class="text-bold">{{ info_rm.alamat ?? '--' }}, {{ info_rm.nomor_rt ?? 0 }}/{{ info_rm.nomor_rw ?? 0 }}</div>
+            </div>
+            <div class="grub-control horizontal gap-12px">
+              <div class="w-min-100px">Nama KK:</div>
+              <div class="text-bold">{{ info_rm.nama_kk ?? '--' }}</div>
+            </div>
+            <div class="grub-control horizontal gap-12px">
+              <div class="w-min-100px">No KTP:</div>
+              <div class="text-bold">{{ info_rm.nik ?? '--' }}</div>
+            </div>
+            <div class="grub-control horizontal gap-12px">
+              <div class="w-min-100px">No BPJS:</div>
+              <div class="text-bold">{{ info_rm.nomor_jaminan ?? '--' }}</div>
+            </div>
             <div>
               <label class="v-group-input">
                 Tanggal Input
                 <input v-model="tanggal_kunjungan" type="date" class="textbox outline blue rounded small">
+              </label>
+              <label class="v-group-input">
+                Status Kunjungan
+                <select v-model="status_kujungan" class="textbox outline blue rounded light">
+                  <option value="baru">Kunjungan Baru</option>
+                  <option value="lama">Kunjungan Lama</option>
+                </select>
               </label>
               <label class="v-group-input">
                 Poli
@@ -212,7 +249,7 @@
                   <th>Status</th>
                   <th>BPJS</th>
                   <th>Diagnosa</th>
-                  <th>action</th>
+                  <th>Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -265,6 +302,7 @@
         valid_rm: false,
         kunjungan: [],
         // registration
+        status_kujungan: 'baru',
         tanggal_kunjungan: new Date().toJSON().slice(0,10),
         poli_tujuan: 'umum',
         jenis_peserta: 0,

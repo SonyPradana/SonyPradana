@@ -1,0 +1,89 @@
+@import '../base/variables';
+
+table {
+  padding: 4px;
+  font-family: Arial, Helvetica, sans-serif;
+  color: $gray-800;
+  border-collapse: collapse;
+  font-size: 1rem;
+  line-height: 1.5rem;
+
+  th a,
+  td a,
+  tr,
+  thead,
+  tbody {
+    -moz-box-sizing: border-box;
+    -o-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+
+  th a:link:not(.link),
+  th a:hover:not(.link),
+  th a:active:not(.link),
+  th a:visited:not(.link) {
+    color: $gray-900;
+    text-decoration: none;
+  }
+
+  th a:not(.link),
+  td a:not(.link) {
+    display: block;
+    width: 100%;
+  }
+
+  th .link {
+    margin-right: 4px;
+  }
+
+  th a.sort-by { 
+    padding-right: 16px;
+    position: relative;
+  }
+
+  a.sort-by:before,
+  a.sort-by:after {
+    border: 4px solid transparent;
+    content: "";
+    display: block;
+    height: 0;
+    right: 4px;
+    top: 50%;
+    position: absolute;
+    width: 0;
+  }
+
+  a.sort-by:before {
+    border-bottom-color: $gray-500;
+    margin-top: -8px;
+  }
+  a.sort-by:after {
+    border-top-color: $gray-500;
+    margin-top: 1px;
+  }
+  
+  td,
+  th {
+    border: 1px solid $gray-100;
+    text-align: left;
+    padding: 8px;
+  }
+
+  thead tr td,
+  tbody tr th.number,
+  tbody tr th.center
+  {
+    text-align: center;
+  }
+  
+  tbody tr:nth-child(even) {
+    background-color: $gray-100;
+  }
+  tbody tr:hover {
+    background-color: $yellow-100;
+  }
+  th.mark {
+    color:$yellow-300
+  }
+}
