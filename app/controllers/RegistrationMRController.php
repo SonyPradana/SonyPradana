@@ -1,6 +1,7 @@
 <?php
 
 use Simpus\Apps\Controller;
+use Simpus\Apps\Middleware;
 use System\Database\MyPDO;
 
 class RegistrationMRController extends Controller
@@ -35,9 +36,9 @@ class RegistrationMRController extends Controller
     $error = array();
 
     return $this->view('PendaftaranRM/MedicalRegistration', array (
-      "auth"          => $this->getMiddleware()['auth'],
+      "auth"          => Middleware::getMiddleware()['auth'],
       "DNT"           => $this->getMiddleware()['DNT'],
-      "redirect_to"   => $_GET['redirect_to'] ?? '/',
+      "redirect_to"   => $_GET['url'] ?? null,
       "meta"          => array (
         "title"         => "Pendaftaran RM",
         "discription"   => "Sistem Informasi Manajemen Puskesmas SIMPUS Lerep",
@@ -47,9 +48,7 @@ class RegistrationMRController extends Controller
         "active_menu"   => 'Pendaftaran',
         "header_menu"   => MENU_MEDREC
       ),
-      "contents" => array (
-        'it'  => 'cools'
-      ),
+      "contents" => array (),
       'error' => $error,
       "message" => array (
         "show"      => $msg['show'],

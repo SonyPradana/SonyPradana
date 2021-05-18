@@ -31,7 +31,7 @@
 
     .box-border {
       border-radius: 4px;
-      border: 1px solid #F3F4F6;
+      border: 1px solid #E5E5E5;
       border-top: 3px solid #2563EB;
       padding: 8px;
     }
@@ -151,6 +151,9 @@
               >
             </label>
             <div class="grub-control horizontal right gap-12px">
+              <button v-if="valid_rm" v-on:click="editRM" type="button" class="btn rounded light green fill">Edit</button>
+              <button v-else v-on:click="newRM" type="button" class="btn rounded light blue fill">Baru</button>
+
               <button v-on:click="getInfo" type="button" class="btn rounded light blue outline">Cari</button>
               <button v-on:click="reset" type="button" class="btn rounded light red outline">Batal</button>
             </div>
@@ -217,9 +220,7 @@
                 </select>
               </label>
               <div class="grub-control horizontal right gap-12px">
-                <button v-if="valid_rm" v-on:click="daftar" type="button" class="btn rounded light blue outline">Daftar</button>
-                <button v-else v-on:click="getInfo" type="button" class="btn rounded light blue outline">Baru</button>
-
+                <button :disabled="!valid_rm" v-on:click="daftar" type="button" class="btn rounded light blue outline">Daftar</button>
                 <button v-on:click="reset" type="button" class="btn rounded light red outline">Batal</button>
               </div>
             </div>
@@ -310,6 +311,11 @@
     },
     mounted() {
       this.loadKunjungan()
+
+      this.nomor_rm = '<?= $portal['redirect_to']; ?>'
+      if (this.nomor_rm != '') {
+        this.getInfo();
+      }
     },
     methods: {
       loadKunjungan() {
@@ -320,6 +326,7 @@
             }
           })
       },
+
       getInfo() {
         this.valid_rm = false;
         $json(`/api/ver1.0/RekamMedis/search.json?strict-search=on&nomor-rm-search=${this.nomor_rm}&nik-jaminan=${this.nomor_jaminan}`)
@@ -335,6 +342,7 @@
             }
           })
       },
+
       reset() {
         this.nomor_rm = ''
         this.nomor_jaminan = ''
@@ -344,6 +352,7 @@
         this.poli_tujuan = 'umum'
         this.jenis_peserta = 0
       },
+
       daftar() {
         if (this.valid_rm) {
           $json(`/api/ver2/RegistrationMR/tambahKunjungan.json`, {
@@ -375,6 +384,7 @@
           })
         }
       },
+
       hapus(id) {
         if (confirm("Hapus Kunjungan!")) {
           const index = this.kunjungan.findIndex(e => e.id == id)
@@ -401,6 +411,7 @@
             })
         }
       },
+
       isNumber: function(evt) {
         evt = evt ? evt : window.event;
         const charCode = evt.which ? evt.which : evt.keyCode;
@@ -409,7 +420,15 @@
         } else {
           return true;
         }
-      }
+      },
+
+      newRM() {
+        window.location.href = '/rekam-medis/new?url=/pendaftaran'
+      },
+
+      editRM() {
+        window.location.href = `/rekam-medis/edit?document_id=${this.info_rm.id}`
+      },
 
     },
   })
