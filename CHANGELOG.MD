@@ -12,17 +12,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Medical Record add NIK and Nomor jaminan (biodata)
 - Medical Record CRUD support biodata
 - Add Regestration Medical record
+- Router prefix (grouping route expression with same prefix)
 
 ### Changed
 - Register command now in CLI.php (class) not in command.config.php (array)
 - Cek nomor terahir menggunakan id dan nomor rm tertinggi
 - [Style] Menyamakan variable warna (css), merge table css ke full.style.css
+- Change index router to static class
 
 ### Fixed
 - Var_dump in pruduction (Insert.php)
 - Fix MyModel skip value = 0 (zero), php detect 0 if null
 - Fix MyModel return where statment to '()', if where statment null MyModel will not return the query
 - Fix MyModel prefix ambigus column name, support costume prefix
+
+### Security
+- decress memory use in unit test (add reset router)
 
 ## [2.3.7] - 2021-04-16
 ### Added
