@@ -26,6 +26,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix MyModel return where statment to '()', if where statment null MyModel will not return the query
 - Fix MyModel prefix ambigus column name, support costume prefix
 
+### Removed
+- MixController, mixing js or css to one single file
+
 ### Security
 - decress memory use in unit test (add reset router)
 

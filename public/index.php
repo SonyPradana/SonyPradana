@@ -137,13 +137,6 @@ Router::match(['get', 'post'], '/kia-anak/(:text)/(:text)', function(string $act
 Router::any('/API/([0-9a-zA-Z.]*)/(:any)/(:any).json', function($version, $unit, $action) {
   return (new ApiController())->index($unit, $action, $version);
 });
-// API - Mix
-Router::get('/css/mix.style.css', function() {
-  return (new MixController())->mix_css();
-});
-Router::get('/js/mix.app.js', function() {
-  return (new MixController())->mix_javascript();
-});
 
 // Trivia
 Router::match(array('get', 'post'), '/trivia/submit', function() {
