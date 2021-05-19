@@ -3,13 +3,12 @@
 namespace Simpus\Tests;
 
 use PHPUnit\Framework\TestCase;
-use Simpus\Apps\Route;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Pool;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
-use Simpus\Apps\Controller;
+use Simpus\Apps\Router;
 
 class RouterTest extends TestCase
 {
@@ -21,11 +20,12 @@ class RouterTest extends TestCase
     $_SERVER['REQUEST_URI'] = '/found';
     $_SERVER['REQUEST_METHOD'] = 'GET';
 
-    Route::get('/found', function() {
+    Router::Reset();
+    Router::get('/found', function() {
       echo 'hay';
     });
 
-    Route::run('/');
+    Router::run('/');
   }
 
   public function testNotAllowRouter(): void
@@ -36,15 +36,16 @@ class RouterTest extends TestCase
     $_SERVER['REQUEST_URI'] = '/not-allowed';
     $_SERVER['REQUEST_METHOD'] = 'POST';
 
-    Route::get('/not-allowed', function($any) {
+    Router::Reset();
+    Router::get('/not-allowed', function($any) {
       echo 'hay';
     });
 
-    Route::methodNotAllowed(function() {
+    Router::methodNotAllowed(function() {
       echo 'not allowed';
     });
 
-    Route::run('/');
+    Router::run('/');
   }
 
   public function testNotFoundRouter(): void
@@ -55,15 +56,16 @@ class RouterTest extends TestCase
     $_SERVER['REQUEST_URI'] = '/not-found';
     $_SERVER['REQUEST_METHOD'] = 'GET';
 
-    Route::get('/has-found', function($any) {
+    Router::Reset();
+    Router::get('/has-found', function($any) {
       echo 'hay';
     });
 
-    Route::pathNotFound(function($path) {
+    Router::pathNotFound(function($path) {
       echo $path;
     });
 
-    Route::run('/');
+    Router::run('/');
   }
 
   public function testSpeedRouter(): void
@@ -75,19 +77,17 @@ class RouterTest extends TestCase
     $_SERVER['REQUEST_METHOD'] = 'GET';
 
     while ($keepRun == true) {
-      $router = new Route();
-      $router->get('/', function() {
+      Router::Reset();
+      Router::get('/', function() {
         return "router test speed";
       });
-      $router->run('/');
+      Router::run('/');
 
       $routerCount++;
 
       if (microtime(true) - $watch_start > 1) {
         $keepRun = false;
       }
-
-      $router = null;
     }
 
     $this->assertGreaterThan(26_000, $routerCount);

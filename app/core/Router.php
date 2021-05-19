@@ -40,6 +40,16 @@ class Router
   }
 
   /**
+   * Reset all propery to be null
+   */
+  public static function Reset()
+  {
+    self::$routes = Array();
+    self::$pathNotFound = null;
+    self::$methodNotAllowed = null;
+  }
+
+  /**
    * Grouping routes using same prafix
    * @param sting $prefix Prefix of router exprestion
    * @return RouterFactory Function ti collact routes
