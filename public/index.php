@@ -3,15 +3,15 @@ session_name('simpus');
 session_set_cookie_params(['secure' => true, 'httponly' => true,]);
 session_start();
 
-use Simpus\Apps\{Route, Controller, Middleware};
+use Simpus\Apps\{Router, Controller, Middleware, RouterProvider};
 use Simpus\Auth\{Auth, User};
 
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 
-$app   = new Route();
 $token = $_SESSION['token'] ?? '';
 $auth  = new Auth($token, Auth::USER_NAME_AND_USER_AGENT_IP);
 $user  = new User($auth->getUserName());
+
 Middleware::setMiddleware( array(
   "auth" => array(
     "token"                 => $token,
@@ -24,27 +24,27 @@ Middleware::setMiddleware( array(
 ));
 
 // home
-$app->get('/', function() {
+Router::get('/', function() {
   return (new HomeController())->index();
 });
 
 // auth
-$app->match(['get', 'post'], '/login', function() {
+Router::match(['get', 'post'], '/login', function() {
   return (new AuthController())->login();
 });
-$app->match(['get', 'post'], '/logout', function() {
+Router::match(['get', 'post'], '/logout', function() {
   return (new AuthController())->logout();
 });
-$app->match(['get', 'post'], '/profile', function() {
+Router::match(['get', 'post'], '/profile', function() {
   return (new AuthController())->profile();
 });
-$app->match(['get', 'post'], '/register', function() {
+Router::match(['get', 'post'], '/register', function() {
   return (new AuthController())->register();
 });
-$app->match(['get', 'post'], '/reset-password', function() {
+Router::match(['get', 'post'], '/reset-password', function() {
   return (new AuthController())->reset();
 });
-$app->match(['get', 'post'], '/forgot/(:text)', function(string $action) {
+Router::match(['get', 'post'], '/forgot/(:text)', function(string $action) {
   if ($action == 'reset') {
     return (new AuthController())->hardReset();
   } elseif ( $action == 'send') {
@@ -56,34 +56,38 @@ $app->match(['get', 'post'], '/forgot/(:text)', function(string $action) {
   }
 });
 
-$app->get('/admin', function() {
-  return (new AdminController())->index();
-});
-$app->get('/admin/(:any)', function($any) {
-  return (new AdminController())->index();
-});
-$app->get('/admin/(:any)/(:any)', function($any, $second_any) {
-  return (new AdminController())->index();
+Router::prefix('/admin')->routes(function(RouterProvider $routes) {
+  $routes->get('', function() {
+    return (new AdminController())->index();
+  });
+
+  $routes->get('/(:any)', function($any) {
+    return (new AdminController())->index();
+  });
+
+  $routes->get('/(:any)/(:any)', function($any, $second_any) {
+    return (new AdminController())->index();
+  });
 });
 
 // message
-$app->get('/messages/public', function() {
+Router::get('/messages/public', function() {
   return (new MessageController())->public();
 });
 
 // halaman standar
-$app->get('/About', function() {
+Router::get('/About', function() {
   return (new HomeController())->about();
 });
-$app->get('/Ourteam', function() {
+Router::get('/Ourteam', function() {
   return (new ContactController())->ourTeam();
 });
-$app->match(['get', 'post'], '/Contactus', function() {
+Router::match(['get', 'post'], '/Contactus', function() {
   return (new ContactController())->contactUs();
 });
 
 // info
-$app->get('/info/(:any)', function(string $page) {
+Router::get('/info/(:any)', function(string $page) {
   if (Controller::view_exists('info/' . $page)) {
     return (new InfoController())->show( $page );
   } else {
@@ -94,29 +98,32 @@ $app->get('/info/(:any)', function(string $page) {
 });
 
 // aricle
-$app->get('/read/(:any)', function(string $title) {
+Router::get('/read/(:any)', function(string $title) {
   // TODO: article exist cheacker before call index
   return (new ArticleController())->index($title);
 });
 
 // unit kerja
 // pendaftaran
-$app->get('/pendaftaran', function() {
+Router::get('/pendaftaran', function() {
   return (new RegistrationMRController)->index();
 });
 // rekam-medis
-$app->get('/rekam-medis', function() {
-  return (new RekamMedisController())->index();
-});
-$app->match(['get', 'post'], '/rekam-medis/(:text)', function(string $page) {
-  if (Controller::view_exists('rekam-medis/' . $page)) {
-    return (new RekamMedisController())->show( strtolower($page) );
-  } else {
+Router::prefix('/rekam-medis')->routes(function(RouterProvider $routes) {
+  $routes->get('', function() {
     return (new RekamMedisController())->index();
-  }
+  });
+
+  $routes->match(['get', 'post'], '/(:text)', function(string $page) {
+    if (Controller::view_exists('rekam-medis/' . $page)) {
+      return (new RekamMedisController())->show( strtolower($page) );
+    } else {
+      return (new RekamMedisController())->index();
+    }
+  });
 });
 // kia-anak biodata/posyandu
-$app->match(['get', 'post'], '/kia-anak/(:text)/(:text)', function(string $action, string $unit) {
+Router::match(['get', 'post'], '/kia-anak/(:text)/(:text)', function(string $action, string $unit) {
   if (Controller::view_exists('kia-anak/'. $unit . '/'. $action)) {
     return (new KiaAnakController)->show($action, $unit);
   } else {
@@ -127,49 +134,57 @@ $app->match(['get', 'post'], '/kia-anak/(:text)/(:text)', function(string $actio
 });
 
 // API
-$app->match(['get', 'put', 'post', 'delete'], '/API/([0-9a-zA-Z.]*)/(:any)/(:any).json', function($version, $unit, $action) {
+Router::any('/API/([0-9a-zA-Z.]*)/(:any)/(:any).json', function($version, $unit, $action) {
   return (new ApiController())->index($unit, $action, $version);
 });
 // API - Mix
-$app->get('/css/mix.style.css', function() {
+Router::get('/css/mix.style.css', function() {
   return (new MixController())->mix_css();
 });
-$app->get('/js/mix.app.js', function() {
+Router::get('/js/mix.app.js', function() {
   return (new MixController())->mix_javascript();
 });
 
 // Trivia
-$app->match(array('get', 'post'), '/trivia/submit', function() {
+Router::match(array('get', 'post'), '/trivia/submit', function() {
   return (new TriviaController())->submit();
 });
 
 // Stories
-$app->get('/stories', function() {
-  return (new StoriesController)->index();
+Router::prefix('/stories')->routes(function(RouterProvider $route) {
+
+  $route->get('', function() {
+    return (new StoriesController)->index();
+  });
+
+  $route->get('/view/(:any)', function($storyID) {
+    return (new StoriesController)->preview($storyID);
+  });
+
+  $route->get('/roll/(:any)', function($group_name) {
+    return (new StoriesController)->roll($group_name);
+  });
 });
 
-$app->get('/stories/view/(:any)', function($storyID) {
-  return (new StoriesController)->preview($storyID);
-});
-$app->get('/stories/roll/(:any)', function($group_name) {
-  return (new StoriesController)->roll($group_name);
-});
-
-$app->get('/QnA', function() {
+Router::get('/QnA', function() {
   return (new QuestionAnswerController)->index();
 });
-$app->get('/question/(:id)/(:slug)', function($thread_ID, $slug) {
-  return (new QuestionAnswerController)->thread($thread_ID);
-});
-$app->get('/question/ask', function() {
-  return (new QuestionAnswerController)->ask();
-});
-$app->get('/question/answer/(:id)', function($id) {
-  return (new QuestionAnswerController)->answer($id);
+Router::prefix('/question')->routes(function(RouterProvider $route) {
+  $route->get('/(:id)/(:slug)', function($thread_ID, $slug) {
+    return (new QuestionAnswerController)->thread($thread_ID);
+  });
+
+  $route->get('/ask', function() {
+    return (new QuestionAnswerController)->ask();
+  });
+
+  $route->get('/answer/(:id)', function($id) {
+    return (new QuestionAnswerController)->answer($id);
+  });
 });
 
 // sitemap generator
-$app::get('/sitemap.(:text)', function($ext) {
+Router::get('/sitemap.(:text)', function($ext) {
   $ext = strtolower($ext);
   $respone = new SiteMapController();
 
@@ -183,16 +198,16 @@ $app::get('/sitemap.(:text)', function($ext) {
 });
 
 // default path 404, 405
-$app->pathNotFound(function($path) {
+Router::pathNotFound(function($path) {
   return DefaultController::page_404(array(
     'path' => $path
   ));
 });
-$app->methodNotAllowed(function($path, $method) {
+Router::methodNotAllowed(function($path, $method) {
   return DefaultController::page_405(array (
     'path' => $path,
     'method' => $method
   ));
 });
 
-$app->run('/');
+Router::run('/');
