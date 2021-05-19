@@ -2,9 +2,8 @@
 
 namespace Simpus\Apps;
 
-class Route
+class Router
 {
-
   private static $routes = Array();
   private static $pathNotFound = null;
   private static $methodNotAllowed = null;
@@ -18,7 +17,45 @@ class Route
     '(:all)'  => '(.*)',
   );
 
-  public static function match($method, $uri, $callback)
+  /**
+   * Adding new router using array of router
+   * @param array $route Router array format (expression, function, method)
+   */
+  public static function addRoutes(array $route)
+  {
+    if (isset($route['expression'])
+    && isset($route['function'])
+    && isset($route['method'])) {
+      array_push(self::$routes, $route);
+    }
+  }
+
+  /**
+   * Get routes has added
+   * @return array Routes array
+   */
+  public static function getRoutes()
+  {
+    return self::$routes;
+  }
+
+  /**
+   * Grouping routes using same prafix
+   * @param sting $prefix Prefix of router exprestion
+   * @return RouterFactory Function ti collact routes
+   */
+  public static function prefix(string $prefix)
+  {
+    return new RouterFactory($prefix);
+  }
+
+  /**
+   * Function used to add a new route
+   * @param array|string $method Methods allow
+   * @param string $expression Route string or expression
+   * @param callable $function Function to call if route with allowed method is found
+   */
+  public static function match($method, string $uri, $callback)
   {
     $user_pattern   = array_keys(self::$patterns);
     $allow_pattern  = array_values(self::$patterns);
@@ -32,61 +69,66 @@ class Route
     array_push(self::$routes, $route);
   }
 
-  public static function setRoutes($route)
-  {
-    self::$routes = $route;
-  }
-  public static function getRoutes()
-  {
-    return self::$routes;
-  }
-
   /**
-    * Function used to add a new route [method: get, post]
-    * @param string $expression    Route string or expression
-    * @param callable $function    Function to call if route with allowed method is found
-    *
-    */
+   * Function used to add a new route [any method]
+   * @param string $expression Route string or expression
+   * @param callable $function Function to call if route with allowed method is found
+   *
+   */
   public static function any(string $expression, $function)
   {
     self::match(['get','post', 'put', 'patch', 'delete', 'options'], $expression, $function);
   }
 
   /**
-    * Function used to add a new route [method: get]
-    * @param string $expression    Route string or expression
-    * @param callable $function    Function to call if route with allowed method is found
-    *
-    */
+   * Function used to add a new route [method: get]
+   * @param string $expression Route string or expression
+   * @param callable $function Function to call if route with allowed method is found
+   *
+   */
   public static function get(string $expression, $function)
   {
     self::match('get', $expression, $function);
   }
 
   /**
-    * Function used to add a new route [method: post]
-    * @param string $expression    Route string or expression
-    * @param callable $function    Function to call if route with allowed method is found
-    *
-    */
+   * Function used to add a new route [method: post]
+   * @param string $expression Route string or expression
+   * @param callable $function Function to call if route with allowed method is found
+   *
+   */
   public static function post(string $expression, $function)
   {
     self::match('post', $expression, $function);
   }
 
+  /**
+   * Result when route expression not register/found
+   * @param callable Function to be Call
+   */
   public static function pathNotFound($function)
   {
     self::$pathNotFound = $function;
   }
 
+  /**
+   * Result when route method not match/allowed
+   * @param callable Function to be Call
+   */
   public static function methodNotAllowed($function)
   {
     self::$methodNotAllowed = $function;
   }
 
+  /**
+   * Run/execute routes
+   * @param string $basepath Base Path
+   * @param boolean $case_matters Cese sensitive metters
+   * @param boolean $trailing_slash_matters Trailing slash matters
+   * @param boolean $multimatch Return Multy route
+   */
   public static function run($basepath = '', $case_matters = false, $trailing_slash_matters = false, $multimatch = false)
   {
-
     // The basepath never needs a trailing slash
     // Because the trailing slash will be added using the route expressions
     $basepath = rtrim($basepath, '/');
@@ -103,7 +145,7 @@ class Route
   		  $path = $parsed_url['path'];
   	  } else {
         // If the path is not equal to the base path (including a trailing slash)
-        if ($basepath.'/'!=$parsed_url['path']) {
+        if ($basepath.'/' != $parsed_url['path']) {
           // Cut the trailing slash away because it does not matters
           $path = rtrim($parsed_url['path'], '/');
         } else {
