@@ -63,9 +63,7 @@ class CronCommand extends Command
     // covid web scrab
     $schadule
       ->call(function() use ($pdo) {
-        return (new CovidKabSemarangService($pdo))->indexing_compiere([
-          "x-version" => "ver1.1"
-        ]);
+        return (new CovidKabSemarangService($pdo))->indexing_compiere([]);
       })
       ->eventName('info covid')
       ->hourly();

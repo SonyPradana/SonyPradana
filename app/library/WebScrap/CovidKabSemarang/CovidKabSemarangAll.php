@@ -4,86 +4,16 @@ namespace WebScrap\CovidKabSemarang;
 
 use DOMDocument;
 use GuzzleHttp\Client;
+use GuzzleHttp\Promise;
 
-class CovidKabSemarang
+class CovidKabSemarangAll
 {
-  private $_positif_dirawat = 0;
-  private $_positif_isolasi = 0;
-  private $_positif_sembuh = 0;
-  private $_positif_meninggal = 0;
-  private $_suspek = 0;
-  private $_suspek_discharded = 0;
-  private $_suspek_meninggal = 0;
-  private $_raw_data = [];
-
-  /**
-   * @return integer jumlah positif covid dirawat
-   */
-  public function positifDirawat(): int
+  public static function instant()
   {
-    return (int) $this->_positif_dirawat;
+    return new self;
   }
 
-  /**
-   * @return integer Jumlah pasien positif yang diisolasi
-   */
-  public function positifIsolasi(): int
-  {
-    return (int) $this->_positif_isolasi;
-  }
-
-  /**
-   * @return integer jumlah positif covid dirawat
-  */
-  public function positifSembuh(): int
-  {
-    return (int) $this->_positif_sembuh;
-  }
-
-  /**
-   * @return integer jumlah positif covid dirawat
-   */
-  public function positifMeninggal(): int
-  {
-    return (int) $this->_positif_meninggal;
-  }
-
-  /**
-   * @return integer jumlah suspek covid
-   */
-  public function suspek(): int
-  {
-    return (int) $this->_suspek;
-  }
-
-  /**
-   * @return integer jumlah suspek discharded covid
-   */
-  public function suspekDischarded(): int
-  {
-    return (int) $this->_suspek_discharded;
-  }
-
-  /**
-   * @return integer jumlah suspek covid meninggal
-   */
-  public function suspekMeninggal(): int
-  {
-    return (int) $this->_suspek_meninggal;
-  }
-
-  /**
-   * @return integer Raw data (semua data)
-   */
-  public function data(): array
-  {
-    return $this->_raw_data;
-  }
-
-  /**
-   * @var array array id kecamatan se kabupaten
-   */
-  public $Daftar_Kecamatan = [
+  private $Daftar_Kecamatan = [
     "getasan"       => 1,
     "tengaran"      => 2,
     "susukan"       => 3,
@@ -105,18 +35,66 @@ class CovidKabSemarang
     "bandungan"     => 19
   ];
 
-  public static function instant()
+  /**
+   * Catch all data from 19 api (kecamtan sekabupaten)
+   */
+  public function catchAll()
   {
-    return new self;
+    $client = new Client(['base_uri' => 'https://corona.semarangkab.go.id/prona/covid/data_desa']);
+
+    // Initiate each request but do not block
+    $promises = [];
+
+    foreach ($this->Daftar_Kecamatan as $key => $val)  {
+      $promises[$key] = $client->getAsync('?id_kecamatan=' . $val);
+    }
+
+    $responses = Promise\Utils::unwrap($promises);
+
+    $res                = [];
+    $kasus_positif      = 0;
+    $kasus_isolasi      = 0;
+    $kasus_sembuh       = 0;
+    $kasus_meninggal    = 0;
+    $suspek             = 0;
+    $suspek_discharded  = 0;
+    $suspek_meninggal   = 0;
+
+    foreach ($responses as $respone_name => $respone) {
+      $data = $this->getData($respone_name, $respone->getBody());
+
+      $res[]              = $data;
+      $kasus_positif      += $data["kasus_posi"];
+      $kasus_isolasi      += $data["kasus_isol"];
+      $kasus_sembuh       += $data["kasus_semb"];
+      $kasus_meninggal    += $data["kasus_meni"];
+      $suspek             += $data["suspek"];
+      $suspek_discharded  += $data["discharded"];
+      $suspek_meninggal   += $data["suspek_meninggal"];
+    }
+
+    return array(
+      "kabupaten"         => "semarang",
+      "kasus_posi"        => $kasus_positif,
+      "kasus_isol"        => $kasus_isolasi,
+      "kasus_semb"        => $kasus_sembuh,
+      "kasus_meni"        => $kasus_meninggal,
+      "suspek"            => $suspek,
+      "suspek_discharded" => $suspek_discharded,
+      "suspek_meninggal"  => $suspek_meninggal,
+      "data"              => $res,
+    );
   }
 
   /**
    * Mengkonvert html table ke array php
-   * @param string $nama_kecamatan Nama kecamatan terdaftar diwillayah kabupaten semarang
+   *
+   * @param string $nama_kecamatan Nama kecamatan terdaftar diwilayah kabupaten semarang
+   * @param string $html Raw data html catch from api
    * @return array|boolean Hasil array covid wilayah kab semarang.
    * False jika data gagal dimuat
    */
-  public function getData($nama_kecamatan)
+  private function getData($nama_kecamatan, $html)
   {
     // parameter untukmendapatkan total data per request
     $positif_dirawat    = 0;
@@ -127,19 +105,9 @@ class CovidKabSemarang
     $suspek_discharded  = 0;
     $suspek_meninggal   = 0;
 
-    // mengkonvert nama wilayah kedalam id kecamatan
-    $id = $this->Daftar_Kecamatan[$nama_kecamatan];
-
-    // memuat data mentah dari web dinkes
-    $client = new Client();
-    $res = $client->get("https://corona.semarangkab.go.id/prona/covid/data_desa?id_kecamatan=$id");
-    if ($res->getStatusCode() > 200) {
-      return false;
-    }
-
     // memuat data dalam bentuk DOM htlm -> mudah di parsing
     $dom = new DOMDocument();
-    $dom->loadHTML($res->getBody());
+    $dom->loadHTML($html);
 
     $desa = [];
 
@@ -190,17 +158,17 @@ class CovidKabSemarang
     // mengkelompok kan semua hasil menjadi satu
    return [
       "kecamatan"         => $nama_kecamatan,
-      "kasus_posi"        => $this->_positif_dirawat    = $positif_dirawat,
-      "kasus_isol"        => $this->_positif_isolasi    = $positif_isolasi,
-      "kasus_semb"        => $this->_positif_sembuh     = $positif_sembuh,
-      "kasus_meni"        => $this->_positif_meninggal  = $positif_meninggal,
-      "suspek"            => $this->_suspek             = $suspek,
-      "discharded"        => $this->_suspek_discharded  = $suspek_discharded,
-      "suspek_meninggal"  => $this->_suspek_meninggal   = $suspek_meninggal,
-      "data"              => $this->_raw_data           = $desa
+      "kasus_posi"        => $positif_dirawat,
+      "kasus_isol"        => $positif_isolasi,
+      "kasus_semb"        => $positif_sembuh,
+      "kasus_meni"        => $positif_meninggal,
+      "suspek"            => $suspek,
+      "discharded"        => $suspek_discharded,
+      "suspek_meninggal"  => $suspek_meninggal,
+      "data"              => $desa
     ];
   }
-
+  
   /**
    * Helper -> mengilangakan whitespace pada string
    * @return string string tanpa ada doble space

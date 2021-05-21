@@ -123,24 +123,6 @@ final class ServicesTest extends TestCase
     $this->assertEquals('ok', $data_fetch['status']);
     $this->assertEquals(['HTTP/1.1 200 Oke'], $data_fetch['headers']);
 
-    // success indexing [optional to test]
-    // $data_indexing = $api->indexing (
-    //   array (
-    //     'x-version' => 'ver1.1'
-    //   )
-    // );
-    // $this->assertEquals('ok', $data_indexing['status']);
-    // $this->assertEquals(['HTTP/1.1 200 Oke'], $data_indexing['headers']);
-
-    // success index compire ['optional to test']
-    // $data_indexCompiere = $api->indexing_compiere (
-    //   array (
-    //     'x-version' => 'ver1.1'
-    //   )
-    // );
-    // $this->assertEquals('ok', $data_indexCompiere['status']);
-    // $this->assertEquals(['HTTP/1.1 200 Oke'], $data_indexCompiere['headers']);
-
     // success info
     $data_info = $api->info(array());
     $this->assertEquals('ok', $data_info['status']);
@@ -173,25 +155,7 @@ final class ServicesTest extends TestCase
     $this->assertEquals('Bad Request', $data_fetch['status']);
     $this->assertEquals(['HTTP/1.1 400 Bad Request'], $data_fetch['headers']);
 
-    // fail indexing [optional to test]
-    $data_indexing = $api->indexing (
-      array (
-        'x-version' => 'ver1.0'
-      )
-    );
-    $this->assertEquals('error', $data_indexing['status']);
-    $this->assertEquals(['HTTP/1.1 200 Oke'], $data_indexing['headers']);
-
-    // faild index compire ['optional to test']
-    $data_indexCompiere = $api->indexing_compiere (
-      array (
-        'x-version' => 'ver1.0'
-      )
-    );
-    $this->assertEquals('error', $data_indexCompiere['status']);
-    $this->assertEquals(['HTTP/1.1 200 Oke'], $data_indexCompiere['headers']);
-
-    // faild tracker
+   // faild tracker
     $data_tracker = $api->tracker(
       array (
         'range_waktu' => 0

@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Medical Record CRUD support biodata
 - Add Regestration Medical record
 - Router prefix (grouping route expression with same prefix)
+- Covid Tracker now using async api call 4X faster reguler catch api
 
 ### Changed
 - Register command now in CLI.php (class) not in command.config.php (array)

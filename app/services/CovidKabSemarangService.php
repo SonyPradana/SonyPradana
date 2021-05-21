@@ -3,6 +3,7 @@ use Model\CovidTracker\CovidTracker;
 use Simpus\Apps\Service;
 use System\Database\MyPDO;
 use WebScrap\CovidKabSemarang\CovidKabSemarang;
+use WebScrap\CovidKabSemarang\CovidKabSemarangAll;
 use WebScrap\CovidKabSemarang\CovidKabSemarangTracker;
 
 class CovidKabSemarangService extends Service
@@ -13,19 +14,6 @@ class CovidKabSemarangService extends Service
   {
     $this->error = new DefaultService();
     $this->PDO = $PDO ?? MyPDO::getInstance();
-  }
-
-  private function versionControl(): array
-  {
-    return array(
-      'status'    => 'error',
-      'code'      => 200,
-      'error'     => 'endpoint version not support',
-      'info'      => array (
-        'support_version' => 'ver1.1',
-      ),
-      'headers'       => ['HTTP/1.1 200 Oke']
-    );
   }
 
   /**
@@ -146,10 +134,8 @@ class CovidKabSemarangService extends Service
       // force format
       $date_format = 'Y-m-d h:i:sa';
     }
-    
-    $covid_tracker  = new CovidKabSemarangTracker();
 
-    // configurasi
+    $covid_tracker  = new CovidKabSemarangTracker($this->PDO);
 
     // configurasi - date
     $list_date      = $covid_tracker->listOfDate();
@@ -167,7 +153,7 @@ class CovidKabSemarangService extends Service
     if (isset($request['kecamatan'])) {
       $location = explode('--', $request['kecamatan']);
     } else {
-      $list_kecamatan = (new CovidKabSemarang())->Daftar_Kecamatan;
+      $list_kecamatan = CovidKabSemarang::instant()->Daftar_Kecamatan;
       $location = array_keys($list_kecamatan);
     }
 
@@ -175,7 +161,7 @@ class CovidKabSemarangService extends Service
     $covid_tracker->setFiltersDate( $date );
 
     $result = [];
-    foreach ( $date as $this_date) {
+    foreach ($date as $this_date) {
       $session            = $covid_tracker->result()[ $this_date ];
 
       // counting - tingkat kabupaten
@@ -198,7 +184,7 @@ class CovidKabSemarangService extends Service
       $last_suspek_dischraded  = 0;
       $last_suspek_meninggal   = 0;
 
-      foreach($session as $data_desa){
+      foreach ($session as $data_desa) {
         $kasus_positif      += $data_desa['konfirmasi_symptomatik'];
         $kasus_isolasi      += $data_desa['konfirmasi_asymptomatik'];
         $kasus_sembuh       += $data_desa['konfirmasi_sembuh'];
@@ -283,40 +269,11 @@ class CovidKabSemarangService extends Service
     $daftar = $data->Daftar_Kecamatan;
 
     if ($id == null) {
-      // akumulasi semua data (se-kabupaten)
-      $kasus_positif = 0;
-      $kasus_isolasi = 0;
-      $kasus_sembuh = 0;
-      $kasus_meninggal = 0;
-      $suspek             = 0;
-      $suspek_discharded  = 0;
-      $suspek_meninggal   = 0;
-      $res = [];
-      // me loop semua kecamatan terdaftar
-      foreach ($daftar as $key => $value) {
-        $res[]              = $data->getData($key);
-        $kasus_positif      += $data->positifDirawat();
-        $kasus_isolasi      += $data->positifIsolasi();
-        $kasus_sembuh       += $data->positifSembuh();
-        $kasus_meninggal    += $data->positifMeninggal();
-        $suspek             += $data->suspek();
-        $suspek_discharded  += $data->suspekDischarded();
-        $suspek_meninggal   += $data->suspekMeninggal();
-      }
-      // menyun hasil dari data yang telah di konvert
-      return array(
-        "kabupaten"  => "semarang",
-        "kasus_posi" => $kasus_positif,
-        "kasus_isol" => $kasus_isolasi,
-        "kasus_semb" => $kasus_sembuh,
-        "kasus_meni" => $kasus_meninggal,
-        "suspek"            => $suspek,
-        "suspek_discharded" => $suspek_discharded,
-        "suspek_meninggal"  => $suspek_meninggal,
-        "data"       => $res,
-        'status'     => 'ok',
-        'headers'    => ['HTTP/1.1 200 Oke']
-      );
+      $repone = CovidKabSemarangAll::instant()->catchAll() ?? [];
+      $repone['status'] = 'ok';
+      $repone['code'] = 200;
+      $repone['headers'] = ['HTTP/1.1 200 Oke'];
+      return $repone;
     } else {
       // data sesauai id
       if (! array_key_exists($id, $daftar)) {
@@ -344,11 +301,6 @@ class CovidKabSemarangService extends Service
    */
   public function indexing(array $request)
   {
-    $version =  $request['x-version'] ?? 'ver1.0';
-    if ($version == 'ver1.0') {
-      return $this->versionControl();
-    }
-
     $last_index     = CovidTracker::getLastIndex();
     $next_index     = $last_index + 3600;
     $allow_index    = $next_index > (int) time() ? false : true;
@@ -381,11 +333,6 @@ class CovidKabSemarangService extends Service
    */
   public function indexing_compiere(array $request)
   {
-    $version =  $request['x-version'] ?? 'ver1.0';
-    if ($version == 'ver1.0') {
-      return $this->versionControl();
-    }
-
     // get old data
     $old_raw = $this->tracker_data(array());
     $old_data = array(
@@ -403,7 +350,7 @@ class CovidKabSemarangService extends Service
     $next_index     = $last_index + 3600;
 
     // indexing data
-    $index = new CovidKabSemarangTracker();
+    $index = new CovidKabSemarangTracker($this->PDO);
     $isNewData = $index->createIndex_compire($old_data);
 
     return array(
@@ -411,7 +358,7 @@ class CovidKabSemarangService extends Service
       'code'          => 200,
       'last_index'    => date("Y/m/d h:i:sa", $last_index),
       'next_index'    => date("Y/m/d h:i:sa", $next_index),
-      'index_status'  => $isNewData ? 'sussessful' : 'no index',
+      'index_status'  => $isNewData ? 'successful' : 'no index',
       'headers'       => ['HTTP/1.1 200 Oke']
     );
   }
@@ -459,12 +406,9 @@ class CovidKabSemarangService extends Service
 
   public function daftar_kecamatan(array $param): array
   {
-    $data   = new CovidKabSemarang();
-    $daftar = $data->Daftar_Kecamatan;
-
     return array(
       'time'      => time(),
-      'data'      => $daftar,
+      'data'      => CovidKabSemarang::instant()->Daftar_Kecamatan,
       'status'    => 'ok',
       'code'      => 200,
       'headers'   => ['HTTP/1.1 200 Oke']
