@@ -110,7 +110,7 @@ class CronCommand extends Command
     // create jadwal
     $schadule
       ->call(function() use ($pdo) {
-        $create = new Simpus\Services\JadwalKia($pdo);
+        $create = new \Model\JadwalKia\JadwalKia($pdo);
         $success = $create->autoCreatJadwal(date('m'), date('Y'));
 
         $error = false;

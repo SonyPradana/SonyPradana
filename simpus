@@ -3,5 +3,5 @@
 require_once './vendor/autoload.php';
 
 // call CLI
-$new_cli = new \Simpus\Apps\CLI($argv);
+return new \Simpus\Apps\CLI($argv);
 
