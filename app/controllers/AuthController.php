@@ -4,7 +4,7 @@ use Simpus\Auth\{User, Login, Logout, EmailAuth, Registartion, ResetPassword, Fo
 use System\Database\MyPDO;
 use System\File\UploadFile;
 use Simpus\Apps\Controller;
-use Simpus\Helper\StringValidation as sv;
+use Helper\String\StringValidation as sv;
 use \Gumlet\ImageResize;
 
 class AuthController extends Controller

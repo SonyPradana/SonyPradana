@@ -1,4 +1,4 @@
-<?php namespace Simpus\Services;
+<?php namespace Model\JadwalKia;
 
 use System\Database\MyPDO;
 use \DateTime;
@@ -146,8 +146,8 @@ class JadwalKia
       $this->PDO->bind(':ev_dt', $vaksin);
       $this->PDO->execute();
       if ($this->PDO->rowCount() > 0) {
-          // data berhasil disimpan
-          return true;
+        // data berhasil disimpan
+        return true;
       }
       // data gagal sisimpan
       return false;
@@ -160,15 +160,21 @@ class JadwalKia
    * @param string $to_date       Tanggal baru
    * @param string $to_vaksin   Jenis vaksin baru
    */
-  public function editJadwal($from_date, $from_vaksin, $to_date, $to_vaksin)
-  {
-      // koneksi data base
-      $this->PDO->query("UPDATE `list_of_services` SET `date` = :t_tanggal', `event_detail` = :t_ev_dt WHERE `date` = :f_tanggal AND `event_detail`= :f_ev_dt");
-      $this->PDO->bind(':f_tanggal', $from_date);
-      $this->PDO->bind(':f_ev_dt', $from_vaksin);
-      $this->PDO->bind(':t_tanggal', $to_date);
-      $this->PDO->bind(':t_ev_dt', $to_vaksin);
-      $this->PDO->execute();
+  public function editJadwal(
+    $from_date,
+    $from_vaksin,
+    $to_date,
+    $to_vaksin
+  ) {
+    // koneksi data base
+    $this->PDO->query("UPDATE `list_of_services` SET `date` = :t_tanggal', `event_detail` = :t_ev_dt WHERE `date` = :f_tanggal AND `event_detail`= :f_ev_dt");
+    $this->PDO->bind(':f_tanggal', $from_date);
+    $this->PDO->bind(':f_ev_dt', $from_vaksin);
+    $this->PDO->bind(':t_tanggal', $to_date);
+    $this->PDO->bind(':t_ev_dt', $to_vaksin);
+    $this->PDO->execute();
+
+    return $this->PDO->rowCount();
   }
 
   /**

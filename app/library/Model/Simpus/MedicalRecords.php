@@ -3,7 +3,7 @@
 namespace Model\Simpus;
 
 use Helper\String\Str;
-use Simpus\Helper\StringValidation;
+use Helper\String\StringValidation;
 use System\Database\MyModel;
 use System\Database\MyPDO;
 use System\Database\MyQuery;

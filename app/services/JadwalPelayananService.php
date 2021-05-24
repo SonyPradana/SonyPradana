@@ -1,7 +1,7 @@
 <?php
 
 use Simpus\Apps\Service;
-use Simpus\Services\JadwalKia;
+use Model\JadwalKia\JadwalKia;
 use System\Database\MyPDO;
 
 class JadwalPelayananService extends Service

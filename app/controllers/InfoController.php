@@ -1,7 +1,7 @@
 <?php
 use Simpus\Apps\Controller;
 use Simpus\Auth\User;
-use Simpus\Services\JadwalKia;
+use Model\JadwalKia\JadwalKia;
 
 class InfoController extends Controller
 {
