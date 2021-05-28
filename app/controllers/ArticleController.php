@@ -3,6 +3,8 @@
 use Simpus\Apps\Controller;
 use Model\Article\articleModel;
 use Simpus\Auth\User;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
+use Symfony\Contracts\Cache\ItemInterface;
 
 class ArticleController extends Controller
 {
@@ -13,10 +15,18 @@ class ArticleController extends Controller
 
   public function index(string $articleID)
   {
-    $read_article = new articleModel();
-    $read_article->selectColomn(['*']);
-    $read_article->filterURLID($articleID);
-    $result = $read_article->result()[0] ?? null;
+    $cache = new  FilesystemAdapter('', 0, BASEURL . '/storage/app/cache/');
+    $result = $cache->get('articlecontroller' . $articleID, function (ItemInterface $item) use ($articleID) {
+      $item->expiresAfter(600); // expt after10 minute
+
+      $read_article = new articleModel();
+      $read_article->selectColomn(['*']);
+      $read_article->filterURLID($articleID);
+      $result = $read_article->result()[0] ?? null;
+
+      return $result;
+    });
+
     if( $result == null ) $this->articleNotFound($articleID);
     if( $result['status'] == 'draft' ) $this->articleNotFound($articleID);
 

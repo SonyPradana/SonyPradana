@@ -2,6 +2,7 @@
 public/data/img/
 vendor/
 node_modules/
+storage/
 
 # file
 .env
