@@ -23,8 +23,12 @@ class Cache
 
     // redis adapter
     if ($driver == 'redis') {
+      $port = REDIS_PORT != ''
+        ? ':' . REDIS_PORT
+        : '';
+
       $clinet = RedisAdapter::createConnection(
-        'redis://' . REDIS_HOST . ':' . REDIS_PORT
+        'redis://' . REDIS_HOST . $port
       );
       $this->cache_driver = new RedisTagAwareAdapter($clinet);
       return;

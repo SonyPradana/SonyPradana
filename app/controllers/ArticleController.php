@@ -2,9 +2,8 @@
 
 use Simpus\Apps\Controller;
 use Model\Article\articleModel;
+use Simpus\Apps\Cache;
 use Simpus\Auth\User;
-use Symfony\Component\Cache\Adapter\FilesystemAdapter;
-use Symfony\Contracts\Cache\ItemInterface;
 
 class ArticleController extends Controller
 {
@@ -15,24 +14,25 @@ class ArticleController extends Controller
 
   public function index(string $articleID)
   {
-    $cache = new  FilesystemAdapter('', 0, BASEURL . '/storage/app/cache/');
-    $result = $cache->get('articlecontroller' . $articleID, function (ItemInterface $item) use ($articleID) {
-      $item->expiresAfter(600); // expt after10 minute
+    $result = Cache::remember(
+      'ArticleController' . $articleID,
+      86400, // caching 1 day
+      function() use ($articleID) {
+        $read_article = new articleModel();
+        $read_article->selectColomn(['*']);
+        $read_article->filterURLID($articleID);
+        $result = $read_article->result()[0] ?? null;
 
-      $read_article = new articleModel();
-      $read_article->selectColomn(['*']);
-      $read_article->filterURLID($articleID);
-      $result = $read_article->result()[0] ?? null;
-
-      return $result;
+        return $result;
     });
 
-    if( $result == null ) $this->articleNotFound($articleID);
-    if( $result['status'] == 'draft' ) $this->articleNotFound($articleID);
+    if ($result == null ) $this->articleNotFound($articleID);
+    if ($result['status'] == 'draft') $this->articleNotFound($articleID);
 
     $author = new User($result['author']);
     $selisih_waktu = time() - $result['update_time'];
-    $format_tanggal = $selisih_waktu < 86400 ? date('h:i:sa',  $result['update_time'])
+    $format_tanggal = $selisih_waktu < 86400
+      ? date('h:i:sa',  $result['update_time'])
       : date('d M Y',  $result['update_time']);
 
     return $this->view('article/index', [
