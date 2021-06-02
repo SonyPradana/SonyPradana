@@ -2,6 +2,7 @@
 
 namespace Simpus\Apps;
 
+use CacheCommand;
 use CronCommand;
 use HelpCommand;
 use Helper\String\Str;
@@ -24,6 +25,8 @@ class CLI
       MakerCommand::$command,
       // cron
       CronCommand::$command,
+      // cache
+      CacheCommand::$command,
       // more command here
 
     );

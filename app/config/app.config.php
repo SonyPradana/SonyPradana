@@ -21,4 +21,5 @@ return array (
   'SERVICES_PATH'   => '/app/services/',
   'COMPONENT_PATH'  => '/resources/components/',
   'COMMNAD_PATH'    => '/app/commands/',
+  'CACHE_PATH'      => '/storage/app/cache'
 );

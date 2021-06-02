@@ -19,11 +19,13 @@ class Config
     $dbs_config = include($path . 'database.config.php');
     $pusher_config = include($path . 'pusher.config.php');
     $headerMenu_config = include($path . 'headermenu.config.php');
+    $redis_config = include($path . 'redis.config.php');
     // excute config
     $this->appConfig($app_config);
     $this->databeseConfig($dbs_config);
     $this->pusherConfig($pusher_config);
     $this->headerMenuConfig($headerMenu_config);
+    $this->redisConfig($redis_config);
 
   }
 
@@ -38,6 +40,7 @@ class Config
         'services'    => $config['SERVICES_PATH'],
         'component'   => $config['COMPONENT_PATH'],
         'commands'    => $config['COMMNAD_PATH'],
+        'cache'       => $config['CACHE_PATH'],
       ]);
 
       define('APP_FULLPATH', [
@@ -47,6 +50,7 @@ class Config
         'services'    => $config['BASEURL'] . $config['SERVICES_PATH'],
         'component'   => $config['BASEURL'] . $config['COMPONENT_PATH'],
         'commands'    => $config['BASEURL'] . $config['COMMNAD_PATH'],
+        'cache'       => $config['BASEURL'] . $config['CACHE_PATH'],
       ]);
   }
 
@@ -77,5 +81,12 @@ class Config
     // poasayndu header menu
     define('MENU_POSYANDU', $config['MENU_POSYANDU']);
 
+  }
+
+  private function redisConfig(array $config)
+  {
+    define('REDIS_HOST', $config['REDIS_HOST']);
+    define('REDIS_PASS', $config['REDIS_PASS']);
+    define('REDIS_PORT', $config['REDIS_PORT']);
   }
 }
