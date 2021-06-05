@@ -14,6 +14,7 @@ use PHPUnit\Framework\TestCase;
 use QAResponseService;
 use QuestionAnswerService;
 use RekamMedisService;
+use Simpus\Apps\Cache;
 use System\Database\MyPDO;
 use TriviaService;
 use WilayahKabSemarangService;
@@ -156,6 +157,7 @@ final class ServicesTest extends TestCase
     $this->assertEquals(['HTTP/1.1 400 Bad Request'], $data_fetch['headers']);
 
    // faild tracker
+    Cache::static()->clear('CKSS-track');
     $data_tracker = $api->tracker(
       array (
         'range_waktu' => 0
@@ -164,6 +166,7 @@ final class ServicesTest extends TestCase
     $this->assertEquals('Bad Request', $data_tracker['status']);
 
     // faild track data
+    Cache::static()->clear('CKSS-trackdata');
     $data_trackData = $api->tracker_data(
       array (
         'range_waktu' => 0

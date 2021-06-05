@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Support cache (using symfony)
+
 ### Changed
 - Change namespace  from Simpus\Services to Model\JadwalKia
 - Change namespace  from Simpus\Helper to Helper\String

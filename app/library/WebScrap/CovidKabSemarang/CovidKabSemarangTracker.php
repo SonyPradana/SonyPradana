@@ -2,7 +2,6 @@
 
 namespace WebScrap\CovidKabSemarang;
 
-use WebScrap\CovidKabSemarang\CovidKabSemarang;
 use System\Database\MyPDO;
 
 /** class untuk minyimpan data kedalam data base */
