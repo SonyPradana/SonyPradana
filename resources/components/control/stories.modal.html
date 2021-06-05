@@ -12,7 +12,6 @@
       <div class="form stories">
         <form id="upload-stories" action="/" method="post">
           <input accept="image/*;capture=camera" type="file" name="upload_stories" id="input-image">
-          <input type="hidden" name="end" id="input-end" value="5184000">
           <section class="group-input">
             <label for="input-caption">Pengirim</label>
             <input class="textbox outline blue rounded normal" type="text" name="uploader" id="input-uploader" value="" placeholder="Pengirim...">
@@ -40,7 +39,7 @@
       let data = new FormData(e.target);
       data.append('caption', $id('input-caption').value);
       data.append('uploader', $id('input-uploader').value);
-      data.append('end', 8400);
+      data.append('end', 5184000); // 2 bulan
   
       $json('/API/v1.0/Stories/Upload.json', 
         {
