@@ -3,6 +3,8 @@
 namespace Simpus\Apps;
 
 use Psr\Cache\CacheItemInterface;
+use Symfony\Component\Cache\Adapter\AbstractAdapter;
+use Symfony\Component\Cache\Adapter\AbstractTagAwareAdapter;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\Cache\Adapter\PdoAdapter;
 use Symfony\Component\Cache\Adapter\RedisAdapter;
@@ -10,6 +12,11 @@ use Symfony\Component\Cache\Adapter\RedisTagAwareAdapter;
 
 class Cache
 {
+  /**
+   * Abstract adabter
+   * @return AbstractTagAwareAdapter|AbstractAdapter
+   *  Cache adabter symfony cache
+   */
   public $cache_driver;
   private static Cache $self;
 
@@ -59,7 +66,7 @@ class Cache
 
   /**
    * Short hand to call cache class
-   * @return cacheAdabter
+   * @return AbstractTagAwareAdapter|AbstractAdapter
    *  Cache adabter symfony cache
    */
   public static function static()

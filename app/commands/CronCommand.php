@@ -63,6 +63,10 @@ class CronCommand extends Command
     // covid web scrab
     $schadule
       ->call(function() use ($pdo) {
+        // clear covid cached
+        Simpus\Apps\Cache::static()->clear('CKSS');
+
+        // return indexing function
         return (new CovidKabSemarangService($pdo))->indexing_compiere([]);
       })
       ->eventName('info covid')

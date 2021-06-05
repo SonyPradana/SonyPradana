@@ -45,8 +45,14 @@ class CacheCommand extends Command
         break;
 
       case 'clear':
+        $prefix = $this->OPTION[0] ?? '';
         echo $this->textDim("clearing cache...\n");
-        Cache::static()->clear();
+        if ($prefix != '') {
+          echo $this->textDim("with prefix - "),
+            $this->textYellow($prefix), "\n";
+        }
+
+        Cache::static()->clear($prefix);
         break;
 
       default:

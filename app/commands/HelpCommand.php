@@ -50,9 +50,14 @@ class HelpCommand extends Command
       "\n",
       "\n\t" . $this->textGreen("cron") . $this->tabs(6) . "Run cron job (all shadule)",
       "\n\t" . $this->textGreen("cron") . ":work" . $this->tabs(5) . "Run virtual cron job in terminal",
+      "\n",
+      "\n\t" . $this->textGreen("cache") . ":info" . $this->tabs(5) . "Get cache information",
+      "\n\t" . $this->textGreen("cache") . ":clear" . $this->tabs(5) . "Clear all cache",
+      "\n\t" . $this->textGreen("cache") . ":clear [cache_prefix]" . $this->tabs(3) . "Clear cache with prefix items name",
 
       "\n\nAvilable argument:",
       "\n\t" . $this->textDim("--table-name=[table_name]") . "\tget table column when creating model/models",
+      "\n",
 
     ]);
   }
