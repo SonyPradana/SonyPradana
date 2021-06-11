@@ -47,13 +47,13 @@ Router::match(['get', 'post'], '/reset-password', function() {
 Router::match(['get', 'post'], '/forgot/(:text)', function(string $action) {
   if ($action == 'reset') {
     return (new AuthController())->hardReset();
-  } elseif ( $action == 'send') {
-    return (new AuthController())->send();
-  } else {
-    return DefaultController::page_404(array(
-      'path' => '/forgot/'.$action
-    ));
   }
+  if ($action == 'send') {
+    return (new AuthController())->send();
+  }
+  return DefaultController::page_404(array(
+    'path' => '/forgot/'.$action
+  ));
 });
 
 Router::prefix('/admin')->routes(function(RouterProvider $routes) {
@@ -90,11 +90,11 @@ Router::match(['get', 'post'], '/Contactus', function() {
 Router::get('/info/(:any)', function(string $page) {
   if (Controller::view_exists('info/' . $page)) {
     return (new InfoController())->show( $page );
-  } else {
-    return DefaultController::page_404(array (
-      'path' => '/info/'.$page
-    ));
   }
+
+  return DefaultController::page_404(array (
+    'path' => '/info/'.$page
+  ));
 });
 
 // aricle
@@ -117,20 +117,22 @@ Router::prefix('/rekam-medis')->routes(function(RouterProvider $routes) {
   $routes->match(['get', 'post'], '/(:text)', function(string $page) {
     if (Controller::view_exists('rekam-medis/' . $page)) {
       return (new RekamMedisController())->show( strtolower($page) );
-    } else {
-      return (new RekamMedisController())->index();
     }
+
+    return DefaultController::page_404(array (
+      'path' => '/rekam-medis/' . $page
+    ));
   });
 });
 // kia-anak biodata/posyandu
 Router::match(['get', 'post'], '/kia-anak/(:text)/(:text)', function(string $action, string $unit) {
   if (Controller::view_exists('kia-anak/'. $unit . '/'. $action)) {
     return (new KiaAnakController)->show($action, $unit);
-  } else {
-    return DefaultController::page_404(array (
-      'path' => '/kia-anak/'.$action.'/'.$unit
-    ));
   }
+
+  return DefaultController::page_404(array (
+    'path' => '/kia-anak/'.$action.'/'.$unit
+  ));
 });
 
 // API
@@ -181,12 +183,19 @@ Router::get('/sitemap.(:text)', function($ext) {
   $ext = strtolower($ext);
   $respone = new SiteMapController();
 
-  if ($ext === "html" || $ext === "txt") {
-    return $respone->html();
-  } elseif ($ext === "xml") {
-    return $respone->index();
-  } else {
-    return (new DefaultController)->page_404([]);
+  switch ($ext) {
+    case "html":
+    case "txt":
+      return $respone->html();
+      break;
+
+    case "xml":
+      return $respone->index();
+      break;
+
+    default:
+      return DefaultController::page_404([]);
+      break;
   }
 });
 
