@@ -7,7 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Support cache (using symfony)
-
+- Add global some function:
+  - slugify, startsWith, dd, app_path, base_path, abort, api_abort, view
 ### Changed
 - Change namespace  from Simpus\Services to Model\JadwalKia
 - Change namespace  from Simpus\Helper to Helper\String
