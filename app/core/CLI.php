@@ -6,7 +6,7 @@ use CacheCommand;
 use CronCommand;
 use HelpCommand;
 use Helper\String\Str;
-use MakerCommand;
+use MakeCommand;
 
 class CLI
 {
@@ -22,7 +22,7 @@ class CLI
       // help command
       HelpCommand::$command,
       // make somthink command
-      MakerCommand::$command,
+      MakeCommand::$command,
       // cron
       CronCommand::$command,
       // cache

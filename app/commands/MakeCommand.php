@@ -4,17 +4,33 @@ use Simpus\Apps\Command;
 use System\Database\MyPDO;
 use System\Database\MyQuery;
 
-class MakerCommand extends Command
+class MakeCommand extends Command
 {
 
   public static array $command = array(
     [
       "cmd"       => "make",
       "mode"      => "start",
-      "class"     => MakerCommand::class,
+      "class"     => MakeCommand::class,
       "fn"        => "switcher",
     ],
   );
+
+  public function printHelp()
+  {
+    return array(
+      'option' => array(
+        "\n\t" . $this->textGreen("make") . ":controller [controller_name]\t\tgenerate new controller and view",
+        "\n\t" . $this->textGreen("make") . ":view [view_name]\t\t\t\tgenerate new view",
+        "\n\t" . $this->textGreen("make") . ":service [services_name]\t\t\tgenerate new service",
+        "\n\t" . $this->textGreen("make") . ":model [model_name] " . $this->textDim("[argument]") . "\t\tgenerate new model",
+        "\n\t" . $this->textGreen("make") . ":models [models_name] " . $this->textDim("[argument]") . "\t\tgenerate new models",
+      ),
+      'argument' => array(
+        "\n\t" . $this->textDim("--table-name=[table_name]") . "\tget table column when creating model/models",
+      )
+    );
+  }
 
   public function switcher()
   {

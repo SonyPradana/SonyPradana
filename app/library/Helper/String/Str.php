@@ -9,6 +9,14 @@ class Str
     return substr($in, 0, strlen($find)) == $find;
   }
 
+  public static function contains(string $find, string $in)
+  {
+    if (!strpos($find, $in)) {
+      return true;
+  }
+  return false;
+  }
+
   public static function fillText(string $text, int $lenght, string $fillWith)
   {
     $fill_lenght = $lenght - strlen($text);

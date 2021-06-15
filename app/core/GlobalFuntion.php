@@ -81,6 +81,23 @@ if (! function_exists("startsWith")) {
   }
 }
 
+if (! function_exists("stringContains")) {
+  /**
+   * Cek text exis on text
+   *
+   * @param string $find
+   *  Text to find
+   * @param string $in
+   *  Resource to find
+   * @return bool
+   *  True if find text in text
+   */
+  function stringContains(string $find, string $in): bool
+  {
+    return \Helper\String\Str::contains($find, $in);
+  }
+}
+
 // contoller
 
 if (! function_exists("view")) {

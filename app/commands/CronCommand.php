@@ -15,6 +15,17 @@ class CronCommand extends Command
     ],
   );
 
+  public function printHelp()
+  {
+    return array(
+      'option' => array(
+        "\n\t" . $this->textGreen("cron") . $this->tabs(6) . "Run cron job (all shadule)",
+        "\n\t" . $this->textGreen("cron") . ":work" . $this->tabs(5) . "Run virtual cron job in terminal",
+      ),
+      'argumnet' => array()
+    );
+  }
+
   public function switcher()
   {
     // get category command

@@ -25,10 +25,38 @@ class HelpCommand extends Command
       "class"     => self::class,
       "fn"        => "commandList",
     ],
+    [
+      "cmd"       => "help",
+      'mode'      => "full",
+      "class"     => self::class,
+      "fn"        => "commandhelp",
+    ],
   );
 
   public function println()
   {
+    $has_visited = [];
+    $help_command = [];
+    $argument_command = [];
+    foreach (CLI::$command as $commands) {
+      if (!in_array($commands['class'], $has_visited)) {
+        $class_name = $commands['class'];
+        $has_visited[] = $class_name;
+
+        $class_path = app_path('commands', true) . $class_name . '.php';
+        if (file_exists($class_path)) {
+          $class = new $class_name([]);
+          $res = call_user_func_array([$class, 'printHelp'], []) ?? [];
+          if ($res['option'] != null) {
+            $help_command[] = $res['option'];
+          }
+          if ($res['argument'] != null) {
+            $argument_command[] = $res['argument'];
+          }
+        }
+      }
+    }
+
     $this->prints([
       "Welcome to simpus lerep CLI",
 
@@ -40,26 +68,23 @@ class HelpCommand extends Command
       "\n\t" . $this->textDim("--help") . "\t\t\tget all help command",
       "\n\t" . $this->textDim("--list") . "\t\t\tget list of commands registered (class & function)",
       "\n\t" . $this->textDim("--version") . "\t\tget version simpus cli",
-
-      "\n\nAvilabe option:",
-      "\n\t" . $this->textGreen("make") . ":controller [controller_name]\t\tgenerate new controller and view",
-      "\n\t" . $this->textGreen("make") . ":view [view_name]\t\t\t\tgenerate new view",
-      "\n\t" . $this->textGreen("make") . ":service [services_name]\t\t\tgenerate new service",
-      "\n\t" . $this->textGreen("make") . ":model [model_name] " . $this->textDim("[argument]") . "\t\tgenerate new model",
-      "\n\t" . $this->textGreen("make") . ":models [models_name] " . $this->textDim("[argument]") . "\t\tgenerate new models",
       "\n",
-      "\n\t" . $this->textGreen("cron") . $this->tabs(6) . "Run cron job (all shadule)",
-      "\n\t" . $this->textGreen("cron") . ":work" . $this->tabs(5) . "Run virtual cron job in terminal",
-      "\n",
-      "\n\t" . $this->textGreen("cache") . ":info" . $this->tabs(5) . "Get cache information",
-      "\n\t" . $this->textGreen("cache") . ":clear" . $this->tabs(5) . "Clear all cache",
-      "\n\t" . $this->textGreen("cache") . ":clear [cache_prefix]" . $this->tabs(3) . "Clear cache with prefix items name",
-
-      "\n\nAvilable argument:",
-      "\n\t" . $this->textDim("--table-name=[table_name]") . "\tget table column when creating model/models",
-      "\n",
-
     ]);
+
+    echo "\nAvilabe option:";
+
+    foreach ($help_command as $help) {
+      $this->prints($help);
+      echo "\n";
+    }
+
+    echo "\nAvilable argument:";
+
+    foreach ($argument_command as $help) {
+      $this->prints($help);
+      echo "\n";
+    }
+    echo "\n";
   }
 
   public function versionCek()
@@ -96,5 +121,50 @@ class HelpCommand extends Command
         "\n",
       ]);
     }
+  }
+
+  public function commandHelp()
+  {
+    if ($this->OPTION[0] == null) {
+      echo
+        $this->textYellow("\nTo see help command, place provide command_name\n\n\t"),
+        $this->textDim("php simpus help <comman_nama>\n"),
+        $this->textRed("\t\t\t^^^^^^^^^^^^^\n\n");
+      ;
+      return;
+    }
+
+    $className = $this->OPTION[0];
+    if (stringContains(":", $className)) {
+      $className = explode(':', $className);
+      $className = $className[0];
+    }
+
+    $className .= 'Command';
+    $className = ucfirst($className);
+    $classPath = app_path('commands', true) . $className . '.php';
+
+    if (file_exists($classPath)) {
+      require_once $classPath;
+      $class = new $className([]);
+
+      $result = call_user_func_array([$class, 'printHelp'], []) ?? '';
+
+      if (is_array($result)) {
+        $this->prints(array_merge(
+          ["Avilable Option:"],
+          $result['option'] ?? $result,
+          ["\n\nAvilable Argument:"],
+          $result['argument'] ?? [],
+          ["\n\n"]
+        ));
+        return;
+      }
+
+      echo $result;
+      return;
+    }
+
+    echo $this->textRed("\nHelp command not found\n\n");
   }
 }
