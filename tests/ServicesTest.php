@@ -133,6 +133,7 @@ final class ServicesTest extends TestCase
     $this->assertIsArray($data_date['data']);
 
     // success tracker
+    Cache::static()->clear('CKSS-track');
     $data_tracker = $api->tracker(array());
     $this->assertEquals('ok', $data_tracker['status']);
 
@@ -141,6 +142,7 @@ final class ServicesTest extends TestCase
     $this->assertNotEmpty($data_trackAll['data']);
 
     // succcess track data
+    Cache::static()->clear('CKSS-trackdata');
     $data_trackData = $api->tracker_data(array());
     $this->assertEquals('ok', $data_trackData['status']);
     $this->assertEquals(['HTTP/1.1 200 Oke'], $data_trackData['headers']);
