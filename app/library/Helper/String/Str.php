@@ -9,12 +9,9 @@ class Str
     return substr($in, 0, strlen($find)) == $find;
   }
 
-  public static function contains(string $find, string $in)
+  public static function contains(string $needle, string $haystack): bool
   {
-    if (!strpos($find, $in)) {
-      return true;
-  }
-  return false;
+    return '' === $needle || false !== strpos($haystack, $needle);
   }
 
   public static function fillText(string $text, int $lenght, string $fillWith)
