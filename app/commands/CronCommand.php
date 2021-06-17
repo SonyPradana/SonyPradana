@@ -1,7 +1,7 @@
 <?php
 
 use Simpus\Apps\Command;
-use System\Cron\Schadule;
+use System\Cron\Schedule;
 
 class CronCommand extends Command
 {
@@ -34,10 +34,28 @@ class CronCommand extends Command
     // stopwatch
     $watch_start = microtime(true);
 
+    // property
+
     // find router
     switch ($makeAction[1] ?? '') {
       case '':
-        $this->schaduler(new Schadule());
+        $this->scheduler($schedule = new Schedule());
+        $schedule->execute();
+        break;
+
+      case 'list':
+        echo "\n";
+        $this->scheduler($schedule = new Schedule());
+        foreach ($schedule->getPools() as $cron) {
+          echo "#  ";
+          if ($cron->isAnimusly()) {
+            echo $this->textDim($cron->getTimeName()), "\t";
+          } else {
+            echo $this->textGreen($cron->getTimeName()), "\t";
+          }
+
+          echo $this->textYellow($cron->getEventname()), "\n";
+        }
         break;
 
       case 'work':
@@ -49,7 +67,9 @@ class CronCommand extends Command
             echo $this->textDim("Run cron at - ". date("D, H i"));
             echo "\n";
 
-            $this->schaduler(new Schadule());
+            $this->scheduler($schedule = new Schedule());
+            $schedule->execute();
+
             sleep(60);
           } else {
             sleep(1);
@@ -67,12 +87,12 @@ class CronCommand extends Command
     echo "\nDone in " . $this->textYellow($watch_end ."ms\n");
   }
 
-  public function schaduler(Schadule $schadule): void
+  public function scheduler(Schedule $schedule): void
   {
     $pdo = new System\Database\MyPDO();
 
     // covid web scrab
-    $schadule
+    $schedule
       ->call(function() use ($pdo) {
         // clear covid cached
         Simpus\Apps\Cache::static()->clear('CKSS');
@@ -84,7 +104,7 @@ class CronCommand extends Command
       ->hourly();
 
     // delete old database rows
-    $schadule
+    $schedule
       ->call(function() use ($pdo) {
         System\Database\MyQuery::conn('scrf_protection', $pdo)
           ->delete()
@@ -96,7 +116,7 @@ class CronCommand extends Command
       ->weekly();
 
     // delete old story
-    $schadule
+    $schedule
       ->call(function() use ($pdo) {
         $all = Model\Stories\Stories::call($pdo)->resultAll() ?? [];
         $delete = [];
@@ -123,7 +143,7 @@ class CronCommand extends Command
       ->daily();
 
     // create jadwal
-    $schadule
+    $schedule
       ->call(function() use ($pdo) {
         $create = new \Model\JadwalKia\JadwalKia($pdo);
         $success = $create->autoCreatJadwal(date('m'), date('Y'));
@@ -143,7 +163,7 @@ class CronCommand extends Command
       ->eventName('jadwal imunisasi')
       ->mountly();
     // cron log maintance
-    $schadule
+    $schedule
       ->call(function() use ($pdo) {
         System\Database\MyQuery::conn('cron_log', $pdo)
           ->delete()
@@ -153,6 +173,6 @@ class CronCommand extends Command
       ->eventName('cron log maintance')
       ->mountly();
 
-    // others schadule
+    // others schedule
   }
 }

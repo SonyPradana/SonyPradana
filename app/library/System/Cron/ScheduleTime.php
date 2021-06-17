@@ -11,7 +11,9 @@ class ScheduleTime
   private $time;
   private $log;
   private $event_name = 'animus';
-
+  private $time_exect;
+  private $time_name = '';
+  private $animusly = false;
 
   public function __construct($call_back, $params, $time)
   {
@@ -19,6 +21,14 @@ class ScheduleTime
     $this->params = $params;
     $this->time = $time;
     $this->log = new CronLog();
+    $this->time_exect = [
+      [
+        'D' => date('D', $this->time),
+        'd' => date('d', $this->time),
+        'h' => date('H', $this->time),
+        'm' => date('i', $this->time)
+      ]
+    ];
   }
 
   public function eventName($val)
@@ -27,13 +37,37 @@ class ScheduleTime
     return $this;
   }
 
-  private function exect(array $events)
+  public function animusly($run_as_animusly = true)
   {
+    $this->animusly = $run_as_animusly;
+    return $this;
+  }
+
+  public function isAnimusly(): bool
+  {
+    return $this->animusly;
+  }
+
+  public function getEventname()
+  {
+    return $this->event_name;
+  }
+
+  public function getTimeName()
+  {
+    return $this->time_name;
+  }
+
+  // TODO: get next due time
+
+  public function exect()
+  {
+    $events = $this->time_exect;
+
     $dayLetter  = date("D", $this->time);
     $day        = date("d", $this->time);
     $hour       = date("H", $this->time);
     $minute     = date("i", $this->time);
-
 
     foreach ($events as $event) {
       $eventDayLetter = $event['D'] ?? $dayLetter; // default day letter every event
@@ -61,25 +95,30 @@ class ScheduleTime
           'output'          => json_encode($out_put),
         ]);
 
-        $this->log->cread();
+        if (! $this->animusly) {
+          $this->log->cread();
+        }
       }
     }
   }
 
   public function justInTime()
   {
-    return $this->exect([
+    $this->time_name = __FUNCTION__;
+    $this->time_exect = [
       [
         'D' => date('D', $this->time),
         'd' => date('d', $this->time),
         'h' => date('H', $this->time),
         'm' => date('i', $this->time)
       ]
-    ]);
+    ];
+    return $this;
   }
 
   public function everyTenMinute()
   {
+    $this->time_name = __FUNCTION__;
     $minute = [];
     for ($i=0; $i < 60; $i++) {
 
@@ -92,12 +131,14 @@ class ScheduleTime
       }
     }
 
-    return $this->exect($minute);
+    $this->time_exect = $minute;
+    return $this;
   }
 
   public function everyThirtyMinutes()
   {
-    return $this->exect([
+    $this->time_name = __FUNCTION__;
+    $this->time_exect = [
       [
         'd' => date('d', $this->time),
         'h' => date('H', $this->time),
@@ -108,11 +149,14 @@ class ScheduleTime
         'h' => date('H', $this->time),
         'm' => 30,
       ],
-    ]);
+    ];
+
+    return $this;
   }
 
   public function everyTwoHour()
   {
+    $this->time_name = __FUNCTION__;
 
     $thisDay = date("d", $this->time);
     $hourly = []; // from 00.00 to 23.00 (12 time)
@@ -126,12 +170,14 @@ class ScheduleTime
       }
     }
 
-    return $this->exect($hourly);
+    $this->time_exect = $hourly;
+    return $this;
   }
 
   public function everyTwelveHour()
   {
-    return $this->exect([
+    $this->time_name = __FUNCTION__;
+    $this->time_exect = [
       [
         'd' => date('d', $this->time),
         'h' => 0,
@@ -142,11 +188,13 @@ class ScheduleTime
         'h' => 12,
         'm' => 0,
       ]
-    ]);
+    ];
+    return $this;
   }
 
   public function hourly()
   {
+    $this->time_name = __FUNCTION__;
     $hourly = []; // from 00.00 to 23.00 (24 time)
     for ($i=0; $i < 24; $i++) {
       $hourly[] = [
@@ -156,60 +204,75 @@ class ScheduleTime
       ];
     }
 
-    return $this->exect($hourly);
+   $this->time_exect = $hourly;
+   return $this;
   }
 
   public function hourlyAt(int $hour24)
   {
-    return $this->exect([
+    $this->time_name = __FUNCTION__;
+    $this->time_exect = [
       [
         'd' => date('d', $this->time),
         'h' => $hour24,
         'm' => 0
       ]
-    ]);
+    ];
+
+    return $this;
  }
 
   public function daily()
   {
-    return $this->exect([
+    $this->time_name = __FUNCTION__;
+   $this->time_exect = [
       // from day 1 to 31 (31 time)
       ['d' => date('d'), 'h' => 0, 'm' => 0],
-    ]);
+    ];
+
+    return $this;
   }
 
   public function dailyAt(int $day)
   {
-    return $this->exect([
+    $this->time_name = __FUNCTION__;
+    $this-> time_exect = [
       [
         'd' => $day,
         'h' => 0,
         'm' => 0,
       ]
-    ]);
+    ];
+
+    return $this;
   }
 
   public function weekly()
   {
-    return $this->exect([
+    $this->time_name = __FUNCTION__;
+   $this->time_exect = [
       [
         'D' => "Sun",
         'd' => date('d', $this->time),
         'h' => 0,
         'm' => 0
       ],
-    ]);
+    ];
+
+    return $this;
   }
 
   public function mountly()
   {
-    return $this->exect([
+    $this->time_name = __FUNCTION__;
+    $this->time_exect = [
       [
         'd' => 1,
         'h' => 0,
         'm' => 0
       ],
-    ]);
-  }
+    ];
 
+    return $this;
+  }
 }

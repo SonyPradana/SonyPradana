@@ -9,12 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support cache (using symfony)
 - Add global some function:
   - slugify, startsWith, dd, app_path, base_path, abort, api_abort, view
+- Better chain code in cron shedule
+- Add command cron:list to show all cron register
 
 ### Changed
 - Change namespace from Simpus\Services to Model\JadwalKia
 - Change namespace from Simpus\Helper to Helper\String
 - Help command now create in every command (child)
 - Class rename Commands/MakerCommand.php to Commands/MakeCommand.php
+- Rename file from Schadule.php to Schedule.php
 
 ### Deprecated
  - StringManipulation.php willbe merge with Manipulation.php
