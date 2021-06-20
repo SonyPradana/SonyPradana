@@ -162,16 +162,34 @@ class CronCommand extends Command
       })
       ->eventName('jadwal imunisasi')
       ->mountly();
+
     // cron log maintance
     $schedule
       ->call(function() use ($pdo) {
-        System\Database\MyQuery::conn('cron_log', $pdo)
-          ->delete()
-          ->equal('output', '[]')
-          ->execute();
+        $data = \System\Database\MyQuery::conn('cron_log', $pdo)
+          ->select()
+          ->limit(0, 10)
+          ->order('id', \System\Database\MyQuery::ORDER_ASC)
+          ->all();
+
+        $min_time = $data[0]['schedule_time'] ?? time();
+
+        if ($min_time < time() - 604800) {
+          file_put_contents(
+            base_path() . '/storage/cron_backup/' . $min_time . '.json',
+            json_encode($data, JSON_PRETTY_PRINT)
+          );
+
+          \System\Database\MyQuery::conn('cron_log', $pdo)
+            ->delete()
+            ->in('id', array_map(fn($a) => $a['id'], $data))
+            ->execute();
+        }
+
       })
       ->eventName('cron log maintance')
-      ->mountly();
+      ->everyTwelveHour()
+      ->animusly();
 
     // others schedule
   }

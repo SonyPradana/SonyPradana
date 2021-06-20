@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Help command now create in every command (child)
 - Class rename Commands/MakerCommand.php to Commands/MakeCommand.php
 - Rename file from Schadule.php to Schedule.php
+- Cron schedule for maintance, now deleting oldest log and backup then in storage/cron_log
 
 ### Deprecated
  - StringManipulation.php willbe merge with Manipulation.php
