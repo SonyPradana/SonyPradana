@@ -41,11 +41,13 @@ if (! function_exists("base_path")) {
   /**
    * Get base path
    *
+   * @param string $insert_path
+   *  Insert string in end of path
    * @return string
    * Base path folder
    */
-  function base_path(): string {
-    return BASEURL;
+  function base_path(string $insert_path = ''): string {
+    return BASEURL . $insert_path;
   }
 }
 
@@ -176,5 +178,13 @@ if (! function_exists("abort")) {
         break;
     }
     return ApiController::static()->index('Default', "code_$status_code", "1.1");
+  }
+}
+
+// timing
+
+if (! function_exists('now')) {
+  function now($time = "") {
+    return \Provider\Time\Now::now($time);
   }
 }
