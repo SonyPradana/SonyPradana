@@ -34,7 +34,7 @@ class AntrianPoliService extends Service
     );;
   }
 
-  public function antrian(array $params): array
+  public function antrian(array $request): array
   {
     $antrian = new antrianModel($this->PDO);
     $get_antrian = $antrian->resultAll();
@@ -56,17 +56,27 @@ class AntrianPoliService extends Service
     );
   }
 
-  public function dipanggil($params): array
+  public function dipanggil($request): array
   {
     $this->useAuth();
 
-    $update_poli = $this->validPoli($params);
-    $update_antrian = $this->validInput($params);
+    $validate = new GUMP();
+    $validate->validation_rules([
+      'poli'    => 'required|contains,A;B;C;D;a;b;c;d;',
+      'antrian' => 'required|numeric'
+    ]);
+    $validate->filter_rules([
+      'antrian' => 'upper_case'
+    ]);
+    $validate->run($request);
+    if ($validate->errors()) {
+      return $this->error(405);;
+    }
 
     $antrian_poli =  new antrianCRUD($this->PDO);
     $status = $antrian_poli
-      ->setID($update_poli)
-      ->setCurrent($update_antrian)
+      ->setID($request['poli'])
+      ->setCurrent($request['antrian'])
       ->setCurrentTime()
       ->update();
 
@@ -84,17 +94,27 @@ class AntrianPoliService extends Service
     );
   }
 
-  public function baru($params): array
+  public function baru($request): array
   {
     $this->useAuth();
 
-    $update_poli = $this->validPoli($params);
-    $update_antrian = $this->validInput($params);
+    $validate = new GUMP();
+    $validate->validation_rules([
+      'poli'    => 'required|contains,A;B;C;D;a;b;c;d;',
+      'antrian' => 'required|numeric'
+    ]);
+    $validate->filter_rules([
+      'antrian' => 'upper_case'
+    ]);
+    $validate->run($request);
+    if ($validate->errors()) {
+      return $this->error(405);;
+    }
 
     $antrian_poli =  new antrianCRUD($this->PDO);
     $status = $antrian_poli
-      ->setID($update_poli)
-      ->setQueueing($update_antrian)
+      ->setID($request['poli'])
+      ->setQueueing($request['antrian'])
       ->setQueueingTime()
       ->update();
 
@@ -114,11 +134,11 @@ class AntrianPoliService extends Service
 
   }
 
-  public function reset($params): array
+  public function reset($request): array
   {
     $this->useAuth();
 
-    $poli = $params['poli'] ?? $this->errorHandler(405);
+    $poli = $request['poli'] ?? $this->errorHandler(405);
     $antrian = new antrianCRUD($this->PDO);
 
     $data = array();
@@ -167,23 +187,6 @@ class AntrianPoliService extends Service
       'headers' => array('HTTP/1.1 200 Oke')
     );
 
-  }
-
-  // helper function
-  private function validInput(array $params)
-  {
-    $number = $params['antrian'] ?? null;
-    if (! is_int($number)) {
-      $this->errorHandler(405);
-    }
-    return $number < 0 ? 0 : $number;
-  }
-
-  private function validPoli(array $params): string
-  {
-    $poli = $params['poli'] ?? $this->errorHandler(405);
-    $poli = strtoupper($poli);
-    return in_array($poli, ['A', 'B', 'C', 'D']) ? $poli : $this->errorHandler(405);
   }
 }
 
