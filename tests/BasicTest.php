@@ -15,7 +15,6 @@ final class BasicTest extends TestCase
     $this->assertFileExists('./app/controllers/ApiController.php');
 
     $this->assertFileExists('./app/core/CLI.php');
-    $this->assertFileExists('./app/core/Command.php');
     $this->assertFileExists('./app/core/Config.php');
     $this->assertFileExists('./app/core/Controller.php');
     $this->assertFileExists('./app/core/Middleware.php');
@@ -27,6 +26,7 @@ final class BasicTest extends TestCase
     $this->assertFileExists('./app/core/template/models');
     $this->assertFileExists('./app/core/template/service');
     $this->assertFileExists('./app/core/template/view');
+    $this->assertFileExists('./app/core/template/command');
 
     $this->assertFileExists('./app/library/System/Database/CrudInterface.php');
     $this->assertFileExists('./app/library/System/Database/MyCRUD.php');

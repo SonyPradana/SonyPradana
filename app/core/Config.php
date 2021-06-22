@@ -41,6 +41,7 @@ class Config
         'component'   => $config['COMPONENT_PATH'],
         'commands'    => $config['COMMNAD_PATH'],
         'cache'       => $config['CACHE_PATH'],
+        'config'      => $config['CONFIG']
       ]);
 
       define('APP_FULLPATH', [
@@ -51,6 +52,7 @@ class Config
         'component'   => $config['BASEURL'] . $config['COMPONENT_PATH'],
         'commands'    => $config['BASEURL'] . $config['COMMNAD_PATH'],
         'cache'       => $config['BASEURL'] . $config['CACHE_PATH'],
+        'config'      => $config['BASEURL'] . $config['CONFIG'],
       ]);
   }
 

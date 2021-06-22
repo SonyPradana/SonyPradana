@@ -2,11 +2,7 @@
 
 namespace Simpus\Apps;
 
-use CacheCommand;
-use CronCommand;
-use HelpCommand;
 use Helper\String\Str;
-use MakeCommand;
 
 class CLI
 {
@@ -18,18 +14,7 @@ class CLI
     $baseArgs = $arguments[1] ?? '--help';
 
     // load register command
-    self::$command = array_merge(
-      // help command
-      HelpCommand::$command,
-      // make somthink command
-      MakeCommand::$command,
-      // cron
-      CronCommand::$command,
-      // cache
-      CacheCommand::$command,
-      // more command here
-
-    );
+    self::$command = include(app_path('config', true) . "command.config.php");
 
     foreach (self::$command ?? [] as $cmd) {
       // matching alias

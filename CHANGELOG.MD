@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add global some function:
   - slugify, startsWith, dd, app_path, base_path, abort, api_abort, view
   - now() - to manage time
+- Add make:command to create command class
 
 ### Changed
 - Change namespace from Simpus\Services to Model\JadwalKia
@@ -20,6 +21,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Class rename Commands/MakerCommand.php to Commands/MakeCommand.php
 - Rename file from Schadule.php to Schedule.php
 - Cron schedule for maintance, now deleting oldest log and backup then in storage/cron_log
+- Change namespace from Simpus\App to System\Console
+- Command registration now on command.config.php
 
 ### Deprecated
  - StringManipulation.php willbe merge with Manipulation.php

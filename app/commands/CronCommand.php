@@ -1,6 +1,6 @@
 <?php
 
-use Simpus\Apps\Command;
+use System\Console\Command;
 use System\Cron\Schedule;
 
 class CronCommand extends Command

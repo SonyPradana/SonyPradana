@@ -1,7 +1,7 @@
 <?php
 
 use Simpus\Apps\Cache;
-use Simpus\Apps\Command;
+use System\Console\Command;
 
 class CacheCommand extends Command
 {

@@ -1,6 +1,6 @@
 <?php
 
-use Simpus\Apps\Command;
+use System\Console\Command;
 use Simpus\Apps\CLI;
 
 class HelpCommand extends Command
