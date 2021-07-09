@@ -67,42 +67,27 @@ class ScheduleTime
 
   public function exect()
   {
-    $events = $this->time_exect;
+    if ($this->isDue()) {
+      // stopwatch
+      $watch_start = microtime(true);
 
-    $dayLetter  = date("D", $this->time);
-    $day        = date("d", $this->time);
-    $hour       = date("H", $this->time);
-    $minute     = date("i", $this->time);
+      // TODO: more call back support
+      $out_put = call_user_func($this->call_back, $this->params) ?? [];
 
-    foreach ($events as $event) {
-      $eventDayLetter = $event['D'] ?? $dayLetter; // default day letter every event
+      // stopwatch
+      $watch_end = round(microtime(true) - $watch_start, 3) * 1000;
 
-      if ($eventDayLetter == $dayLetter
-      && $event['d'] == $day
-      && $event['h'] == $hour
-      && $event['m'] == $minute) {
+      $this->log->convertFromArray([
+        'id'              => null,
+        'schedule_time'   => $this->time,
+        'execution_time'  => $watch_end,
+        'event_name'      => $this->event_name,
+        'status'          => $out_put['code'] ?? 200,
+        'output'          => json_encode($out_put),
+      ]);
 
-        // stopwatch
-        $watch_start = microtime(true);
-
-        // TODO: more call back support
-        $out_put = call_user_func($this->call_back, $this->params) ?? [];
-
-        // stopwatch
-        $watch_end = round(microtime(true) - $watch_start, 3) * 1000;
-
-        $this->log->convertFromArray([
-          'id'              => null,
-          'schedule_time'   => $this->time,
-          'execution_time'  => $watch_end,
-          'event_name'      => $this->event_name,
-          'status'          => $out_put['code'] ?? 200,
-          'output'          => json_encode($out_put),
-        ]);
-
-        if (! $this->animusly) {
-          $this->log->cread();
-        }
+      if (! $this->animusly) {
+        $this->log->cread();
       }
     }
   }
