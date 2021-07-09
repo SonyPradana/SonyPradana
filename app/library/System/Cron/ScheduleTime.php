@@ -58,6 +58,11 @@ class ScheduleTime
     return $this->time_name;
   }
 
+  public function getTimeExect()
+  {
+    return $this->time_exect;
+  }
+
   // TODO: get next due time
 
   public function exect()
@@ -100,6 +105,34 @@ class ScheduleTime
         }
       }
     }
+  }
+
+  /**
+   * Cek the timeexcute is due time or not
+   * @return bool True if can be excute rightnow
+   */
+  public function isDue()
+  {
+    $events = $this->time_exect;
+
+    $dayLetter  = date("D", $this->time);
+    $day        = date("d", $this->time);
+    $hour       = date("H", $this->time);
+    $minute     = date("i", $this->time);
+
+    foreach ($events as $event) {
+      $eventDayLetter = $event['D'] ?? $dayLetter; // default day letter every event
+
+      if ($eventDayLetter == $dayLetter
+      && $event['d'] == $day
+      && $event['h'] == $hour
+      && $event['m'] == $minute) {
+
+        return true;
+      }
+    }
+
+    return false;
   }
 
   public function justInTime()
