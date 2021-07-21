@@ -2,7 +2,6 @@
 
 use Model\Simpus\KIAAnakRecords;
 use Simpus\Apps\Service;
-use Simpus\Helper\HttpHeader;
 
 class KiaAnakService extends Service
 {

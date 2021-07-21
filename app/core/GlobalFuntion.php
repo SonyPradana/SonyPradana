@@ -46,10 +46,10 @@ if (! function_exists("model_path")) {
    * @return string
    *  Application path folder
    */
-  function model_path(bool $include_basePath = false): string {
+  function model_path(bool $include_basePath = false, string $surfix_path = ''): string {
     return $include_basePath
-      ? (APP_FULLPATH['model'] ?? '')
-      : (APP_PATH['model'] ?? '');
+      ? (APP_FULLPATH['model'] ?? '') . $surfix_path
+      : (APP_PATH['model'] ?? '') . $surfix_path;
   }
 }
 
@@ -63,10 +63,10 @@ if (! function_exists("view_path")) {
    * @return string
    *  Application path folder
    */
-  function view_path(bool $include_basePath = false): string {
+  function view_path(bool $include_basePath = false, string $surfix_path = ''): string {
     return $include_basePath
-      ? (APP_FULLPATH['view'] ?? '')
-      : (APP_PATH['view'] ?? '');
+      ? (APP_FULLPATH['view'] ?? '') . $surfix_path
+      : (APP_PATH['view'] ?? '') . $surfix_path;
   }
 }
 
@@ -80,10 +80,10 @@ if (! function_exists("controllers_path")) {
    * @return string
    *  Application path folder
    */
-  function controllers_path(bool $include_basePath = false): string {
+  function controllers_path(bool $include_basePath = false, string $surfix_path = ''): string {
     return $include_basePath
-      ? (APP_FULLPATH['controllers'] ?? '')
-      : (APP_PATH['controllers'] ?? '');
+      ? (APP_FULLPATH['controllers'] ?? '') . $surfix_path
+      : (APP_PATH['controllers'] ?? '') . $surfix_path;
   }
 }
 
@@ -97,10 +97,10 @@ if (! function_exists("services_path")) {
    * @return string
    *  Application path folder
    */
-  function services_path(bool $include_basePath = false): string {
+  function services_path(bool $include_basePath = false, string $surfix_path = ''): string {
     return $include_basePath
-      ? (APP_FULLPATH['services'] ?? '')
-      : (APP_PATH['services'] ?? '');
+      ? (APP_FULLPATH['services'] ?? '') . $surfix_path
+      : (APP_PATH['services'] ?? '') . $surfix_path;
   }
 }
 
@@ -114,10 +114,10 @@ if (! function_exists("component_path")) {
    * @return string
    *  Application path folder
    */
-  function component_path(bool $include_basePath = false): string {
+  function component_path(bool $include_basePath = false, string $surfix_path = ''): string {
     return $include_basePath
-      ? (APP_FULLPATH['component'] ?? '')
-      : (APP_PATH['component'] ?? '');
+      ? (APP_FULLPATH['component'] ?? '') . $surfix_path
+      : (APP_PATH['component'] ?? '') . $surfix_path;
   }
 }
 
@@ -131,10 +131,10 @@ if (! function_exists("commands_path")) {
    * @return string
    *  Application path folder
    */
-  function commands_path(bool $include_basePath = false): string {
+  function commands_path(bool $include_basePath = false, string $surfix_path = ''): string {
     return $include_basePath
-      ? (APP_FULLPATH['commands'] ?? '')
-      : (APP_PATH['commands'] ?? '');
+      ? (APP_FULLPATH['commands'] ?? '') . $surfix_path
+      : (APP_PATH['commands'] ?? '') . $surfix_path;
   }
 }
 
@@ -148,10 +148,10 @@ if (! function_exists("cache_path")) {
    * @return string
    *  Application path folder
    */
-  function cache_path(bool $include_basePath = false): string {
+  function cache_path(bool $include_basePath = false, string $surfix_path = ''): string {
     return $include_basePath
-      ? (APP_FULLPATH['cache'] ?? '')
-      : (APP_PATH['cache'] ?? '');
+      ? (APP_FULLPATH['cache'] ?? '') . $surfix_path
+      : (APP_PATH['cache'] ?? '') . $surfix_path;
   }
 }
 
@@ -165,10 +165,10 @@ if (! function_exists("config_path")) {
    * @return string
    *  Application path folder
    */
-  function config_path(bool $include_basePath = false): string {
+  function config_path(bool $include_basePath = false, string $surfix_path = ''): string {
     return $include_basePath
-      ? (APP_FULLPATH['config'] ?? '')
-      : (APP_PATH['config'] ?? '');
+      ? (APP_FULLPATH['config'] ?? '') . $surfix_path
+      : (APP_PATH['config'] ?? '') . $surfix_path;
   }
 }
 
@@ -322,5 +322,21 @@ if (! function_exists("abort")) {
 if (! function_exists('now')) {
   function now($time = "") {
     return \Provider\Time\Now::now($time);
+  }
+}
+
+// http
+
+if (! function_exists('request')) {
+  function request(): System\Http\Request
+  {
+    return (new System\Http\RequestFactory())->getFromGloball();
+  }
+}
+
+if (! function_exists('respone')) {
+  function respone($conten = '', int $respone_code = System\Http\Respone::HTTP_OK, array $headers = []): System\Http\Respone
+  {
+    return (new System\Http\Respone($conten, $respone_code, $headers));
   }
 }

@@ -4,7 +4,6 @@ use Helper\String\Manipulation;
 use Model\QuestionAnswer\ask;
 use Model\QuestionAnswer\asks;
 use Simpus\Apps\Service;
-use Simpus\Helper\HttpHeader;
 use System\Database\MyPDO;
 use System\Database\MyQuery;
 

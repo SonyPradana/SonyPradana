@@ -4,7 +4,6 @@ namespace Simpus\Apps;
 
 use DefaultService;
 use Simpus\Apps\Middleware;
-use Simpus\Helper\HttpHeader;
 use Simpus\Auth\Auth;
 
 abstract class Service extends Middleware
@@ -74,12 +73,13 @@ abstract class Service extends Middleware
    */
   protected function errorHandler(int $error_code = 404): void
   {
-    $errRes     = $this->error($error_code);
-    $headers['headers']    = array_values($errRes['headers']);
-    $headers['headers'][]  = 'Content-Type: application/json';
+    $repone     = $this->error($error_code);
+    $headers[]  = array_values($repone['headers']);
+    $headers[]  = 'Content-Type: application/json';
 
-    unset($errRes['headers']);
-    HttpHeader::printJson($errRes, 0, $headers);
+    respone($repone, $error_code, $headers)
+      ->json()
+      ->close();
   }
 
   /**
@@ -90,8 +90,8 @@ abstract class Service extends Middleware
   {
     // cek access
     if ($this->getMiddleware()['auth']['login'] == false) {
-      HttpHeader::printJson(
-        // costume respone
+      respone(
+        // content
         array(
           'status'  => 'Unauthorized',
           'code'    => 401,
@@ -100,16 +100,17 @@ abstract class Service extends Middleware
           ),
         ),
 
-        // respone code
-        500,
+        // status code
+        401,
 
-        // costume header
+        // headers
         array(
-          "headers" => array (
-            'HTTP/1.0 401 Unauthorized',
-            'Content-Type: application/json'
-          )
-      ));
+          'HTTP/1.0 401 Unauthorized',
+          'Content-Type: application/json'
+        )
+      )
+        ->json()
+        ->close();
     }
   }
 
@@ -120,7 +121,8 @@ abstract class Service extends Middleware
     $auth = new Auth($token, Auth::USER_NAME_AND_USER_AGENT_IP);
 
     if (! $auth->privilege($role)) {
-      HttpHeader::printJson(// costume respone
+      respone(
+        // content
         array(
           'status'  => 'Unauthorized',
           'code'    => 401,
@@ -128,15 +130,18 @@ abstract class Service extends Middleware
             'server' => 'Unauthorized'
           ),
         ),
-        
-        500,
-        // costume header
+
+        // status code
+        401,
+
+        // headers
         array(
-        "headers" => array (
           'HTTP/1.0 401 Unauthorized',
           'Content-Type: application/json'
         )
-      ));
+      )
+        ->json()
+        ->close();
     }
   }
 }
