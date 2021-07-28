@@ -324,3 +324,19 @@ if (! function_exists('now')) {
     return \Provider\Time\Now::now($time);
   }
 }
+
+
+// broadcast
+if (! function_exists('broadcast')) {
+  /**
+   * Send broadcast to send to clinets
+   *
+   * @param string $channels Channel name to sand to clinet
+   * @param string $event Event name to sand to clinet
+   * @param array $data Data array to sand nto clinet
+   * @return array A data
+   */
+  function broadcast($channels, $event, $data) {
+    return (new \System\Broadcast\Broadcast($channels, $event))->trigerPusher($data);
+  }
+}
