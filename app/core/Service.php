@@ -128,7 +128,7 @@ abstract class Service extends Middleware
             'server' => 'Unauthorized'
           ),
         ),
-        
+
         500,
         // costume header
         array(
@@ -138,5 +138,10 @@ abstract class Service extends Middleware
         )
       ));
     }
+  }
+
+  protected function isGuest(): bool
+  {
+    return !$this->getMiddleware()['auth']['login'];
   }
 }
