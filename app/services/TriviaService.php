@@ -30,7 +30,10 @@ class TriviaService extends Service
   public function Get_Ques(array $params): array
   {
     $rev = $params['rev'] ?? 0;
-    $triva = new Trivia(null, $rev);
+    if ($rev < 1) {
+      return $this->error->code_400();
+    }
+    $triva = new Trivia();
     $triva->randomID($rev)->read();
 
     return array (
