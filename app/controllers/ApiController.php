@@ -14,23 +14,21 @@ class ApiController extends Controller
         ->allIn()
     );
 
-    respone(
-      $response,
-      $response['code'] ?? 200,
-      []
-    )
-    ->removeHeader([
-      'Expires',
-      'Pragma',
-      'X-Powered-By',
-      'Connection',
-      'Server'
-    ])
-    ->json()
-    ->close();
+    response()
+      ->setContent($response)
+      ->setResponeCode($response['code'] ?? 200)
+      ->setHeaders($response['headers'] ?? [])
+      ->removeHeader([
+        'Expires',
+        'Pragma',
+        'X-Powered-By',
+        'Connection',
+        'Server',
+      ])
+      ->json();
   }
 
-  private function getService($service_nama, $method_nama, $args = []) :array
+  private function getService($service_nama, $method_nama, $args = []): array
   {
     $service_nama   = str_replace('-', '', $service_nama);
     $method_nama    = str_replace('-', '_', $method_nama);

@@ -334,9 +334,9 @@ if (! function_exists('request')) {
   }
 }
 
-if (! function_exists('respone')) {
-  function respone($conten = '', int $respone_code = System\Http\Respone::HTTP_OK, array $headers = []): System\Http\Respone
+if (! function_exists('response')) {
+  function response($conten = '', int $respone_code = System\Http\Response::HTTP_OK, array $headers = []): System\Http\Response
   {
-    return (new System\Http\Respone($conten, $respone_code, $headers));
+    return (new System\Http\Response($conten, $respone_code, $headers));
   }
 }
