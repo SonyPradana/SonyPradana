@@ -2,19 +2,26 @@
 <html lang="en">
 <head>
   <?php
-
-use Model\JadwalVaksin\JadwalVaksins;
-
 include($_SERVER['DOCUMENT_ROOT'] . '/resources/components/meta/metatag.php') ?>
 
   <link rel="stylesheet" href="/lib/css/ui/v1.1/full.style.css">
   <script src="/lib/js/index.min.js"></script>
   <script src="/lib/js/bundles/keepalive.min.js"></script>
   <script src="/lib/js/vendor/vue/vue.min.js"></script>
+
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "datePublished": "2021-03-08T08:00:00+08:00",
+      "dateModified": "2021-08-04T09:20:00+08:00"
+    }
+  </script>
+
   <style>
     .container.width-view {
       display: grid;
       grid-template-columns: 1fr 300px;
+      gap: 12px;
     }
     main {
       overflow-x: auto;
@@ -59,7 +66,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/resources/components/meta/metatag.php') ?>
 
     /* article */
     .article.body p {
-      font-size: 1rem;
+      font-size: 1.25rem;
       line-height: 2rem;
     }
 
@@ -88,184 +95,60 @@ include($_SERVER['DOCUMENT_ROOT'] . '/resources/components/meta/metatag.php') ?>
 
       <article>
         <div class="article-header">
-          <h1 class="text-gray-900">Info Vaksin Jumlah dan Sasaran</h1>
+          <h1 class="text-gray-900"><?= $portal['meta']['title'] ?></h1>
           <div class="article breadcrumb">
             <div class="author">
               <img src="<?= $content->article['display_picture_small'] ?>" alt="@<?= $content->article['display_name'] ?>" srcset="">
               <div class="author-name"><a href="/Ourteam"><?= $content->article['display_name'] ?></a></div>
             </div>
-            <div class="time">8 Maret 2021</div>
+            <div class="time">Posted 08 Maret 2021</div>
           </div>
         </div>
 
         <div id="media-app" class="media-article">
           <div class="vaksin-card">
             <div class="box-card progress">
-              <div class="box-title">Progres Vaksin - Nasional</div>
+              <div class="box-title">Progres Vaksin - Puskesmas Lerep (sumber external)</div>
               <div class="box-body">
-                <!-- lansia -->
-                <div class="card progress progress-lansia">
-                  <div class="title">Lansia</div>
+
+                <!-- loop data -->
+                <div class="card progress progress-lansia" v-for="vaksin in data_vaksin">
+                  <div class="title">{{ vaksin.kategory }}</div>
                   <div class="data">
-                    <div class="sub-data sasaran">
-                      <div class="title">Sasaran</div>
+                    <div class="sub-data detail">
+                      <div class="title">Tanggal</div>
                       <div class="data text">
-                        {{ lastest.sasaran_vaksinasi_lansia }}
+                        {{ vaksin.date }}
                       </div>
                     </div>
                     <div class="sub-data tahap-1">
                       <div class="title">Tahap Pertama</div>
                       <div class="data text">
-                        {{ lastest.tahapan_vaksinasi.lansia.sudah_vaksin1 }}
-                        ({{ lastest.cakupan.lansia_vaksinasi1 }})
+                        {{ vaksin.vaksin_1 }}
                       </div>
                     </div>
-                    <div class="sub-data tahap-1">
+                    <div class="sub-data tahap-2">
                       <div class="title">Tahap Kedua</div>
                       <div class="data text">
-                        {{ lastest.tahapan_vaksinasi.lansia.sudah_vaksin2 }}
-                        ({{ lastest.cakupan.lansia_vaksinasi2 }})
+                      {{ vaksin.vaksin_2 }}
                       </div>
                     </div>
                   </div>
                 </div>
 
-                <!-- petugas publik  -->
-                <div class="card progress progress-petugas-publik">
-                  <div class="title">Petugas Publik</div>
-                  <div class="data">
-                    <div class="sub-data sasaran">
-                      <div class="title">Sasaran</div>
-                      <div class="data text">
-                        {{ lastest.sasaran_vaksinasi_petugas_publik }}
-                      </div>
-                    </div>
-                    <div class="sub-data tahap-1">
-                      <div class="title">Tahap Pertama</div>
-                      <div class="data text">
-                        {{ lastest.tahapan_vaksinasi.petugas_publik.sudah_vaksin1 }}
-                        ({{ lastest.cakupan.petugas_publik_vaksinasi1 }})
-                      </div>
-                    </div>
-                    <div class="sub-data tahap-1">
-                      <div class="title">Tahap Kedua</div>
-                      <div class="data text">
-                        {{ lastest.tahapan_vaksinasi.petugas_publik.sudah_vaksin2 }}
-                        ({{ lastest.cakupan.petugas_publik_vaksinasi2 }})
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- petugas sdm kesehatan -->
-                <div class="card progress progress-sdm-kesehatan">
-                  <div class="title">SDM Kesehatan</div>
-                  <div class="data">
-                    <div class="sub-data sasaran">
-                      <div class="title">Sasaran</div>
-                      <div class="data text">
-                        {{ lastest.sasaran_vaksinasi_sdmk }}
-                      </div>
-                    </div>
-                    <div class="sub-data tahap-1">
-                      <div class="title">Tahap Pertama</div>
-                      <div class="data text">
-                        {{ lastest.tahapan_vaksinasi.sdm_kesehatan.sudah_vaksin1 }}
-                        ({{ lastest.cakupan.sdm_kesehatan_vaksinasi1 }})
-                      </div>
-                    </div>
-                    <div class="sub-data tahap-1">
-                      <div class="title">Tahap Kedua</div>
-                      <div class="data text">
-                        {{ lastest.tahapan_vaksinasi.sdm_kesehatan.sudah_vaksin2 }}
-                        ({{ lastest.cakupan.sdm_kesehatan_vaksinasi2 }})
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- total sasaran -->
-                <div class="card progress progress-total">
-                  <div class="title">Total</div>
-                  <div class="data">
-                    <div class="sub-data sasaran">
-                      <div class="title">Sasaran</div>
-                      <div class="data text">
-                        {{ lastest.total_sasaran_vaksinasi }}
-                      </div>
-                    </div>
-                    <div class="sub-data tahap-1">
-                      <div class="title">Tahap Pertama</div>
-                      <div class="data text">
-                        {{ lastest.vaksinasi1 }}
-                        ({{ lastest.cakupan.vaksinasi1 }})
-                      </div>
-                    </div>
-                    <div class="sub-data tahap-1">
-                      <div class="title">Tahap Kedua</div>
-                      <div class="data text">
-                        {{ lastest.vaksinasi2 }}
-                        ({{ lastest.cakupan.vaksinasi2 }})
-                      </div>
-                    </div>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
 
           <div class="media note text-gray-500">
-            <p>Terakhir di Perbarui {{ lastest.date }}</p>
-            <p>Sumber:cekdiri.id/vaksinasi/</p>
+            <p>Sumber data: https://kipi.covid19.go.id</p>
+            <p>Data terupdate otomatis</p>
           </div>
         </div>
 
         <div class="article body">
-          <h2 class="text-gray-800">Sasaran Vaksinasi Wilayah Puskesamas Lerep</h2>
-          <h3 class="text-gray-700">Jadwal vaksiasi lansia</h3>
-          <table id="jadwal-lansia">
-            <thead>
-              <tr>
-                <td>No</td>
-                <td>Tanggal</td>
-                <td>Sasaran</td>
-                <td>Desa / Kelurahan</td>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(event, index) in events" :key="event.id">
-                <td v-text="index + 1"></td>
-                <td v-text="event.tanggal"></td>
-                <td v-text="event.jumlah"></td>
-                <td v-text="event.desa"></td>
-              </tr>
-            </tbody>
-          </table>
-
-          <p>Jadwal vaksin yang lain akan di infokan di halam ini</p>
-          <h3 class="text-gray-700">Jadwal vaksin kedua</h3>
-          <p>Untuk mengetahui Jadwal vaksin kedua (setelah mendapat vaksin pertama), ada beberapa cara anatara lain;</p>
-          <ol>
-            <li>
-              <p>
-                Menghitung manual, dengan menjumlahkan 28 hari sejak tanggal vaksin pertama. Bila vaksin jatuh pada hari jumat atau minggu vaksin dapat diundur pada hari berikutnya.
-                Tanggal vaksin pertama dapat dilihat pada kartu vaksin yang telah diperoleh sebelumnya.
-              </p>
-              <p>Contoh: pasien mendapat vakin pertama pada tanggal 1 Maret, maka pasien datang kembali pada tanggal 29 Maret</p>
-            </li>
-            <li>
-              <p>
-                Mengujungi situs resmi pemerintah <a href="https://pedulilindungi.id/" target="_blank" rel="noopener noreferrer">pedulilindungi.com</a>, kemudian masukan nama lengkap dan nik yang terdaftar. Secara otomatis akan muncul inforamsi vaksinasi Anda.
-              </p>
-              <img src="/data/img/article/contoh-pedulilindungi.png" alt="contoh pedulilindungi" width="470px">
-
-            </li>
-            <li>
-              <p>
-                Menghubungi petugas vaksinasi. Anda dapat bertanya secara langsung kepada kami di puskesmas Lerep atau menghubungi <a href="tel:+64">Petugas vaksin</a> atau bidan desa setempat.
-              </p>
-            </li>
-          </ol>
+          <h2>Update jadwal vaksin</h2>
+          <p>Untuk mengetahui update terbaru kuota vaksin dapat dilihat pada chanel telegram di <a href="https://t.me/vaksinpuskesmaslerep">t.me/vaksinpuskesmaslerep</a>, atau di halaman khusus kuota vaksin (halaman percobaan) <a href="/vaksinasi" rel=”follow”>simpuslerep.com/vaskiniasai.</a></p>
         </div>
       </article>
 
@@ -310,74 +193,74 @@ include($_SERVER['DOCUMENT_ROOT'] . '/resources/components/meta/metatag.php') ?>
     el: '#media-app',
     data() {
       return {
-        lastest: {
-          "cakupan": {
-            "lansia_vaksinasi1": "0%",
-            "lansia_vaksinasi2": "0%",
-            "petugas_publik_vaksinasi1": "0%",
-            "petugas_publik_vaksinasi2": "0%",
-            "sdm_kesehatan_vaksinasi1": "0%",
-            "sdm_kesehatan_vaksinasi2": "0%",
-            "vaksinasi1": "0%",
-            "vaksinasi2": "0%"
+        data_vaksin: [
+          // kategory vaksin
+          {
+            "kategory": "--",
+            "date": "--",
+            "total_vaksin": 0,
+            "vaksin_1": 0,
+            "vaksin_2": 0,
+            "total_tunda": 0,
+            "tunda_1": 0,
+            "tunda_2": 0,
           },
-          "date": "2021-04-07",
-          "sasaran_vaksinasi_lansia": 0,
-          "sasaran_vaksinasi_petugas_publik": 0,
-          "sasaran_vaksinasi_sdmk": 0,
-          "tahapan_vaksinasi": {
-            "lansia": {
-              "sudah_vaksin1": 0,
-              "sudah_vaksin2": 0,
-              "tertunda_vaksin1": 0,
-              "tertunda_vaksin2": 0,
-              "total_vaksinasi1": 0,
-              "total_vaksinasi2": 0
-            },
-            "petugas_publik": {
-              "sudah_vaksin1": 0,
-              "sudah_vaksin2": 0,
-              "tertunda_vaksin1": 0,
-              "tertunda_vaksin2": 0,
-              "total_vaksinasi1": 0,
-              "total_vaksinasi2": 0
-            },
-            "sdm_kesehatan": {
-              "sudah_vaksin1": 0,
-              "sudah_vaksin2": 0,
-              "tertunda_vaksin1": 0,
-              "tertunda_vaksin2": 0,
-              "total_vaksinasi1": 0,
-              "total_vaksinasi2": 0
-            }
-          },
-          "total_sasaran_vaksinasi": 0,
-          "vaksinasi1": 0,
-          "vaksinasi2": 0
+        ],
+        data_blank : {
+          "kategory": "--",
+          "date": "--",
+          "total_vaksin": 0,
+          "vaksin_1": 0,
+          "vaksin_2": 0,
+          "total_tunda": 0,
+          "tunda_1": 0,
+          "tunda_2": 0,
         }
       }
     },
-    mounted() {
-      $json('https://cekdiri.id/vaksinasi/')
-        .then(json => {
-          let data = json.monitoring
-          console.log(data.pop())
-          this.lastest = data.pop()
-        })
-    },
-  })
 
-  new Vue({
-    el: '#jadwal-lansia',
-    data() {
-      return {
-        events: {}
-      }
-    },
     mounted() {
-      $json('/api/ver1.1/JadwalVaksin/lansia.json')
+      $json('https://kipi.covid19.go.id/api/get-faskes-vaksinasi?skip=0&city=KAB.%20SEMARANG')
         .then(json => {
-          this.events = json.data
+          if (json.success) {
+            json.data.forEach(element => {
+              // id lerep 10638
+              if (element.id == 10638) {
+                let new_data = []
+                let total_vaksin = this.data_blank
+                element.detail.forEach(data => {
+                  if (data.batch == "TAHAP 3") {
+                    return
+                  }
+
+                  new_data.push({
+                    "kategory": data.batch,
+                    "date": data.tanggal,
+                    "total_vaksin": data.divaksin,
+                    "vaksin_1": data.divaksin_1,
+                    "vaksin_2": data.divaksin_2,
+                    "total_tunda": data.pending_vaksin,
+                    "tunda_1": data.pending_vaksin_1,
+                    "tunda_2": data.pending_vaksin_2,
+                  })
+
+                  total_vaksin.kategory = "TOTAL"
+                  total_vaksin.total_vaksin += data.divaksin
+                  total_vaksin.vaksin_1 += data.divaksin_1
+                  total_vaksin.vaksin_2 += data.divaksin_2
+                  total_vaksin.total_tunda += data.total_tunda
+                  total_vaksin.tunda_1 += data.pending_vaksin_1
+                  total_vaksin.tunda_2 += data.pending_vaksin_2
+                })
+                // push to data vaksin
+                if (new_data.length > 0) {
+                  this.data_vaksin = new_data
+                  this.data_vaksin.push(total_vaksin)
+                }
+              }
+            });
+          }
+          this.data_vaksin
         })
     },
   })
