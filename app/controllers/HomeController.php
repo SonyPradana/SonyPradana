@@ -32,6 +32,7 @@ class HomeController extends Controller
     // result
     return $this->view('home/index', [
       "auth"    => $this->getMiddleware()['auth'],
+      'etag'  => 'abcd123',
       "meta"    => [
         "title"         => "SIMPUS Lerep",
         "discription"   => "Sistem Informasi Manajemen Puskesmas SIMPUS Lerep",

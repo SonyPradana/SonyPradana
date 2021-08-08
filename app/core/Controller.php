@@ -1,31 +1,47 @@
 <?php
 
 namespace Simpus\Apps;
+
 use Simpus\Apps\Middleware;
 
 abstract class Controller extends Middleware
 {
-
-  public function view($view, $portal = [])
+  public function view(string $view, array $portal = [])
   {
-    // short hand to access content
-    if (isset($portal['contents'])) {
-      $content = (object) $portal['contents'];
-    }
-
-    // require component
-    require_once APP_FULLPATH['view'] . $view . '.template.php';
-
-    // require js & css
-
-    // requrie templates
+    static::renderView($view, $portal);
 
     return $this;
   }
 
+  public static function renderView(string $view, array $portal = [])
+  {
+    $meta = new \TemplateEngine\Portal($portal['meta'] ?? []);
+    $content = new \TemplateEngine\Portal($portal['contents'] ?? []);
+    $content_type = $portal['header']['content_type'] ?? 'Content-Type: text/html';
+
+    // get render content
+    ob_start();
+    require_once view_path(true, $view . '.template.php');
+    $html = ob_get_clean();
+
+    // send render content to client
+    response()
+      ->setContent($html)
+      ->setResponeCode(\System\Http\Response::HTTP_OK)
+      ->setHeaders([$content_type])
+      ->removeHeader([
+        'Expires',
+        'Pragma',
+        'X-Powered-By',
+        'Connection',
+        'Server',
+      ])
+      ->send();
+  }
+
   public static function view_exists($view) :bool
   {
-    return file_exists( APP_FULLPATH['view'] . $view . '.template.php');
+    return file_exists(view_path(true) . $view . '.template.php');
   }
 
   /**

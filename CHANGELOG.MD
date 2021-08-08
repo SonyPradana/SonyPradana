@@ -5,10 +5,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Add global view() to render template to client
+- Controller class (view) can call from static funtion (renderView funtion)
+- Add Portal class to change array to obejct
+
 ### Changed
 - Throw all request and respone to one classes (request class and respone class)
 - Global path include (optional) surfix path
 - Services perrent class has inplemnet class and respone class (newst)
+- Controller class (view) use respone class to respone to client
+- Unit test for router speed must less that 1 second for 100 request
 
 ### Removed
 - Class Request in Helper\Http has ben removed

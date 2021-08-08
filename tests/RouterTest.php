@@ -119,6 +119,6 @@ class RouterTest extends TestCase
 
     $end = microtime(true);
 
-    $this->assertLessThan(1.15, $end - $start);
+    $this->assertLessThan(0.99, $end - $start);
   }
 }

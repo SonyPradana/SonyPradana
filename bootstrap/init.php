@@ -14,6 +14,7 @@ require_once dirname(__DIR__) . '/app/core/Controller.php';
 require_once dirname(__DIR__) . '/app/core/CLI.php';
 require_once dirname(__DIR__) . '/app/core/Service.php';
 require_once dirname(__DIR__) . '/app/core/GlobalFuntion.php';
+require_once dirname(__DIR__) . '/app/core/TemplateEngine/Portal.php';
 
 
 // Declare Config Class

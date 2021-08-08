@@ -340,3 +340,12 @@ if (! function_exists('response')) {
     return (new System\Http\Response($conten, $respone_code, $headers));
   }
 }
+
+// template
+
+if (! function_exists('view')) {
+  function view(string $view, array $portal = [])
+  {
+    \Simpus\Apps\Controller::renderView($view, $portal);
+  }
+}
