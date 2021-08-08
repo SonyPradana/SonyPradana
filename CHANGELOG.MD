@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [2.3.10] - 2021-08-08
 ### Added
 - Add global view() to render template to client
 - Controller class (view) can call from static funtion (renderView funtion)
@@ -22,7 +24,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Class Request in Helper\Http has ben removed
 - Class Respone in Helper\Http has ben removed
 - Class HttpHeader in Helper\HttpHeader has ben removed
-
 
 ## [2.3.9] - 2021-06-28
 ### Added
