@@ -97,7 +97,11 @@ Router::get('/info/(:any)', function(string $page) {
   ));
 });
 
-// aricle
+Router::get('/vaksinasi', function() {
+  return (new VaksinasiController)->index();
+});
+
+// article
 Router::get('/read/(:any)', function(string $title) {
   // TODO: article exist cheacker before call index
   return (new ArticleController())->index($title);

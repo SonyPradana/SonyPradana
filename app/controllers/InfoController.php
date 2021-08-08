@@ -102,9 +102,9 @@ class InfoController extends Controller
     return $this->view('/info/vaksin', [
       "auth"    => $this->getMiddleware()['auth'],
       "meta"     => [
-        "title"         => "Info Vaksin - Simpus Lerep",
-        "discription"   => "Info Vakin Terbaru",
-        "keywords"      => "simpus lerep, puskesmas lerep, Info vaksin, jadwal vaksin"
+        "title"         => "Update Vaksinasi Covid-19 Di Puskesmas Lerep",
+        "discription"   => "Update Info Vaksinasi Covid-19 Di Puskesmas Lerep",
+        "keywords"      => "simpus lerep, puskesmas lerep, Info vaksin, jadwal vaksin, update vaksin"
       ],
       "header"   => [
         "active_menu"   => 'home',

@@ -77,7 +77,7 @@ abstract class Service extends Middleware
     $headers[]  = array_values($repone['headers']);
     $headers[]  = 'Content-Type: application/json';
 
-    respone($repone, $error_code, $headers)
+    response($repone, $error_code, $headers)
       ->json()
       ->close();
   }
@@ -90,7 +90,7 @@ abstract class Service extends Middleware
   {
     // cek access
     if ($this->getMiddleware()['auth']['login'] == false) {
-      respone(
+      response(
         // content
         array(
           'status'  => 'Unauthorized',
@@ -121,7 +121,7 @@ abstract class Service extends Middleware
     $auth = new Auth($token, Auth::USER_NAME_AND_USER_AGENT_IP);
 
     if (! $auth->privilege($role)) {
-      respone(
+      response(
         // content
         array(
           'status'  => 'Unauthorized',
@@ -143,5 +143,10 @@ abstract class Service extends Middleware
         ->json()
         ->close();
     }
+  }
+
+  protected function isGuest(): bool
+  {
+    return !$this->getMiddleware()['auth']['login'];
   }
 }

@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add global view() to render template to client
 - Controller class (view) can call from static funtion (renderView funtion)
 - Add Portal class to change array to obejct
+- Add View-Controller to info kuota vaskin
 
 ### Changed
 - Throw all request and respone to one classes (request class and respone class)
