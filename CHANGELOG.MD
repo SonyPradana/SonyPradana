@@ -8,6 +8,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Add View-Controller to info kuota vaskin
 
+### Changed
+- Throw all request and respone to one classes (request class and respone class)
+- Global path include (optional) surfix path
+- Services perrent class has inplemnet class and respone class (newst)
+
+### Removed
+- Class Request in Helper\Http has ben removed
+- Class Respone in Helper\Http has ben removed
+- Class HttpHeader in Helper\HttpHeader has ben removed
+
+
 ## [2.3.9] - 2021-06-28
 ### Added
 - Support cache (using symfony)

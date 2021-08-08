@@ -1,53 +1,39 @@
 <?php
 
-use Helper\Http\Respone;
 use Simpus\Apps\Controller;
 
 class ApiController extends Controller
 {
-
   public function index($unit, $action, $version): void
   {
-    $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
-    $params = $_GET;
-    if ($method == 'PUT' || $method == 'DELETE') {
-      $body   = file_get_contents('php://input');
-      $params = json_decode($body, true);
-    } elseif ($method == 'POST') {
-      $params = $_POST;
-    }
+    $response = $this->getService(
+      $unit . 'Service',
+      $action,
+      request()
+        ->with(['x-version' => $version])
+        ->allIn()
+    );
 
-    if (!empty($_FILES)) {
-      $params['files'] = $_FILES;
-    }
-
-    // send method type
-    $params['x-method'] = $method;
-
-    // send version request
-    $params['x-version'] = $version;
-
-    $response = $this->getService( $unit . 'Service', $action, [$params]);
-
-    // get header and them remove header from response
-    $headers = $response['headers'] ?? [];
-    unset($response['headers']);
-
-    // insert defult header
-    array_push($headers, 'Content-Type: application/json');
-
-    // respone as json
-    Respone::print($response, 0, array(
-      'headers' => array_merge(Respone::headers(), $headers)
-    ));
+    response()
+      ->setContent($response)
+      ->setResponeCode($response['code'] ?? 200)
+      ->setHeaders($response['headers'] ?? [])
+      ->removeHeader([
+        'Expires',
+        'Pragma',
+        'X-Powered-By',
+        'Connection',
+        'Server',
+      ])
+      ->json();
   }
 
-  private function getService($service_nama, $method_nama, $args = []) :array
+  private function getService($service_nama, $method_nama, $args = []): array
   {
     $service_nama   = str_replace('-', '', $service_nama);
     $method_nama    = str_replace('-', '_', $method_nama);
 
-    if (file_exists(APP_FULLPATH['services'] . $service_nama . '.php')) {
+    if (file_exists(services_path(true,  $service_nama . '.php'))) {
       $service = new $service_nama;
       if (method_exists($service, $method_nama)) {
         // call target services
