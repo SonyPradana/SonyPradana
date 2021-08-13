@@ -55,7 +55,7 @@ class Request
     return $this->query[$key];
   }
 
-  public function getPost(string $key = null): mixed
+  public function getPost(string $key = null)
 	{
 		if (func_num_args() === 0) {
 			return $this->post;
