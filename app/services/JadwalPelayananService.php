@@ -32,7 +32,9 @@ class JadwalPelayananService extends Service
 
   public function create_jadwal(array $request)
   {
-    $this->useAuth();
+    if ($this->isGuest()) {
+      return $this->error->code_401();
+    }
 
     $create = new JadwalKia($this->PDO);
     $success = $create->autoCreatJadwal(date('m'), date('Y'));

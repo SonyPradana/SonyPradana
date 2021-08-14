@@ -149,4 +149,9 @@ abstract class Service extends Middleware
   {
     return !$this->getMiddleware()['auth']['login'];
   }
+
+  protected function isAuth(): bool
+  {
+    return $this->getMiddleware()['auth']['login'];
+  }
 }

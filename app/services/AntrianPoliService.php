@@ -7,31 +7,20 @@
 
 use Model\Antrian\{antrianCRUD, antrianModel};
 use Simpus\Apps\Service;
+use System\Broadcast\Broadcast;
 use System\Database\MyPDO;
 
 class AntrianPoliService extends Service
 {
-  private function pusher($data)
-  {
-    $this->Pusher->trigger('my-channel', 'my-event', $data);
-  }
-
   protected $PDO = null;
-  protected $Pusher = null;
+  /** @var Broadcast */
+  protected $pusher;
 
   public function __construct(MyPDo $PDO = null)
   {
     $this->error = new DefaultService();
     $this->PDO = $PDO ?? MyPDO::getInstance();
-    $this->Pusher = new Pusher\Pusher(
-      PUSHER_APP_KEY,
-      PUSHER_APP_SECRET,
-      PUSHER_APP_ID,
-      array (
-        'cluster' => PUSHER_APP_CLUSTER,
-        'useTLS' => true
-      )
-    );;
+    $this->pusher = new Broadcast('info', 'antrian');
   }
 
   public function antrian(array $request): array
@@ -45,20 +34,20 @@ class AntrianPoliService extends Service
       return $x;
     }, $get_antrian);
 
-    $this->pusher($get_antrian);
-    return array (
+    return $this->pusher->trigerPusher([
       'status'  => 'ok',
       'code'    => 200,
       'last'    => $antrian->lastUpdate(),
-      'date'    => '15 Oct 2020',
       'data'    => $get_antrian,
       'headers' => array('HTTP/1.1 200 Oke')
-    );
+    ]);
   }
 
   public function dipanggil($request): array
   {
-    $this->useAuth();
+    if ($this->isGuest()) {
+      return $this->error->code_401();
+    }
 
     $validate = new GUMP();
     $validate->validation_rules([
@@ -84,19 +73,19 @@ class AntrianPoliService extends Service
     $get_antrian['date_time'] = date('d F Y', $get_antrian['date_time']);
     $get_antrian['current_times'] = date('h:i a', $get_antrian['current_times']);
 
-    $this->pusher($get_antrian);
-
-    return array(
+    return $this->pusher->trigerPusher([
       'status'  => $status ? 'ok' : 'error',
       'code'    => 200,
       'data'    => $get_antrian,
       'headers' => array('HTTP/1.1 200 Oke')
-    );
+    ]);
   }
 
   public function baru($request): array
   {
-    $this->useAuth();
+    if ($this->isGuest()) {
+      return $this->error->code_401();
+    }
 
     $validate = new GUMP();
     $validate->validation_rules([
@@ -123,20 +112,20 @@ class AntrianPoliService extends Service
     $get_antrian['queueing_times'] = date('h:i a', $get_antrian['current_times']);
     $get_antrian['current_times'] = date('h:i a', $get_antrian['current_times']);
 
-    $this->pusher($get_antrian);
-
-    return array (
+    return $this->pusher->trigerPusher([
       'status'  => $status ? 'ok' : 'error',
       'code'    => 200,
       'data' => $get_antrian,
       'headers' => array('HTTP/1.1 200 Oke')
-    );
+    ]);
 
   }
 
   public function reset($request): array
   {
-    $this->useAuth();
+    if ($this->isGuest()) {
+      return $this->error->code_401();
+    }
 
     $poli = $request['poli'] ?? $this->errorHandler(405);
     $antrian = new antrianCRUD($this->PDO);
@@ -177,15 +166,13 @@ class AntrianPoliService extends Service
       $data['queueing_times'] = date('h:i a', $data['current_times']);
       $data['current_times'] = date('h:i a', $data['current_times']);
     }
-    $this->pusher($data);
 
-
-    return array(
+    return $this->pusher->trigerPusher([
       'status'  => $status ? 'ok' : 'error',
       'code'    => 200,
       'data'    => $data,
       'headers' => array('HTTP/1.1 200 Oke')
-    );
+    ]);
 
   }
 }

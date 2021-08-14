@@ -255,16 +255,16 @@
             cluster: 'ap1'
         });
 
-        let channel = pusher.subscribe('my-channel');
-        channel.bind('my-event', function (data) {
-            if(! Array.isArray(data)) {
-                app.tanggal = data.date_time;
-                app.poli[data.poli].current = data.current;
-                app.poli[data.poli].times = data.current_times;
-                app.poli[data.poli].queueing = data.queueing;
-                app.poli[data.poli].queueing_times = data.queueing_times;
+        let channel = pusher.subscribe('info');
+        channel.bind('antrian-loket', function (json) {
+            if(! Array.isArray(json)) {
+                app.tanggal = json.data.date_time;
+                app.poli[json.data.poli].current        = json.data.current;
+                app.poli[json.data.poli].times          = json.data.current_times;
+                app.poli[json.data.poli].queueing       = json.data.queueing;
+                app.poli[json.data.poli].queueing_times = json.data.queueing_times;
 
-                app.last_call = ` ${data.poli} ${data.current}`;
+                app.last_call = ` ${json.data.poli} ${json.data.current}`;
             }
         });
 
@@ -272,7 +272,6 @@
         const app = new Vue({
             el: '#app',
             data: {
-                test: [],
                 tanggal: '',
                 last_call: '--',
                 poli: {

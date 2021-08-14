@@ -127,7 +127,9 @@ class StoriesService extends Service
 
   public function Deleted_Stories(array $request): array
   {
-    $this->useAuth();
+    if ($this->isGuest()) {
+      return $this->error->code_401();
+    }
 
     $storyID = $request['stories_id'] ?? 0;
     if ($storyID == 0)

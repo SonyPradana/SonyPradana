@@ -15,7 +15,9 @@ class TriviaService extends Service
 
   public function Delete_Ques(array $params)
   {
-    $this->UseAuth();
+    if ($this->isGuest()) {
+      return $this->error->code_401();
+    }
 
     $triva = new Trivia($this->PDO);
     $triva->setID($params['id'] ?? 0);

@@ -56,7 +56,9 @@ class NewsFeederService extends Service
 
   public function AllNews(array $request): array
   {
-    $this->useAuth();
+    if ($this->isGuest()) {
+      return $this->error->code_401();
+    }
 
     $feeds   = new articleModel($this->PDO);
     $feeds->selectColomn(

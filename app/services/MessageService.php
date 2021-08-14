@@ -50,7 +50,9 @@ class MessageService extends Service
 
   public function read(array $param): array
   {
-    $this->useAuth();
+    if ($this->isGuest()) {
+      return $this->error->code_401();
+    }
 
     $limit      = $param['limit'] ?? 100;
     $page       = $param['page'] ?? 1;
