@@ -39,6 +39,7 @@ class Response
   /** Header array pools */
   private $headers;
   private $is_array;  // content type
+  private $remove_headers = [];
 
   /**
    * Create rosone http base on conten and header
@@ -68,6 +69,9 @@ class Response
    */
   private function sendHeaders(): void
   {
+    if (headers_sent()) {
+      return;
+    }
     // header respone code
     $respone_code = $this->respone_code;
     $respone_text = Response::$statusTexts[$respone_code] ?? 'unknown status';
@@ -77,6 +81,15 @@ class Response
     // header
     foreach ($this->headers as $header) {
       header($header);
+    }
+
+    // remove header
+    if ($this->remove_headers === null) {
+      header_remove();
+    } else {
+      foreach ($this->remove_headers as $header) {
+        header_remove($header);
+      }
     }
   }
 
@@ -141,8 +154,7 @@ class Response
    */
   public function json($content = null)
   {
-    header_remove("Content-Type");
-    header('Content-Type: application/json');
+    $this->header('Content-Type: application/json');
 
     if ($content != null) {
       $this->setContent($content);
@@ -160,8 +172,7 @@ class Response
    */
   public function html(bool $minify = false)
   {
-    header_remove("Content-Type");
-    header('Content-Type: text/html');
+    $this->headers[] = 'Content-Type: text/html';
 
     if (! $this->is_array && $minify) {
       $this->setContent($this->minify($this->content));
@@ -176,9 +187,7 @@ class Response
    */
   public function planText()
   {
-    header_remove("Content-Type");
-    header('Content-Type: text/html');
-
+    $this->headers[] = 'Content-Type: text/html';
     $this->send();
 
     return $this;
@@ -264,14 +273,8 @@ class Response
    */
   public function removeHeader(?array $headers = null)
   {
-    if ($headers === null) {
-      header_remove();
-      return $this;
-    }
+    $this->remove_headers = $headers;
 
-    foreach ($headers as $header) {
-      header_remove($header);
-    }
     return $this;
   }
 
@@ -307,7 +310,7 @@ class Response
     // header based on the Request
     foreach ($follow_rule as $rule) {
       if ($request->hasHeader($rule)) {
-        header($request->getHeaders($rule));
+        $this->headers[] = $request->getHeaders($rule);
       }
     }
 
