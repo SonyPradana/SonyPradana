@@ -15,6 +15,7 @@ abstract class Controller extends Middleware
 
   public static function renderView(string $view, array $portal = [])
   {
+    $auth = new \TemplateEngine\Portal($portal['auth'] ?? []);
     $meta = new \TemplateEngine\Portal($portal['meta'] ?? []);
     $content = new \TemplateEngine\Portal($portal['contents'] ?? []);
     $content_type = $portal['header']['content_type'] ?? 'Content-Type: text/html';
