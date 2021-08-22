@@ -1,6 +1,5 @@
 <?php
 
-use ParagonIE\Sodium\Core\ChaCha20;
 use Simpus\Apps\Cache;
 use Simpus\Apps\Service;
 
@@ -30,13 +29,13 @@ class KuotaVaksinService extends Service
     }
     // method must put
     if ($request['x-method'] != 'PUT') {
-      return $this->error(403);
+      return $this->error->code_403();
     }
 
     // validate
     $validate = new GUMP();
     $validate->validation_rules([
-      'date'  => 'required|date,d/m/Y',
+      'date'  => 'required',
       'data'  => 'required'
     ]);
     $validate->run($request);
@@ -77,9 +76,6 @@ class KuotaVaksinService extends Service
     // generate document id
     $key = 'kuota-vaksin';
     $data = Cache::static()->getItem($key)->get() ?? null;
-    $vaksin_date = $data === null
-      ? 0
-      : $data['date'] ?? 0;
 
     $error = $data === null
       ? 'tidak ada kuota vaksin'
@@ -113,7 +109,7 @@ class KuotaVaksinService extends Service
     $validate->validation_rules([
       'kategory'  => 'required|alpha_space|min_len,4|max_len,25',
       'kuota'     => 'required|min_numeric,0',
-      'dipakai'   => 'required|min_numeric,1'
+      'dipakai'   => 'required|min_numeric,0'
     ]);
     $validate->run($request);
 

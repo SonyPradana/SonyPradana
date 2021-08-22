@@ -20,7 +20,7 @@ class AntrianPoliService extends Service
   {
     $this->error = new DefaultService();
     $this->PDO = $PDO ?? MyPDO::getInstance();
-    $this->pusher = new Broadcast('info', 'antrian');
+    $this->pusher = new Broadcast('info', 'antrian-loket');
   }
 
   public function antrian(array $request): array

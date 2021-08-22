@@ -6,7 +6,7 @@
   <link rel="stylesheet" href="/lib/css/ui/v1.1/full.style.css">
   <script src="/lib/js/index.min.js"></script>
   <script src="/lib/js/bundles/keepalive.min.js"></script>
-  <script src="/lib/js/vendor/vue/vue.min.js"></script>
+  <script src="/lib/js/vendor/vue/vue.js"></script>
   <script src="/lib/js/vendor/pusher/pusher.min.js"></script>
   <style>
     .container.width-view {
@@ -121,7 +121,39 @@
 
         <!-- article body -->
         <div class="article-body">
+          <?php if ($auth->login) :?>
+            <div v-if="raw == null || raw == []">
+              <input v-model="date" type="text">
+              <ul>
+                <li v-for="item in new_data">
+                  <div v-text="item.kategory"></div>
+                  <div v-text="item.kuota"></div>
+                  <div v-text="item.dipakai"></div>
+                </li>
+              </ul>
 
+              <!-- flexsible  -->
+              <input v-model="tempory_data.kategory" type="text">
+              <input v-model="tempory_data.kuota" type="text">
+              <input v-model="tempory_data.dipakai" type="text">
+
+              <!-- fixable -->
+              <button v-on:click="addNewData">tambah</button>
+              <button v-on:click="createJadwal">Kirim data</button>
+            </div>
+            <div v-else>
+              <div v-for="item in raw.data">
+                <input v-model="item.kategory" type="text">
+                <input v-model="item.kuota" type="text">
+                <input v-model="item.dipakai" type="text">
+
+                <button v-on:click="update(item.kategory, item.kuota, item.dipakai)">update</button>
+              </div>
+
+              <button v-on:click="updateAll()">Update All</button>
+              <button v-on:click="reset">Reset</button>
+            </div>
+          <?php endif; ?>
         </div>
       </article>
 
@@ -177,7 +209,80 @@
   const app = new Vue({
     el: '#app',
     data: {
+      date: null,
       raw: [],
+      tempory_data: {
+        kategory: '',
+        kuota: 0,
+        dipakai: 0
+      },
+      new_data: []
+    },
+    methods: {
+      addNewData() {
+        // if (this.tempory_data.kategory == '') {
+        //   return;
+        // }
+        const data = {...this.tempory_data}
+        this.new_data.push(data)
+        // reset
+        this.tempory_data.kategory = ''
+        this.tempory_data.kuota = 0
+        this.tempory_data.dipakai = 0
+      },
+
+      createJadwal() {
+        $json('/api/v1.0/KuotaVaksin/createJadwal.json', {
+          method: 'PUT',
+          headers: {'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            date: this.date,
+            data: this.new_data
+          })
+        })
+          .then(json => {
+            if (json.status === 'ok') {
+              creat_snackbar('berhasil dibuat');
+              show_snackbar();
+            }
+          })
+      },
+
+      reset() {
+        $json('/api/v1.0/KuotaVaksin/destroyKuota.json')
+          .then(json => {
+            if (json.status === 'oke') {
+              this.raw = null
+              this.new_data = []
+              creat_snackbar('berhasil direset');
+              show_snackbar();
+            }
+          })
+      },
+
+      update(kategory, kuota, dipakai) {
+        $json('/api/v1.0/KuotaVaksin/updateKuota.json', {
+          method: 'PUT',
+          headers: {'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            kategory: kategory,
+            kuota: kuota,
+            dipakai: dipakai
+          })
+        })
+          .then(json => {
+            if (json.status === 'ok') {
+              creat_snackbar('berhasil diupdate');
+              show_snackbar();
+            }
+          })
+      },
+      updateAll() {
+        this.raw.data.forEach(element => {
+          this.update(element.kategory, element.kuota, element.dipakai)
+        });
+      }
+
     },
     mounted() {
       $json('/api/v1.0/KuotaVaksin/getKuota.json')
@@ -186,6 +291,9 @@
             this.raw = json.data
           }
         })
+
+      const d = new Date()
+      this.date = `${d.getDay()}/${d.getMonth() + 1}/${d.getFullYear()}`
     },
   })
 </script>
