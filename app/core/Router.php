@@ -8,6 +8,9 @@ class Router
   private static $pathNotFound = null;
   private static $methodNotAllowed = null;
 
+  /**
+   * Short hand to readable regex url
+   */
   public static $patterns = Array (
     '(:id)'   => '(\d+)',
     '(:num)'  => '([0-9]*)',
@@ -76,7 +79,7 @@ class Router
       'method' => $method
     );
 
-    array_push(self::$routes, $route);
+    return new RouteNamed($route);
   }
 
   /**
@@ -87,7 +90,7 @@ class Router
    */
   public static function any(string $expression, $function)
   {
-    self::match(['get','post', 'put', 'patch', 'delete', 'options'], $expression, $function);
+    return self::match(['get','post', 'put', 'patch', 'delete', 'options'], $expression, $function);
   }
 
   /**
@@ -98,7 +101,7 @@ class Router
    */
   public static function get(string $expression, $function)
   {
-    self::match('get', $expression, $function);
+    return self::match('get', $expression, $function);
   }
 
   /**
@@ -109,7 +112,51 @@ class Router
    */
   public static function post(string $expression, $function)
   {
-    self::match('post', $expression, $function);
+    return self::match('post', $expression, $function);
+  }
+
+  /**
+   * Function used to add a new route [method: put]
+   * @param string $expression Route string or expression
+   * @param callable $function Function to call if route with allowed method is found
+   *
+   */
+  public static function put(string $expression, $function)
+  {
+    return self::match('put', $expression, $function);
+  }
+
+  /**
+   * Function used to add a new route [method: patch]
+   * @param string $expression Route string or expression
+   * @param callable $function Function to call if route with allowed method is found
+   *
+   */
+  public static function patch(string $expression, $function)
+  {
+    return self::match('patch', $expression, $function);
+  }
+
+  /**
+   * Function used to add a new route [method: delete]
+   * @param string $expression Route string or expression
+   * @param callable $function Function to call if route with allowed method is found
+   *
+   */
+  public static function delete(string $expression, $function)
+  {
+    return self::match('delete', $expression, $function);
+  }
+
+  /**
+   * Function used to add a new route [method: options]
+   * @param string $expression Route string or expression
+   * @param callable $function Function to call if route with allowed method is found
+   *
+   */
+  public static function options(string $expression, $function)
+  {
+    return self::match('options', $expression, $function);
   }
 
   /**
