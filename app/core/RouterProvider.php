@@ -41,7 +41,7 @@ class RouterProvider
       'method' => $method
     );
 
-    array_push($this->routes, $route);
+    return new RouteNamed($route, 'prefix-global');
   }
 
   /**
@@ -52,7 +52,7 @@ class RouterProvider
    */
   public function any(string $expression, $function)
   {
-    $this->match(['get','post', 'put', 'patch', 'delete', 'options'], $expression, $function);
+    return $this->match(['get','post', 'put', 'patch', 'delete', 'options'], $expression, $function);
   }
 
   /**
@@ -63,7 +63,7 @@ class RouterProvider
     */
   public function get(string $expression, $function)
   {
-    $this->match('get', $expression, $function);
+    return $this->match('get', $expression, $function);
   }
 
   /**
@@ -74,6 +74,50 @@ class RouterProvider
    */
   public function post(string $expression, $function)
   {
-    $this->match('post', $expression, $function);
+    return $this->match('post', $expression, $function);
+  }
+
+  /**
+   * Function used to add a new route [method: put]
+   * @param string $expression Route string or expression
+   * @param callable $function Function to call if route with allowed method is found
+   *
+   */
+  public function put(string $expression, $function)
+  {
+    return $this->match('put', $expression, $function);
+  }
+
+  /**
+   * Function used to add a new route [method: patch]
+   * @param string $expression Route string or expression
+   * @param callable $function Function to call if route with allowed method is found
+   *
+   */
+  public function patch(string $expression, $function)
+  {
+    return $this->match('patch', $expression, $function);
+  }
+
+  /**
+   * Function used to add a new route [method: delete]
+   * @param string $expression Route string or expression
+   * @param callable $function Function to call if route with allowed method is found
+   *
+   */
+  public function delete(string $expression, $function)
+  {
+    return $this->match('delete', $expression, $function);
+  }
+
+  /**
+   * Function used to add a new route [method: options]
+   * @param string $expression Route string or expression
+   * @param callable $function Function to call if route with allowed method is found
+   *
+   */
+  public function options(string $expression, $function)
+  {
+    return $this->match('options', $expression, $function);
   }
 }

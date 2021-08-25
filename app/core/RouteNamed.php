@@ -6,9 +6,9 @@ class RouteNamed
 {
   private $route;
 
-  public function __construct(array $route)
+  public function __construct(array $route, ?string $default_name = 'global')
   {
-    $route['name'] = 'global';
+    $route['name'] = $default_name ?? 'global';
     $this->route = $route;
   }
 
