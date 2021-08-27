@@ -3,7 +3,7 @@ session_name('simpus');
 session_set_cookie_params(['secure' => true, 'httponly' => true,]);
 session_start();
 
-use Simpus\Apps\{Router, Controller, Middleware, RouterProvider};
+use Simpus\Apps\{Router, Controller, Middleware, RouteProvider};
 use Simpus\Auth\{Auth, User};
 
 require_once dirname(__DIR__) . '/vendor/autoload.php';
@@ -56,7 +56,7 @@ Router::match(['get', 'post'], '/forgot/(:text)', function(string $action) {
   ));
 });
 
-Router::prefix('/admin')->routes(function(RouterProvider $routes) {
+Router::prefix('/admin')->routes(function(RouteProvider $routes) {
   $routes->get('', function() {
     return (new AdminController())->index();
   });
@@ -113,7 +113,7 @@ Router::get('/pendaftaran', function() {
   return (new RegistrationMRController)->index();
 });
 // rekam-medis
-Router::prefix('/rekam-medis')->routes(function(RouterProvider $routes) {
+Router::prefix('/rekam-medis')->routes(function(RouteProvider $routes) {
   $routes->get('', function() {
     return (new RekamMedisController())->index();
   });
@@ -150,7 +150,7 @@ Router::match(array('get', 'post'), '/trivia/submit', function() {
 });
 
 // Stories
-Router::prefix('/stories')->routes(function(RouterProvider $route) {
+Router::prefix('/stories')->routes(function(RouteProvider $route) {
 
   $route->get('', function() {
     return (new StoriesController)->index();
@@ -168,7 +168,7 @@ Router::prefix('/stories')->routes(function(RouterProvider $route) {
 Router::get('/QnA', function() {
   return (new QuestionAnswerController)->index();
 });
-Router::prefix('/question')->routes(function(RouterProvider $route) {
+Router::prefix('/question')->routes(function(RouteProvider $route) {
   $route->get('/(:id)/(:slug)', function($thread_ID, $slug) {
     return (new QuestionAnswerController)->thread($thread_ID);
   });

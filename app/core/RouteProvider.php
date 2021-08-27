@@ -2,7 +2,7 @@
 
 namespace Simpus\Apps;
 
-class RouterProvider
+class RouteProvider
 {
 
   private $routes = Array();
