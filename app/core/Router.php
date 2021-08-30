@@ -20,6 +20,13 @@ class Router
     '(:all)'  => '(.*)',
   );
 
+  public static function mapPatterns(string $url): string
+  {
+    $user_pattern         = array_keys(self::$patterns);
+    $allow_pattern        = array_values(self::$patterns);
+    return str_replace($user_pattern, $allow_pattern, $url);
+  }
+
   /**
    * Adding new router using array of router
    * @param array $route Router array format (expression, function, method)
@@ -31,6 +38,12 @@ class Router
     && isset($route['method'])) {
       array_push(self::$routes, $route);
     }
+  }
+
+  public static function mergeRoutes(array $array_routes)
+  {
+    // warning:: all item will push without validation
+    array_push(self::$routes, ...$array_routes);
   }
 
   /**
@@ -70,16 +83,11 @@ class Router
    */
   public static function match($method, string $uri, $callback)
   {
-    $user_pattern   = array_keys(self::$patterns);
-    $allow_pattern  = array_values(self::$patterns);
-    $new_uri        = str_replace($user_pattern, $allow_pattern, $uri);
-    $route = Array (
-      'expression' => $new_uri,
-      'function' => $callback,
-      'method' => $method
-    );
-
-    return new RouteNamed($route);
+    return new RouteNamed([
+      'method'      => $method,
+      'expression'  => self::mapPatterns($uri),
+      'function'    => $callback
+    ]);
   }
 
   /**

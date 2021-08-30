@@ -7,14 +7,6 @@ class RouteProvider
 
   private $routes = Array();
 
-  public $patterns = Array (
-    '(:id)'   => '(\d+)',
-    '(:num)'  => '([0-9]*)',
-    '(:text)' => '([a-zA-Z]*)',
-    '(:any)'  => '([0-9a-zA-Z_+-]*)',
-    '(:slug)' => '([0-9a-zA-Z_-]*)',
-    '(:all)'  => '(.*)',
-  );
   /**
    * Get routes has added
    * @return array Routes array
@@ -30,18 +22,15 @@ class RouteProvider
    * @param string $expression Route string or expression
    * @param callable $function Function to call if route with allowed method is found
    */
-  public function match($method,string $uri, $callback)
+  public function match($method, string $uri, $callback)
   {
-    $user_pattern   = array_keys($this->patterns);
-    $allow_pattern  = array_values($this->patterns);
-    $new_uri        = str_replace($user_pattern, $allow_pattern, $uri);
     $route = Array (
-      'expression' => $new_uri,
+      'expression' => Router::mapPatterns($uri),
       'function' => $callback,
       'method' => $method
     );
 
-    return new RouteNamed($route, 'prefix-global');
+    array_push($this->routes, $route);
   }
 
   /**

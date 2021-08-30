@@ -18,7 +18,6 @@ class RouteFactory
    * Adding router prefix
    *
    * @param callable $callable Function to add prefix (use parrameter as RouteProvider)
-   * @return this Chain Function
    */
   public function routes($callback)
   {
@@ -33,5 +32,4 @@ class RouteFactory
 
     return $this;
   }
-
 }
