@@ -18,7 +18,7 @@ aside {
 
         .boxs-info {
             display: grid;
-            grid-template-columns: repeat(4, 140px);
+            grid-template-columns: repeat(4, 160px);
             gap: 12px;
             align-items: center;
             user-select: none;
@@ -342,7 +342,7 @@ aside:not(.top) {
 
 @media screen  and (max-width: 767px) {        
     aside.top .boxs-info {
-        grid-template-columns: repeat(2, 144px);
+        grid-template-columns: repeat(2, 160px);
     }
     aside:not(.top) {
         margin-top: 32px;
