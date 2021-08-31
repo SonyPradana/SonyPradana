@@ -98,7 +98,7 @@ class Router
    */
   public static function any(string $expression, $function)
   {
-    return self::match(['get','post', 'put', 'patch', 'delete', 'options'], $expression, $function);
+    return self::match(['get', 'head', 'post', 'put', 'patch', 'delete', 'options'], $expression, $function);
   }
 
   /**
@@ -109,7 +109,7 @@ class Router
    */
   public static function get(string $expression, $function)
   {
-    return self::match('get', $expression, $function);
+    return self::match(['get', 'head'], $expression, $function);
   }
 
   /**
