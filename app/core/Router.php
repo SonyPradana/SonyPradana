@@ -75,14 +75,30 @@ class Router
     return new RouteFactory($prefix);
   }
 
+  public static function view(string $uri, string $view_name, array $portal = [])
+  {
+    self::match(
+      'get',
+      $uri,
+      fn() => Controller::renderView($view_name, $portal)
+    );
+  }
+
   /**
    * Function used to add a new route
    * @param array|string $method Methods allow
    * @param string $expression Route string or expression
-   * @param callable $function Function to call if route with allowed method is found
+   * @param callable|array $function Function to call if route with allowed method is found
    */
   public static function match($method, string $uri, $callback)
   {
+    if (is_array($callback)) {
+      $callback = function() use ($callback) {
+        $a = new $callback[0];
+        return $a($callback[1]);
+      };
+    }
+
     return new RouteNamed([
       'method'      => $method,
       'expression'  => self::mapPatterns($uri),
