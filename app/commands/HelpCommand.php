@@ -47,10 +47,12 @@ class HelpCommand extends Command
         if (file_exists($class_path)) {
           $class = new $class_name([]);
           $res = call_user_func_array([$class, 'printHelp'], []) ?? [];
-          if ($res['option'] != null) {
+
+          if (isset($res['option']) && $res['option'] != null) {
             $help_command[] = $res['option'];
           }
-          if ($res['argument'] != null) {
+
+          if (isset($res['argument']) && $res['argument'] != null) {
             $argument_command[] = $res['argument'];
           }
         }
