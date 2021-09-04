@@ -6,6 +6,11 @@ use Simpus\Apps\Middleware;
 
 abstract class Controller extends Middleware
 {
+  public function __invoke($invoke)
+  {
+    call_user_func([$this, $invoke]);
+  }
+
   public function view(string $view, array $portal = [])
   {
     static::renderView($view, $portal);

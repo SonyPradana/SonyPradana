@@ -9,9 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [2.3.10] - 2021-08-08
 ### Added
 - Add global view() to render template to client
-- Controller class (view) can call from static funtion (renderView funtion)
-- Add Portal class to change array to obejct
+- ```Controller::class``` (view) can call from static funtion (renderView funtion)
+- Add ```Portal::class``` to change array to obejct
 - Add View-Controller to info kuota vaskin
+- Add Router name
+- ```Router::class``` suport router name, route view (instans render view), support HEAD request method
 
 ### Changed
 - Throw all request and respone to one classes (request class and respone class)
@@ -19,6 +21,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Services perrent class has inplemnet class and respone class (newst)
 - Controller class (view) use respone class to respone to client
 - Unit test for router speed must less that 1 second for 100 request
+- Rename class ```RouterFactory::class``` to ```RouteFactory::class```
+- Rename class ```RouterProvider::class``` to ```RouteProvider::class```
 
 ### Removed
 - Class Request in Helper\Http has ben removed

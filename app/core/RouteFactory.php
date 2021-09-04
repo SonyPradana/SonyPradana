@@ -2,7 +2,7 @@
 
 namespace Simpus\Apps;
 
-class RouterFactory
+class RouteFactory
 {
   /**
    * @var string Prefix of router expression
@@ -17,12 +17,11 @@ class RouterFactory
   /**
    * Adding router prefix
    *
-   * @param callable $callable Function to add prefix (use parrameter as RouterProvider)
-   * @return this Chain Function
+   * @param callable $callable Function to add prefix (use parrameter as RouteProvider)
    */
   public function routes($callback)
   {
-    $routes = new RouterProvider();
+    $routes = new RouteProvider();
     call_user_func_array($callback, [$routes]);
 
     foreach ($routes->getRoutes() as $route) {
@@ -33,5 +32,4 @@ class RouterFactory
 
     return $this;
   }
-
 }
