@@ -2,6 +2,9 @@
 
 namespace Simpus\Apps;
 
+use AuthMiddleware;
+use Simpus\Auth\Auth;
+
 class Router
 {
   private static $routes = Array();
@@ -75,11 +78,18 @@ class Router
     return new RouteFactory($prefix);
   }
 
+  public static function middleware(array $middlewares)
+  {
+    foreach ($middlewares as $middleware) {
+      if ($middleware instanceof AbstractMiddleware) {
+        $middleware->handle();
+      }
+    }
+  }
+
   public static function view(string $uri, string $view_name, array $portal = [])
   {
-    self::match(
-      'get',
-      $uri,
+    self::match('get', $uri,
       fn() => Controller::renderView($view_name, $portal)
     );
   }

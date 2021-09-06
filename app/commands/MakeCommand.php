@@ -25,7 +25,8 @@ class MakeCommand extends Command
         "\n\t" . $this->textGreen("make") . ":service [services_name]\t\t\tgenerate new service",
         "\n\t" . $this->textGreen("make") . ":model [model_name] " . $this->textDim("[argument]") . "\t\tgenerate new model",
         "\n\t" . $this->textGreen("make") . ":models [models_name] " . $this->textDim("[argument]") . "\t\tgenerate new models",
-        "\n\t" . $this->textGreen("make") . ":command [command_name] " . "\t\tgenerate new command",
+        "\n\t" . $this->textGreen("make") . ":command [command_name] " . "\t\t\tgenerate new command",
+        "\n\t" . $this->textGreen("make") . ":middleware [middleware_name] " . "\t\tgenerate new middleware",
       ),
       'argument' => array(
         "\n\t" . $this->textDim("--table-name=[table_name]") . "\tget table column when creating model/models",
@@ -73,6 +74,10 @@ class MakeCommand extends Command
 
       case 'command':
         $this->make_commad();
+        break;
+
+      case 'middleware':
+        $this->make_middleware();
         break;
 
       default:
@@ -237,6 +242,27 @@ class MakeCommand extends Command
       echo $this->textGreen("\nFinish created command file");
     } else {
       echo $this->textRed("\nFailed Create command file");
+    }
+  }
+
+  public function make_middleware()
+  {
+    echo $this->textYellow("Making middleware file...");
+    echo $this->textDim("\n...\n");
+
+    // main code
+    $success = $this->makeTemplate($this->OPTION[0], array(
+      'template_location' => '/app/core/template/middleware',
+      'save_location'     => '/app/middleware/',
+      'pattern'           => '__middleware__',
+      'surfix'            => 'Middleware.php'
+    ));
+
+    // the result
+    if ($success) {
+      echo $this->textGreen("\nFinish created middleware file");
+    } else {
+      echo $this->textRed("\nFailed Create middleware file");
     }
   }
 

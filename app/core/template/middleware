@@ -1,0 +1,12 @@
+#!/usr/bin/env php
+<?php
+
+use Simpus\Apps\AbstractMiddleware;
+
+class __middleware__Middleware extends AbstractMiddleware
+{
+  public function handle()
+  {
+    // do your stuff    
+  }
+}

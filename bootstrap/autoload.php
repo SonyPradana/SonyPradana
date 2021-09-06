@@ -27,4 +27,10 @@ spl_autoload_register(function( $class ) {
     return;
   }
 
+  // auto load command
+  if (file_exists(BASEURL . '/app/middleware/' . $className . '.php')) {
+    require_once BASEURL . '/app/middleware/' . $className . '.php';
+    return;
+  }
+
 });
