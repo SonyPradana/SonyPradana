@@ -1,6 +1,6 @@
 <?php
 
-namespace System\Provider;
+namespace Provider\Broadcast;
 
 class Broadcast
 {
