@@ -6,12 +6,13 @@ use System\File\UploadFile;
 use Simpus\Apps\Controller;
 use Helper\String\StringValidation as sv;
 use \Gumlet\ImageResize;
+use Provider\Session\Session;
 
 class AuthController extends Controller
 {
     private function useAuth()
     {
-        if ($this->getMiddleware()['auth']['login'] == false) {
+        if (Session::getSession()['auth']['login'] == false) {
             DefaultController::page_401(array (
                 'links' => array (
                     array('Login',  '/login?url=' . $_SERVER['REQUEST_URI'])
@@ -22,7 +23,7 @@ class AuthController extends Controller
 
     private function useGuest()
     {
-        if ($this->getMiddleware()['auth']['login']) {
+        if (Session::getSession()['auth']['login']) {
             header("Location: /");
             exit();
         }
@@ -150,7 +151,7 @@ class AuthController extends Controller
         // logic:
 
         // mengambil data untuk input value(form)
-        $user_name  = $this->getMiddleware()['auth']["user_name"];
+        $user_name  = Session::getSession()['auth']["user_name"];
         $user       = new User( $user_name );
 
         // valdiaation
@@ -324,8 +325,8 @@ class AuthController extends Controller
     {
         $this->useAuth();
         # property
-        $user_name      = $this->getMiddleware()['auth']['user_name'];
-        $display_name   = $this->getMiddleware()['auth']['display_name'];
+        $user_name      = Session::getSession()['auth']['user_name'];
+        $display_name   = Session::getSession()['auth']['display_name'];
 
         // validation
         $validation = new GUMP('id');

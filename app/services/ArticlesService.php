@@ -62,7 +62,7 @@ class ArticlesService extends Service
         array(
           'id'            => '',
           'slug'          => $slug,
-          'author'        => $this->getMiddleware()['auth']['user_name'],
+          'author'        => Session::getSession()['auth']['user_name'],
           'title'         => $request['title'],
           'discription'   => $request['discription'],
           'keywords'      => $request['keywords'],

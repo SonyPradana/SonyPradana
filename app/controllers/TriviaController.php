@@ -1,6 +1,6 @@
 <?php
 
-use Model\Trivia\Trivia;
+use Provider\Session\Session;
 use Simpus\Apps\Controller;
 use System\File\UploadFile;
 
@@ -9,7 +9,7 @@ class TriviaController extends Controller
   public function submit()
   {
     $msg = array('show' => false, 'type' => 'info', 'content' => 'oke');
-    
+
     // upload image
     $fileSize = $_FILES['quest_img']['size'] ?? 0;
     $isUploaded = $fileSize ==  0 ? true : false;
@@ -25,7 +25,7 @@ class TriviaController extends Controller
         ->upload();
       $isUploaded = $upload_image->Success();
     }
-    
+
     $error = array();
     if (isset($_POST['sumbit']) && $isUploaded) {
       $trivia = new TriviaService();
@@ -34,7 +34,7 @@ class TriviaController extends Controller
       if ($error === true) {
         $msg['show'] = true;
         $msg['type'] = 'success';
-        $msg['content'] = 'Berhasil disimpan';        
+        $msg['content'] = 'Berhasil disimpan';
       } else {
         $msg['show'] = true;
         $msg['type'] = 'danger';
@@ -52,7 +52,7 @@ class TriviaController extends Controller
     }
 
     return $this->view('/trivia/submit', array (
-      'auth' => $this->getMiddleware()['auth'],
+      'auth' => Session::getSession()['auth'],
       'meta' => array (
         'title' => 'submit pertanyaan Anda',
         'discription' => 'Submit pertanyan dari Anda untuk dibagikan kepada yang lain',
@@ -72,5 +72,5 @@ class TriviaController extends Controller
           "content"   => $msg['content']
       )
     ));
-  }  
+  }
 }

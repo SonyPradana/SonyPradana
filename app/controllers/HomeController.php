@@ -2,6 +2,7 @@
 
 use Simpus\Apps\Controller;
 use System\Database\MyQuery;
+use Provider\Session\Session;
 
 class HomeController extends Controller
 {
@@ -31,7 +32,7 @@ class HomeController extends Controller
 
     // result
     return $this->view('home/index', [
-      "auth"    => $this->getMiddleware()['auth'],
+      "auth"    => Session::getSession()['auth'],
       'etag'  => 'abcd123',
       "meta"    => [
         "title"         => "SIMPUS Lerep",
@@ -59,7 +60,7 @@ class HomeController extends Controller
 
     // result
     return $this->view('home/about', [
-      "auth"    => $this->getMiddleware()['auth'],
+      "auth"    => Session::getSession()['auth'],
       "meta"     => [
         "title"         => "Tentang Kami",
         "discription"   => "Tentang kami",

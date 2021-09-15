@@ -1,6 +1,6 @@
 <?php
 
-use Simpus\Apps\{AbstractMiddleware, Middleware};
+use Simpus\Apps\AbstractMiddleware;
 use Simpus\Auth\{Auth, User};
 
 class AuthMiddleware extends AbstractMiddleware
@@ -11,7 +11,7 @@ class AuthMiddleware extends AbstractMiddleware
     $auth  = new Auth($token, Auth::USER_NAME_AND_USER_AGENT_IP);
     $user  = new User($auth->getUserName());
 
-    Middleware::setMiddleware( array(
+    \Provider\Session\Session::setSession([
       "auth" => array(
         "token"                 => $token,
         "login"                 => $auth->TrushClient(),
@@ -20,6 +20,6 @@ class AuthMiddleware extends AbstractMiddleware
         "display_picture_small" => $user->getSmallDisplayPicture()
       ),
       "DNT" => isset($_SERVER['HTTP_DNT']) && $_SERVER['HTTP_DNT'] == 1 ? true : false
-    ));
+    ]);
   }
 }

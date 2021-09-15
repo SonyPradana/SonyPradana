@@ -5,6 +5,7 @@ use Model\Simpus\{MedicalRecord, MedicalRecords, PersonalRecord, Relation};
 use Simpus\Auth\Log;
 use Simpus\Apps\Controller;
 use System\Database\MyPDO;
+use Provider\Session\Session;
 
 class RekamMedisController extends Controller
 {
@@ -38,8 +39,8 @@ class RekamMedisController extends Controller
     $this->PDO = MyPDO::getInstance();
     //  WARNING:    fungsi ini adalah funsi authrization, wajib ada
 
-    // call_user_func_array($this->getMiddleware()['before'], []);
-    if ($this->getMiddleware()['auth']['login'] == false) {
+    // call_user_func_array(Session::getSession()['before'], []);
+    if (Session::getSession()['auth']['login'] == false) {
       DefaultController::page_401(array (
         'links' => array (
           array('Home Page', '/'),
@@ -77,7 +78,7 @@ class RekamMedisController extends Controller
     }
 
     return $this->view('rekam-medis/index', [
-      "auth"    => $this->getMiddleware()['auth'],
+      "auth"    => Session::getSession()['auth'],
       "meta"     => [
         "title"         => "Dashbord Rekam Medis",
         "discription"   => "Sistem Informasi Manajemen Puskesmas SIMPUS Lerep",
@@ -169,7 +170,7 @@ class RekamMedisController extends Controller
           $_SESSION['last_data'] = $_POST;
 
           // user log
-          $log = new Log( $this->getMiddleware()['auth']['user_name'] );
+          $log = new Log( Session::getSession()['auth']['user_name'] );
           $log->set_event_type('med-rec');
           $log->save( $edit_rm->getLastQuery() );
         } else {
@@ -215,8 +216,8 @@ class RekamMedisController extends Controller
     }
 
     return $this->view('rekam-medis/edit', [
-      "auth"          => $this->getMiddleware()['auth'],
-      "DNT"           => $this->getMiddleware()['DNT'],
+      "auth"          => Session::getSession()['auth'],
+      "DNT"           => Session::getSession()['DNT'],
       "redirect_to"   => $_GET['redirect_to'] ?? '/',
       "meta"          => [
         "title"         => "Edit Data Rekam Medis",
@@ -304,8 +305,8 @@ class RekamMedisController extends Controller
 
     // result
     return $this->view('rekam-medis/new', [
-      "auth"     => $this->getMiddleware()['auth'],
-      "DNT"      => $this->getMiddleware()['DNT'],
+      "auth"     => Session::getSession()['auth'],
+      "DNT"      => Session::getSession()['DNT'],
       "meta"     => [
         "title"         => "Buat Rekam Medis Baru",
         "discription"   => "Sistem Informasi Manajemen Puskesmas SIMPUS Lerep",
@@ -353,8 +354,8 @@ class RekamMedisController extends Controller
     $nik_jaminan     = $_GET['nik-jaminan'] ?? '';
 
     return $this->view('rekam-medis/search', [
-      "auth"     => $this->getMiddleware()['auth'],
-      "DNT"      => $this->getMiddleware()['DNT'],
+      "auth"     => Session::getSession()['auth'],
+      "DNT"      => Session::getSession()['DNT'],
       "meta"     => [
         "title"         => "Cari Data Rekam Medis",
         "discription"   => "Sistem Informasi Manajemen Puskesmas SIMPUS Lerep",
@@ -406,8 +407,8 @@ class RekamMedisController extends Controller
     $data_rm->currentPage($page);
 
     return $this->view('rekam-medis/view', [
-      "auth"      => $this->getMiddleware()['auth'],
-      "DNT"       => $this->getMiddleware()['DNT'],
+      "auth"      => Session::getSession()['auth'],
+      "DNT"       => Session::getSession()['DNT'],
       "meta"      => [
         "title"         => "Lihat Data Rekam Medis",
         "discription"   => "Sistem Informasi Manajemen Puskesmas SIMPUS Lerep",
@@ -437,8 +438,8 @@ class RekamMedisController extends Controller
       $profile    = MedicalRecord::withId( $profile_id );
 
       return $this->view('rekam-medis/profile',[
-        "auth"      => $this->getMiddleware()['auth'],
-        "DNT"       => $this->getMiddleware()['DNT'],
+        "auth"      => Session::getSession()['auth'],
+        "DNT"       => Session::getSession()['DNT'],
         "meta"      => [
           "title"         => "Profile Pasien - SimpusLerep",
           "discription"   => "Profile data dan biodata pasien",

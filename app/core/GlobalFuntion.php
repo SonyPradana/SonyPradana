@@ -365,3 +365,15 @@ if (! function_exists('view')) {
     \Simpus\Apps\Controller::renderView($view, $portal);
   }
 }
+
+// session
+
+if (! function_exists('auth')) {
+  function auth(?string $key)
+  {
+    return $key === null
+      ? \Provider\Session\Session::getSession()
+      : (\Provider\Session\Session::getSession()['auth'][$key] ?? null)
+    ;
+  }
+}

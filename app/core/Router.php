@@ -2,9 +2,6 @@
 
 namespace Simpus\Apps;
 
-use AuthMiddleware;
-use Simpus\Auth\Auth;
-
 class Router
 {
   private static $routes = Array();

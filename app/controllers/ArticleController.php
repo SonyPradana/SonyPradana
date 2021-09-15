@@ -4,6 +4,7 @@ use Simpus\Apps\Controller;
 use Model\Article\articleModel;
 use Simpus\Apps\Cache;
 use Simpus\Auth\User;
+use Provider\Session\Session;
 
 class ArticleController extends Controller
 {
@@ -36,7 +37,7 @@ class ArticleController extends Controller
       : date('d M Y',  $result['update_time']);
 
     return $this->view('article/index', [
-      "auth"    => $this->getMiddleware()['auth'],
+      "auth"    => Session::getSession()['auth'],
       "meta"     => [
         "title"         => $result['title'],
         "discription"   => $result['discription'],

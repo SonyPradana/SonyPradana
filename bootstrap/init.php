@@ -6,7 +6,6 @@ require_once dirname(__DIR__) . '/bootstrap/autoload.php';
 // Core
 require_once dirname(__DIR__) . '/app/core/Config.php';
 require_once dirname(__DIR__) . '/app/core/Cache.php';
-require_once dirname(__DIR__) . '/app/core/Middleware.php';
 require_once dirname(__DIR__) . '/app/core/RouteNamed.php';
 require_once dirname(__DIR__) . '/app/core/Router.php';
 require_once dirname(__DIR__) . '/app/core/RouteFactory.php';

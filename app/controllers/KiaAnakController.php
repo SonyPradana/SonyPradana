@@ -6,6 +6,7 @@ use Model\Simpus\{Relation, MedicalRecord};
 use Model\Simpus\{KIAAnakRecord, KIAAnakRecords};
 use Model\Simpus\{GroupsPosyandu, PosyanduRecord, PosyanduRecords};
 use Convert\Converter\ConvertCode;
+use Provider\Session\Session;
 
 class KiaAnakController extends Controller
 {
@@ -14,8 +15,8 @@ class KiaAnakController extends Controller
     {
         //  WARNING:    fungsi ini adalah funsi authrization, wajib ada
 
-        // call_user_func_array($this->getMiddleware()['before'], []);
-        if( $this->getMiddleware()['auth']['login'] == false ){
+        // call_user_func_array(Session::getSession()['before'], []);
+        if( Session::getSession()['auth']['login'] == false ){
             DefaultController::page_401(array (
                 'links' => array (
                     array('Home Page', '/'),
@@ -116,7 +117,7 @@ class KiaAnakController extends Controller
         }
 
         return $this->view('kia-anak/biodata/edit', [
-            "auth"    => $this->getMiddleware()['auth'],
+            "auth"    => Session::getSession()['auth'],
             "meta"     => [
                 "title"         => "Edit Data KIA Anak",
                 "discription"   => "Sistem Informasi Manajemen Puskesmas SIMPUS Lerep",
@@ -229,7 +230,7 @@ class KiaAnakController extends Controller
         }
 
         return $this->view('kia-anak/biodata/new',[
-            "auth"    => $this->getMiddleware()['auth'],
+            "auth"    => Session::getSession()['auth'],
             "meta"     => [
                 "title"         => "Biodata Baru - KIA Anak",
                 "discription"   => "Sistem Informasi Manajemen Puskesmas SIMPUS Lerep",
@@ -275,8 +276,8 @@ class KiaAnakController extends Controller
 
         // result
         return $this->view('kia-anak/biodata/search',[
-            "auth"    => $this->getMiddleware()['auth'],
-            "DNT"      => $this->getMiddleware()['DNT'],
+            "auth"    => Session::getSession()['auth'],
+            "DNT"      => Session::getSession()['DNT'],
             "meta"     => [
                 "title"         => "Cari Data KIA Anak",
                 "discription"   => "Sistem Informasi Manajemen Puskesmas SIMPUS Lerep",
@@ -317,8 +318,8 @@ class KiaAnakController extends Controller
 
         // result
         return $this->view('kia-anak/biodata/view',[
-            "auth"    => $this->getMiddleware()['auth'],
-            "DNT"      => $this->getMiddleware()['DNT'],
+            "auth"    => Session::getSession()['auth'],
+            "DNT"      => Session::getSession()['DNT'],
             "meta"     => [
                 "title"         => "Lihat Data KIA Anak",
                 "discription"   => "Sistem Informasi Manajemen Puskesmas SIMPUS Lerep",
@@ -369,7 +370,7 @@ class KiaAnakController extends Controller
         if (! $validation->errors() && $isValided && $read) {
             // setter dari user inputkz
             $posyandu->setTempatPemeriksaan( $_POST['tempat_pemeriksaan'] ?? $posyandu->getTempatPemeriksaan() )
-                     ->setTenagaPemeriksaan( $this->getMiddleware()['auth']['user_name'] )
+                     ->setTenagaPemeriksaan( Session::getSession()['auth']['user_name'] )
                      ->setTanggalPemeriksaan( $_POST['tanggal_pemeriksaan'] ?? $posyandu->getTanggalPemeriksaan() )
                      ->setTinggiBadan( $_POST['tinggi_badan'] ?? $posyandu->getTinggiBadan() )
                      ->setBeratBadan( $_POST['berat_badan'] ?? $posyandu->getBeratBadan() );
@@ -393,7 +394,7 @@ class KiaAnakController extends Controller
         $berat_pemeriksaan      = $posyandu->getBeratBadan();
 
         return $this->view('kia-anak/posyandu/edit', [
-            "auth"    => $this->getMiddleware()['auth'],
+            "auth"    => Session::getSession()['auth'],
             "meta"     => [
                 "title"         => "Edit Data KIA Anak",
                 "discription"   => "Sistem Informasi Manajemen Puskesmas SIMPUS Lerep",
@@ -453,7 +454,7 @@ class KiaAnakController extends Controller
 
         // result
         return $this->view('kia-anak/posyandu/new', [
-            "auth"    => $this->getMiddleware()['auth'],
+            "auth"    => Session::getSession()['auth'],
             "meta"     => [
                 "title"         => "Buat Tambah Posyandu Baru",
                 "discription"   => "Sistem Informasi Manajemen Puskesmas SIMPUS Lerep",
@@ -497,8 +498,8 @@ class KiaAnakController extends Controller
 
         // result
         return $this->view("kia-anak/biodata/search", [
-            "auth"    => $this->getMiddleware()['auth'],
-            "DNT"      => $this->getMiddleware()['DNT'],
+            "auth"    => Session::getSession()['auth'],
+            "DNT"      => Session::getSession()['DNT'],
             "meta"     => [
                 "title"         => "Cari data Posyandu",
                 "discription"   => "Sistem Informasi Manajemen Puskesmas SIMPUS Lerep",
@@ -565,8 +566,8 @@ class KiaAnakController extends Controller
 
         // result
         return $this->view("kia-anak/posyandu/view", [
-            "auth"    => $this->getMiddleware()['auth'],
-            "DNT"      => $this->getMiddleware()['DNT'],
+            "auth"     => Session::getSession()['auth'],
+            "DNT"      => Session::getSession()['DNT'],
             "meta"     => [
                 "title"         => "Cari data Posyandu",
                 "discription"   => "Sistem Informasi Manajemen Puskesmas SIMPUS Lerep",

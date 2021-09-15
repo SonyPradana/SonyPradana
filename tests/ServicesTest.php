@@ -11,6 +11,7 @@ use MessageService;
 use Model\Stories\Story;
 use NewsFeederService;
 use PHPUnit\Framework\TestCase;
+use Provider\Session\Session;
 use QAResponseService;
 use QuestionAnswerService;
 use RekamMedisService;
@@ -18,7 +19,6 @@ use Simpus\Apps\Cache;
 use System\Database\MyPDO;
 use TriviaService;
 use WilayahKabSemarangService;
-use Simpus\Apps\Middleware;
 use StoriesService;
 use System\Database\MyQuery;
 
@@ -47,7 +47,7 @@ final class ServicesTest extends TestCase
 
   public function testServiceAntrian(): void
   {
-    Middleware::setMiddleware($this->middleware);
+    Session::setSession($this->middleware);
     $api = new AntrianPoliService($this->PDO());
 
     // success
@@ -88,7 +88,7 @@ final class ServicesTest extends TestCase
   // ERROR: cant modife middleware
   public function testServiceAuth(): void
   {
-    Middleware::setMiddleware($this->middleware);
+    Session::setSession($this->middleware);
     $api = new AuthService();
 
     // success auth
@@ -200,7 +200,7 @@ final class ServicesTest extends TestCase
   public function testServiceMessage(): void
   {
     // setup midleware for simulation login
-    Middleware::setMiddleware($this->middleware);
+    Session::setSession($this->middleware);
     $api = new MessageService($this->PDO());
 
     // success
@@ -222,7 +222,7 @@ final class ServicesTest extends TestCase
   public function testServiceTrivia(): void
   {
     // setup midleware for simulation login
-    Middleware::setMiddleware($this->middleware);
+    Session::setSession($this->middleware);
     $api = new TriviaService($this->PDO());
 
     // success assert test
@@ -281,7 +281,7 @@ final class ServicesTest extends TestCase
   public function testServiceRekamMedis(): void
   {
     // setup midleware for simulation login
-    Middleware::setMiddleware($this->middleware);
+    Session::setSession($this->middleware);
     $api = new RekamMedisService($this->PDO());
 
     // success feact API

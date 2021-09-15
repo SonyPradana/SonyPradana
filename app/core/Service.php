@@ -3,10 +3,10 @@
 namespace Simpus\Apps;
 
 use DefaultService;
-use Simpus\Apps\Middleware;
 use Simpus\Auth\Auth;
+use Provider\Session\Session;
 
-abstract class Service extends Middleware
+abstract class Service
 {
   const CODE_NO_CONTENT           = 204;
   const CODE_BAD_REQUEST          = 400;
@@ -89,7 +89,7 @@ abstract class Service extends Middleware
   protected function useAuth(): void
   {
     // cek access
-    if ($this->getMiddleware()['auth']['login'] == false) {
+    if (Session::getSession()['auth']['login'] == false) {
       response(
         // content
         array(
@@ -117,7 +117,7 @@ abstract class Service extends Middleware
   protected function useUserRole(string $role): void
   {
     // cek access
-    $token = Middleware::getMiddleware()['auth']['token'];
+    $token = Session::getSession()['auth']['token'];
     $auth = new Auth($token, Auth::USER_NAME_AND_USER_AGENT_IP);
 
     if (! $auth->privilege($role)) {
@@ -147,11 +147,11 @@ abstract class Service extends Middleware
 
   protected function isGuest(): bool
   {
-    return !$this->getMiddleware()['auth']['login'];
+    return !Session::getSession()['auth']['login'];
   }
 
   protected function isAuth(): bool
   {
-    return $this->getMiddleware()['auth']['login'];
+    return Session::getSession()['auth']['login'];
   }
 }

@@ -1,6 +1,7 @@
 <?php
 
 use Simpus\Apps\Service;
+use Provider\Session\Session;
 
 class AuthService extends Service
 {
@@ -11,7 +12,7 @@ class AuthService extends Service
 
   public function login_status(array $request)
   {
-    $status = $this->getMiddleware()['auth'];
+    $status = Session::getSession()['auth'];
 
     if ($status['login']) {
       return array(

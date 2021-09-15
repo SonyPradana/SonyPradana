@@ -4,6 +4,7 @@ use Model\Stories\Stories;
 use Model\Stories\Story;
 use Simpus\Apps\Controller;
 use System\Database\MyPDO;
+use Provider\Session\Session;
 
 class StoriesController extends Controller
 {
@@ -13,8 +14,8 @@ class StoriesController extends Controller
     $error = array();
 
     return $this->view('stories/index', array (
-      "auth"          => $this->getMiddleware()['auth'],
-          "DNT"           => $this->getMiddleware()['DNT'],
+          "auth"          => Session::getSession()['auth'],
+          "DNT"           => Session::getSession()['DNT'],
           "redirect_to"   => $_GET['redirect_to'] ?? '/',
           "meta"          => array (
             "title"         => "Simpus Stories",
@@ -70,8 +71,8 @@ class StoriesController extends Controller
     }
 
     return $this->view('stories/preview', array (
-      "auth"          => $this->getMiddleware()['auth'],
-        "DNT"           => $this->getMiddleware()['DNT'],
+      "auth"          => Session::getSession()['auth'],
+        "DNT"           => Session::getSession()['DNT'],
         "redirect_to"   => $_GET['redirect_to'] ?? '/',
         "meta"          => array (
           "title"         => "Story Preview",
@@ -120,8 +121,8 @@ class StoriesController extends Controller
     $oddStories = $countData % 2 === 0 ? true : false;
 
     return $this->view('stories/roll', array (
-      "auth"          => $this->getMiddleware()['auth'],
-        "DNT"           => $this->getMiddleware()['DNT'],
+      "auth"          => Session::getSession()['auth'],
+        "DNT"           => Session::getSession()['DNT'],
         "redirect_to"   => $_GET['redirect_to'] ?? '/',
         "meta"          => array (
           "title"         => "Story Preview",

@@ -8,6 +8,7 @@ use Model\QuestionAnswer\ask;
 use Model\QuestionAnswer\asks;
 use Simpus\Apps\Controller;
 use System\Database\MyQuery;
+use Provider\Session\Session;
 
 class QuestionAnswerController extends Controller
 {
@@ -23,8 +24,8 @@ class QuestionAnswerController extends Controller
       $error = array();
 
       return $this->view('question-answer/index', array (
-        "auth"          => $this->getMiddleware()['auth'],
-            "DNT"           => $this->getMiddleware()['DNT'],
+        "auth"          => Session::getSession()['auth'],
+            "DNT"           => Session::getSession()['DNT'],
             "redirect_to"   => $_GET['redirect_to'] ?? '/',
             "meta"          => array (
               "title"         => "Forum Tanya Jawab - Simpus Lerep",
@@ -104,8 +105,8 @@ class QuestionAnswerController extends Controller
         ->execute();
 
       return $this->view('question-answer/thread', array (
-        "auth"          => $this->getMiddleware()['auth'],
-        "DNT"           => $this->getMiddleware()['DNT'],
+        "auth"          => Session::getSession()['auth'],
+        "DNT"           => Session::getSession()['DNT'],
         "redirect_to"   => $_GET['redirect_to'] ?? '/',
         "meta"          => array (
           "title"         => $quest['title'] . " - QnA simpus lerep",
@@ -159,8 +160,8 @@ class QuestionAnswerController extends Controller
         ->execute();
 
       return $this->view('question-answer/ask', array (
-        "auth"          => $this->getMiddleware()['auth'],
-        "DNT"           => $this->getMiddleware()['DNT'],
+        "auth"          => Session::getSession()['auth'],
+        "DNT"           => Session::getSession()['DNT'],
         "redirect_to"   => $_GET['redirect_to'] ?? '/',
         "meta"          => array (
           "title"         => "QnA - simpus lerep",
@@ -224,8 +225,8 @@ class QuestionAnswerController extends Controller
         ->execute();
 
       return $this->view('question-answer/ask', array (
-        "auth"          => $this->getMiddleware()['auth'],
-        "DNT"           => $this->getMiddleware()['DNT'],
+        "auth"          => Session::getSession()['auth'],
+        "DNT"           => Session::getSession()['DNT'],
         "redirect_to"   => $_GET['redirect_to'] ?? '/',
         "meta"          => array (
           "title"         => "QnA - simpus lerep",

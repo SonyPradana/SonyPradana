@@ -2,9 +2,7 @@
 
 namespace Simpus\Apps;
 
-use Simpus\Apps\Middleware;
-
-abstract class Controller extends Middleware
+abstract class Controller
 {
   public function __invoke($invoke)
   {

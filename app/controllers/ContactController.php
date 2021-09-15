@@ -68,7 +68,7 @@ class ContactController extends Controller
 
         // result
         return $this->view('contact/contactUs', [
-            "auth"    => $this->getMiddleware()['auth'],
+            "auth"    => Session::getSession()['auth'],
             "meta"     => [
                 "title"         => "Hubungi Kami",
                 "discription"   => "Sistem Informasi Manajemen Puskesmas SIMPUS Lerep",
@@ -99,7 +99,7 @@ class ContactController extends Controller
 
         // result
         return $this->view('contact/ourTeam', [
-            "auth"    => $this->getMiddleware()['auth'],
+            "auth"    => Session::getSession()['auth'],
             "meta"     => [
                 "title"         => "Tim Kami",
                 "discription"   => "profile pegawai/admin simpus lerep",

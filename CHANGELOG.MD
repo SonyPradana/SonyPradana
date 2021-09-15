@@ -12,10 +12,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - New folder to collect all midlleware classes ```'./app/middleware/'```
 - Move auth and session to middleware -> ```SessionStartMiddleware::class```, ```AuthMiddleware::class```
 - Add cli to make new middleware class from ```AbstractMiddleware::class```
+- Add class ```Session::class``` to collect auth information
 
 ### Changed
-- Rename class ```RouterFactory::class``` to ```RouteFactory::class```
-- Rename class ```RouterProvider::class``` to ```RouteProvider::class```
+- Rename class name ```RouterFactory::class``` to ```RouteFactory::class```
+- Rename class name ```RouterProvider::class``` to ```RouteProvider::class```
+- Change class ```Middleware::class``` to ```Session::class```
+
+### Removed
+- Romove class ```Middleware::class```
 
 ## [2.3.10] - 2021-08-08
 ### Added

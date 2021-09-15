@@ -1,6 +1,7 @@
 <?php
 
 use Simpus\Apps\Controller;
+use Provider\Session\Session;
 
 class VaksinasiController extends Controller
 {
@@ -12,8 +13,8 @@ class VaksinasiController extends Controller
     $author = new Simpus\Auth\User("angger");
 
     return $this->view('Vaksinasi/Vaksinasi', array (
-      "auth"          => $this->getMiddleware()['auth'],
-      "DNT"           => $this->getMiddleware()['DNT'],
+      "auth"          => Session::getSession()['auth'],
+      "DNT"           => Session::getSession()['DNT'],
       "redirect_to"   => $_GET['redirect_to'] ?? '/',
       "meta"          => array (
         "title"         => "Informasi Kuota Vaksin Puskesmas Lerep",

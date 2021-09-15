@@ -2,6 +2,7 @@
 <?php
 
 use Simpus\Apps\Controller;
+use Provider\Session\Session;
 
 class __controller__Controller extends Controller
 {
@@ -11,8 +12,8 @@ class __controller__Controller extends Controller
     $error = array();
 
     return $this->view('__controller__', array (
-      "auth"          => $this->getMiddleware()['auth'],
-      "DNT"           => $this->getMiddleware()['DNT'],
+      "auth"          => Session::getSession()['auth'],
+      "DNT"           => Session::getSession()['DNT'],
       "redirect_to"   => $_GET['redirect_to'] ?? '/',
       "meta"          => array (
         "title"         => "Documnet Title",

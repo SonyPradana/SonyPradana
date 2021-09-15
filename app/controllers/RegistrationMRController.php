@@ -1,15 +1,15 @@
 <?php
 
 use Simpus\Apps\Controller;
-use Simpus\Apps\Middleware;
 use System\Database\MyPDO;
+use Provider\Session\Session;
 
 class RegistrationMRController extends Controller
 {
   private $PDO = null;
   public function useAuth()
   {
-    if ($this->getMiddleware()['auth']['login'] == false) {
+    if (Session::getSession()['auth']['login'] == false) {
       DefaultController::page_401(array (
         'links' => array (
           array('Login',  '/login?url=' . $_SERVER['REQUEST_URI'])
@@ -36,8 +36,8 @@ class RegistrationMRController extends Controller
     $error = array();
 
     return $this->view('PendaftaranRM/MedicalRegistration', array (
-      "auth"          => Middleware::getMiddleware()['auth'],
-      "DNT"           => $this->getMiddleware()['DNT'],
+      "auth"          => Session::getSession()['auth'],
+      "DNT"           => Session::getSession()['DNT'],
       "redirect_to"   => $_GET['url'] ?? null,
       "meta"          => array (
         "title"         => "Pendaftaran RM",

@@ -1,15 +1,14 @@
 <?php
 
+use Provider\Session\Session;
 use Simpus\Apps\Controller;
-use Simpus\Apps\Middleware;
 use Simpus\Auth\Auth;
-use Simpus\Auth\Privilege;
 
 class AdminController extends Controller
 {
   public function __construct()
   {
-    $token  = Middleware::getMiddleware()['auth']['token'];
+    $token  = Session::getSession()['auth']['token'];
     $auth   = new Auth($token, Auth::USER_NAME_AND_USER_AGENT_IP);
 
     if (! $auth->privilege('admin')) {
@@ -23,8 +22,8 @@ class AdminController extends Controller
     $error = array();
 
     return $this->view('admin/index', array (
-      "auth"          => $this->getMiddleware()['auth'],
-      "DNT"           => $this->getMiddleware()['DNT'],
+      "auth"          => Session::getSession()['auth'],
+      "DNT"           => Session::getSession()['DNT'],
       "redirect_to"   => $_GET['redirect_to'] ?? '/',
       "meta"          => array (
         "title"         => "Dashbord - SIMPUS LEREP",
