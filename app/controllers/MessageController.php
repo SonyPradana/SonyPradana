@@ -1,6 +1,6 @@
 <?php
 
-use Simpus\Apps\Controller;
+use System\Router\Controller;
 use Provider\Session\Session;
 
 class MessageController extends Controller{

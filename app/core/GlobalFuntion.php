@@ -362,7 +362,7 @@ if (! function_exists('response')) {
 if (! function_exists('view')) {
   function view(string $view, array $portal = [])
   {
-    \Simpus\Apps\Controller::renderView($view, $portal);
+    \System\Router\Controller::renderView($view, $portal);
   }
 }
 

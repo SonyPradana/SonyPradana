@@ -1,6 +1,6 @@
 <?php
 
-use Simpus\Apps\Controller;
+use System\Router\Controller;
 use Model\Article\articleModel;
 use Simpus\Apps\Cache;
 use Simpus\Auth\User;

@@ -1,7 +1,7 @@
 <?php
 
 use Provider\Session\Session;
-use Simpus\Apps\Controller;
+use System\Router\Controller;
 use Simpus\Auth\Auth;
 
 class AdminController extends Controller

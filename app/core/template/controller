@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 
-use Simpus\Apps\Controller;
+use System\Router\Controller;
 use Provider\Session\Session;
 
 class __controller__Controller extends Controller

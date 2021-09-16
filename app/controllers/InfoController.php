@@ -1,5 +1,5 @@
 <?php
-use Simpus\Apps\Controller;
+use System\Router\Controller;
 use Simpus\Auth\User;
 use Model\JadwalKia\JadwalKia;
 use Provider\Session\Session;

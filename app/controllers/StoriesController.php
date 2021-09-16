@@ -2,7 +2,7 @@
 
 use Model\Stories\Stories;
 use Model\Stories\Story;
-use Simpus\Apps\Controller;
+use System\Router\Controller;
 use System\Database\MyPDO;
 use Provider\Session\Session;
 

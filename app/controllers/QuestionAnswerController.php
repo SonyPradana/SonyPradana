@@ -6,7 +6,7 @@ use Gregwar\Captcha\PhraseBuilder;
 use System\Database\MyPDO;
 use Model\QuestionAnswer\ask;
 use Model\QuestionAnswer\asks;
-use Simpus\Apps\Controller;
+use System\Router\Controller;
 use System\Database\MyQuery;
 use Provider\Session\Session;
 

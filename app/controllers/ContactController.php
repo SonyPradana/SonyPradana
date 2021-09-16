@@ -1,7 +1,7 @@
 <?php
 
 use System\Database\MyPDO;
-use Simpus\Apps\Controller;
+use System\Router\Controller;
 use Simpus\Helper\MathCaptcha;
 use Simpus\Message\ContactUs;
 

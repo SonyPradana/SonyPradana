@@ -1,6 +1,6 @@
 <?php
 
-use Simpus\Apps\{Router, Controller, RouteProvider};
+use System\Router\{Router, Controller, RouteProvider};
 
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 

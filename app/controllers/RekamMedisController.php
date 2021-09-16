@@ -3,7 +3,7 @@
 use Convert\Converter\ConvertCode;
 use Model\Simpus\{MedicalRecord, MedicalRecords, PersonalRecord, Relation};
 use Simpus\Auth\Log;
-use Simpus\Apps\Controller;
+use System\Router\Controller;
 use System\Database\MyPDO;
 use Provider\Session\Session;
 

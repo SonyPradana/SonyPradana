@@ -3,12 +3,10 @@
 namespace Simpus\Tests;
 
 use PHPUnit\Framework\TestCase;
-use GuzzleHttp\Client;
+use GuzzleHttp\{Client, Pool};
 use GuzzleHttp\Exception\RequestException;
-use GuzzleHttp\Pool;
-use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Response;
-use Simpus\Apps\Router;
+use GuzzleHttp\Psr7\{Request, Response};
+use System\Router\Router;
 
 class RouterTest extends TestCase
 {

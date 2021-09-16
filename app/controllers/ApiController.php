@@ -1,6 +1,6 @@
 <?php
 
-use Simpus\Apps\Controller;
+use System\Router\Controller;
 
 class ApiController extends Controller
 {

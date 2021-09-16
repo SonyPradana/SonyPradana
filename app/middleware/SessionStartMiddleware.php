@@ -1,6 +1,6 @@
 <?php
 
-use Simpus\Apps\AbstractMiddleware;
+use System\Router\AbstractMiddleware;
 
 class SessionStartMiddleware extends AbstractMiddleware
 {

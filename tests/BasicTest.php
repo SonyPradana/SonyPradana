@@ -16,8 +16,6 @@ final class BasicTest extends TestCase
 
     $this->assertFileExists('./app/core/CLI.php');
     $this->assertFileExists('./app/core/Config.php');
-    $this->assertFileExists('./app/core/Controller.php');
-    $this->assertFileExists('./app/core/Router.php');
     $this->assertFileExists('./app/core/Service.php');
 
     $this->assertFileExists('./app/core/template/controller');

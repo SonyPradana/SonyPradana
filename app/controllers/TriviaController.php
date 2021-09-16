@@ -1,7 +1,7 @@
 <?php
 
 use Provider\Session\Session;
-use Simpus\Apps\Controller;
+use System\Router\Controller;
 use System\File\UploadFile;
 
 class TriviaController extends Controller

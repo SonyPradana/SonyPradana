@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 
-use Simpus\Apps\AbstractMiddleware;
+use System\Router\AbstractMiddleware;
 
 class __middleware__Middleware extends AbstractMiddleware
 {

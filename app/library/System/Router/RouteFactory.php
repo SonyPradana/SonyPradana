@@ -1,6 +1,6 @@
 <?php
 
-namespace Simpus\Apps;
+namespace System\Router;
 
 class RouteFactory
 {

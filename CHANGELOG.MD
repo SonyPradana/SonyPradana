@@ -18,6 +18,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Rename class name ```RouterFactory::class``` to ```RouteFactory::class```
 - Rename class name ```RouterProvider::class``` to ```RouteProvider::class```
 - Change class ```Middleware::class``` to ```Session::class```
+- Change namespace ```Simpus\App\AbstractMiddleware``` to ```System\Router\AbstractMiddleware```
+- Change namespace ```Simpus\App\Controller``` to ```System\Router\Controller```
+- Change namespace ```Simpus\App\RouteFactory``` to ```System\Router\RouteFactory```
+- Change namespace ```Simpus\App\RouteNamed``` to ```System\Router\RouteNamed```
+- Change namespace ```Simpus\App\RouteProvider``` to ```System\Router\RouteProvider```
+- Change namespace ```Simpus\App\Router``` to ```System\Router```
 
 ### Removed
 - Romove class ```Middleware::class```

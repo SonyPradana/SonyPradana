@@ -3,7 +3,7 @@
 use Simpus\Auth\{User, Login, Logout, EmailAuth, Registartion, ResetPassword, ForgotPassword};
 use System\Database\MyPDO;
 use System\File\UploadFile;
-use Simpus\Apps\Controller;
+use System\Router\Controller;
 use Helper\String\StringValidation as sv;
 use \Gumlet\ImageResize;
 use Provider\Session\Session;

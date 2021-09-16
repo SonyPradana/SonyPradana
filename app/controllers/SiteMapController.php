@@ -3,7 +3,7 @@
 use Helper\String\Manipulation;
 use Model\Article\articleModel;
 use Model\QuestionAnswer\asks;
-use Simpus\Apps\Controller;
+use System\Router\Controller;
 
 class SiteMapController extends Controller
 {

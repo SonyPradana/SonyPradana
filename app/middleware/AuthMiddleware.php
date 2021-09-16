@@ -1,6 +1,6 @@
 <?php
 
-use Simpus\Apps\AbstractMiddleware;
+use System\Router\AbstractMiddleware;
 use Simpus\Auth\{Auth, User};
 
 class AuthMiddleware extends AbstractMiddleware

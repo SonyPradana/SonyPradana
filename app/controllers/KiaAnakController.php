@@ -1,7 +1,7 @@
 <?php
 
 use System\Database\MyPDO;
-use Simpus\Apps\Controller;
+use System\Router\Controller;
 use Model\Simpus\{Relation, MedicalRecord};
 use Model\Simpus\{KIAAnakRecord, KIAAnakRecords};
 use Model\Simpus\{GroupsPosyandu, PosyanduRecord, PosyanduRecords};
