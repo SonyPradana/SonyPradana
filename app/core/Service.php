@@ -65,6 +65,17 @@ abstract class Service
   }
 
   /**
+   * return success array with data
+   *
+   * @param array $data Send data to client (optional)
+   * @return array Array return provider
+   */
+  protected function sussess(array $data = []): array
+  {
+    return $this->error->code_200($data);
+  }
+
+  /**
    * handle error as a function on return array,
    * so can return error instanl
    *

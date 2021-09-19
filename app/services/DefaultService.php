@@ -6,6 +6,22 @@
 class DefaultService
 {
   /**
+   * Status Ok
+   *
+   * @return array Staus success or ok
+   */
+  public function code_200(array $data = []): array
+  {
+    return array(
+      'status'  => 'ok',
+      'code'    => 200,
+      'data'    => $data,
+      'error'   => false,
+      'headers' => ['HTTP/1.1 400 No Content']
+    );
+  }
+
+  /**
    * No Content
    *
    * @return array No Content
@@ -18,7 +34,7 @@ class DefaultService
       'error'   => array(
         'server' => 'No Content'
       ),
-      'headers' => ['HTTP/1.1 400 No Content']
+      'headers' => ['HTTP/1.1 204 No Content']
     );
   }
 

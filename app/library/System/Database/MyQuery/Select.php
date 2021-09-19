@@ -8,7 +8,7 @@ use System\Database\MyQuery\Join\Join;
 
 class Select extends Fetch implements ConditionInterface
 {
-  public function __construct(string $table_name, array $columns_name, MyPDO $PDO = null)
+  public function __construct(string $table_name, array $columns_name, MyPDO $PDO = null, array $options = null)
   {
     $this->_table = $table_name;
     $this->_column = $columns_name;
@@ -16,14 +16,11 @@ class Select extends Fetch implements ConditionInterface
 
     // defaul query
     if (count($this->_column) > 1) {
-      $this->_column = array_map (
-        fn($e) => "`$e`",
-        $this->_column
-      );
+      $this->_column = array_map(fn($e) => "`$e`", $this->_column);
     }
 
     $column = implode(', ', $columns_name);
-    $this->_query = "SELECT $column FROM `$this->_table`";
+    $this->_query = $options['query'] ?? "SELECT $column FROM `$this->_table`";
   }
 
   public function __toString()

@@ -5,6 +5,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Add success respone array ```DefaultService::code_200()```
+- Add editable 'select' for model ```MyModel::select()``` its like  ```MyModel::costumeWhere()``` but more powerfull
+
 ### Fixed
 - Fix issue #55 - jadwal pelyanan imunisasi tidak memfilter tahun
 

@@ -2,6 +2,8 @@
 
 namespace System\Database;
 
+use System\Database\MyQuery\Select;
+
 abstract class MyModel
 {
   /** kumpulan array filter */
@@ -296,5 +298,14 @@ abstract class MyModel
   public static function call(MyPDO $pdo = null)
   {
     return new static($pdo);
+  }
+
+  /**
+   * Its like costumeWhere() but more elegant syntax.
+   * Intreget with Select() class
+   */
+  public function select()
+  {
+    return new Select($this->_TABELS[0], $this->_COLUMNS, $this->PDO, ['query' => $this->query()]);
   }
 }
