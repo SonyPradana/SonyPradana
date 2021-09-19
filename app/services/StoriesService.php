@@ -6,10 +6,12 @@ use Model\Stories\Stories;
 use Model\Stories\Story;
 use Simpus\Apps\Service;
 use System\Database\MyPDO;
+use System\Database\MyQuery;
 use System\File\UploadFile;
 
 class StoriesService extends Service
 {
+
   protected $PDO = null;
 
   public function __construct(MyPDO $PDO = null)
@@ -183,30 +185,28 @@ class StoriesService extends Service
 
   public function Group_Story(array $request): array
   {
-    $stories = new Stories($this->PDO);
+    $stories = Stories::call()
+      ->order('date_taken', MyQuery::ORDER_DESC)
+      ->resultAll();
 
-    $data = null;
-    foreach ($stories->getGroub() as $groupStory) {
-      $uploader = $groupStory['uploader'];
-      $uploader = $uploader == '' ? 'angger' : $uploader;
+    $data = $added = [];
+    foreach ($stories as $story) {
+      // prevent duplicate uploader
+      if (! in_array($story['uploader'], $added)) {
+        $added[] = $story['uploader'];
 
-      $stories->filterByUploader($uploader);
-      $this->PDO->query($stories->getQuery());
-      $this->PDO->bind(':uploader', $uploader);
-
-      $data[$uploader] = $this->PDO->single();
-
-      // add slug story roll
-      $slug = str_replace(' ', '+', $uploader);
-      $data[$uploader]['slug'] = "/stories/roll/$slug";
+        // insert new data (no duplicate data)
+        $uploader = $story['uploader'] == '' ? 'angger' : $story['uploader'];
+        $data[$uploader] = $story;
+        // insert slug img
+        $slug = str_replace(' ', '+', $uploader);
+        $data[$uploader]['slug'] = "/stories/roll/$slug";
+      }
     }
 
-    return array (
-      'status'  => 'ok',
-      'code'    => 200,
-      'data'    => $data,
-      'headers' => array('HTTP/1.1 200 Oke')
-    );
+    return count($added) > 0
+      ? $this->sussess($data)
+      : $this->error->code_204();
   }
 
 }

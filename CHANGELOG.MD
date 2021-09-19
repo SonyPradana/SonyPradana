@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Fix issue #55 - jadwal pelyanan imunisasi tidak memfilter tahun
+- Sorted stories data #52	
 
 ## [2.3.11] - 2021-09-16
 ### Added
