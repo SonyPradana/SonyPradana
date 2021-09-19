@@ -27,20 +27,16 @@ class JadwalKia
     $third_week = array();   $date_tw = date("Y-m-d", strtotime("third friday $tahun-$bulan"));
 
     // koneksi data base ambil berdasarkan kriteria yang dibuat (bulan / tahun)
-    $this->PDO->query (
-      "SELECT
-        *
-      FROM
-        `list_of_services`
-      WHERE
-        `event`=:event AND MONTH(Date) = :m
-      ORDER BY `date` ASC"
-    );
-    $this->PDO->bind(':event', "imunisasi anak");
-    $this->PDO->bind(':m', $bulan);
+    $res = MyQuery::conn('list_of_services')
+      ->select()
+      ->equal('event', 'imunisasi anak')
+      ->where('MONTH(Date) = :m AND YEAR(Date) = :y', [['m', $bulan], ['y', $tahun]])
+      ->order('date', MyQuery::ORDER_ASC)
+      ->strictMode(true)
+      ->all();
 
     // mengisi array sesuai hasil ditemukan didata base
-    foreach ($this->PDO->resultset() as $row) {
+    foreach ($res as $row) {
       // mengisi array jenis vaksin
       $data[$row['event_detail']][] = date("d M", strtotime($row['date']));
       // mengisi array tanggal berdasarkan jenis vaksin
@@ -61,12 +57,14 @@ class JadwalKia
     // menyusun hasil data
     // kembalian array
     return array (
-      "version" => "1.0",
-      "bulan" => date("M Y", strtotime("$tahun-$bulan-1")),
-      "jadwal" => $date,
+      "status"  => "oke",
+      "code"    => 200,
+      "version" => "1.1",
+      "bulan"   => date("M Y", strtotime("$tahun-$bulan-1")),
+      "jadwal"  => $date,
       "jumat pertama" => $first_week,
       "jumat ketiga" => $third_week,
-      "data" => $data
+      "data"    => $data
     );
 }
 

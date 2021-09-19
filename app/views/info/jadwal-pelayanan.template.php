@@ -173,7 +173,8 @@
             this.first = false;
             $json(`/api/ver1.0/Jadwal-Pelayanan/Imunisasi.json?month=${date[0]}&year=${date[1]}`)
             .then( json => {
-              if (json.status = 'oke') {
+              console.log(json)
+              if (json.code == 200) {
                 this.raw = json.data;
               }
             })
