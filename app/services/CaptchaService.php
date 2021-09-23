@@ -3,8 +3,8 @@
 use Convert\Converter\ConvertCode;
 use Gregwar\Captcha\CaptchaBuilder;
 use Gregwar\Captcha\PhraseBuilder;
+use Simpus\Apps\Cache;
 use Simpus\Apps\Service;
-use System\Database\MyQuery;
 
 class CaptchaService extends Service
 {
@@ -16,7 +16,7 @@ class CaptchaService extends Service
   public function Generate(array $request): array
   {
     // captcha builder
-    $parseBuilder = new PhraseBuilder(5, 'ABCDEFGHIJKLMNOPQRSTU');
+    $parseBuilder = new PhraseBuilder(5, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ');
     $captcha = new CaptchaBuilder(null, $parseBuilder);
     $captcha
       ->setBackgroundColor(255, 255, 255)
@@ -25,16 +25,9 @@ class CaptchaService extends Service
       ->build(200, 70);
 
     // scrf builder
-    $scrfKey = ConvertCode::RandomCode(5);
-    MyQuery::conn('scrf_protection')
-      ->insert()
-      ->values([
-        'id'        => '',
-        'scrf_key'  => $scrfKey,
-        'secret'    => $captcha->getPhrase(),
-        'hit'       => 1
-      ])
-      ->execute();
+    $scrfKey = ConvertCode::RandomCode(6);
+
+    Cache::remember($scrfKey, 600, ['value' => $captcha->getPhrase()]);
 
     return array(
       'status'  => 'ok',
@@ -46,6 +39,33 @@ class CaptchaService extends Service
       'error'   => false,
       'headers' => array('HTTP/1.1 200 Oke')
     );
+  }
+
+  public function Validate(array $request): array
+  {
+    // $this->validate;
+    $validate =  new GUMP();
+    $validate->validation_rules([
+      'key'     => 'required',
+      'captcha' => 'required',
+    ]);
+    $validate->run($request);
+
+    if (! $validate->errors()) {
+      if (Cache::static()->hasItem($request['key'])) {
+        $get = Cache::static()->getItem($request['key']);
+        $value = $get->get()['value'];
+
+        // delete captha if key has hit
+        Cache::static()->delete($request['key']);
+
+        return $this->sussess([
+          "is_valid" => strtolower($value) === strtolower($request['captcha'])
+        ]);
+      }
+    }
+
+    return $this->sussess(['is_valid' => false]);
   }
 }
 

@@ -1,8 +1,5 @@
 <?php
 
-use Convert\Converter\ConvertCode;
-use Gregwar\Captcha\CaptchaBuilder;
-use Gregwar\Captcha\PhraseBuilder;
 use System\Database\MyPDO;
 use Model\QuestionAnswer\ask;
 use Model\QuestionAnswer\asks;
@@ -48,6 +45,9 @@ class QuestionAnswerController extends Controller
       ));
     }
 
+    /**
+     * View thred with id
+     */
     public function thread($request)
     {
       $msg = array('show' => false, 'type' => 'info', 'content' => 'oke');
@@ -82,28 +82,6 @@ class QuestionAnswerController extends Controller
         $answerAll[$key]['childs'] = $childsCount;
       }
 
-      // random captcha key
-      $scrfKey = ConvertCode::RandomCode(5);
-
-      // captcha builder
-      $parseBuilder = new PhraseBuilder(5, 'ABCDEFGHIJKLMNOPQRSTU');
-      $captcha = new CaptchaBuilder(null, $parseBuilder);
-      $captcha
-        ->setBackgroundColor(255, 255, 255)
-        ->setMaxBehindLines(1)
-        ->setMaxFrontLines(1)
-        ->build(200, 70);
-
-      // storege captcha to db
-      $db = new MyQuery($this->PDO);
-      $db('scrf_protection')
-        ->insert()
-        ->value('id', '')
-        ->value('scrf_key', $scrfKey)
-        ->value('secret', $captcha->getPhrase())
-        ->value('hit', 1)
-        ->execute();
-
       return $this->view('question-answer/thread', array (
         "auth"          => Session::getSession()['auth'],
         "DNT"           => Session::getSession()['DNT'],
@@ -120,8 +98,6 @@ class QuestionAnswerController extends Controller
         "contents" => array (
           'perent' => $quest,
           'answers' => $answerAll,
-          'scrf_key' => $scrfKey,
-          'captcha_image' => $captcha->inline(),
         ),
         'error' => $error,
         "message" => array (
@@ -132,32 +108,17 @@ class QuestionAnswerController extends Controller
       ));
     }
 
+    /**
+     * Create new thread (new quetion)
+     */
     public function ask()
     {
       $msg = array('show' => false, 'type' => 'info', 'content' => 'oke');
       $error = array();
 
-      // random captcha key
-      $scrfKey = ConvertCode::RandomCode(5);
-
       // captcha builder
-      $parseBuilder = new PhraseBuilder(5, 'ABCDEFGHIJKLMNOPQRSTU');
-      $captcha = new CaptchaBuilder(null, $parseBuilder);
-      $captcha
-        ->setBackgroundColor(255, 255, 255)
-        ->setMaxBehindLines(1)
-        ->setMaxFrontLines(1)
-        ->build(200, 70);
-
-      // storege captcha to db
-      $db = new MyQuery($this->PDO);
-      $db('scrf_protection')
-        ->insert()
-        ->value('id', '')
-        ->value('scrf_key', $scrfKey)
-        ->value('secret', $captcha->getPhrase())
-        ->value('hit', 1)
-        ->execute();
+      $captcha_services = new CaptchaService();
+      $captha = $captcha_services->Generate([]);
 
       return $this->view('question-answer/ask', array (
         "auth"          => Session::getSession()['auth'],
@@ -173,8 +134,8 @@ class QuestionAnswerController extends Controller
           "header_menu"   => MENU_MEDREC
         ),
         "contents" => array (
-          'scrf_key' => $scrfKey,
-          'captcha_image' => $captcha->inline(),
+          'scrf_key' => $captha['data']['scrf_key'] ?? '',
+          'captcha_image' => $captha['data']['captcha_image'] ?? '',
           'isPerent' => false,
           'perent_id' => '',
           'perent_content' => '',
@@ -189,6 +150,9 @@ class QuestionAnswerController extends Controller
       ));
     }
 
+    /**
+     * Answer / replay some question
+     */
     public function answer($question_id)
     {
       $msg = array('show' => false, 'type' => 'info', 'content' => 'oke');
@@ -202,27 +166,9 @@ class QuestionAnswerController extends Controller
       }
       $ask->read();
 
-      // random captcha key
-      $scrfKey = ConvertCode::RandomCode(5);
-
       // captcha builder
-      $parseBuilder = new PhraseBuilder(5, 'ABCDEFGHIJKLMNOPQRSTU');
-      $captcha = new CaptchaBuilder(null, $parseBuilder);
-      $captcha
-        ->setBackgroundColor(255, 255, 255)
-        ->setMaxBehindLines(1)
-        ->setMaxFrontLines(1)
-        ->build(200, 70);
-
-      // storege captcha to db
-      $db = new MyQuery($this->PDO);
-      $db('scrf_protection')
-        ->insert('scrf_protection')
-        ->value('id', '')
-        ->value('scrf_key', $scrfKey)
-        ->value('secret', $captcha->getPhrase())
-        ->value('hit', 1)
-        ->execute();
+      $captcha_services = new CaptchaService();
+      $captha = $captcha_services->Generate([]);
 
       return $this->view('question-answer/ask', array (
         "auth"          => Session::getSession()['auth'],
@@ -238,8 +184,8 @@ class QuestionAnswerController extends Controller
           "header_menu"   => MENU_MEDREC
         ),
         "contents" => array (
-          'scrf_key' => $scrfKey,
-          'captcha_image' => $captcha->inline(),
+          'scrf_key' => $captha['data']['scrf_key'] ?? '',
+          'captcha_image' => $captha['data']['captcha_image'] ?? '',
           'isPerent' => true,
           'perent_id' => $question_id,
           'perent_title' => $ask->getTitle(),

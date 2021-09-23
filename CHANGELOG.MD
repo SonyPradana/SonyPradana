@@ -8,10 +8,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Add success respone array ```DefaultService::code_200()```
 - Add editable 'select' for model ```MyModel::select()``` its like  ```MyModel::costumeWhere()``` but more powerfull
+- Add function to validiate captcha ```CaptchaService::Validate()```
 
 ### Fixed
 - Fix issue #55 - jadwal pelyanan imunisasi tidak memfilter tahun
 - Sorted stories data #52	
+- Fix Cacptcha always accept request
+
+### Changed
+- Captcha storage using ```Cache::class```
 
 ## [2.3.11] - 2021-09-16
 ### Added

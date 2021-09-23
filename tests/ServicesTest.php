@@ -4,6 +4,7 @@ namespace Simpus\Tests;
 
 use AntrianPoliService;
 use AuthService;
+use CaptchaService;
 use CovidKabSemarangService;
 use JadwalPelayananService;
 use JadwalVaksinService;
@@ -456,16 +457,12 @@ final class ServicesTest extends TestCase
     $this->assertNotEmpty($res['data']);
 
     // creating scrf to pass the scrf protactin
-    $scrfKey = 'key';
-    $scrfSecret = 'secret';
-    $db = new MyQuery($this->PDO());
-    $db('scrf_protection')
-      ->insert()
-      ->value('id', '')
-      ->value('scrf_key', $scrfKey)
-      ->value('secret', $scrfSecret)
-      ->value('hit', 10)
-      ->execute();
+    $captcha_services = new CaptchaService();
+    $captcha = $captcha_services->Generate([]);
+
+    $scrfKey = $captcha['data']['scrf_key'];
+    $get = Cache::static()->getItem($scrfKey);
+    $scrfSecret = $get->get()['value'];
 
     $request = array (
       'x-method' => 'PUT',

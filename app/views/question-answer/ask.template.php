@@ -84,7 +84,7 @@
       </div>
       <div class="ask-form">
         <h3>Pendapat Anda:</h3>
-        <form x-data="askForm()" x-on:submit.prevent="submitData">
+        <form x-data="askForm()" x-on:submit.prevent="submitData" x-init="captchaProvider()">
 
           <label class="v-group-input">
             Nama*
@@ -229,7 +229,7 @@
         })
         .then(json => {
           console.log(json);
-          if (json.status == 'ok') {
+          if (json.error == false) {
             console.log('Form sucessfully submitted!');
             success = true;
             new_id = json.data.new_id;
@@ -266,7 +266,6 @@
         })
         .then(json => {
           this.data.scrf_key = json.data.scrf_key;
-          $work(json.data.scrf_key);
           $id('captcha-image').setAttribute('src', json.data.captcha_image);
         })
       }

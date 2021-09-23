@@ -103,18 +103,6 @@ class CronCommand extends Command
       ->eventName('info covid')
       ->hourly();
 
-    // delete old database rows
-    $schedule
-      ->call(function() use ($pdo) {
-        System\Database\MyQuery::conn('scrf_protection', $pdo)
-          ->delete()
-          ->execute();
-
-          return [];
-      })
-      ->eventName('scrf_protection')
-      ->weekly();
-
     // delete old story
     $schedule
       ->call(function() use ($pdo) {

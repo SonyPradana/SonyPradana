@@ -103,34 +103,15 @@ class QuestionAnswerService extends Service
     $save = false;
 
     // sample scrf protection (resiver)
-    $db = new MyQuery($this->PDO);
-    $getScrf = $db
-      ->table('scrf_protection')
-      ->select()
-      ->equal('scrf_key', $request['scrf_key'])
-      ->single();
+    $captcha = new CaptchaService();
+    $captcha_validate = $captcha->Validate([
+      'key'     => $request['scrf_key'],
+      'captcha' => $request['scrf_secret'],
+    ]);
+    $correct_captcha = $captcha_validate['data']['is_valid'] ?? false;
 
-    // scrf hit count & scrf secret cek
-    $scrfHit = $getScrf['hit'] ?? 0;
-    $scrfSecret = $getScrf['scret'] ?? false;
-    if ($scrfHit < 1
-    && $scrfSecret != $request['scrf_secret']) {
-      $error['scrf_secret'] = 'Token tidak valid';
-    }
-
-    // reomove scrf access if success
-    $scrfHit -= 1;
-    if ($scrfHit < 1) {
-      $db('scrf_protection')
-        ->delete()
-        ->equal('scrf_key', $request['scrf_key'])
-        ->execute();
-    } else {
-      $db('scrf_protection')
-        ->update()
-        ->value('hit', $scrfHit)
-        ->equal('scrf_key', $request['scrf_key'])
-        ->execute();
+    if (! $correct_captcha) {
+      $error['captcha'] = 'invalid captcha, try again';
     }
 
     if (empty($error)) {
@@ -159,7 +140,6 @@ class QuestionAnswerService extends Service
       'status'  => $save ? 'ok' : 'not saved',
       'code'    => 200,
       'data'    => [
-        $request,
         'new_id'  => $this->PDO->lastInsertId()
       ],
       'error'   => $error ?? false,

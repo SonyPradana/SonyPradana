@@ -186,7 +186,7 @@ use Helper\String\Manipulation;
           <h2 class="text-gray-700">Jawaban kamu</h2>
         </div>
         <div class="form-box">
-            <form  id="new-post" x-data="newPost()" x-on:submit.prevent="submitData">
+            <form  id="new-post" x-data="newPost()" x-on:submit.prevent="submitData" x-init="captchaProvider()">
               <label class="v-group-input">
                 Nama
                 <input class="textbox outline blue rounded small" type="text" x-model="data.name">
@@ -280,7 +280,7 @@ use Helper\String\Manipulation;
           body: JSON.stringify(this.data)
         })
         .then(json => {
-          if (json.status == 'ok') {
+          if (json.error == false) {
             console.log('Form sucessfully submitted!');
 
             // clear field
@@ -292,7 +292,6 @@ use Helper\String\Manipulation;
           }
         })
         .finally(() => {
-          $work('Done!');
 
           this.onSubmit = false
           if (success) {
@@ -309,7 +308,6 @@ use Helper\String\Manipulation;
         })
         .then(json => {
           this.data.scrf_key = json.data.scrf_key;
-          $work(json.data.scrf_key);
           $id('captcha-image').setAttribute('src', json.data.captcha_image);
         })
       }
