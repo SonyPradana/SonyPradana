@@ -1,5 +1,6 @@
 <?php
 
+use Provider\Session\Session;
 use System\Database\MyPDO;
 use System\Router\Controller;
 use Simpus\Helper\MathCaptcha;
