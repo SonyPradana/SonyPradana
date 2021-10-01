@@ -6,6 +6,7 @@ use Psr\Cache\CacheItemInterface;
 use Symfony\Component\Cache\Adapter\AbstractAdapter;
 use Symfony\Component\Cache\Adapter\AbstractTagAwareAdapter;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
+use Symfony\Component\Cache\Adapter\MemcachedAdapter;
 use Symfony\Component\Cache\Adapter\PdoAdapter;
 use Symfony\Component\Cache\Adapter\RedisAdapter;
 use Symfony\Component\Cache\Adapter\RedisTagAwareAdapter;
@@ -27,20 +28,31 @@ class Cache
   public function __construct(string $cache_driver = 'file')
   {
     $driver = $_ENV['CACHE_DRIVER'] ?? $cache_driver;
+    $driver = strtolower($driver);
 
     // redis adapter
     if ($driver == 'redis') {
-      $port = REDIS_PORT != ''
-        ? ':' . REDIS_PORT
-        : '';
-      $pwd = REDIS_PASS . '@';
+      // dsn config
+      $port = REDIS_PORT != '' ? ':' . REDIS_PORT : '';
+      $pwd  = REDIS_PASS == '' ? REDIS_PASS . '@' : '';
+      $host = REDIS_HOST;
 
-      $clinet = RedisAdapter::createConnection(
-        'redis://' . $pwd . REDIS_HOST . $port
-      );
+      $clinet = RedisAdapter::createConnection('redis://' . $pwd . $host . $port);
       $this->cache_driver = new RedisTagAwareAdapter($clinet);
       return;
     }
+
+    if ($driver == 'memcached') {
+      // dsn config
+      $port = MEMCACHED_PORT != '' ? ':' . MEMCACHED_PORT : '';
+      $pwd  = MEMCACHED_PASS == '' ? MEMCACHED_PASS . '@' : '';
+      $host = MEMCACHED_HOST;
+
+      $client = MemcachedAdapter::createConnection('memcached://' . $pwd . $host . $port);
+      $this->cache_driver = new MemcachedAdapter($client);
+      return;
+    }
+
     if ($driver == 'pdo') {
       $this->cache_driver = new PdoAdapter(
         'mysql:host=' . DB_HOST . ';dbname=' . DB_NAME,

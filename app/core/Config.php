@@ -20,13 +20,14 @@ class Config
     $pusher_config = include($path . 'pusher.config.php');
     $headerMenu_config = include($path . 'headermenu.config.php');
     $redis_config = include($path . 'redis.config.php');
+    $memcache_config = include($path . 'memcache.config.php');
     // excute config
     $this->appConfig($app_config);
     $this->databeseConfig($dbs_config);
     $this->pusherConfig($pusher_config);
     $this->headerMenuConfig($headerMenu_config);
     $this->redisConfig($redis_config);
-
+    $this->memcacheConfig($memcache_config);
   }
 
   private function appConfig(array $config)
@@ -90,5 +91,12 @@ class Config
     define('REDIS_HOST', $config['REDIS_HOST']);
     define('REDIS_PASS', $config['REDIS_PASS']);
     define('REDIS_PORT', $config['REDIS_PORT']);
+  }
+
+  private function memcacheConfig(array $config)
+  {
+    define('MEMCACHED_HOST', $config['MEMCACHED_HOST']);
+    define('MEMCACHED_PASS', $config['MEMCACHED_PASS']);
+    define('MEMCACHED_PORT', $config['MEMCACHED_PORT']);
   }
 }
