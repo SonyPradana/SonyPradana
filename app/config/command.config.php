@@ -9,5 +9,7 @@ return array_merge(
   CronCommand::$command,
   // cache
   CacheCommand::$command,
+	// Debug
+	DebugCommand::$command
 	// more command here
 );
