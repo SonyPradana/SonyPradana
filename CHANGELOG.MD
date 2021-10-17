@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add success respone array ```DefaultService::code_200()```
 - Add editable 'select' for model ```MyModel::select()``` its like  ```MyModel::costumeWhere()``` but more powerfull
 - Add function to validiate captcha ```CaptchaService::Validate()```
+- Add feature to generate class, property and method as string ```System\Template\Generate::class```
 
 ### Fixed
 - Fix issue #55 - jadwal pelyanan imunisasi tidak memfilter tahun
