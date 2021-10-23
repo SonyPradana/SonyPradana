@@ -21,7 +21,7 @@ class Method
   private $name;
   private $params = [];
   private $return_type;
-  private $body;
+  private $body = [];
 
   public function __construct(string $name)
   {
@@ -40,7 +40,7 @@ class Method
 
   public function planTemplate(): string
   {
-    return "{{comment}}{{before}}function {{name}}({{params}}){{return type}}{{new line}}{{{new line}}{{body}}{{new line}}}";
+    return $this->customize_template ?? "{{comment}}{{before}}function {{name}}({{params}}){{return type}}{{new line}}{\n{{body}}{{new line}}}";
   }
 
   public function generate(): string
@@ -98,7 +98,8 @@ class Method
     $return .= $this->return_type;
 
     // body
-    $body = $tab_dept(1) . $this->body;
+    $bodys = array_map(fn($x) => $tab_dept(2) . $x, $this->body);
+    $body = implode("\n", $bodys);
 
     return str_replace(
       ["{{comment}}", "{{before}}", "{{name}}", "{{params}}", "{{new line}}", "{{body}}", "{{return type}}"],
@@ -149,9 +150,9 @@ class Method
     return $this;
   }
 
-  public function body(?string $body)
+  public function body(?array $body)
   {
-    $this->body = $body ?? "";
+    $this->body = $body ?? [];
     return $this;
   }
 }

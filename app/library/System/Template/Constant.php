@@ -10,11 +10,11 @@ class Constant
   use FormatterTrait;
   use CommentTrait;
 
+  private $visibility = self::PUBLIC_;
   const PUBLIC_ = 0;
   const PRIVATE_ = 1;
   const PROTECTED_ = 2;
 
-  private $visibility = self::PUBLIC_;
   private $name;
   private $expecting;
 
@@ -36,7 +36,7 @@ class Constant
 
   private function planTemplate(): string
   {
-    return "{{comment}}{{visibility}}const {{name}}{{expecting}};";
+    return $this->customize_template ?? "{{comment}}{{visibility}}const {{name}}{{expecting}};";
   }
 
   public function generate(): string

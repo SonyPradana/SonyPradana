@@ -2,7 +2,7 @@
 
 namespace System\Template;
 
-class ConstPools
+class ConstPool
 {
   private $pools = [];
 

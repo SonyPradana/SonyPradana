@@ -14,7 +14,7 @@ class Property
   private $visibility = self::PRIVATE_;
   public const PUBLIC_ = 0;
   public const PRIVATE_ = 1;
-  public const PROTECTED_ = 1;
+  public const PROTECTED_ = 2;
 
   private $name;
   private $expecting;
@@ -36,7 +36,7 @@ class Property
 
   private function planTemplate(): string
   {
-    return "{{comment}}{{visibility}}{{static}}{{name}}{{expecting}};";
+    return $this->customize_template ?? "{{comment}}{{visibility}}{{static}}{{name}}{{expecting}};";
   }
 
   public function generate(): string

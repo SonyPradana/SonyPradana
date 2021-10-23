@@ -21,7 +21,7 @@ trait CommentTrait
 		return $this->addComment(null);
 	}
 
-	public function addParamCommnet(string $datatype, string $name, string $description)
+	public function addParamComment(string $datatype, string $name, string $description)
 	{
 		$name = $name == "" ? $name : " " . $name;
 		$description = $description == "" ? $description : " " . $description;
@@ -31,21 +31,21 @@ trait CommentTrait
 		return $this;
 	}
 
-	public function addVaribaleCommnet(string $datatype, string $name = "")
+	public function addVaribaleComment(string $datatype, string $name = "")
 	{
 		$name = $name == "" ? $name : " " . $name;
 
-		$this->comments[] = "@var $datatype $name";
+		$this->comments[] = "@var $datatype$name";
 
 		return $this;
 	}
 
-	public function addReturnCommnet(string $datatype, string $name = "", string $description = "")
+	public function addReturnComment(string $datatype, string $name = "", string $description = "")
 	{
 		$name = $name == "" ? $name : " " . $name;
 		$description = $description == "" ? $description : " " . $description;
 
-		$this->comments[] = "@return $datatype $name $description";
+		$this->comments[] = "@return $datatype$name$description";
 
 		return $this;
 	}

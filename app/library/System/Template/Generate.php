@@ -13,6 +13,7 @@ class Generate
   // for config
   private $is_final = false;
   private $rule;
+  private $end_with_newline = false;
   const SET_CLASS = 0;
   const SET_ABSTRACT = 1;
   const SET_TRAIT = 2;
@@ -53,7 +54,7 @@ class Generate
 
   private function planTemplate(): string
   {
-    return "<?php\n\n{{before}}\n{{comment}}\n{{rule}}class\40{{head}}\n{\n{{body}}\n}";
+    return $this->customize_template ?? "<?php\n{{before}}{{comment}}\n{{rule}}class\40{{head}}\n{\n{{body}}\n}{{end}}";
   }
 
   public function generate(): string
@@ -63,6 +64,10 @@ class Generate
 
     // scope: before
     $before = [];
+    if ($this->namespace != null || count($this->uses) > 0) {
+      $before[] = "";
+    }
+
     // generte namespace
     if ($this->namespace != null) {
       $before[] = "namespace " . $this->namespace . ";\n";
@@ -71,6 +76,7 @@ class Generate
     // genertae uses
     if (count($this->uses) > 0) {
       $before[] = "use " . implode(";\nuse ", $this->uses) . ";";
+      $before[] = '';
     }
 
     $before = implode("\n", $before);
@@ -97,7 +103,7 @@ class Generate
 
     // generte extend
     if ($this->extend != null) {
-      $head[] = "extend " . $this->extend;
+      $head[] = "extends " . $this->extend;
     }
 
     // generete implements
@@ -166,14 +172,17 @@ class Generate
 
     // generate raw body
     if (count($this->body) > 0) {
-      $body[] = $tab_dept(1) . implode("\n" . $tab_dept(1), $this->body);
+      $body[] = $tab_dept(1) . implode("\n" . $tab_dept(2), $this->body);
     }
 
     $body = implode("\n", array_filter($body));
 
+    // end with new line
+    $end = $this->end_with_newline ? "\n" : '';
+
     return str_replace(
-      ["{{before}}", "{{comment}}", "{{rule}}", "{{head}}", "{{body}}"],
-      [$before, $comment, $rule, $head, $body],
+      ["{{before}}", "{{comment}}", "{{rule}}", "{{head}}", "{{body}}", "{{end}}"],
+      [$before, $comment, $rule, $head, $body, $end],
       $class
     );
   }
@@ -207,6 +216,12 @@ class Generate
   {
     $this->is_final = $isFinal;
 
+    return $this;
+  }
+
+  public function setEndWithNewLine(bool $enable = true)
+  {
+    $this->end_with_newline = $enable;
     return $this;
   }
 
@@ -290,7 +305,7 @@ class Generate
 
     // detect if multy const with constPool
     elseif (is_callable($new_const)) {
-      $const = new ConstPools();
+      $const = new ConstPool();
 
       call_user_func_array($new_const, [$const]);
 
