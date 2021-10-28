@@ -18,13 +18,6 @@ final class BasicTest extends TestCase
     $this->assertFileExists('./app/core/Config.php');
     $this->assertFileExists('./app/core/Service.php');
 
-    $this->assertFileExists('./app/core/template/controller');
-    $this->assertFileExists('./app/core/template/model');
-    $this->assertFileExists('./app/core/template/models');
-    $this->assertFileExists('./app/core/template/service');
-    $this->assertFileExists('./app/core/template/view');
-    $this->assertFileExists('./app/core/template/command');
-
     $this->assertFileExists('./app/library/System/Database/CrudInterface.php');
     $this->assertFileExists('./app/library/System/Database/MyCRUD.php');
     $this->assertFileExists('./app/library/System/Database/MyModel.php');
