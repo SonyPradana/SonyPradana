@@ -42,7 +42,8 @@ class Config
         'component'   => $config['COMPONENT_PATH'],
         'commands'    => $config['COMMNAD_PATH'],
         'cache'       => $config['CACHE_PATH'],
-        'config'      => $config['CONFIG']
+        'config'      => $config['CONFIG'],
+        'middleware'  => $config['MIDDLEWARE'],
       ]);
 
       define('APP_FULLPATH', [
@@ -54,6 +55,7 @@ class Config
         'commands'    => $config['BASEURL'] . $config['COMMNAD_PATH'],
         'cache'       => $config['BASEURL'] . $config['CACHE_PATH'],
         'config'      => $config['BASEURL'] . $config['CONFIG'],
+        'middleware'  => $config['BASEURL'] . $config['MIDDLEWARE'],
       ]);
   }
 

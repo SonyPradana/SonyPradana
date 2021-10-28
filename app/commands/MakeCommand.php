@@ -1,8 +1,13 @@
 <?php
 
+use Helper\Maker\MakeClassCommand;
+use Helper\Maker\MakeClassController;
+use Helper\Maker\MakeClassMiddleware;
+use Helper\Maker\MakeClassModel;
+use Helper\Maker\MakeClassModels;
+use Helper\Maker\MakeClassServices;
+use Helper\Maker\MakeClassView;
 use System\Console\Command;
-use System\Database\MyPDO;
-use System\Database\MyQuery;
 
 class MakeCommand extends Command
 {
@@ -96,14 +101,14 @@ class MakeCommand extends Command
     echo $this->textDim("\n...\n");
 
     // main code
-    $success = $this->makeTemplate($this->OPTION[0], array (
-      'template_location' => '/app/core/template/controller',
-      'save_location' => APP_PATH['controllers'],
-      'pattern' => '__controller__',
-      'surfix' => 'Controller.php'
-    ));
+    $template_location = controllers_path(true, $this->OPTION[0] . 'Controller.php');
+    $success = !file_exists($template_location);
 
-    // the result
+    if ($success) {
+      $success = file_put_contents($template_location, MakeClassController::render($this->OPTION[0]));
+    }
+
+    // result
     if ($success) {
       echo $this->textGreen("\nFinish created controller\n");
     } else {
@@ -117,14 +122,14 @@ class MakeCommand extends Command
     echo $this->textDim("\n...\n");
 
     // main code
-    $success = $this->makeTemplate($this->OPTION[0], array (
-      'template_location' => '/app/core/template/view',
-      'save_location'     => APP_PATH['view'],
-      'pattern'           => '__view__',
-      'surfix'            => '.template.php'
-    ));
+    $template_location = view_path(true, $this->OPTION[0] . '.template.php');
+    $success = !file_exists($template_location);
 
-    // the result
+    if ($success) {
+      $success = file_put_contents($template_location, MakeClassView::render($this->OPTION[0]));
+    }
+
+    // result
     if ($success) {
       echo $this->textGreen("\nFinish created view file\n");
     } else {
@@ -138,14 +143,14 @@ class MakeCommand extends Command
     echo $this->textDim("\n...\n");
 
     // main code
-    $success = $this->makeTemplate($this->OPTION[0], array(
-      'template_location' => '/app/core/template/service',
-      'save_location'     => APP_PATH['services'],
-      'pattern'           => '__service__',
-      'surfix'            => 'Service.php'
-    ));
+    $template_location = services_path(true, $this->OPTION[0] . 'Service.php');
+    $success = !file_exists($template_location);
 
-    // the result
+    if ($success) {
+      $success = file_put_contents($template_location, MakeClassServices::render($this->OPTION[0]));
+    }
+
+    // result
     if ($success) {
       echo $this->textGreen("\nFinish created services file");
     }else {
@@ -159,22 +164,23 @@ class MakeCommand extends Command
     echo $this->textDim("\n...\n");
 
     // main code
-    $success = $this->makeTemplate($this->OPTION[0],array(
-      'template_location' => '/app/core/template/model',
-      'save_location'     => APP_PATH['model'],
-      'pattern'           => '__model__',
-      'surfix'            => '.php'
-    ), $this->OPTION[0] . '/');
+    $template_folder = model_path(true, $this->OPTION[0]);
+    $template_location = model_path(true, $this->OPTION[0] . '/' . $this->OPTION[0] . '.php');
 
-    // fill table name
-    if (substr($this->OPTION[1], 0, 12) == '--table-name') {
-      $table_name = explode('=', $this->OPTION[1])[1];
-      $this->FillModelDatabase(
-        APP_FULLPATH['model'] . $this->OPTION[0] . '/' . $this->OPTION[0] . ".php",
-        $table_name);
+    $success = !file_exists($template_folder)
+      ? mkdir($template_folder)
+      : !file_exists($template_location);
+
+    if ($success) {
+      // fill table name
+      $table_name = substr($this->OPTION[1], 0, 12) == '--table-name'
+        ? explode('=', $this->OPTION[1])[1]
+        : null
+      ;
+      $success = file_put_contents($template_location, MakeClassModel::render($this->OPTION[0], $table_name));
     }
 
-    // the result
+    // result
     if ($success) {
       echo $this->textGreen("\nFinish created model file");
     } else {
@@ -188,22 +194,23 @@ class MakeCommand extends Command
     echo $this->textDim("\n...\n");
 
     // main code
-    $success = $this->makeTemplate($this->OPTION[0], array(
-      'template_location' => '/app/core/template/models',
-      'save_location'     => APP_PATH['model'],
-      'pattern'           => '__models__',
-      'surfix'            => 's.php'
-    ), $this->OPTION[0] . '/');
+    $template_folder = model_path(true, $this->OPTION[0]);
+    $template_location = model_path(true, $this->OPTION[0] . '/' . $this->OPTION[0] . 's.php');
 
-    // fill table name
-    if (substr($this->OPTION[1], 0, 12) == '--table-name') {
-      $table_name = explode('=', $this->OPTION[1])[1];
-      $this->FillModelsDatabase(
-        APP_FULLPATH['model'] . $this->OPTION[0] . '/' . $this->OPTION[0] . "s.php",
-        $table_name);
+    $success = !file_exists($template_folder)
+      ? mkdir($template_folder)
+      : !file_exists($template_location);
+
+    if ($success) {
+      // fill table name
+      $table_name = substr($this->OPTION[1], 0, 12) == '--table-name'
+        ? explode('=', $this->OPTION[1])[1]
+        : null
+      ;
+      $success = file_put_contents($template_location, MakeClassModels::render($this->OPTION[0], $table_name));
     }
 
-    // the result
+    // result
     if ($success) {
       echo $this->textGreen("\nFinish created models file");
     } else {
@@ -217,28 +224,31 @@ class MakeCommand extends Command
     echo $this->textDim("\n...\n");
 
     // main code
-    $success = $this->makeTemplate($this->OPTION[0], array(
-      'template_location' => '/app/core/template/command',
-      'save_location'     => app_path('commands'),
-      'pattern'           => '__command__',
-      'surfix'            => 'Command.php'
-    ));
+    $config_location = config_path(true, 'command.config.php');
+    $template_location = commands_path(true, $this->OPTION[0] . 'Command.php');
+    $success = !file_exists($template_location);
 
-    // the result
+    if ($success) {
+      $success = file_put_contents($template_location, MakeClassCommand::render($this->OPTION[0]));
+    }
+
     if ($success) {
       // add command config for calling new command
-      $geContent = file_get_contents(app_path('config', true) . 'command.config.php');
-      $geContent = str_replace(
+      $config = file_get_contents($config_location);
+      $new_config = str_replace(
         "// more command here",
 
         "// " . $this->OPTION[0] . "\n\t" .
         $this->OPTION[0] . "Command::$"."command\n" .
         "\t// more command here",
 
-        $geContent);
+        $config);
 
-      file_put_contents(app_path('config', true) . 'command.config.php', $geContent);
+      $success = file_put_contents($config_location, $new_config);
+    }
 
+    // result
+    if ($success) {
       echo $this->textGreen("\nFinish created command file");
     } else {
       echo $this->textRed("\nFailed Create command file");
@@ -251,14 +261,14 @@ class MakeCommand extends Command
     echo $this->textDim("\n...\n");
 
     // main code
-    $success = $this->makeTemplate($this->OPTION[0], array(
-      'template_location' => '/app/core/template/middleware',
-      'save_location'     => '/app/middleware/',
-      'pattern'           => '__middleware__',
-      'surfix'            => 'Middleware.php'
-    ));
+    $template_location = middleware_path(true, $this->OPTION[0] . 'Middleware.php');
+    $success = !file_exists($template_location);
 
-    // the result
+    if ($success) {
+      $success = file_put_contents($template_location, MakeClassMiddleware::render($this->OPTION[0]));
+    }
+
+    // result
     if ($success) {
       echo $this->textGreen("\nFinish created middleware file");
     } else {
@@ -266,123 +276,4 @@ class MakeCommand extends Command
     }
   }
 
-  /**
-   * Replece template to new class/resoure
-   *
-   * @param string $argument Name of Class/file
-   * @param array $make_option Configuration to replace template
-   * @param string $folder Create folder for save location
-   * @return boolean True if templete success copie
-  */
-  private function makeTemplate(string $argument, array $make_option, string $folder = ''): bool
-  {
-    $folder = ucfirst($folder);
-    if (file_exists(BASEURL . $make_option['save_location'] . $folder . $argument . $make_option['surfix'])) {
-      echo $this->textDim("file alredy exis");
-      return false;
-
-    } elseif (! file_exists(BASEURL . $make_option['save_location'] . $folder)) {
-      mkdir(BASEURL . $make_option['save_location'] . $folder);
-    }
-
-    $get_template = file_get_contents(BASEURL . $make_option['template_location']);
-    // frist replace ucfrist pattern by at @
-    $get_template = str_replace("@" . $make_option['pattern'], ucfirst($argument),  $get_template);
-    // replace patternt
-    $get_template = str_replace($make_option['pattern'], $argument,  $get_template);
-    // remove helper comment
-    $get_template = preg_replace('/^.+\n/', '', $get_template);
-    // saving
-    $isCopied = file_put_contents(BASEURL . $make_option['save_location'] . $folder . $argument . $make_option['surfix'], $get_template);
-
-    return $isCopied === false ? false : true;
-  }
-
-  /**
-   * Fill template with property
-   * base on databe table
-   *
-   * @param string $model_location File location (model)
-   * @param string $table_name Tabel name to sync with model
-   * @return boolean True if templete success copie
-  */
-  private function FillModelDatabase(string $model_location, string $table_name): bool
-  {
-    $table_column = MyQuery::conn("COLUMNS", MyPDO::conn("INFORMATION_SCHEMA"))
-      ->select()
-      ->equal("TABLE_SCHEMA", DB_NAME)
-      ->equal("TABLE_NAME", $table_name)
-      ->all() ?? [];
-
-    $column_template = '';
-    $getter_template = '';
-    $setter_template = '';
-    foreach ($table_column as $column) {
-      if ($column['COLUMN_NAME'] != 'id') {
-        $column_template .= "'" . $column['COLUMN_NAME'] . "' => null,\n\t\t\t";
-        $getter_template .= $this->TemplateGetterModel($column['COLUMN_NAME']);
-        $setter_template .= $this->TemplateSetterModel($column['COLUMN_NAME']);
-      }
-
-    }
-
-    $getContent = file_get_contents($model_location);
-    // replece table name
-    $getContent = str_replace('__table__', $table_name, $getContent);
-    // replace teble column
-    $getContent = str_replace('__column__', $column_template, $getContent);
-    // replece getter and setter
-    $getContent = str_replace('__getter__', $getter_template, $getContent);
-    $getContent = str_replace('__setter__', $setter_template, $getContent);
-
-    $isCopied   = file_put_contents($model_location, $getContent);
-
-    return $isCopied === false ? false : true;
-  }
-
-  /**
-   * Fill template with property
-   * base on databe table
-   *
-   * @param string $model_location File location (models)
-   * @param string $table_name Tabel name to sync with models
-   * @return boolean True if templete success copie
-  */
-  private function FillModelsDatabase(string $model_location, string $table_name): bool
-  {
-    $getContent = file_get_contents($model_location);
-    $getContent = str_replace('__table__', $table_name, $getContent);
-    $isCopied   = file_put_contents($model_location, $getContent);
-
-    return $isCopied === false ? false : true;
-  }
-
-  // helper
-
-  /**
-   * Helper for make model
-   */
-  private function TemplateGetterModel(string $column_name): string
-  {
-    return
-      "\n\t"    . "public function $column_name()" .
-      "\n\t"    . "{" .
-      "\n\t\t"  . "return " . "$" . "this->COLUMNS['$column_name'];" .
-      "\n\t"    . "}" .
-      "\n";
-  }
-
-  /**
-   * Helper for make model
-   */
-  private function TemplateSetterModel(string $column_name): string
-  {
-    $functionName = ucfirst($column_name);
-    return
-      "\n\t"      . "public function set$functionName(int " . "$" . "val)" .
-      "\n\t"      . "{" .
-      "\n\t\t"    . "$" . "this->COLUMNS['$column_name'] = " . "$" . "val;" .
-      "\n\t\t"    . "return " . "$" . "this;" .
-      "\n\t"      . "}";
-  }
 }

@@ -172,6 +172,23 @@ if (! function_exists("config_path")) {
   }
 }
 
+if (! function_exists("middleware_path")) {
+
+  /**
+   * Get aplication middleware path, base on config file
+   *
+   * @param bool $include_basePath
+   *  True to add base path to result
+   * @return string
+   *  Application path folder
+   */
+  function middleware_path(bool $include_basePath = false, string $surfix_path = ''): string {
+    return $include_basePath
+      ? (APP_FULLPATH['middleware'] ?? '') . $surfix_path
+      : (APP_PATH['middleware'] ?? '') . $surfix_path;
+  }
+}
+
 if (! function_exists("base_path")) {
 
   /**

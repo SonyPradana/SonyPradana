@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add editable 'select' for model ```MyModel::select()``` its like  ```MyModel::costumeWhere()``` but more powerfull
 - Add function to validiate captcha ```CaptchaService::Validate()```
 - Add feature to generate class, property and method as string ```System\Template\Generate::class```
+- Add class helper to generate class (make contoller, make view, make model/s, make services, make command, make middleware)
+- Add config path for middleware ```middleware_path()```
 
 ### Fixed
 - Fix issue #55 - jadwal pelyanan imunisasi tidak memfilter tahun
@@ -18,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Captcha storage using ```Cache::class```
+- ```MakeCommand::class``` changed manual template copy to class generate
 
 ## [2.3.11] - 2021-09-16
 ### Added

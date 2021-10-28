@@ -23,4 +23,5 @@ return array (
   'COMMNAD_PATH'    => '/app/commands/',
   'CACHE_PATH'      => '/storage/app/cache',
   'CONFIG'          => '/app/config/',
+  'MIDDLEWARE'      => '/app/middleware/',
 );
