@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add feature to generate class, property and method as string ```System\Template\Generate::class```
 - Add class helper to generate class (make contoller, make view, make model/s, make services, make command, make middleware)
 - Add config path for middleware ```middleware_path()```
+- Add global function to read env mode
 
 ### Fixed
 - Fix issue #55 - jadwal pelyanan imunisasi tidak memfilter tahun

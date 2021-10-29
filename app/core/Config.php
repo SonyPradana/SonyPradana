@@ -34,6 +34,10 @@ class Config
   {
       define('BASEURL', $config['BASEURL']);
       date_default_timezone_set($config['time_zone']);
+
+      define('APP_ENV', $config['ENVIRONMENT']);
+
+      // path config
       define('APP_PATH', [
         'model'       => $config['MODEL_PATH'],
         'view'        => $config['VIEW_PATH'],
