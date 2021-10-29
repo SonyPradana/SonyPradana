@@ -394,3 +394,44 @@ if (! function_exists('auth')) {
     ;
   }
 }
+
+// app config
+
+if (! function_exists('app_env')) {
+
+  /**
+   * Cek application environment mode
+   *
+   * @return string Application environment mode
+   */
+  function app_env(): string
+  {
+    return APP_ENV;
+  }
+}
+
+if (! function_exists('is_production')) {
+
+  /**
+   * Cek application production mode
+   *
+   * @return bool True if in production mode
+   */
+  function is_production(): bool
+  {
+    return APP_ENV === "prod";
+  }
+}
+
+if (! function_exists('is_dev')) {
+
+  /**
+   * Cek application developent mode
+   *
+   * @return bool True if in dev moded
+   */
+  function is_dev(): bool
+  {
+    return APP_ENV === "dev";
+  }
+}
